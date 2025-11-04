@@ -1,4 +1,27 @@
 <!-- Topbar Start -->
+
+<style>
+    /* Dropdown Menu Fix for Dark Navbar */
+    .navbar .dropdown-menu {
+        background-color: #0f1114 !important;
+        /* subtle dark background */
+        border: none;
+        padding: 0;
+        min-width: 200px;
+    }
+
+    .navbar .dropdown-menu .dropdown-item {
+        color: #ddd !important;
+        padding: 10px 20px;
+        transition: all 0.3s ease;
+    }
+
+    .navbar .dropdown-menu .dropdown-item:hover,
+    .navbar .dropdown-menu .dropdown-item:focus {
+        background-color: #b3d33c !important;
+        color: #000 !important;
+    }
+</style>
 <div class="container-fluid px-4 d-none d-lg-block">
     <div class="row gx-4">
         <div class="col-lg-4 text-center py-2">
