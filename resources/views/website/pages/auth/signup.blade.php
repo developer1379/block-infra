@@ -1,6 +1,4 @@
 <x-layout.app-layout>
-
-
     <div class="container py-5" style="min-height:80vh;">
         <div class="row justify-content-center align-items-center">
             <div class="col-md-8 col-lg-6">
@@ -34,44 +32,34 @@
                         <div class="mb-4 text-center">
                             <label class="form-label fw-semibold text-dark mb-2">Register As</label>
                             <div class="d-flex justify-content-center gap-3">
-
                                 <div>
                                     <input type="radio" class="btn-check" name="role" id="contractor"
-                                        autocomplete="off" checked>
+                                        value="contractor" autocomplete="off" checked>
                                     <label class="btn border border-2 px-4 py-2 fw-semibold" for="contractor"
-                                        style="border-color:#b3d33c;color:#000;">
-                                        Contractor
-                                    </label>
+                                        style="border-color:#b3d33c;color:#000;">Contractor</label>
                                 </div>
-
                                 <div>
-                                    <input type="radio" class="btn-check" name="role" id="user"
+                                    <input type="radio" class="btn-check" name="role" id="user" value="user"
                                         autocomplete="off">
                                     <label class="btn border border-2 px-4 py-2 fw-semibold" for="user"
-                                        style="border-color:#b3d33c;color:#000;">
-                                        User
-                                    </label>
+                                        style="border-color:#b3d33c;color:#000;">User</label>
                                 </div>
-
                             </div>
                         </div>
 
-                        <!-- Optional CSS for better active style -->
-                        <style>
-                            /* Make active role button filled with brand color */
-                            .btn-check:checked+label {
-                                background-color: #b3d33c !important;
-                                color: #000 !important;
-                                box-shadow: none !important;
-                            }
-
-                            /* Hover effect for better UX */
-                            label.btn:hover {
-                                background-color: #b3d33c20;
-                                /* faint green tint */
-                            }
-                        </style>
-
+                        <!-- Contractor Category (Dynamic Field) -->
+                        <div class="mb-3" id="contractorCategoryField">
+                            <label class="form-label fw-semibold text-dark">Contractor Category</label>
+                            <select class="form-select border-dark-subtle">
+                                <option selected disabled>Select Category</option>
+                                <option value="civil">Civil Contractor</option>
+                                <option value="electrical">Electrical Contractor</option>
+                                <option value="mechanical">Mechanical Contractor</option>
+                                <option value="plumbing">Plumbing Contractor</option>
+                                <option value="painting">Painting & Finishing</option>
+                                <option value="interior">Interior & Design</option>
+                            </select>
+                        </div>
 
                         <button type="submit" class="btn w-100 py-2"
                             style="background-color:#b3d33c;color:#000;font-weight:600;">
@@ -88,4 +76,40 @@
             </div>
         </div>
     </div>
+
+    <!-- Styles -->
+    <style>
+        .btn-check:checked+label {
+            background-color: #b3d33c !important;
+            color: #000 !important;
+            box-shadow: none !important;
+        }
+
+        label.btn:hover {
+            background-color: #b3d33c20;
+        }
+    </style>
+
+    <!-- Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const contractorRadio = document.getElementById('contractor');
+            const userRadio = document.getElementById('user');
+            const categoryField = document.getElementById('contractorCategoryField');
+
+            function toggleCategoryField() {
+                if (contractorRadio.checked) {
+                    categoryField.style.display = 'block';
+                } else {
+                    categoryField.style.display = 'none';
+                }
+            }
+
+            contractorRadio.addEventListener('change', toggleCategoryField);
+            userRadio.addEventListener('change', toggleCategoryField);
+
+            // Initialize on load
+            toggleCategoryField();
+        });
+    </script>
 </x-layout.app-layout>
