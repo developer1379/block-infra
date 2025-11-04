@@ -86,5 +86,19 @@ class WebsiteController extends Controller
         return view('website.pages.contact');
     }
 
+    /**
+     * Display the login page.
+     */
+    public function login()
+    {
+        return view('website.pages.auth.login');
+    }
 
+    /**
+     * Display the signup (register) page.
+     */
+    public function signup()
+    {
+        return view('website.pages.auth.signup');
+    }
 }

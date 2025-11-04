@@ -97,7 +97,7 @@
                     class="nav-item nav-link text-uppercase">DigitalShramik</a>
                 <a href="{{ route('website.contact') }}" class="nav-item nav-link text-uppercase">Contact Us</a>
 
-                <a href="{{ route('website.request-demo') }}"
+                <a href="{{ route('website.login') }}"
                     class="nav-item nav-link text-dark px-4 ms-3 d-none d-lg-block text-uppercase"
                     style="background-color:#b3d33c; border-radius:0; font-weight:600;">
                     Login <i class="bi bi-arrow-right"></i>
