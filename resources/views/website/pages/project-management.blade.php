@@ -8,7 +8,7 @@
     <div class="container py-5">
         <div class="row align-items-center g-5">
             <div class="col-lg-6 wow fadeInLeft" data-wow-delay="0.2s">
-                <img src="{{ asset('website/img/project-management.jpg') }}" class="img-fluid rounded shadow" alt="Project Management">
+                <img src="{{ asset('website/img/construction.jpg') }}" class="img-fluid rounded shadow" alt="Project Management">
             </div>
             <div class="col-lg-6 wow fadeInRight" data-wow-delay="0.4s">
                 <h2 class="fw-bold text-dark mb-3">Expert Project Management Services</h2>
