@@ -32,21 +32,3 @@ Route::controller(WebsiteController::class)->group(function () {
     Route::get('/signup', 'signup')->name('website.signup');
 });
 
-
-Route::get('/login', [AuthController::class, 'loginPage'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.post');
-
-Route::get('/register', [AuthController::class, 'registerPage'])->name('register');
-Route::post('/register', [AuthController::class, 'register'])->name('register.post');
-
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-Route::middleware(['auth'])->get('/dashboard', function () {
-    $user = auth()->user();
-    if ($user->hasRole('contractor')) {
-        return view('website.dashboard.contractor');
-    } elseif ($user->hasRole('user')) {
-        return view('website.dashboard.user');
-    }
-    return redirect('/');
-})->name('dashboard');
