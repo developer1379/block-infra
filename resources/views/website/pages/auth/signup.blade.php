@@ -52,12 +52,34 @@
                             <label class="form-label fw-semibold text-dark">Contractor Category</label>
                             <select class="form-select border-dark-subtle">
                                 <option selected disabled>Select Category</option>
-                                <option value="civil">Civil Contractor</option>
-                                <option value="electrical">Electrical Contractor</option>
-                                <option value="mechanical">Mechanical Contractor</option>
-                                <option value="plumbing">Plumbing Contractor</option>
-                                <option value="painting">Painting & Finishing</option>
-                                <option value="interior">Interior & Design</option>
+
+                                <optgroup label="Building & Civil Works">
+                                    <option value="civil">Civil Construction</option>
+                                    <option value="structural">Structural Contractor</option>
+                                    <option value="road">Road & Highway Contractor</option>
+                                    <option value="bridge">Bridge & Infrastructure Contractor</option>
+                                </optgroup>
+
+                                <optgroup label="Mechanical, Electrical & Plumbing (MEP)">
+                                    <option value="electrical">Electrical Contractor</option>
+                                    <option value="mechanical">Mechanical / HVAC Contractor</option>
+                                    <option value="plumbing">Plumbing & Sanitation</option>
+                                    <option value="fire">Fire Safety Systems</option>
+                                </optgroup>
+
+                                <optgroup label="Finishing & Design">
+                                    <option value="painting">Painting & Finishing</option>
+                                    <option value="interior">Interior Design & Fit-out</option>
+                                    <option value="tiling">Tiling & Flooring</option>
+                                    <option value="carpentry">Carpentry & Joinery</option>
+                                </optgroup>
+
+                                <optgroup label="Specialized Works">
+                                    <option value="landscaping">Landscaping & Exterior Works</option>
+                                    <option value="waterproofing">Waterproofing & Insulation</option>
+                                    <option value="solar">Solar & Renewable Installations</option>
+                                    <option value="demolition">Demolition & Site Preparation</option>
+                                </optgroup>
                             </select>
                         </div>
 
