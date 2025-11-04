@@ -22,38 +22,58 @@
         color: #000 !important;
     }
 </style>
-<div class="container-fluid px-4 d-none d-lg-block">
-    <div class="row gx-4">
-        <div class="col-lg-4 text-center py-2">
-            <div class="d-inline-flex align-items-center">
-                <i class="bi bi-geo-alt fs-4 me-2" style="color:#b3d33c;"></i>
-                <div class="text-start small">
-                    <h6 class="text-uppercase fw-semibold mb-1">Our Office</h6>
-                    <span>Flat No. 202, Plot No. 674, Vishambhar Sadan, Vikas Nagar, Kanpur</span>
+<!-- Topbar Start -->
+<div class="container-fluid bg-light py-1 px-4 d-none d-lg-block border-bottom">
+    <div class="row align-items-center text-center gx-0">
+
+        <!-- Office Address -->
+        <div class="col-lg-4 py-1">
+            <div class="d-inline-flex align-items-center justify-content-center">
+                <i class="bi bi-geo-alt-fill me-2" style="color:#b3d33c; font-size:1.1rem;"></i>
+                <div class="text-start">
+                    <small class="d-block text-uppercase fw-semibold text-dark">Our Office</small>
+                    <small class="text-muted">Flat 202, Plot 674, Vishambhar Sadan, Vikas Nagar, Kanpur</small>
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 text-center border-start border-end py-2">
-            <div class="d-inline-flex align-items-center">
-                <i class="bi bi-envelope-open fs-4 me-2" style="color:#b3d33c;"></i>
-                <div class="text-start small">
-                    <h6 class="text-uppercase fw-semibold mb-1">Email Us</h6>
-                    <span>info@blocinfra.com</span>
+
+        <!-- Email -->
+        <div class="col-lg-4 py-1 border-start border-end">
+            <div class="d-inline-flex align-items-center justify-content-center">
+                <i class="bi bi-envelope-fill me-2" style="color:#b3d33c; font-size:1.1rem;"></i>
+                <div class="text-start">
+                    <small class="d-block text-uppercase fw-semibold text-dark">Email Us</small>
+                    <small><a href="mailto:info@blocinfra.com"
+                            class="text-muted text-decoration-none">info@blocinfra.com</a></small>
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 text-center py-2">
-            <div class="d-inline-flex align-items-center">
-                <i class="bi bi-phone-vibrate fs-4 me-2" style="color:#b3d33c;"></i>
-                <div class="text-start small">
-                    <h6 class="text-uppercase fw-semibold mb-1">Call Us</h6>
-                    <span>+91 73111 22392</span>
+
+        <!-- Phone -->
+        <div class="col-lg-4 py-1">
+            <div class="d-inline-flex align-items-center justify-content-center">
+                <i class="bi bi-telephone-fill me-2" style="color:#b3d33c; font-size:1.1rem;"></i>
+                <div class="text-start">
+                    <small class="d-block text-uppercase fw-semibold text-dark">Call Us</small>
+                    <small class="text-muted">+91 73111 22392</small>
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 <!-- Topbar End -->
+
+<!-- Optional Styling (can go in your CSS) -->
+<style>
+    .container-fluid .text-start small {
+        line-height: 1.2;
+    }
+
+    .container-fluid.bg-light {
+        background-color: #f8f9fa !important;
+    }
+</style>
 
 
 <!-- Navbar Start -->
