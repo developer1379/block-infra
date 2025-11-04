@@ -2,8 +2,8 @@
     <meta charset="utf-8">
     <title>Bloc-Infra - Construction Company</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Free HTML Templates" name="keywords">
-    <meta content="Free HTML Templates" name="description">
+    <meta content="Kanpur's best Construction " name="keywords">
+    <meta content="Kanpur Construction comapany" name="description">
 
     <!-- Favicon -->
     <link href="{{ asset('website/img/fav.jpg') }}" rel="icon">
