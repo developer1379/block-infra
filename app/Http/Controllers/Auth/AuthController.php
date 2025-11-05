@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
+
 
 class AuthController extends Controller
 {
@@ -30,22 +32,25 @@ class AuthController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
             'role' => 'required|in:contractor,user',
+            'contractor_category' => 'nullable|string|max:255',
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'contractor_category' => $request->role === 'contractor' ? $request->contractor_category : null,
         ]);
 
-        // Assign Role
+        // ✅ ensure the role exists for the 'web' guard
+        Role::findOrCreate($request->role, 'web');
+
         $user->assignRole($request->role);
 
         Auth::login($user);
 
         return redirect()->route('dashboard')->with('success', 'Registration successful!');
     }
-
     // Handle login
     public function login(Request $request)
     {
@@ -71,6 +76,6 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login')->with('success', 'Logged out successfully.');
+        return redirect()->route('website.login')->with('success', 'Logged out successfully.');
     }
 }

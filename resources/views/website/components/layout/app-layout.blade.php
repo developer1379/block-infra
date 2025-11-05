@@ -14,6 +14,7 @@
 
     {{-- Main Content --}}
     {{ $slot }}
+    @include('website.common.toast')
 
     {{-- Footer --}}
     @include('website.common.footer')

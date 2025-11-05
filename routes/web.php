@@ -1,19 +1,8 @@
 <?php
 
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
 
 Route::controller(WebsiteController::class)->group(function () {
     Route::get('/', 'index')->name('website.home');
@@ -27,8 +16,22 @@ Route::controller(WebsiteController::class)->group(function () {
     Route::get('/digitalshramik', 'digitalShramik')->name('website.digitalshramik');
     Route::get('/contact', 'contact')->name('website.contact');
     Route::get('/request-demo', 'requestDemo')->name('website.request-demo');
-
-    Route::get('/login', 'login')->name('website.login');
-    Route::get('/signup', 'signup')->name('website.signup');
 });
 
+// 🔐 Auth Routes (handled by AuthController)
+Route::controller(AuthController::class)->group(function () {
+    Route::get('/login', 'loginPage')->name('website.login');
+    Route::post('/login', 'login')->name('website.login.submit');
+
+    Route::get('/signup', 'registerPage')->name('website.signup');
+    Route::post('/signup', 'register')->name('website.register.submit');
+
+    Route::post('/logout', 'logout')->name('logout');
+});
+
+// 🧱 Dashboard (Protected)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('admin.pages.dashboard.index');
+    })->name('dashboard');
+});

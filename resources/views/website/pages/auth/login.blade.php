@@ -7,20 +7,21 @@
                         <h3 class="fw-bold text-uppercase" style="color:#b3d33c;">Login to Bloc Infra</h3>
                         <p class="text-muted mb-0">Access your account as a User or Contractor</p>
                     </div>
-                    <form>
+                    <form method="POST" action="{{ route('website.login.submit') }}">
+                        @csrf
                         <div class="mb-3">
                             <label class="form-label fw-semibold text-dark">Email Address</label>
-                            <input type="email" class="form-control border-dark-subtle"
-                                placeholder="Enter your email">
+                            <input type="email" name="email" class="form-control border-dark-subtle"
+                                placeholder="Enter your email" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold text-dark">Password</label>
-                            <input type="password" class="form-control border-dark-subtle"
-                                placeholder="Enter your password">
+                            <input type="password" name="password" class="form-control border-dark-subtle"
+                                placeholder="Enter your password" required>
                         </div>
                         <div class="d-flex justify-content-between mb-3">
                             <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="remember">
+                                <input type="checkbox" class="form-check-input" id="remember" name="remember">
                                 <label class="form-check-label small text-muted" for="remember">Remember me</label>
                             </div>
                             <a href="#" class="small text-decoration-none" style="color:#b3d33c;">Forgot
@@ -31,6 +32,7 @@
                             Login
                         </button>
                     </form>
+
                     <div class="text-center mt-4">
                         <p class="text-muted mb-0">Don't have an account?</p>
                         <a href="{{ route('website.signup') }}" class="fw-semibold text-decoration-none"
