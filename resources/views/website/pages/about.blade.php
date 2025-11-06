@@ -1,135 +1,239 @@
 <x-layout.app-layout>
 
-    {{-- Page Header --}}
-    <div class="container-fluid bg-dark text-center py-6 mb-5">
-        <h1 class="display-4 text-uppercase mb-3 wow fadeInDown" data-wow-delay="0.2s" style="color:#b3d33c;">
-            About Us
-        </h1>
-        <p class="lead mb-0 fw-semibold wow fadeInUp" data-wow-delay="0.4s" style="color:#fff;">
-            Building the Future with Strength, Quality & Integrity
-        </p>
-    </div>
+    {{-- PAGE HEADER --}}
+    <section class="bg-dark text-center py-6 mb-5">
+        <div class="container">
+            <h1 class="display-5 fw-bold text-uppercase mb-2" style="color:#b3d33c;">About Us</h1>
+            <p class="lead text-light fw-medium mb-0">Building the Future with Strength, Quality & Integrity</p>
+        </div>
+    </section>
 
-    {{-- About Section --}}
-    <div class="container py-5">
-        <div class="row align-items-center g-5">
-            <div class="col-lg-6 wow fadeInLeft" data-wow-delay="0.2s">
-                <img src="{{ asset('website/img/about.jpg') }}" class="img-fluid rounded shadow" alt="About Bloc Infra">
-            </div>
-            <div class="col-lg-6 wow fadeInRight" data-wow-delay="0.4s">
-                <h2 class="text-uppercase fw-bold mb-3" style="color:#b3d33c;">Who We Are</h2>
-                <p class="fw-semibold text-dark mb-4">
-                    <strong>Bloc Infra Pvt. Ltd.</strong> brings builders, contractors, and clients together under one
-                    digital roof. Our platform simplifies the entire construction process—whether you’re hiring skilled
-                    professionals, connecting with verified contractors, or managing your building project effortlessly.
-                </p>
-                <p class="fw-semibold text-dark mb-4">
-                    We understand that the construction industry relies on trust, transparency, and timely execution.
-                    That’s why we’ve built a network that enables users to compare services, collaborate efficiently,
-                    and ensure high-quality work at the right price. From residential developments to large-scale
-                    infrastructure projects, Bloc Infra is your trusted partner for excellence.
-                </p>
-                <p class="fw-semibold text-dark mb-4">
-                    Our mission is to modernize how construction projects are coordinated and delivered. With
-                    technology-driven tools, professional partnerships, and a focus on reliability, we help turn your
-                    ideas into strong, lasting structures.
-                </p>
-                <a href="{{ url('contact') }}" class="btn px-4 py-2 wow fadeInUp fw-bold" data-wow-delay="0.6s"
-                    style="background-color:#b3d33c;color:#000;">
-                    Contact Us
-                </a>
+    {{-- WHO WE ARE --}}
+    <section class="py-5">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6 wow fadeInLeft" data-wow-delay="0.2s">
+                    <img src="{{ asset('website/img/about.jpg') }}" class="img-fluid rounded shadow"
+                        alt="About Bloc Infra">
+                </div>
+                <div class="col-lg-6 wow fadeInRight" data-wow-delay="0.4s">
+                    <h2 class="fw-bold text-uppercase mb-3" style="color:#b3d33c;">Who We Are</h2>
+                    <p class="text-dark mb-3 lh-lg">
+                        <strong>Bloc Infra Pvt. Ltd.</strong> connects builders, contractors, and clients under one
+                        powerful digital platform.
+                        Whether you’re hiring skilled professionals, managing contractors, or planning a construction
+                        project —
+                        we make the process simple, transparent, and reliable.
+                    </p>
+                    <p class="text-dark mb-4 lh-lg">
+                        Our platform empowers seamless collaboration through verified contractors, project tracking
+                        tools, and professional consultation —
+                        ensuring that every project is completed with trust, quality, and efficiency.
+                    </p>
+                    <a href="{{ url('contact') }}" class="btn px-4 py-2 fw-bold shadow-sm"
+                        style="background-color:#b3d33c;color:#000;">Contact Us</a>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    {{-- Mission Vision Values --}}
-    <div class="container-fluid bg-dark py-6 mt-5">
+    {{-- OUR SERVICES --}}
+    <section class="py-6 bg-light">
+        <div class="container text-center">
+            <h2 class="fw-bold text-uppercase mb-3" style="color:#b3d33c;">Our Services</h2>
+            <p class="text-muted mb-5">Simplifying Construction. Empowering Connections.</p>
+
+            <div class="row g-4">
+                @php
+                    $services = [
+                        [
+                            'icon' => 'fa-handshake',
+                            'title' => 'Contractor–Builder Networking',
+                            'desc' =>
+                                'Connect with verified contractors for every aspect of construction, from small repairs to large-scale projects.',
+                        ],
+                        [
+                            'icon' => 'fa-comments',
+                            'title' => 'Project Consultation',
+                            'desc' => 'Receive expert advice on project planning, budgeting, and timelines.',
+                        ],
+                        [
+                            'icon' => 'fa-tasks',
+                            'title' => 'Project Management Tools',
+                            'desc' =>
+                                'Manage documentation, schedules, and communication efficiently with our digital tools.',
+                        ],
+                        [
+                            'icon' => 'fa-headset',
+                            'title' => 'User Support',
+                            'desc' =>
+                                'Access dedicated support for queries, troubleshooting, and contractor recommendations.',
+                        ],
+                    ];
+                @endphp
+
+                @foreach ($services as $service)
+                    <div class="col-md-6 col-lg-3 wow fadeInUp" data-wow-delay="0.{{ $loop->iteration }}s">
+                        <div class="card h-100 border-0 shadow-sm p-4 transition hover-lift">
+                            <div class="mb-3">
+                                <i class="fa-solid {{ $service['icon'] }} fs-2" style="color:#b3d33c;"></i>
+                            </div>
+                            <h5 class="fw-semibold text-dark mb-2">{{ $service['title'] }}</h5>
+                            <p class="text-muted small mb-0 lh-base">{{ $service['desc'] }}</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    {{-- MISSION & VISION --}}
+    <section class="bg-dark text-light py-6">
         <div class="container text-center">
             <div class="row g-5">
-                <div class="col-md-4 wow fadeInUp" data-wow-delay="0.2s">
-                    <div class="p-4 border border-secondary rounded h-100">
-                        <i class="bi bi-bullseye fs-1 mb-3" style="color:#b3d33c;"></i>
-                        <h4 class="text-uppercase text-white fw-bold mb-3">Our Mission</h4>
-                        <p class="fw-semibold text-light mb-0">
-                            To empower progress by providing sustainable, technology-driven infrastructure and
-                            construction solutions that strengthen communities and businesses.
+                @php
+                    $mv = [
+                        [
+                            'icon' => 'fa-bullseye',
+                            'title' => 'Our Mission',
+                            'desc' =>
+                                'To empower the construction community by creating a transparent, efficient, and reliable digital platform connecting users, builders, and contractors.',
+                        ],
+                        [
+                            'icon' => 'fa-lightbulb',
+                            'title' => 'Our Vision',
+                            'desc' =>
+                                'To become the most trusted online hub for construction services, recognized for innovation, quality, and dependable partnerships.',
+                        ],
+                        [
+                            'icon' => 'fa-people-group',
+                            'title' => 'Our Values',
+                            'desc' =>
+                                'Integrity • Innovation • Quality • Safety • Sustainability • Customer Satisfaction.',
+                        ],
+                    ];
+                @endphp
+
+                @foreach ($mv as $item)
+                    <div class="col-md-4 wow fadeInUp" data-wow-delay="0.{{ $loop->iteration }}s">
+                        <div class="p-4 border border-secondary rounded-3 h-100 bg-black bg-opacity-25">
+                            <i class="fa-solid {{ $item['icon'] }} fs-2 mb-3" style="color:#b3d33c;"></i>
+                            <h4 class="fw-bold text-uppercase mb-3 text-light">{{ $item['title'] }}</h4>
+                            <p class="small text-light mb-0 lh-lg">{{ $item['desc'] }}</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    {{-- CONTRACTOR DETAILS --}}
+    <section class="py-6">
+        <div class="container text-center">
+            <h2 class="fw-bold text-uppercase mb-3" style="color:#b3d33c;">Essential Contractor Details</h2>
+            <p class="text-muted mb-5">Transparency and trust begin with clear professional information.</p>
+
+            <div class="row g-4 text-start">
+                @php
+                    $details = [
+                        [
+                            'title' => 'Contractor / Company Name',
+                            'desc' => 'Fundamental for identification and branding.',
+                        ],
+                        [
+                            'title' => 'Areas of Specialization',
+                            'desc' => 'Specify skills like plumbing, electrical, carpentry, or general contracting.',
+                        ],
+                        ['title' => 'Service Regions', 'desc' => 'List the cities or regions your company serves.'],
+                        [
+                            'title' => 'Portfolio / Project Showcase',
+                            'desc' =>
+                                'Share photos, descriptions, and testimonials from completed work to build client trust.',
+                        ],
+                        [
+                            'title' => 'Years in Business / Experience',
+                            'desc' => 'Highlight reliability and industry expertise.',
+                        ],
+                        [
+                            'title' => 'Ratings & Reviews',
+                            'desc' => 'Display client feedback and star ratings for transparency.',
+                        ],
+                    ];
+                @endphp
+
+                @foreach ($details as $item)
+                    <div class="col-md-4 wow fadeInUp" data-wow-delay="0.{{ $loop->iteration }}s">
+                        <div class="card h-100 border-0 shadow-sm p-4 transition hover-lift bg-white">
+                            <h5 class="fw-semibold text-dark mb-2">{{ $item['title'] }}</h5>
+                            <p class="text-dark small mb-0 lh-base">{{ $item['desc'] }}</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    {{-- BLOG & LEGAL --}}
+    <section class="py-6 bg-light">
+        <div class="container text-center">
+            <div class="row justify-content-center g-4">
+                <div class="col-md-5 wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="card border-0 shadow-sm p-4 h-100 hover-lift">
+                        <i class="fa-solid fa-newspaper fs-2 mb-3" style="color:#b3d33c;"></i>
+                        <h5 class="fw-semibold text-dark mb-2">Blog / Insights</h5>
+                        <p class="text-muted small mb-0 lh-base">
+                            Stay updated with construction trends, educational guides, and company news.
                         </p>
                     </div>
                 </div>
-                <div class="col-md-4 wow fadeInUp" data-wow-delay="0.4s">
-                    <div class="p-4 border border-secondary rounded h-100">
-                        <i class="bi bi-lightbulb fs-1 mb-3" style="color:#b3d33c;"></i>
-                        <h4 class="text-uppercase text-white fw-bold mb-3">Our Vision</h4>
-                        <p class="fw-semibold text-light mb-0">
-                            To redefine the construction experience through innovation, integrity, and excellence —
-                            becoming the most trusted name in modern infrastructure development.
-                        </p>
-                    </div>
-                </div>
-                <div class="col-md-4 wow fadeInUp" data-wow-delay="0.6s">
-                    <div class="p-4 border border-secondary rounded h-100">
-                        <i class="bi bi-people fs-1 mb-3" style="color:#b3d33c;"></i>
-                        <h4 class="text-uppercase text-white fw-bold mb-3">Our Values</h4>
-                        <p class="fw-semibold text-light mb-0">
-                            Integrity | Innovation | Quality | Safety | Sustainability | Collaboration | Customer Trust
+                <div class="col-md-5 wow fadeInUp" data-wow-delay="0.4s">
+                    <div class="card border-0 shadow-sm p-4 h-100 hover-lift">
+                        <i class="fa-solid fa-scale-balanced fs-2 mb-3" style="color:#b3d33c;"></i>
+                        <h5 class="fw-semibold text-dark mb-2">Legal</h5>
+                        <p class="text-muted small mb-0 lh-base">
+                            Review our <a href="#" class="text-decoration-none" style="color:#b3d33c;">Terms &
+                                Conditions</a> and
+                            <a href="#" class="text-decoration-none" style="color:#b3d33c;">Privacy Policy</a>
+                            to understand your rights and obligations.
                         </p>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    {{-- Why Choose Bloc Infra --}}
-    <div class="container py-6">
-        <div class="text-center mb-5 wow fadeInDown">
-            <h2 class="text-uppercase fw-bold" style="color:#b3d33c;">Why Choose Bloc Infra</h2>
-            <p class="fw-semibold text-dark">Your Reliable Partner in Infrastructure & Construction Excellence</p>
+    {{-- CTA --}}
+    <section class="bg-dark text-center text-white py-6">
+        <div class="container">
+            <h2 class="fw-bold text-uppercase mb-3">Ready to Build Your Vision?</h2>
+            <a href="{{ url('request-demo') }}" class="btn px-5 py-3 mt-3 fw-bold shadow-sm"
+                style="background-color:#b3d33c;color:#000;">Request a Demo
+                <i class="fa-solid fa-arrow-right ms-1"></i></a>
         </div>
-        <div class="row g-4 text-center">
-            <div class="col-md-3 col-sm-6 wow zoomIn" data-wow-delay="0.2s">
-                <i class="bi bi-award fs-1 mb-3" style="color:#b3d33c;"></i>
-                <h5 class="fw-bold text-dark">Quality Assurance</h5>
-                <p class="fw-semibold text-dark small">
-                    Every project is executed with precision, adhering to global standards of safety and durability.
-                </p>
-            </div>
-            <div class="col-md-3 col-sm-6 wow zoomIn" data-wow-delay="0.4s">
-                <i class="bi bi-gear fs-1 mb-3" style="color:#b3d33c;"></i>
-                <h5 class="fw-bold text-dark">Modern Technology</h5>
-                <p class="fw-semibold text-dark small">
-                    We adopt smart construction tools and digital workflows for faster, data-driven project management.
-                </p>
-            </div>
-            <div class="col-md-3 col-sm-6 wow zoomIn" data-wow-delay="0.6s">
-                <i class="bi bi-people-fill fs-1 mb-3" style="color:#b3d33c;"></i>
-                <h5 class="fw-bold text-dark">Expert Team</h5>
-                <p class="fw-semibold text-dark small">
-                    Our team of skilled professionals ensures high-quality execution with innovative engineering.
-                </p>
-            </div>
-            <div class="col-md-3 col-sm-6 wow zoomIn" data-wow-delay="0.8s">
-                <i class="bi bi-building fs-1 mb-3" style="color:#b3d33c;"></i>
-                <h5 class="fw-bold text-dark">Timely Delivery</h5>
-                <p class="fw-semibold text-dark small">
-                    With structured planning and efficient processes, we deliver projects on time — every time.
-                </p>
-            </div>
-        </div>
-    </div>
+    </section>
 
-    {{-- Call to Action --}}
-    <div class="container-fluid bg-dark text-center py-5 mt-5 wow fadeInUp" data-wow-delay="0.2s">
-        <h2 class="text-uppercase fw-bold text-white mb-3">Ready to Build Your Vision?</h2>
-        <a href="{{ url('request-demo') }}" class="btn px-5 py-3 mt-3 fw-bold"
-            style="background-color:#b3d33c;color:#000;">
-            Request a Demo <i class="bi bi-arrow-right"></i>
-        </a>
-    </div>
+    {{-- CUSTOM STYLES --}}
+    <style>
+        .py-6 {
+            padding-top: 4rem !important;
+            padding-bottom: 4rem !important;
+        }
 
-    {{-- WOW.js & Animate.css --}}
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+    </style>
+
+    {{-- JS --}}
     @push('scripts')
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
         <script>
             new WOW().init();
         </script>
