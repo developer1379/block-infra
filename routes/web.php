@@ -35,3 +35,6 @@ Route::middleware(['auth'])->group(function () {
         return view('admin.pages.dashboard.index');
     })->name('dashboard');
 });
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class, ['as' => 'admin']);
+});
