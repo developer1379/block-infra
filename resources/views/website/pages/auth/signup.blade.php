@@ -69,36 +69,48 @@
                             </div>
                         </div>
 
+                        @php
+                            $parentCategories = \App\Models\Category::query()
+                                ->with([
+                                    'subcategories' => function ($q) {
+                                        $q->where('is_active', 1)->orderBy('name');
+                                    },
+                                ])
+                                ->whereNull('parent_id')
+                                ->where('is_active', 1)
+                                ->orderBy('name')
+                                ->get();
+                        @endphp
+
                         {{-- Contractor Category (only when contractor selected) --}}
                         <div class="mb-3" id="contractorCategoryField">
                             <label class="form-label fw-semibold text-dark">Contractor Category</label>
                             <select name="contractor_category" class="form-select border-dark-subtle">
-                                <option selected disabled>Select Category</option>
-                                <optgroup label="Building & Civil Works">
-                                    <option value="civil">Civil Construction</option>
-                                    <option value="structural">Structural Contractor</option>
-                                    <option value="road">Road & Highway Contractor</option>
-                                    <option value="bridge">Bridge & Infrastructure Contractor</option>
-                                </optgroup>
-                                <optgroup label="Mechanical, Electrical & Plumbing (MEP)">
-                                    <option value="electrical">Electrical Contractor</option>
-                                    <option value="mechanical">Mechanical / HVAC Contractor</option>
-                                    <option value="plumbing">Plumbing & Sanitation</option>
-                                    <option value="fire">Fire Safety Systems</option>
-                                </optgroup>
-                                <optgroup label="Finishing & Design">
-                                    <option value="painting">Painting & Finishing</option>
-                                    <option value="interior">Interior Design & Fit-out</option>
-                                    <option value="tiling">Tiling & Flooring</option>
-                                    <option value="carpentry">Carpentry & Joinery</option>
-                                </optgroup>
-                                <optgroup label="Specialized Works">
-                                    <option value="landscaping">Landscaping & Exterior Works</option>
-                                    <option value="waterproofing">Waterproofing & Insulation</option>
-                                    <option value="solar">Solar & Renewable Installations</option>
-                                    <option value="demolition">Demolition & Site Preparation</option>
-                                </optgroup>
+                                <option value="" disabled {{ old('contractor_category') ? '' : 'selected' }}>
+                                    Select Category</option>
+
+                                @foreach ($parentCategories as $parent)
+                                    @php $children = $parent->subcategories; @endphp
+
+                                    @if ($children->count())
+                                        <optgroup label="{{ $parent->name }}">
+                                            @foreach ($children as $child)
+                                                <option value="{{ $child->id }}"
+                                                    {{ old('contractor_category') == $child->id ? 'selected' : '' }}>
+                                                    {{ $child->name }}
+                                                </option>
+                                            @endforeach
+                                        </optgroup>
+                                    @else
+                                        {{-- If no subcategories, allow selecting the parent itself --}}
+                                        <option value="{{ $parent->id }}"
+                                            {{ old('contractor_category') == $parent->id ? 'selected' : '' }}>
+                                            {{ $parent->name }}
+                                        </option>
+                                    @endif
+                                @endforeach
                             </select>
+
                             @error('contractor_category')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
