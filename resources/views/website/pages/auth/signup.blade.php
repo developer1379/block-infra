@@ -56,64 +56,94 @@
                                 <div>
                                     <input type="radio" class="btn-check" name="role" id="contractor"
                                         value="contractor" autocomplete="off"
-                                        {{ old('role', 'contractor') === 'contractor' ? 'checked' : '' }}>
+                                        {{ old('role') === 'contractor' ? 'checked' : '' }}>
                                     <label class="btn border border-2 px-4 py-2 fw-semibold" for="contractor"
                                         style="border-color:#b3d33c;color:#000;">Contractor</label>
                                 </div>
                                 <div>
                                     <input type="radio" class="btn-check" name="role" id="user" value="user"
-                                        autocomplete="off" {{ old('role') === 'user' ? 'checked' : '' }}>
+                                        autocomplete="off" {{ old('role', 'user') === 'user' ? 'checked' : '' }}>
                                     <label class="btn border border-2 px-4 py-2 fw-semibold" for="user"
                                         style="border-color:#b3d33c;color:#000;">User</label>
                                 </div>
                             </div>
                         </div>
 
-                        @php
-                            $parentCategories = \App\Models\Category::query()
-                                ->with([
-                                    'subcategories' => function ($q) {
-                                        $q->where('is_active', 1)->orderBy('name');
-                                    },
-                                ])
-                                ->whereNull('parent_id')
-                                ->where('is_active', 1)
-                                ->orderBy('name')
-                                ->get();
-                        @endphp
+                        {{-- Contractor Extra Fields --}}
+                        <div id="contractorFields">
+                            {{-- Company Name --}}
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold text-dark">Company Name</label>
+                                <input type="text" name="company_name" value="{{ old('company_name') }}"
+                                    class="form-control border-dark-subtle" placeholder="Enter company name">
+                                @error('company_name')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
 
-                        {{-- Contractor Category (only when contractor selected) --}}
-                        <div class="mb-3" id="contractorCategoryField">
-                            <label class="form-label fw-semibold text-dark">Contractor Category</label>
-                            <select name="contractor_category" class="form-select border-dark-subtle">
-                                <option value="" disabled {{ old('contractor_category') ? '' : 'selected' }}>
-                                    Select Category</option>
+                            {{-- Phone --}}
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold text-dark">Phone Number</label>
+                                <input type="text" name="phone" value="{{ old('phone') }}"
+                                    class="form-control border-dark-subtle" placeholder="Enter phone number">
+                                @error('phone')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
 
-                                @foreach ($parentCategories as $parent)
-                                    @php $children = $parent->subcategories; @endphp
+                            {{-- City --}}
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold text-dark">City</label>
+                                <input type="text" name="city" value="{{ old('city') }}"
+                                    class="form-control border-dark-subtle" placeholder="Enter city">
+                                @error('city')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
 
-                                    @if ($children->count())
-                                        <optgroup label="{{ $parent->name }}">
-                                            @foreach ($children as $child)
-                                                <option value="{{ $child->id }}"
-                                                    {{ old('contractor_category') == $child->id ? 'selected' : '' }}>
-                                                    {{ $child->name }}
-                                                </option>
-                                            @endforeach
-                                        </optgroup>
-                                    @else
-                                        {{-- If no subcategories, allow selecting the parent itself --}}
-                                        <option value="{{ $parent->id }}"
-                                            {{ old('contractor_category') == $parent->id ? 'selected' : '' }}>
-                                            {{ $parent->name }}
-                                        </option>
-                                    @endif
-                                @endforeach
-                            </select>
+                            @php
+                                $parentCategories = \App\Models\Category::query()
+                                    ->with([
+                                        'subcategories' => function ($q) {
+                                            $q->where('is_active', 1)->orderBy('name');
+                                        },
+                                    ])
+                                    ->whereNull('parent_id')
+                                    ->where('is_active', 1)
+                                    ->orderBy('name')
+                                    ->get();
+                            @endphp
 
-                            @error('contractor_category')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
+                            {{-- Contractor Category --}}
+                            <div class="mb-3" id="contractorCategoryField">
+                                <label class="form-label fw-semibold text-dark">Contractor Category</label>
+                                <select name="contractor_category" class="form-select border-dark-subtle">
+                                    <option value="" disabled {{ old('contractor_category') ? '' : 'selected' }}>
+                                        Select Category</option>
+
+                                    @foreach ($parentCategories as $parent)
+                                        @php $children = $parent->subcategories; @endphp
+                                        @if ($children->count())
+                                            <optgroup label="{{ $parent->name }}">
+                                                @foreach ($children as $child)
+                                                    <option value="{{ $child->id }}"
+                                                        {{ old('contractor_category') == $child->id ? 'selected' : '' }}>
+                                                        {{ $child->name }}
+                                                    </option>
+                                                @endforeach
+                                            </optgroup>
+                                        @else
+                                            <option value="{{ $parent->id }}"
+                                                {{ old('contractor_category') == $parent->id ? 'selected' : '' }}>
+                                                {{ $parent->name }}
+                                            </option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                                @error('contractor_category')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
                         </div>
 
                         {{-- Submit --}}
@@ -149,22 +179,32 @@
             display: block;
             margin-top: 3px;
         }
+
+        #contractorFields {
+            display: none;
+        }
     </style>
 
-    {{-- JavaScript --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const contractorRadio = document.getElementById('contractor');
             const userRadio = document.getElementById('user');
-            const categoryField = document.getElementById('contractorCategoryField');
+            const contractorFields = document.getElementById('contractorFields');
 
-            function toggleCategoryField() {
-                categoryField.style.display = contractorRadio.checked ? 'block' : 'none';
+            function toggleContractorFields() {
+                contractorFields.style.display = contractorRadio.checked ? 'block' : 'none';
             }
 
-            contractorRadio.addEventListener('change', toggleCategoryField);
-            userRadio.addEventListener('change', toggleCategoryField);
-            toggleCategoryField();
+            contractorRadio.addEventListener('change', toggleContractorFields);
+            userRadio.addEventListener('change', toggleContractorFields);
+
+            // 👇 ensures that user is selected by default on page load
+            if (!contractorRadio.checked && !userRadio.checked) {
+                userRadio.checked = true;
+            }
+
+            toggleContractorFields();
         });
     </script>
+
 </x-layout.app-layout>

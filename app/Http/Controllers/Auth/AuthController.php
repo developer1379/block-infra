@@ -24,7 +24,6 @@ class AuthController extends Controller
         return view('website.pages.auth.signup');
     }
 
-    // Handle registration
     public function register(Request $request)
     {
         $request->validate([
@@ -33,24 +32,57 @@ class AuthController extends Controller
             'password' => 'required|min:6|confirmed',
             'role' => 'required|in:contractor,user',
             'contractor_category' => 'nullable|string|max:255',
+            'company_name' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'city' => 'nullable|string|max:100',
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'contractor_category' => $request->role === 'contractor' ? $request->contractor_category : null,
-        ]);
+        \DB::beginTransaction();
+        try {
+            // Create user
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
 
-        // ✅ ensure the role exists for the 'web' guard
-        Role::findOrCreate($request->role, 'web');
+            // Ensure the role exists
+            $role = Role::findOrCreate($request->role, 'web');
+            $user->assignRole($role);
 
-        $user->assignRole($request->role);
+            // 🔗 If contractor, also create linked Contractor record
+            if ($request->role === 'contractor') {
+                $contractor = \App\Models\Contractor::create([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'phone' => $request->phone,
+                    'company_name' => $request->company_name,
+                    'category' => $request->contractor_category,
+                    'city' => $request->city,
+                    'is_active' => false, // default inactive until admin approves
+                ]);
 
-        Auth::login($user);
+                \Log::info('🆕 Contractor registered', [
+                    'contractor_id' => $contractor->id,
+                    'user_email' => $user->email,
+                    'category' => $contractor->category,
+                ]);
+            }
 
-        return redirect()->route('dashboard')->with('success', 'Registration successful!');
+            Auth::login($user);
+
+            \DB::commit();
+            return redirect()->route('dashboard')->with('success', 'Registration successful!');
+        } catch (\Throwable $e) {
+            \DB::rollBack();
+            \Log::error('❌ Registration failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            return back()->withInput()->with('error', 'Registration failed. Please try again.');
+        }
     }
+
     // Handle login
     public function login(Request $request)
     {

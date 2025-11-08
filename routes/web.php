@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ContractorController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Auth\AuthController;
@@ -49,3 +50,12 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         ->names('admin.permissions')
         ->except(['show']);
 });
+
+
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::resource('contractors', ContractorController::class)->names('admin.contractors');
+    Route::post('contractors/{id}/toggle-status', [ContractorController::class, 'toggleStatus'])->name('admin.contractors.toggle-status');
+});
+Route::patch('admin/contractor-documents/{id}/verify', [ContractorController::class, 'verify'])
+    ->name('admin.contractor-documents.verify')
+    ->middleware(['auth']);
