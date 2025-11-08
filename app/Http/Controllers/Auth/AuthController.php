@@ -83,7 +83,6 @@ class AuthController extends Controller
         }
     }
 
-    // Handle login
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -91,11 +90,28 @@ class AuthController extends Controller
             'password' => 'required|min:6',
         ]);
 
+        // Fetch user first
+        $user = \App\Models\User::where('email', $request->email)->first();
+
+        // Check if user exists
+        if (!$user) {
+            return back()->withErrors(['email' => 'Invalid credentials provided.']);
+        }
+
+        // ✅ Apply is_active check only for contractors
+        if ($user->hasRole('contractor') && !$user->is_active) {
+            return back()->withErrors([
+                'email' => 'Your contractor account is inactive. Please contact the administrator.',
+            ]);
+        }
+
+        // Attempt login
         if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
             return redirect()->intended(route('dashboard'));
         }
 
+        // Invalid credentials fallback
         return back()->withErrors([
             'email' => 'Invalid credentials provided.',
         ]);
