@@ -36,7 +36,7 @@
             @can('view contractors')
                 <li>
                     <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
-                        <i class="icon icon-people"></i>
+                        <i class="fa fa-users" style="margin-right: 10px;"></i>
                         <span class="nav-text">Contractors</span>
                     </a>
                     <ul aria-expanded="false">
@@ -49,6 +49,7 @@
                     </ul>
                 </li>
             @endcan
+
 
             {{-- Roles & Permissions --}}
             @canany(['view roles', 'view permissions'])

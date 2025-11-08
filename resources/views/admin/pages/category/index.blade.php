@@ -83,7 +83,7 @@
             <div class="card-body p-3">
                 <div class="table-responsive">
                     <table class="table align-middle table-hover mb-0">
-                        <thead class="table-dark text-uppercase small">
+                        <thead class="table-light text-uppercase small">
                             <tr>
                                 <th style="width:50px;">#</th>
                                 <th>Name</th>

@@ -80,7 +80,6 @@
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Company</th>
-                                <th>Category</th>
                                 <th>City</th>
                                 <th>Email</th>
                                 <th>Phone</th>
@@ -94,7 +93,6 @@
                                     <td>{{ $i + 1 }}</td>
                                     <td class="fw-semibold text-dark">{{ $c->name }}</td>
                                     <td>{{ $c->company_name ?? '—' }}</td>
-                                    <td>{{ $c->category ?? '—' }}</td>
                                     <td>{{ $c->city ?? '—' }}</td>
                                     <td>{{ $c->email ?? '—' }}</td>
                                     <td>{{ $c->phone ?? '—' }}</td>
