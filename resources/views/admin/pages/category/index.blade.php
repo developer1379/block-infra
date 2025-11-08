@@ -1,4 +1,35 @@
 <x-admin.app>
+
+    <style>
+        /* === Fix for Status Badge Text Colors === */
+        .badge {
+            border-radius: 4px;
+            font-size: 12px;
+            padding: 5px 10px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        /* Custom Active Badge (Green) */
+        .badge-active {
+            background-color: #b3d33c !important;
+            color: #000 !important;
+            border: 1px solid #9ec92e !important;
+        }
+
+        /* Inactive Badge (Gray) */
+        .badge-inactive {
+            background-color: #6c757d !important;
+            color: #fff !important;
+        }
+
+        /* Subcategory Badge */
+        .badge-sub {
+            background-color: #f1f3f5 !important;
+            color: #333 !important;
+            border: 1px solid #ddd;
+        }
+    </style>
     <div class="">
 
         {{-- PAGE HEADER --}}
@@ -52,7 +83,7 @@
             <div class="card-body p-3">
                 <div class="table-responsive">
                     <table class="table align-middle table-hover mb-0">
-                        <thead class="table-light text-uppercase small">
+                        <thead class="table-dark text-uppercase small">
                             <tr>
                                 <th style="width:50px;">#</th>
                                 <th>Name</th>
@@ -78,11 +109,12 @@
                                     </td>
                                     <td>
                                         @if ($category->is_active)
-                                            <span class="badge bg-success">Active</span>
+                                            <span class="badge badge-active">Active</span>
                                         @else
-                                            <span class="badge bg-secondary">Inactive</span>
+                                            <span class="badge badge-inactive">Inactive</span>
                                         @endif
                                     </td>
+
                                     <td>{{ optional($category->created_at)->format('d M, Y') ?? '-' }}</td>
 
                                     <td class="text-center">
