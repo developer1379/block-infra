@@ -1,6 +1,5 @@
 <x-admin.app>
     <style>
-
         .card {
             border-radius: 12px;
         }
@@ -133,47 +132,51 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($roles as $i => $role)
-                                <tr>
-                                    <td>{{ $i + 1 }}</td>
-                                    <td class="role-name">{{ ucfirst($role->name) }}</td>
-                                    <td>
-                                        @php
-                                            $perms = $role->permissions;
-                                            $visiblePerms = $perms->take(3); // show only first 3
-                                            $remainingCount = $perms->count() - $visiblePerms->count();
-                                        @endphp
+                            @php $count = 1; @endphp
+                            @forelse($roles as $role)
+                                @if ($role->name !== 'admin')
+                                    <tr>
+                                        <td>{{ $count++ }}</td>
+                                        <td class="role-name">{{ ucfirst($role->name) }}</td>
+                                        <td>
+                                            @php
+                                                $perms = $role->permissions;
+                                                $visiblePerms = $perms->take(3);
+                                                $remainingCount = $perms->count() - $visiblePerms->count();
+                                            @endphp
 
-                                        @forelse ($visiblePerms as $p)
-                                            <span class="badge-perm">{{ $p->name }}</span>
-                                        @empty
-                                            <span class="text-muted small">No permissions</span>
-                                        @endforelse
+                                            @forelse ($visiblePerms as $p)
+                                                <span class="badge-perm">{{ $p->name }}</span>
+                                            @empty
+                                                <span class="text-muted small">No permissions</span>
+                                            @endforelse
 
-                                        @if ($remainingCount > 0)
-                                            <span class="badge-more"
-                                                title="{{ $perms->skip(3)->pluck('name')->join(', ') }}">
-                                                +{{ $remainingCount }} more
-                                            </span>
-                                        @endif
-                                    </td>
-                                    <td class="text-center">
-                                        <a href="{{ route('admin.roles.edit', $role->id) }}"
-                                            class="btn btn-sm btn-outline-primary mr-1" title="Edit Role">
-                                            <i class="fa fa-edit"></i>
-                                        </a>
-                                        <form action="{{ route('admin.roles.destroy', $role->id) }}" method="POST"
-                                            class="d-inline"
-                                            onsubmit="return confirm('Are you sure you want to delete this role?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                title="Delete Role">
-                                                <i class="fa fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
+                                            @if ($remainingCount > 0)
+                                                <span class="badge-more"
+                                                    title="{{ $perms->skip(3)->pluck('name')->join(', ') }}">
+                                                    +{{ $remainingCount }} more
+                                                </span>
+                                            @endif
+                                        </td>
+
+                                        <td class="text-center">
+                                            <a href="{{ route('admin.roles.edit', $role->id) }}"
+                                                class="btn btn-sm btn-outline-primary mr-1" title="Edit Role">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                            <form action="{{ route('admin.roles.destroy', $role->id) }}" method="POST"
+                                                class="d-inline"
+                                                onsubmit="return confirm('Are you sure you want to delete this role?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                    title="Delete Role">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endif
                             @empty
                                 <tr>
                                     <td colspan="4" class="text-center empty-state">
@@ -182,6 +185,7 @@
                                     </td>
                                 </tr>
                             @endforelse
+
                         </tbody>
                     </table>
                 </div>
