@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin\ContractorController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UnitController;
+use App\Http\Controllers\Admin\WorkController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Route;
@@ -59,3 +61,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 Route::patch('admin/contractor-documents/{id}/verify', [ContractorController::class, 'verify'])
     ->name('admin.contractor-documents.verify')
     ->middleware(['auth']);
+
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+    Route::resource('works', WorkController::class);
+    Route::resource('units', UnitController::class);
+});
