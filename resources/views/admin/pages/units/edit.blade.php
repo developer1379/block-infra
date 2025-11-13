@@ -1,50 +1,75 @@
 <x-admin.app>
-    <div class="">
+    {{-- PAGE HEADER --}}
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+        <div>
+            <h4 class="text-uppercase font-weight-bold mb-1" style="color:#b3d33c;">Edit Unit</h4>
+            <small class="text-muted">Update measurement unit details</small>
+        </div>
+        <a href="{{ route('admin.units.index') }}" class="btn btn-outline-dark btn-sm mt-2 mt-sm-0">
+            <i class="fa fa-arrow-left"></i> Back
+        </a>
+    </div>
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h4 class="fw-bold text-uppercase mb-0" style="color:#b3d33c;">Edit Unit</h4>
-            <a href="{{ route('admin.units.index') }}" class="btn btn-outline-dark btn-sm">
-                <i class="fa-solid fa-arrow-left"></i> Back
-            </a>
+    {{-- EDIT FORM --}}
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white border-0">
+            <h6 class="mb-0 font-weight-bold text-dark">
+                <i class="fa fa-edit mr-2" style="color:#b3d33c;"></i>Edit Unit
+            </h6>
         </div>
 
-        <div class="card border-0 shadow-sm">
-            <div class="card-body">
-                <form action="{{ route('admin.units.update', $unit->id) }}" method="POST">
-                    @csrf @method('PUT')
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Unit Name</label>
-                            <input type="text" name="name" value="{{ old('name', $unit->name) }}"
-                                   class="form-control border-dark-subtle" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">Symbol</label>
-                            <input type="text" name="symbol" value="{{ old('symbol', $unit->symbol) }}"
-                                   class="form-control border-dark-subtle" required>
-                        </div>
-                        <div class="col-md-12">
-                            <label class="form-label fw-semibold">Description</label>
-                            <textarea name="description" class="form-control border-dark-subtle" rows="2">{{ old('description', $unit->description) }}</textarea>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="is_active" value="1"
-                                       {{ $unit->is_active ? 'checked' : '' }}>
-                                <label class="form-check-label fw-semibold">Active</label>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <button class="btn px-4 fw-bold" style="background-color:#b3d33c;color:#000;">Update Unit</button>
+        <div class="card-body">
+            <form action="{{ route('admin.units.update', $unit->id) }}" method="POST">
+                @csrf
+                @method('PUT')
+
+                <div class="form-row">
+                    {{-- Unit Name --}}
+                    <div class="form-group col-md-6">
+                        <label class="font-weight-semibold text-dark">Unit Name <span
+                                class="text-danger">*</span></label>
+                        <input type="text" name="name" value="{{ old('name', $unit->name) }}"
+                            class="form-control border-secondary" placeholder="e.g., Square Feet" required>
+                    </div>
+
+                    {{-- Symbol --}}
+                    <div class="form-group col-md-6">
+                        <label class="font-weight-semibold text-dark">Symbol <span class="text-danger">*</span></label>
+                        <input type="text" name="symbol" value="{{ old('symbol', $unit->symbol) }}"
+                            class="form-control border-secondary" placeholder="e.g., sqft" required>
+                    </div>
+
+                    {{-- Description --}}
+                    <div class="form-group col-md-12">
+                        <label class="font-weight-semibold text-dark">Description</label>
+                        <textarea name="description" rows="2" class="form-control border-secondary"
+                            placeholder="Short note about the unit">{{ old('description', $unit->description) }}</textarea>
+                    </div>
+
+                    {{-- Active Checkbox --}}
+                    <div class="form-group col-md-12">
+                        <div class="custom-control custom-checkbox mt-2">
+                            <input type="checkbox" class="custom-control-input" id="isActive" name="is_active"
+                                value="1" {{ $unit->is_active ? 'checked' : '' }}>
+                            <label class="custom-control-label font-weight-semibold text-dark" for="isActive">
+                                Active
+                            </label>
                         </div>
                     </div>
-                </form>
-            </div>
-        </div>
+                </div>
 
+                {{-- Submit Button --}}
+                <div class="text-right">
+                    <button type="submit" class="btn px-4 font-weight-bold"
+                        style="background-color:#b3d33c;color:#000;">
+                        <i class="fa fa-save mr-1"></i> Update Unit
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 
     @push('scripts')
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
     @endpush
 </x-admin.app>

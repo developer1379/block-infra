@@ -29,10 +29,12 @@
 
         @include('admin.common.header')
         @include('admin.common.sidebar')
+        @include('website.common.toast')
 
         <div class="content-body">
             <div class="container-fluid">
                 {{ $slot ?? '' }}
+
             </div>
         </div>
 
