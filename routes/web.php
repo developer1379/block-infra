@@ -21,6 +21,7 @@ Route::controller(WebsiteController::class)->group(function () {
     Route::get('/digitalshramik', 'digitalShramik')->name('website.digitalshramik');
     Route::get('/contact', 'contact')->name('website.contact');
     Route::get('/request-demo', 'requestDemo')->name('website.request-demo');
+    Route::get('/calculator','calculator')->name('website.calculator');
 });
 
 // 🔐 Auth Routes (handled by AuthController)

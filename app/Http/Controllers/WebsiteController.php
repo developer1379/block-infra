@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Work;
 use Illuminate\Http\Request;
 
 class WebsiteController extends Controller
@@ -100,5 +102,18 @@ class WebsiteController extends Controller
     public function signup()
     {
         return view('website.pages.auth.signup');
+    }
+
+    public function calculator()
+    {
+        $categories = Category::where('is_active', 1)->orderBy('name')->get();
+
+        $works = Work::with('unit')
+            ->where('is_active', 1)
+            ->orderBy('category_id')
+            ->orderBy('name')
+            ->get();
+
+        return view('website.pages.calculator', compact('categories', 'works'));
     }
 }
