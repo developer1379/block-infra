@@ -112,6 +112,7 @@
 
                 <a href="{{ route('website.about') }}" class="nav-item nav-link text-uppercase">About Us</a>
                 <a href="{{ route('website.faqs') }}" class="nav-item nav-link text-uppercase">FAQs</a>
+                <a href="{{ route('website.calculator') }}" class="nav-item nav-link text-uppercase">Calculator</a>
                 <a href="{{ route('website.contact') }}" class="nav-item nav-link text-uppercase">Contact Us</a>
 
                 <a href="{{ route('website.login') }}"
