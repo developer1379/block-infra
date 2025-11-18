@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\BidController as AdminBidController;
+use App\Http\Controllers\Admin\Contractor\BidController as ContractorBidController;
 use App\Http\Controllers\Admin\ProjectAwardController;
-use App\Http\Controllers\Contractor\BidController;
 
 Route::controller(WebsiteController::class)->group(function () {
     Route::get('/', 'index')->name('website.home');
@@ -96,18 +96,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
 
 Route::middleware(['auth'])->group(function () {
-
-    // Show Add Bid Page (contractor role but admin pages)
-    Route::get(
-        'projects/{id}/add-bid',
-        [BidController::class, 'create']
-    )
+    Route::get('projects/{id}/add-bid', [ContractorBidController::class, 'create'])
         ->name('admin.projects.bid.create');
 
-    // Store Bid
-    Route::post(
-        'projects/{id}/add-bid',
-        [BidController::class, 'store']
-    )
+    Route::post('projects/{id}/add-bid', [ContractorBidController::class, 'store'])
         ->name('admin.projects.bid.store');
 });

@@ -12,7 +12,7 @@
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
         <h5 class="fw-bold mb-1" style="color:#b3d33c;">Submit Bid</h5>
 
-        <a href="{{ route('contractor.projects.show', $project->id) }}" class="btn btn-sm btn-outline-dark">
+        <a href="{{ route('admin.projects.show', $project->id) }}" class="btn btn-sm btn-outline-dark">
             <i class="fa fa-arrow-left"></i> Back
         </a>
     </div>
@@ -29,7 +29,7 @@
 
         <div class="card-body p-3">
 
-            <form action="{{ route('contractor.projects.bid.store', $project->id) }}" method="POST">
+            <form action="{{ route('admin.projects.bid.store', $project->id) }}" method="POST">
                 @csrf
 
                 <div class="row g-3">

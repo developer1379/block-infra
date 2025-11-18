@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Contractor;
+namespace App\Http\Controllers\Admin\Contractor;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\Interfaces\BidRepositoryInterface;
