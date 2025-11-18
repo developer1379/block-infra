@@ -43,4 +43,19 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function projectsCreated()
+    {
+        return $this->hasMany(Project::class, 'created_by');
+    }
+
+    public function bids()
+    {
+        return $this->hasMany(Bid::class, 'contractor_id');
+    }
+
+    public function awardedProjects()
+    {
+        return $this->hasMany(ProjectAward::class, 'awarded_to');
+    }
 }

@@ -107,6 +107,62 @@
                 </li>
             @endcan
 
+            {{-- Projects --}}
+            @can('view projects')
+                <li>
+                    <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
+                        <i class="fa-solid fa-diagram-project me-2"></i>
+                        <span class="nav-text">Projects</span>
+                    </a>
+                    <ul aria-expanded="false">
+
+                        {{-- All Projects --}}
+                        @can('view projects')
+                            <li>
+                                <a href="{{ route('admin.projects.index') }}">
+                                    All Projects
+                                </a>
+                            </li>
+                        @endcan
+
+                        {{-- Add Project --}}
+                        @can('create projects')
+                            <li>
+                                <a href="{{ route('admin.projects.create') }}">
+                                    Add Project
+                                </a>
+                            </li>
+                        @endcan
+
+                    </ul>
+                </li>
+            @endcan
+
+
+            {{-- Bids --}}
+            @can('view bids')
+                <li>
+                    <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
+                        <i class="fa-solid fa-gavel me-2"></i>
+                        <span class="nav-text">Bids</span>
+                    </a>
+
+                    <ul aria-expanded="false">
+
+
+
+                        @can('create bids')
+                            <li>
+                                <a href="{{ route('admin.projects.index') }}">
+                                    <i class="fa fa-gavel"></i> Bid on Projects
+                                </a>
+                            </li>
+                        @endcan
+
+                    </ul>
+                </li>
+            @endcan
+
             {{-- Roles & Permissions --}}
             @canany(['view roles', 'view permissions'])
                 <li>

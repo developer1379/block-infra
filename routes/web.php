@@ -9,6 +9,11 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Admin\BidController as AdminBidController;
+use App\Http\Controllers\Admin\ProjectAwardController;
+use App\Http\Controllers\Contractor\BidController;
+
 Route::controller(WebsiteController::class)->group(function () {
     Route::get('/', 'index')->name('website.home');
     Route::get('/about', 'about')->name('website.about');
@@ -21,7 +26,7 @@ Route::controller(WebsiteController::class)->group(function () {
     Route::get('/digitalshramik', 'digitalShramik')->name('website.digitalshramik');
     Route::get('/contact', 'contact')->name('website.contact');
     Route::get('/request-demo', 'requestDemo')->name('website.request-demo');
-    Route::get('/calculator','calculator')->name('website.calculator');
+    Route::get('/calculator', 'calculator')->name('website.calculator');
 });
 
 // 🔐 Auth Routes (handled by AuthController)
@@ -66,4 +71,43 @@ Route::patch('admin/contractor-documents/{id}/verify', [ContractorController::cl
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
     Route::resource('works', WorkController::class);
     Route::resource('units', UnitController::class);
+});
+
+
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+
+    /** 🔹 PROJECT CRUD ROUTES */
+    Route::get('projects', [ProjectController::class, 'index'])->name('projects.index');
+    Route::get('projects/create', [ProjectController::class, 'create'])->name('projects.create');
+    Route::post('projects', [ProjectController::class, 'store'])->name('projects.store');
+    Route::get('projects/{id}', [ProjectController::class, 'show'])->name('projects.show');
+    Route::get('projects/{id}/edit', [ProjectController::class, 'edit'])->name('projects.edit');
+    Route::put('projects/{id}', [ProjectController::class, 'update'])->name('projects.update');
+    Route::delete('projects/{id}', [ProjectController::class, 'destroy'])->name('projects.destroy');
+
+    /** 🔹 VIEW ALL BIDS OF A PROJECT */
+    Route::get('projects/{id}/bids', [AdminBidController::class, 'projectBids'])
+        ->name('projects.bids');
+
+    /** 🔹 AWARD A BID */
+    Route::post('projects/{projectId}/award/{bidId}', [ProjectAwardController::class, 'awardBid'])
+        ->name('projects.award');
+});
+
+
+Route::middleware(['auth'])->group(function () {
+
+    // Show Add Bid Page (contractor role but admin pages)
+    Route::get(
+        'projects/{id}/add-bid',
+        [BidController::class, 'create']
+    )
+        ->name('admin.projects.bid.create');
+
+    // Store Bid
+    Route::post(
+        'projects/{id}/add-bid',
+        [BidController::class, 'store']
+    )
+        ->name('admin.projects.bid.store');
 });
