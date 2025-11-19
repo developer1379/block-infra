@@ -98,8 +98,8 @@ class AuthController extends Controller
             return back()->withErrors(['email' => 'Invalid credentials provided.']);
         }
 
-        // ✅ Apply is_active check only for contractors
-        if ($user->hasRole('contractor') && !$user->is_active) {
+        //  Apply is_active check only for contractors
+        if ($user->hasRole('contractor') && $user->is_active) {
             return back()->withErrors([
                 'email' => 'Your contractor account is inactive. Please contact the administrator.',
             ]);
