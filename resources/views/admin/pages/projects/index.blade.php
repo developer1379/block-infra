@@ -160,15 +160,21 @@
                                             </button>
                                         </form>
                                     @endcan
-
                                     @if ($project->status == 'open')
                                         @can('create bids')
-                                            <a href="{{ route('admin.projects.bid.create', $project->id) }}"
-                                                class="btn btn-sm text-dark" style="background-color:#b3d33c;">
-                                                <i class="fa fa-gavel"></i> Submit Bid
-                                            </a>
+                                            @if (isset($hasBid[$project->id]) && $hasBid[$project->id] === true)
+                                                <button class="btn btn-sm btn-secondary mb-1" disabled>
+                                                    <i class="fa fa-check"></i> Bid Submitted
+                                                </button>
+                                            @else
+                                                <a href="{{ route('admin.projects.bid.create', $project->id) }}"
+                                                    class="btn btn-sm text-dark mb-1" style="background-color:#b3d33c;">
+                                                    <i class="fa fa-gavel"></i> Submit Bid
+                                                </a>
+                                            @endif
                                         @endcan
                                     @endif
+
 
 
                                 </td>

@@ -31,4 +31,10 @@ class BidRepository implements BidRepositoryInterface
         $bid->update(['status' => $status]);
         return $bid;
     }
+    public function hasUserBid($projectId, $userId)
+    {
+        return \App\Models\Bid::where('project_id', $projectId)
+            ->where('contractor_id', $userId)
+            ->exists();
+    }
 }

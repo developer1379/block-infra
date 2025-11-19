@@ -17,18 +17,30 @@ class ProjectController extends Controller
 
     public function index(Request $request)
     {
-        // Use repository to filter
-        $projects = $this->projects->filterProjects([
+        $filters = [
             'search'     => $request->search,
             'status'     => $request->status,
             'created_by' => $request->created_by,
-        ]);
+        ];
 
-        // Load dropdown list using repo only
+        $projects = $this->projects->filterProjects($filters);
+
+        // Get users for filters
         $createdByUsers = $this->projects->getProjectCreators();
 
-        return view('admin.pages.projects.index', compact('projects', 'createdByUsers'));
+        // If contractor role → check bid status
+        $hasBid = [];
+
+        if (auth()->user()->hasRole('contractor')) {
+
+            foreach ($projects as $project) {
+                $hasBid[$project->id] = $this->bids->hasUserBid($project->id, auth()->id());
+            }
+        }
+
+        return view('admin.pages.projects.index', compact('projects', 'createdByUsers', 'hasBid'));
     }
+
 
 
     public function create()

@@ -8,4 +8,6 @@ interface BidRepositoryInterface
     public function find($id);
     public function create(array $data);
     public function updateStatus($id, $status);
+    public function hasUserBid($projectId, $userId);
+
 }
