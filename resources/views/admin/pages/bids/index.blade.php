@@ -43,6 +43,7 @@
                             <td>{{ $bid->proposal_text }}</td>
 
                             <td>
+                                @can('award bids')
                                 @if ($project->status !== 'awarded')
 
                                     <form action="{{ route('admin.projects.award', [$project->id, $bid->id]) }}"
@@ -59,6 +60,7 @@
                                 @else
                                     <span class="badge bg-success">Awarded</span>
                                 @endif
+                                @endcan
                             </td>
 
                         </tr>
