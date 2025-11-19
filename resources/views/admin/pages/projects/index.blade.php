@@ -142,20 +142,24 @@
                                         <i class="fa fa-eye"></i>
                                     </a>
 
-                                    <a href="{{ route('admin.projects.edit', $project->id) }}"
-                                        class="btn btn-sm btn-warning mb-1">
-                                        <i class="fa fa-edit"></i>
-                                    </a>
+                                    @can('edit projects')
+                                        <a href="{{ route('admin.projects.edit', $project->id) }}"
+                                            class="btn btn-sm btn-warning mb-1">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                    @endcan
 
-                                    <form action="{{ route('admin.projects.destroy', $project->id) }}" method="POST"
-                                        class="d-inline">
-                                        @csrf @method('DELETE')
+                                    @can('delete projects')
+                                        <form action="{{ route('admin.projects.destroy', $project->id) }}" method="POST"
+                                            class="d-inline">
+                                            @csrf @method('DELETE')
 
-                                        <button class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Delete this project?')">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </form>
+                                            <button class="btn btn-sm btn-danger"
+                                                onclick="return confirm('Delete this project?')">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    @endcan
 
                                     @if ($project->status == 'open')
                                         @can('create bids')
