@@ -3,16 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\Interfaces\BidRepositoryInterface;
 use App\Repositories\Interfaces\ProjectRepositoryInterface;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
     protected $projects;
+    protected $bids;
 
-    public function __construct(ProjectRepositoryInterface $projects)
+    public function __construct(ProjectRepositoryInterface $projects, BidRepositoryInterface $bids)
     {
         $this->projects = $projects;
+        $this->bids = $bids;
     }
 
     public function index(Request $request)
