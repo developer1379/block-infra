@@ -35,11 +35,22 @@ class Contractor extends Model
         'is_active' => 'boolean',
     ];
 
-   // ✅ Link to Category table
+    // ✅ Link to Category table
     public function categoryRelation()
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
+
+    public function categories()
+    {
+        return $this->belongsToMany(
+            Category::class,
+            'contractor_category',
+            'contractor_id',
+            'category_id'
+        )->withTimestamps();
+    }
+
 
     // ✅ Link to contractor_documents table
     public function documents()

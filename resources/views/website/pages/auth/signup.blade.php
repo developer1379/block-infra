@@ -1,4 +1,6 @@
 <x-layout.app-layout>
+
+
     <div class="container py-5" style="min-height:80vh;">
         <div class="row justify-content-center align-items-center">
             <div class="col-md-8 col-lg-6">
@@ -114,36 +116,40 @@
                                     ->get();
                             @endphp
 
-                            {{-- Contractor Category --}}
-                            <div class="mb-3" id="contractorCategoryField">
-                                <label class="form-label fw-semibold text-dark">Contractor Category</label>
-                                <select name="contractor_category" class="form-select border-dark-subtle">
-                                    <option value="" disabled {{ old('contractor_category') ? '' : 'selected' }}>
-                                        Select Category</option>
+                            {{-- Contractor Categories (Multiple Select) --}}
+                            <div class="mb-3 form-group" id="contractorCategoryField">
+                                <label class="form-label fw-semibold text-dark">Select Categories (Multiple)</label>
 
+                                <select name="categories[]" class="form-select border-dark-subtle" multiple
+                                    size="6">
                                     @foreach ($parentCategories as $parent)
                                         @php $children = $parent->subcategories; @endphp
+
                                         @if ($children->count())
                                             <optgroup label="{{ $parent->name }}">
                                                 @foreach ($children as $child)
                                                     <option value="{{ $child->id }}"
-                                                        {{ old('contractor_category') == $child->id ? 'selected' : '' }}>
+                                                        @if (is_array(old('categories')) && in_array($child->id, old('categories'))) selected @endif>
                                                         {{ $child->name }}
                                                     </option>
                                                 @endforeach
                                             </optgroup>
                                         @else
                                             <option value="{{ $parent->id }}"
-                                                {{ old('contractor_category') == $parent->id ? 'selected' : '' }}>
+                                                @if (is_array(old('categories')) && in_array($parent->id, old('categories'))) selected @endif>
                                                 {{ $parent->name }}
                                             </option>
                                         @endif
                                     @endforeach
                                 </select>
-                                @error('contractor_category')
+
+                                <small class="text-muted">Hold CTRL to select multiple.</small>
+
+                                @error('categories')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
+
                         </div>
 
                         {{-- Submit --}}

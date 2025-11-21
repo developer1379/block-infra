@@ -26,10 +26,19 @@ class Category extends Model
         'is_active' => 'boolean',
     ];
 
-    // 🔁 Self relationship
     public function parent(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'parent_id');
+    }
+
+    public function contractors()
+    {
+        return $this->belongsToMany(
+            Contractor::class,
+            'contractor_category',
+            'category_id',
+            'contractor_id'
+        )->withTimestamps();
     }
 
     public function subcategories(): HasMany
@@ -37,7 +46,7 @@ class Category extends Model
         return $this->hasMany(Category::class, 'parent_id');
     }
 
-    // ✅ Scope for only active categories
+    //  Scope for only active categories
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
@@ -58,9 +67,5 @@ class Category extends Model
                 $category->slug = Str::slug($category->name);
             }
         });
-
-
     }
-
-
 }

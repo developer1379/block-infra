@@ -269,3 +269,7 @@
     background: var(--primary);
     transform: skew(40deg);
 }
+.select2-search__field{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
