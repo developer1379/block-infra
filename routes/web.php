@@ -13,7 +13,15 @@ use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\BidController as AdminBidController;
 use App\Http\Controllers\Admin\Contractor\BidController as ContractorBidController;
 use App\Http\Controllers\Admin\ProjectAwardController;
+use Illuminate\Support\Facades\Artisan;
 
+Route::get('/cc',function(){
+    Artisan::call("cache:clear");
+    Artisan::call('route:clear');
+
+    return 'cache cleared';
+
+});
 Route::controller(WebsiteController::class)->group(function () {
     Route::get('/', 'index')->name('website.home');
     Route::get('/about', 'about')->name('website.about');
@@ -29,9 +37,9 @@ Route::controller(WebsiteController::class)->group(function () {
     Route::get('/calculator', 'calculator')->name('website.calculator');
 });
 
-// 🔐 Auth Routes (handled by AuthController)
 Route::controller(AuthController::class)->group(function () {
     Route::get('/login', 'loginPage')->name('website.login');
+    Route::get('/auth/login','loginPage')->name('login');
     Route::post('/login', 'login')->name('website.login.submit');
 
     Route::get('/signup', 'registerPage')->name('website.signup');
