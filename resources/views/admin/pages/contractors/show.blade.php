@@ -61,9 +61,7 @@
                 {{-- Profile Image --}}
                 <div class="text-center mb-4">
                     @php
-                        $contractorImage = $contractor->image
-                            ? asset('storage/' . $contractor->image)
-                            : asset('default-avatar.png');
+                        $contractorImage = $contractor->image ? $contractor->image : asset('default-avatar.png');
                     @endphp
 
                     <img src="{{ $contractorImage }}" class="profile-img" id="profileImage"

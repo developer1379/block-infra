@@ -40,7 +40,7 @@
                     $imagePath = auth()->user()->contractor->image ?? null;
                 @endphp
 
-                <img src="{{ $imagePath ? asset('storage/' . $imagePath) : asset('default-avatar.png') }}"
+                <img src="{{ $imagePath ? $imagePath : asset('default-avatar.png') }}"
                     class="profile-image mb-2">
 
 
