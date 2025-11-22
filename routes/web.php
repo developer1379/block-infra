@@ -95,9 +95,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     /** 🔹 VIEW ALL BIDS OF A PROJECT */
     Route::get('projects/{id}/bids', [AdminBidController::class, 'projectBids'])
         ->name('projects.bids');
-
-    /** 🔹 AWARD A BID */
-    Route::post('/admin/projects/{projectId}/award/{bidId}', [ProjectAwardController::class, 'award'])->name('admin.projects.award');
+    Route::post(
+        'projects/{projectId}/award/{bidId}',
+        [ProjectAwardController::class, 'award']
+    )->name('projects.award');
 });
 
 
