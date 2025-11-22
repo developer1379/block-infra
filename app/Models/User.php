@@ -58,4 +58,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(ProjectAward::class, 'awarded_to');
     }
+    public function contractor()
+    {
+        return $this->hasOne(Contractor::class, 'email', 'email');
+    }
 }

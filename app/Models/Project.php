@@ -35,4 +35,10 @@ class Project extends Model
     {
         return $this->hasOne(ProjectAward::class);
     }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'project_category', 'project_id', 'category_id')
+            ->withTimestamps();
+    }
 }

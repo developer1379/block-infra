@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Bid;
+use App\Models\Project;
 use App\Repositories\Interfaces\BidRepositoryInterface;
 use App\Repositories\Interfaces\ProjectAwardRepositoryInterface;
 use App\Repositories\Interfaces\ProjectRepositoryInterface;
@@ -21,22 +23,32 @@ class ProjectAwardController extends Controller
         $this->projects = $projects;
     }
 
-    public function awardBid($projectId, $bidId)
+    public function award($projectId, $bidId)
     {
-        $bid = $this->bids->find($bidId);
+        $project = Project::findOrFail($projectId);
 
-        // Update bid status
-        $this->bids->updateStatus($bidId, 'accepted');
-
-        // Create award entry
-        $this->awards->award([
-            'project_id' => $projectId,
-            'bid_id'     => $bidId,
-            'awarded_to' => $bid->contractor_id,
+        // 1️⃣ Mark selected bid as accepted
+        Bid::where('id', $bidId)->update([
+            'status' => 'accepted'
         ]);
 
-        // Mark project as awarded
-        $this->projects->update($projectId, [
+        // 2️⃣ Reject all other bids for this project
+        Bid::where('project_id', $projectId)
+            ->where('id', '!=', $bidId)
+            ->update(['status' => 'rejected']);
+
+        // 3️⃣ Save award details
+        \App\Models\ProjectAward::updateOrCreate(
+            ['project_id' => $projectId],
+            [
+                'bid_id' => $bidId,
+                'awarded_to' => Bid::find($bidId)->contractor_id,
+                'awarded_at' => now()
+            ]
+        );
+
+        // 4️⃣ Update project status to awarded
+        $project->update([
             'status' => 'awarded'
         ]);
 

@@ -35,7 +35,6 @@ class Contractor extends Model
         'is_active' => 'boolean',
     ];
 
-    // ✅ Link to Category table
     public function categoryRelation()
     {
         return $this->belongsTo(Category::class, 'category_id');
@@ -52,7 +51,7 @@ class Contractor extends Model
     }
 
 
-    // ✅ Link to contractor_documents table
+    //  Link to contractor_documents table
     public function documents()
     {
         return $this->hasMany(ContractorDocument::class, 'contractor_id');

@@ -29,7 +29,7 @@
                     <div class="col-md-6">
                         <label class="small fw-semibold">Title <span class="text-danger">*</span></label>
                         <input type="text" name="title" class="form-control form-control-sm border-secondary"
-                            required>
+                            value="{{ old('title') }}" required>
                     </div>
 
                     {{-- Budget Min --}}
@@ -49,13 +49,63 @@
                     {{-- Location --}}
                     <div class="col-md-6">
                         <label class="small fw-semibold">Location</label>
-                        <input type="text" name="location" class="form-control form-control-sm border-secondary">
+                        <input type="text" name="location" class="form-control form-control-sm border-secondary"
+                            value="{{ old('location') }}">
                     </div>
 
+
+
+                    {{--  MULTIPLE CATEGORIES --}}
+                    @php
+                        $parentCategories = \App\Models\Category::query()
+                            ->with(['subcategories' => fn($q) => $q->where('is_active', 1)])
+                            ->whereNull('parent_id')
+                            ->where('is_active', 1)
+                            ->orderBy('name')
+                            ->get();
+                    @endphp
+
+                    <div class="col-md-12">
+                        <label class="small fw-semibold">Select Categories (Multiple)</label>
+
+                        <select name="categories[]" multiple
+                            class="form-control form-control-sm border-secondary category-select"
+                            style="min-height: 160px;">
+
+                            @foreach ($parentCategories as $parent)
+                                @php $children = $parent->subcategories; @endphp
+
+                                @if ($children->count())
+                                    <optgroup label="{{ $parent->name }}">
+                                        @foreach ($children as $child)
+                                            <option value="{{ $child->id }}"
+                                                {{ collect(old('categories'))->contains($child->id) ? 'selected' : '' }}>
+                                                {{ $child->name }}
+                                            </option>
+                                        @endforeach
+                                    </optgroup>
+                                @else
+                                    <option value="{{ $parent->id }}"
+                                        {{ collect(old('categories'))->contains($parent->id) ? 'selected' : '' }}>
+                                        {{ $parent->name }}
+                                    </option>
+                                @endif
+                            @endforeach
+
+                        </select>
+
+                        <small class="text-muted">Hold CTRL to select multiple categories.</small>
+
+                        @error('categories')
+                            <span class="text-danger small d-block">{{ $message }}</span>
+                        @enderror
+                    </div>
                     {{-- Description --}}
                     <div class="col-md-12">
                         <label class="small fw-semibold">Description <span class="text-danger">*</span></label>
-                        <textarea name="description" rows="3" class="form-control form-control-sm border-secondary" required></textarea>
+                        <input type="hidden" name="description" id="descriptionInput"
+                            value="{{ old('description') }}">
+                        <div id="quillEditor" style="height:250px; background:#fff; border:1px solid #ced4da;"></div>
                     </div>
 
                 </div>
@@ -72,8 +122,20 @@
         </div>
     </div>
 
-    @push('scripts')
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
-    @endpush
+    {{-- Optional Styling --}}
+    <style>
+        .category-select option {
+            padding: 6px;
+        }
+
+        .category-select optgroup {
+            font-weight: 700;
+            color: #333;
+        }
+
+        .category-select option:hover {
+            background-color: #b3d33c30 !important;
+        }
+    </style>
 
 </x-admin.app>

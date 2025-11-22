@@ -3,6 +3,17 @@
 
 <head>
     @include('admin.common.head')
+    <style>
+        .select2-results__option{
+            color: black;
+        }
+        label{
+            color: black;
+        }
+        p{
+            color: black;
+        }
+    </style>
 </head>
 
 <body>

@@ -57,20 +57,39 @@ class ContractorController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'company_name' => 'nullable|string|max:255',
-            'email' => 'nullable|email',
-            'phone' => 'nullable|string|max:20',
-            'city' => 'nullable|string|max:255',
-            'category_id' => 'nullable|integer|exists:categories,id',
-            'is_active' => 'boolean',
+            'name'          => 'required|string|max:255',
+            'company_name'  => 'nullable|string|max:255',
+            'email'         => 'nullable|email',
+            'phone'         => 'nullable|string|max:20',
+            'city'          => 'nullable|string|max:255',
+            'categories'     => 'nullable|array',
+            'categories.*'   => 'exists:categories,id',
+
+            'is_active'     => 'boolean',
         ]);
 
         $contractor = Contractor::findOrFail($id);
-        $contractor->update($validated);
 
-        return redirect()->route('admin.contractors.index')->with('success', 'Contractor updated successfully.');
+        $contractor->update([
+            'name'         => $validated['name'],
+            'company_name' => $validated['company_name'] ?? null,
+            'email'        => $validated['email'] ?? null,
+            'phone'        => $validated['phone'] ?? null,
+            'city'         => $validated['city'] ?? null,
+            'is_active'    => $validated['is_active'] ?? 0,
+        ]);
+
+        if ($request->filled('categories')) {
+            $contractor->categories()->sync($request->categories);
+        } else {
+            $contractor->categories()->sync([]);
+        }
+
+        return redirect()
+            ->route('admin.contractors.index')
+            ->with('success', 'Contractor updated successfully with categories.');
     }
+
 
 
     public function destroy(Contractor $contractor)

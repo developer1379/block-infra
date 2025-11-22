@@ -39,21 +39,29 @@ class BidController extends Controller
         $request->validate([
             'bid_amount'    => 'required|numeric|min:1',
             'delivery_days' => 'required|integer|min:1',
-            'proposal_text' => 'nullable|string'
+            'proposal_text' => 'nullable|string',
+            'proposal_pdf'  => 'nullable|mimes:pdf|max:5120', // max 5MB
         ]);
 
-        // Save Bid using Repository
+        $pdfPath = null;
+
+        // 🔥 HANDLE PDF FILE UPLOAD
+        if ($request->hasFile('proposal_pdf')) {
+            $pdfPath = $request->file('proposal_pdf')
+                ->store('bids/pdf', 'public');
+        }
+
+        // 🔥 SAVE bid using repository
         $this->bids->create([
             'project_id'    => $projectId,
-            'contractor_id' => auth()->id(),   // contractor user ID
+            'contractor_id' => auth()->id(),
             'bid_amount'    => $request->bid_amount,
             'delivery_days' => $request->delivery_days,
             'proposal_text' => $request->proposal_text,
+            'proposal_pdf'  => $pdfPath,   // save path
         ]);
 
         return redirect()->route('admin.projects.show', $projectId)
             ->with('success', 'Bid submitted successfully.');
     }
-
-
 }

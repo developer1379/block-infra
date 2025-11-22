@@ -15,12 +15,11 @@ use App\Http\Controllers\Admin\Contractor\BidController as ContractorBidControll
 use App\Http\Controllers\Admin\ProjectAwardController;
 use Illuminate\Support\Facades\Artisan;
 
-Route::get('/cc',function(){
+Route::get('/cc', function () {
     Artisan::call("cache:clear");
     Artisan::call('route:clear');
 
     return 'cache cleared';
-
 });
 Route::controller(WebsiteController::class)->group(function () {
     Route::get('/', 'index')->name('website.home');
@@ -39,7 +38,7 @@ Route::controller(WebsiteController::class)->group(function () {
 
 Route::controller(AuthController::class)->group(function () {
     Route::get('/login', 'loginPage')->name('website.login');
-    Route::get('/auth/login','loginPage')->name('login');
+    Route::get('/auth/login', 'loginPage')->name('login');
     Route::post('/login', 'login')->name('website.login.submit');
 
     Route::get('/signup', 'registerPage')->name('website.signup');
@@ -98,8 +97,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         ->name('projects.bids');
 
     /** 🔹 AWARD A BID */
-    Route::post('projects/{projectId}/award/{bidId}', [ProjectAwardController::class, 'awardBid'])
-        ->name('projects.award');
+    Route::post('/admin/projects/{projectId}/award/{bidId}', [ProjectAwardController::class, 'award'])->name('admin.projects.award');
 });
 
 

@@ -1,20 +1,44 @@
 <x-admin.app>
 
+    {{-- Custom Styles --}}
+    <style>
+        .form-label-custom {
+            font-size: 12px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .badge-accepted {
+            background: #28a745;
+            color: #fff;
+        }
+
+        .badge-rejected {
+            background: #dc3545;
+            color: #fff;
+        }
+
+        .badge-pending {
+            background: #6c757d;
+            color: #fff;
+        }
+    </style>
+
     {{-- PAGE HEADER --}}
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h5 class="fw-bold" style="color:#b3d33c;">Bids for "{{ $project->title }}"</h5>
 
         <a href="{{ route('admin.projects.index') }}" class="btn btn-sm btn-outline-dark">
-            <i class="fa fa-arrow-left"></i> Back
+            <i class="fa fa-arrow-left mr-1"></i> Back
         </a>
     </div>
 
-    {{-- BIDS TABLE --}}
+    {{-- BID LIST --}}
     <div class="card shadow-sm border-0">
 
         <div class="card-header bg-white py-2 border-0">
             <h6 class="fw-bold mb-0">
-                <i class="fa fa-gavel me-2" style="color:#b3d33c;"></i>Contractor Bids
+                <i class="fa fa-gavel mr-2" style="color:#b3d33c;"></i> Contractor Bids
             </h6>
         </div>
 
@@ -29,42 +53,85 @@
                             <th>Bid Amount</th>
                             <th>Delivery Days</th>
                             <th>Proposal</th>
-                            <th width="120">Action</th>
+                            <th>PDF</th>
+                            <th>Status</th>
+                            <th width="150">Action</th>
                         </tr>
                     </thead>
 
                     <tbody>
+
                         @foreach ($bids as $bid)
-                        <tr>
-                            <td>{{ $bid->id }}</td>
-                            <td>{{ $bid->contractor->name }}</td>
-                            <td>₹{{ $bid->bid_amount }}</td>
-                            <td>{{ $bid->delivery_days }} days</td>
-                            <td>{{ $bid->proposal_text }}</td>
+                            {{-- Contractors can only see their own bid --}}
+                            @if (auth()->user()->hasRole('contractor') && $bid->contractor_id != auth()->id())
+                                @continue
+                            @endif
 
-                            <td>
-                                @can('award bids')
-                                @if ($project->status !== 'awarded')
+                            <tr>
+                                <td>{{ $bid->id }}</td>
 
-                                    <form action="{{ route('admin.projects.award', [$project->id, $bid->id]) }}"
-                                          method="POST">
-                                        @csrf
+                                <td>{{ $bid->contractor->name }}</td>
 
-                                        <button class="btn btn-sm btn-success px-2 fw-bold"
-                                            onclick="return confirm('Award this project?')">
-                                            <i class="fa fa-trophy"></i> Award
+                                <td>₹{{ number_format($bid->bid_amount, 2) }}</td>
+
+                                <td>{{ $bid->delivery_days }} days</td>
+
+                                {{-- PROPOSAL --}}
+                                <td>
+                                    @if ($bid->proposal_text)
+                                        <button class="btn btn-sm btn-info viewProposalBtn"
+                                            data-proposal='@json($bid->proposal_text)'>
+                                            <i class="fa fa-eye"></i> View
                                         </button>
+                                    @else
+                                        <span class="text-muted small">No proposal</span>
+                                    @endif
+                                </td>
 
-                                    </form>
+                                {{-- PDF --}}
+                                <td>
+                                    @if ($bid->proposal_pdf)
+                                        <a href="{{ asset('storage/' . $bid->proposal_pdf) }}" target="_blank"
+                                            class="btn btn-sm btn-outline-primary">
+                                            <i class="fa fa-file-pdf"></i> View
+                                        </a>
+                                    @else
+                                        <span class="text-muted small">No PDF</span>
+                                    @endif
+                                </td>
 
-                                @else
-                                    <span class="badge bg-success">Awarded</span>
-                                @endif
-                                @endcan
-                            </td>
+                                {{-- STATUS --}}
+                                <td>
+                                    @if ($bid->status == 'accepted')
+                                        <span class="badge badge-accepted px-2 py-1">
+                                            <i class="fa fa-check"></i> Awarded
+                                        </span>
+                                    @elseif ($bid->status == 'rejected')
+                                        <span class="badge badge-rejected px-2 py-1">
+                                            <i class="fa fa-times"></i> Rejected
+                                        </span>
+                                    @else
+                                        <span class="badge badge-pending px-2 py-1">Pending</span>
+                                    @endif
+                                </td>
 
-                        </tr>
+                                {{-- ACTION --}}
+                                <td>
+                                    @can('award bids')
+                                        @if ($bid->status == 'pending' && $project->status != 'awarded')
+                                            <button class="btn btn-sm btn-success fw-bold awardBtn"
+                                                data-id="{{ $bid->id }}" data-project="{{ $project->id }}">
+                                                <i class="fa fa-trophy"></i> Award
+                                            </button>
+                                        @else
+                                            {{-- Already handled by badge --}}
+                                        @endif
+                                    @endcan
+                                </td>
+
+                            </tr>
                         @endforeach
+
                     </tbody>
 
                 </table>
@@ -73,5 +140,67 @@
         </div>
 
     </div>
+
+    {{-- Hidden Award Form --}}
+    <form id="awardForm" method="POST" style="display:none;">
+        @csrf
+    </form>
+
+    {{-- PROPOSAL MODAL --}}
+    <div class="modal fade" id="proposalModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Proposal Details</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div id="proposalContent"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    @push('scripts')
+        <script>
+            // View Proposal Modal
+            $(document).on("click", ".viewProposalBtn", function() {
+                let proposal = $(this).data("proposal");
+                $("#proposalContent").html(proposal);
+                $("#proposalModal").modal("show");
+            });
+
+            // Award Bid + SweetAlert
+            $(document).on("click", ".awardBtn", function() {
+
+                let bidId = $(this).data("id");
+                let projectId = $(this).data("project");
+
+                Swal.fire({
+                    title: "Award this bid?",
+                    text: "This action cannot be undone.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#28a745",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, Award"
+                }).then((result) => {
+
+                    if (result.isConfirmed) {
+                        let form = $("#awardForm");
+                        form.attr("action", `/admin/projects/${projectId}/award/${bidId}`);
+                        form.submit();
+                    }
+
+                });
+
+            });
+        </script>
+    @endpush
 
 </x-admin.app>

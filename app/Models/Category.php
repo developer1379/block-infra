@@ -52,6 +52,12 @@ class Category extends Model
         return $query->where('is_active', true);
     }
 
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'project_category', 'category_id', 'project_id');
+    }
+
+
     protected static function boot()
     {
         parent::boot();
