@@ -181,6 +181,16 @@
                 </li>
             @endcanany
 
+            {{-- Contractor Profile --}}
+            @if (auth()->user()->hasRole('contractor'))
+                <li>
+                    <a href="{{ route('contractor.profile') }}" class="has-arrow">
+                        <i class="fa-solid fa-user-shield me-2"></i>
+                        <span class="nav-text">Profile</span>
+                    </a>
+                </li>
+            @endif
+
         </ul>
     </div>
 </div>

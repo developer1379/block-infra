@@ -62,4 +62,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(Contractor::class, 'email', 'email');
     }
+
+    public function contractorCategories()
+    {
+        return $this->belongsToMany(Category::class, 'contractor_category', 'contractor_id', 'category_id')
+            ->withTimestamps();
+    }
 }

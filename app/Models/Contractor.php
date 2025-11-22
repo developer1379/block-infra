@@ -10,15 +10,7 @@ class Contractor extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'email',
-        'phone',
-        'company_name',
-        'category',
-        'city',
-        'is_active'
-    ];
+    protected $guarded = [];
 
     public $incrementing = false;
     protected $keyType = 'string';

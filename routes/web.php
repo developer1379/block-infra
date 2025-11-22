@@ -12,7 +12,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\BidController as AdminBidController;
 use App\Http\Controllers\Admin\Contractor\BidController as ContractorBidController;
+use App\Http\Controllers\Admin\Contractor\ProfileController as ContractorProfileController;
 use App\Http\Controllers\Admin\ProjectAwardController;
+use App\Http\Controllers\Contractor\ProfileController;
 use Illuminate\Support\Facades\Artisan;
 
 Route::get('/cc', function () {
@@ -108,4 +110,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('projects/{id}/add-bid', [ContractorBidController::class, 'store'])
         ->name('admin.projects.bid.store');
+
+    Route::get('/contractor/profile', [ContractorProfileController::class, 'index'])
+        ->name('contractor.profile');
+
+    Route::post('/contractor/profile/update', [ContractorProfileController::class, 'update'])
+        ->name('contractor.profile.update');
 });

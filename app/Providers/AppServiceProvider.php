@@ -13,9 +13,10 @@ use App\Repositories\Interfaces\ProjectRepositoryInterface;
 use App\Repositories\Contracts\ProjectRepository;
 use App\Repositories\Interfaces\BidRepositoryInterface;
 use App\Repositories\Contracts\BidRepository;
+use App\Repositories\Contracts\ContractorProfileRepository;
 use App\Repositories\Interfaces\ProjectAwardRepositoryInterface;
 use App\Repositories\Contracts\ProjectAwardRepository;
-
+use App\Repositories\Interfaces\ContractorProfileRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProjectRepositoryInterface::class, ProjectRepository::class);
         $this->app->bind(BidRepositoryInterface::class, BidRepository::class);
         $this->app->bind(ProjectAwardRepositoryInterface::class, ProjectAwardRepository::class);
+        $this->app->bind(ContractorProfileRepositoryInterface::class, ContractorProfileRepository::class);
     }
 
     /**
