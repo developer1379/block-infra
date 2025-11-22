@@ -44,9 +44,9 @@ class ContractorProfileRepository implements ContractorProfileRepositoryInterfac
         // ---------------------------
         // UPDATE PROFILE PHOTO (BASE64)
         // ---------------------------
-        if (isset($data['profile_photo'])) {
+        if (isset($data['image'])) {
 
-            $file = $data['profile_photo'];
+            $file = $data['image'];
 
             // Convert uploaded file to Base64
             $imageData = base64_encode(file_get_contents($file));
