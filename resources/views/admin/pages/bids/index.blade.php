@@ -23,6 +23,32 @@
             color: #fff;
         }
     </style>
+    <style>
+        /* Make proposal content scroll inside modal */
+        #proposalModal .modal-body {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        /* Fix images from Quill editor */
+        #proposalContent img {
+            max-width: 100%;
+            height: auto !important;
+            display: block;
+            margin: 10px 0;
+            border-radius: 6px;
+        }
+
+        /* Improve text formatting */
+        #proposalContent {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #222;
+            white-space: normal !important;
+            word-wrap: break-word;
+        }
+    </style>
+
 
     {{-- PAGE HEADER --}}
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -79,8 +105,12 @@
                                 {{-- PROPOSAL --}}
                                 <td>
                                     @if ($bid->proposal_text)
+                                        @php
+                                            $encodedProposal = base64_encode($bid->proposal_text ?? '');
+                                        @endphp
+
                                         <button class="btn btn-sm btn-info viewProposalBtn"
-                                            data-proposal='@json($bid->proposal_text)'>
+                                            data-proposal="{{ $encodedProposal }}">
                                             <i class="fa fa-eye"></i> View
                                         </button>
                                     @else
@@ -168,14 +198,16 @@
 
     @push('scripts')
         <script>
-            // View Proposal Modal
             $(document).on("click", ".viewProposalBtn", function() {
-                let proposal = $(this).data("proposal");
-                $("#proposalContent").html(proposal);
+
+                let encoded = $(this).data("proposal");
+                let decoded = atob(encoded);
+
+                $("#proposalContent").html(decoded);
                 $("#proposalModal").modal("show");
             });
 
-            // Award Bid + SweetAlert
+
             $(document).on("click", ".awardBtn", function() {
 
                 let bidId = $(this).data("id");
@@ -198,9 +230,9 @@
                     }
 
                 });
-
             });
         </script>
     @endpush
+
 
 </x-admin.app>

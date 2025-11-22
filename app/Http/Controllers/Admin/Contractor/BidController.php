@@ -43,7 +43,6 @@ class BidController extends Controller
             'proposal_text' => 'nullable|string',
             'proposal_pdf'  => 'nullable|mimes:pdf|max:5120', // max 5MB
         ]);
-        dd($request->all());
 
         $pdfPath = null;
 
