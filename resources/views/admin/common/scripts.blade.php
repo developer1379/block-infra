@@ -96,6 +96,7 @@
 
         $("form").on("submit", function() {
             $("#descriptionInput").val(quill.root.innerHTML);
+            $('#proposalInput').val(quill.root.innerHTML);
         });
 
     });

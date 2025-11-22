@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\Interfaces\BidRepositoryInterface;
 use App\Repositories\Interfaces\ProjectRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class BidController extends Controller
 {
@@ -42,6 +43,7 @@ class BidController extends Controller
             'proposal_text' => 'nullable|string',
             'proposal_pdf'  => 'nullable|mimes:pdf|max:5120', // max 5MB
         ]);
+        dd($request->all());
 
         $pdfPath = null;
 

@@ -130,74 +130,30 @@
 
         </div>
     </div>
-
-    @push('script')
-        {{-- jQuery Script --}}
-        <script>
-            $(document).ready(function() {
-
-                /* --------------------------
-                   INIT QUILL EDITOR
-                --------------------------- */
-                var quill = new Quill('#quillEditor', {
-                    theme: 'snow',
-                    modules: {
-                        toolbar: [
-                            [{
-                                header: [1, 2, 3, false]
-                            }],
-                            ['bold', 'italic', 'underline'],
-                            [{
-                                list: 'ordered'
-                            }, {
-                                list: 'bullet'
-                            }],
-                            ['link', 'image', 'video'],
-                            ['clean']
-                        ]
-                    }
-                });
-
-                $('form').on('submit', function() {
-                    $('#proposalInput').val(quill.root.innerHTML);
-                });
-            });
-        </script>
-    @endpush
 </x-admin.app>
 <script>
-    /* --------------------------
-                    PDF PREVIEW HANDLER
-                --------------------------- */
-
     $(document).ready(function() {
-        $('#pdfInput').on('change', function() {
 
+        // PDF Preview
+        $('#pdfInput').on('change', function() {
             let file = this.files[0];
             let preview = $('#pdfPreview');
             let embed = $('#pdfEmbed');
 
             if (file && file.type === "application/pdf") {
-
                 let fileURL = URL.createObjectURL(file);
-
                 embed.attr('src', fileURL).show();
-
                 preview.find('.pdf-preview-empty').hide();
-
-                preview.prepend(`
-            <p class="pdf-preview-name mt-2">${file.name}</p>
-        `);
-
+                preview.find('.pdf-preview-name').remove();
+                preview.prepend(`<p class="pdf-preview-name mt-2">${file.name}</p>`);
             } else {
                 embed.hide();
                 preview.html(`
-            <i class="fa fa-file-pdf-o"></i>
-            <p class="pdf-preview-empty mb-0">No PDF selected</p>
-        `);
+                    <i class="fa fa-file-pdf-o"></i>
+                    <p class="pdf-preview-empty mb-0">No PDF selected</p>
+                `);
             }
         });
-
 
     });
 </script>
