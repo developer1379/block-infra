@@ -41,20 +41,26 @@ class ContractorProfileRepository implements ContractorProfileRepositoryInterfac
         if (!empty($data['password'])) {
             $user->password = Hash::make($data['password']);
         }
-
         // ---------------------------
-        // UPDATE PROFILE PHOTO
+        // UPDATE PROFILE PHOTO (BASE64)
         // ---------------------------
-        if (isset($data['image'])) {
+        if (isset($data['profile_photo'])) {
 
-            if ($contractor->image && Storage::disk('public')->exists($contractor->image)) {
-                Storage::disk('public')->delete($contractor->image);
-            }
+            $file = $data['profile_photo'];
 
-            $filePath = $data['image']->store('contractors/photos', 'public');
+            // Convert uploaded file to Base64
+            $imageData = base64_encode(file_get_contents($file));
 
-            $contractor->image = $filePath;  // ✔ save to contractor
+            // Get file extension (jpeg/png/etc)
+            $extension = $file->getClientOriginalExtension();
+
+            // Build a proper Base64 string format
+            $base64Image = "data:image/{$extension};base64,{$imageData}";
+
+            // Save Base64 string in contractor table
+            $contractor->image = $base64Image;
         }
+
 
         $user->save();
         $contractor->save();
