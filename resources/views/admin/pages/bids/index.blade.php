@@ -177,15 +177,15 @@
     </form>
 
     {{-- PROPOSAL MODAL --}}
-    <div class="modal fade" id="proposalModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
+    <div class="modal fade" id="proposalModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="proposalModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
             <div class="modal-content">
 
                 <div class="modal-header">
                     <h5 class="modal-title">Proposal Details</h5>
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span>&times;</span>
-                    </button>
+                    <div data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-circle-xmark fa-2x" style="cursor: pointer; color: black;"></i></div>
+
                 </div>
 
                 <div class="modal-body">
