@@ -97,22 +97,48 @@
                         @enderror
                     </div>
 
-                    {{-- Contractor Category --}}
+                    {{-- MULTIPLE CATEGORIES --}}
                     @php
-                        $categories = \App\Models\Category::where('is_active', 1)->orderBy('name')->get();
+                        $parentCategories = \App\Models\Category::query()
+                            ->with([
+                                'subcategories' => function ($q) {
+                                    $q->where('is_active', 1);
+                                },
+                            ])
+                            ->whereNull('parent_id')
+                            ->where('is_active', 1)
+                            ->orderBy('name')
+                            ->get();
                     @endphp
+
                     <div class="mb-3">
-                        <label class="form-label">Contractor Category</label>
-                        <select name="category_id" class="form-select">
-                            <option value="">Select Category</option>
-                            @foreach ($categories as $cat)
-                                <option value="{{ $cat->id }}"
-                                    {{ old('category_id') == $cat->id ? 'selected' : '' }}>
-                                    {{ $cat->name }}
-                                </option>
+                        <label class="form-label">Select Categories (Multiple)</label>
+
+                        <select name="categories[]" multiple class="form-control category-select">
+                            @foreach ($parentCategories as $parent)
+                                @php $children = $parent->subcategories; @endphp
+
+                                @if ($children->count())
+                                    <optgroup label="{{ $parent->name }}">
+                                        @foreach ($children as $child)
+                                            <option value="{{ $child->id }}" class="text-black"
+                                                {{ in_array($child->id, old('categories', [])) ? 'selected' : '' }}>
+                                                {{ $child->name }}
+                                            </option>
+                                        @endforeach
+                                    </optgroup>
+                                @else
+                                    <option value="{{ $parent->id }}" class="text-black"
+                                        {{ in_array($parent->id, old('categories', [])) ? 'selected' : '' }}>
+                                        {{ $parent->name }}
+                                    </option>
+                                @endif
                             @endforeach
                         </select>
+
+                        <small class="text-muted">Hold CTRL to select multiple categories</small>
                     </div>
+
 
                     {{-- Status --}}
                     <div class="mb-4">

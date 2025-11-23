@@ -63,7 +63,7 @@
                         <input type="hidden" name="description" id="descriptionInput">
 
                         {{-- Quill Editor --}}
-                        <div id="quillEditor" style="height:250px; border:1px solid #ced4da; background:#fff;"></div>
+                        <div id="quillEditorProject" style="height:250px; border:1px solid #ced4da; background:#fff;"></div>
 
                         @error('description')
                             <span class="text-danger small">{{ $message }}</span>
@@ -148,7 +148,7 @@
     $(document).ready(function() {
 
         // Initialize Quill
-        var quill = new Quill('#quillEditor', {
+        var projectQuill = new Quill('#quillEditorProject', {
             theme: 'snow',
             modules: {
                 toolbar: [
@@ -170,10 +170,10 @@
         var existingContent = @json($project->description);
 
 
-        quill.root.innerHTML = existingContent;
+        projectQuill.root.innerHTML = existingContent;
 
         $('form').on('submit', function() {
-            $('#descriptionInput').val(quill.root.innerHTML);
+            $('#descriptionInput').val(projectQuill.root.innerHTML);
         });
 
     });
