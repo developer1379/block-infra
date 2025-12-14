@@ -9,16 +9,13 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 
-
 class AuthController extends Controller
 {
-    // Show login page
     public function loginPage()
     {
         return view('website.pages.auth.login');
     }
 
-    // Show register page
     public function registerPage()
     {
         return view('website.pages.auth.signup');
@@ -27,66 +24,61 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
-            'role'     => 'required|in:contractor,user',
-
-            // For multiple categories (array)
+            'role' => 'required|in:contractor,user',
             'categories' => 'nullable|array',
             'categories.*' => 'exists:categories,id',
-
             'company_name' => 'nullable|string|max:255',
-            'phone'        => 'nullable|string|max:20',
-            'city'         => 'nullable|string|max:100',
+            'phone' => 'nullable|string|max:20',
+            'city' => 'nullable|string|max:100',
         ]);
 
         \DB::beginTransaction();
+
         try {
-            // Create User
             $user = User::create([
-                'name'     => $request->name,
-                'email'    => $request->email,
+                'name' => $request->name,
+                'email' => $request->email,
                 'password' => Hash::make($request->password),
             ]);
 
-            // Assign role
             $role = Role::findOrCreate($request->role, 'web');
             $user->assignRole($role);
 
             if ($request->role === 'contractor') {
-
                 $contractor = \App\Models\Contractor::create([
-                    'name'         => $request->name,
-                    'email'        => $request->email,
-                    'phone'        => $request->phone,
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'phone' => $request->phone,
                     'company_name' => $request->company_name,
-                    'city'         => $request->city,
-                    'is_active'    => false,  // wait for admin approval
+                    'city' => $request->city,
+                    'is_active' => false,
                 ]);
 
                 if ($request->filled('categories')) {
                     $contractor->categories()->sync($request->categories);
                 }
-
-                \Log::info("🆕 Contractor registered with multi-categories", [
-                    'contractor_id' => $contractor->id,
-                    'categories'    => $request->categories,
-                ]);
             }
 
             Auth::login($user);
             \DB::commit();
 
-            return redirect()->route('dashboard')
-                ->with('success', 'Registration successful!');
-        } catch (\Throwable $e) {
+            if ($user->hasRole('user')) {
+                return redirect()->route('admin.user');
+            }
 
+            if ($user->hasRole('contractor')) {
+                return redirect()->route('contractor.dashboard');
+            }
+
+            return redirect()->route('dashboard');
+        } catch (\Throwable $e) {
             \DB::rollBack();
 
-            \Log::error(' Contractor Registration Failed', [
+            \Log::error('Registration Failed', [
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
             ]);
 
             return back()->withInput()->with('error', 'Registration failed. Please try again.');
@@ -100,17 +92,14 @@ class AuthController extends Controller
             'password' => 'required|min:6',
         ]);
 
-        $user = \App\Models\User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();
 
         if (!$user) {
             return back()->withErrors(['email' => 'Invalid credentials provided.']);
         }
 
-        // Check contractor activation
         if ($user->hasRole('contractor')) {
-
             $contractor = \App\Models\Contractor::where('email', $user->email)->first();
-
             if ($contractor && $contractor->is_active == 0) {
                 return back()->withErrors([
                     'email' => 'Your contractor account is inactive. Please contact the administrator.',
@@ -118,10 +107,18 @@ class AuthController extends Controller
             }
         }
 
-        // Attempt login
         if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
-            return redirect()->intended(route('dashboard'));
+
+            if (auth()->user()->hasRole('user')) {
+                return redirect()->route('admin.user');
+            }
+
+            if (auth()->user()->hasRole('contractor')) {
+                return redirect()->route('contractor.dashboard');
+            }
+
+            return redirect()->route('dashboard');
         }
 
         return back()->withErrors([
@@ -129,8 +126,6 @@ class AuthController extends Controller
         ]);
     }
 
-
-    // Logout
     public function logout(Request $request)
     {
         Auth::logout();

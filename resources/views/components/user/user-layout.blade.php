@@ -1,184 +1,217 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $title ?? 'BlocInfra' }}</title>
+    <title>{{ $title ?? 'BlocInfra Admin' }}</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    {{-- Fonts & Icons --}}
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
+
+    {{-- Scripts & Styles --}}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0f766e', // Teal 700
+                        'primary-hover': '#0d9488', // Teal 600
+                        'primary-light': '#f0fdfa', // Teal 50
+                        secondary: '#64748b', // Slate 500
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'glow': '0 0 15px rgba(15, 118, 110, 0.3)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    {{-- Alpine.js (Core + Collapse Plugin) --}}
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
+        /* Custom Scrollbar */
+        .sidebar-scroll::-webkit-scrollbar {
+            width: 4px;
         }
 
-        ::-webkit-scrollbar {
-            width: 6px;
+        .sidebar-scroll::-webkit-scrollbar-track {
+            background: transparent;
         }
 
-        ::-webkit-scrollbar-track {
-            background: #f0fdfa;
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 4px;
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: #0f766e;
-            border-radius: 10px;
+        .sidebar-scroll:hover::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
         }
 
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
 
-        /* Brand Colors Configuration */
-        .bg-primary {
-            background-color: #0f766e;
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
 
-        .text-primary {
-            color: #0f766e;
-        }
-
-        .hover\:bg-primary-dark:hover {
-            background-color: #115e59;
-        }
-
-        .bg-primary-light {
-            background-color: #ccfbf1;
-        }
-
-        /* Safe area for iPhone */
-        .pb-safe {
-            padding-bottom: env(safe-area-inset-bottom, 20px);
+        [x-cloak] {
+            display: none !important;
         }
     </style>
+
+    @stack('styles')
 </head>
 
-<body class="bg-slate-50 text-slate-800 antialiased pb-24 md:pb-0">
+<body class="bg-slate-50 text-slate-800 font-sans antialiased overflow-x-hidden">
 
-    <aside class="fixed inset-y-0 left-0 bg-white w-64 border-r border-gray-200 hidden md:flex flex-col z-10 shadow-lg">
-        <div class="p-6 flex items-center gap-3">
-            <div
-                class="w-9 h-9 bg-primary rounded-lg flex items-center justify-center text-white text-lg font-bold shadow-md">
-                <i class="fa-solid fa-cube"></i>
-            </div>
-            <span class="text-xl font-bold tracking-tight text-slate-800">Bloc<span
-                    class="text-primary">Infra</span></span>
-        </div>
+    <div x-data="{ sidebarOpen: false }" class="flex h-screen overflow-hidden">
 
-        <nav class="flex-1 px-4 space-y-2 mt-4">
-            <a href="#"
-                class="flex items-center gap-3 px-4 py-3 bg-primary-light text-primary rounded-xl font-semibold transition shadow-sm">
-                <i class="fa-solid fa-house w-5"></i> Dashboard
-            </a>
-            <a href="#"
-                class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-gray-50 hover:text-slate-700 rounded-xl font-medium transition">
-                <i class="fa-solid fa-city w-5"></i> My Properties
-            </a>
-            <a href="#"
-                class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-gray-50 hover:text-slate-700 rounded-xl font-medium transition">
-                <i class="fa-solid fa-helmet-safety w-5"></i> Contractors
-            </a>
-            <a href="#"
-                class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-gray-50 hover:text-slate-700 rounded-xl font-medium transition">
-                <i class="fa-solid fa-file-contract w-5"></i> Documents
-            </a>
-            <a href="#"
-                class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-gray-50 hover:text-slate-700 rounded-xl font-medium transition">
-                <i class="fa-solid fa-indian-rupee-sign w-5"></i> Payments
-            </a>
-        </nav>
+        {{-- SIDEBAR WRAPPER --}}
+        <aside
+            class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0 flex flex-col shadow-soft"
+            :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
 
-        <div class="p-4 border-t border-gray-100">
-            <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50 cursor-pointer transition">
-                <img src="https://i.pravatar.cc/150?img=68" alt="User"
-                    class="w-10 h-10 rounded-full object-cover border-2 border-primary">
-                <div>
-                    <p class="text-sm font-bold text-slate-800">{{ auth()->user()->name ?? 'Guest User' }}</p>
-                    <p class="text-xs text-slate-500">Owner</p>
-                </div>
-            </div>
-        </div>
-    </aside>
+            {{-- BRAND LOGO --}}
+            <div class="h-16 flex items-center px-6 border-b border-slate-100 shrink-0 bg-white">
+                <a href="{{ route('dashboard') }}" class="flex items-center gap-2 group w-full">
+                    <div
+                        class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-teal-600 flex items-center justify-center text-white shadow-md group-hover:shadow-glow transition-all duration-300">
+                        <i class="fa-solid fa-cube text-sm"></i>
+                    </div>
+                    <span class="text-lg font-bold text-slate-800 tracking-tight">Bloc<span
+                            class="text-primary">Infra</span></span>
+                </a>
 
-    <main class="md:ml-64 min-h-screen transition-all duration-300 relative">
-
-        <header
-            class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200 px-5 py-4 flex justify-between items-center md:hidden shadow-sm">
-            <div class="flex items-center gap-2">
-                <div
-                    class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white text-sm font-bold">
-                    <i class="fa-solid fa-cube"></i>
-                </div>
-                <div>
-                    <h1 class="text-lg font-bold text-slate-800 leading-tight">Bloc<span
-                            class="text-primary">Infra</span></h1>
-                </div>
-            </div>
-            <button
-                class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 relative hover:bg-slate-200 transition">
-                <i class="fa-regular fa-bell"></i>
-                <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
-            </button>
-        </header>
-
-        <header
-            class="hidden md:flex justify-between items-center px-8 py-5 bg-white border-b border-gray-200 sticky top-0 z-20">
-            <div>
-                <h1 class="text-2xl font-bold text-slate-800">{{ $header ?? 'Dashboard' }}</h1>
-                <p class="text-sm text-slate-400">Welcome back, {{ auth()->user()->name ?? 'User' }}</p>
-            </div>
-            <div class="flex items-center gap-5">
-                <div class="relative group">
-                    <i
-                        class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-hover:text-primary transition"></i>
-                    <input type="text" placeholder="Search projects..."
-                        class="pl-11 pr-4 py-2.5 border border-gray-200 bg-slate-50 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white w-72 transition-all">
-                </div>
-                <button
-                    class="w-10 h-10 bg-white border border-gray-200 rounded-full flex items-center justify-center text-slate-600 hover:text-primary hover:border-primary transition shadow-sm">
-                    <i class="fa-solid fa-gear"></i>
+                {{-- Mobile Close Button --}}
+                <button @click="sidebarOpen = false" class="md:hidden ml-auto text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
-        </header>
 
-        <div class="p-4 md:p-8 space-y-6 max-w-7xl mx-auto">
-            {{ $slot }}
+            {{-- NAVIGATION LINKS (Loaded from external file) --}}
+            <div class="flex-1 overflow-y-auto sidebar-scroll py-2 px-3">
+                @include('admin.common.sidebar')
+            </div>
+
+            {{-- SIDEBAR FOOTER (Profile & Logout) --}}
+            <div class="p-4 border-t border-slate-100 shrink-0 bg-slate-50/50">
+                <div
+                    class="flex items-center justify-between gap-2 p-2 rounded-xl bg-white border border-slate-200 shadow-sm">
+
+                    {{-- User Profile Link --}}
+                    @if (auth()->user()->hasRole('contractor'))
+                        <a href="{{ route('contractor.profile') }}"
+                            class="flex items-center gap-2 min-w-0 flex-1 hover:opacity-80 transition-opacity">
+                        @else
+                            <a href="#"
+                                class="flex items-center gap-2 min-w-0 flex-1 hover:opacity-80 transition-opacity">
+                    @endif
+                    <div
+                        class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold border border-primary/20">
+                        {{ substr(auth()->user()->name, 0, 2) }}
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-xs font-bold text-slate-700 truncate">{{ auth()->user()->name }}</p>
+                        <p class="text-[9px] font-medium text-slate-400 uppercase tracking-wide truncate">
+                            {{ auth()->user()->getRoleNames()->first() ?? 'User' }}</p>
+                    </div>
+                    </a>
+
+                    {{-- Logout Button (Icon) --}}
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit"
+                            class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                            title="Logout">
+                            <i class="fa-solid fa-power-off text-xs"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </aside>
+
+        {{-- MOBILE OVERLAY BACKDROP --}}
+        <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity duration.300
+            class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 md:hidden" style="display: none;">
         </div>
 
-    </main>
+        {{-- MAIN CONTENT WRAPPER --}}
+        <div class="flex-1 flex flex-col h-full relative overflow-y-auto no-scrollbar">
 
-    <nav
-        class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-2 flex justify-between items-center z-50 pb-safe shadow-[0_-5px_10px_rgba(0,0,0,0.02)]">
-        <a href="#" class="flex flex-col items-center p-2 text-primary">
-            <i class="fa-solid fa-house text-xl mb-1"></i>
-            <span class="text-[10px] font-medium">Home</span>
-        </a>
-        <a href="#" class="flex flex-col items-center p-2 text-slate-400 hover:text-slate-600 transition">
-            <i class="fa-solid fa-magnifying-glass text-xl mb-1"></i>
-            <span class="text-[10px] font-medium">Search</span>
-        </a>
-        <div class="relative -top-8">
-            <button
-                class="w-14 h-14 bg-primary rounded-2xl rotate-45 flex items-center justify-center text-white shadow-xl shadow-teal-500/40 border-4 border-slate-50 hover:scale-105 transition">
-                <i class="fa-solid fa-plus -rotate-45 text-2xl"></i>
-            </button>
+            {{-- TOP HEADER --}}
+            <header
+                class="h-16 bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-30 px-4 sm:px-6 flex items-center justify-between shrink-0">
+
+                {{-- Left: Mobile Toggle & Page Title --}}
+                <div class="flex items-center gap-4">
+                    <button @click="sidebarOpen = !sidebarOpen"
+                        class="md:hidden p-2 -ml-2 text-slate-500 hover:bg-slate-100 rounded-lg transition-colors">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                    <h1 class="text-lg font-bold text-slate-800 hidden sm:block">{{ $header ?? 'Dashboard' }}</h1>
+                </div>
+
+                {{-- Right: Header Actions --}}
+                <div class="flex items-center gap-3 sm:gap-4">
+                    {{-- Search --}}
+                    <div class="hidden md:block relative">
+                        <i
+                            class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                        <input type="text" placeholder="Type to search..."
+                            class="pl-9 pr-4 py-2 bg-slate-50 border-none rounded-lg text-sm w-64 focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all placeholder:text-slate-400 outline-none">
+                    </div>
+
+                    {{-- Notification Bell --}}
+                    <button
+                        class="relative w-9 h-9 flex items-center justify-center text-slate-500 hover:text-primary hover:bg-primary-light rounded-full transition-colors">
+                        <i class="fa-regular fa-bell text-lg"></i>
+                        <span
+                            class="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                    </button>
+
+                    {{-- Logout Text Button (Desktop) --}}
+                    <form method="POST" action="{{ route('logout') }}" class="hidden sm:block">
+                        @csrf
+                        <button type="submit"
+                            class="text-xs font-semibold text-slate-500 hover:text-red-600 transition-colors ml-2">
+                            Logout
+                        </button>
+                    </form>
+                </div>
+            </header>
+
+            {{-- PAGE CONTENT SLOT --}}
+            <main class="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
+                {{ $slot }}
+            </main>
+
         </div>
-        <a href="#" class="flex flex-col items-center p-2 text-slate-400 hover:text-slate-600 transition">
-            <i class="fa-regular fa-comment-dots text-xl mb-1"></i>
-            <span class="text-[10px] font-medium">Chat</span>
-        </a>
-        <a href="#" class="flex flex-col items-center p-2 text-slate-400 hover:text-slate-600 transition">
-            <i class="fa-regular fa-user text-xl mb-1"></i>
-            <span class="text-[10px] font-medium">Profile</span>
-        </a>
-    </nav>
 
+    </div>
+
+    {{-- FLOATING CHAT BUTTON --}}
+    <button
+        class="fixed bottom-6 right-6 z-50 w-14 h-14 bg-primary text-white rounded-full shadow-lg shadow-primary/40 hover:bg-primary-hover hover:scale-110 hover:-rotate-3 transition-all duration-300 flex items-center justify-center group"
+        onclick="alert('Chat system opening...')" title="Support Chat">
+        <i class="fa-solid fa-comment-dots text-2xl group-hover:animate-pulse"></i>
+        <span class="absolute top-0 right-0 w-4 h-4 bg-red-500 border-2 border-white rounded-full"></span>
+    </button>
+
+    @stack('scripts')
 </body>
 
 </html>
