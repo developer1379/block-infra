@@ -1,191 +1,116 @@
 <x-admin.app>
-    <style>
-        /* === General Layout === */
-        body {
-            background-color: #f8f9fa;
-        }
-
-        .card {
-            border-radius: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        /* === Header === */
-        .page-header h4 {
-            color: #2c3e50;
-            letter-spacing: 0.5px;
-        }
-
-        .page-header small {
-            color: #6c757d;
-        }
-
-        .btn-secondary {
-            background-color: #343a40;
-            border: none;
-        }
-
-        .btn-secondary:hover {
-            background-color: #212529;
-        }
-
-        /* === Form === */
-        label.form-label {
-            color: #212529;
-            font-weight: 600;
-        }
-
-        input.form-control,
-        textarea.form-control,
-        select.form-select {
-            border: 1px solid #ced4da;
-            border-radius: 6px;
-            box-shadow: none;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        input.form-control:focus,
-        textarea.form-control:focus,
-        select.form-select:focus {
-            border-color: #b3d33c;
-            box-shadow: 0 0 0 0.2rem rgba(179, 211, 60, 0.25);
-        }
-
-        .form-check-input:checked {
-            background-color: #b3d33c;
-            border-color: #b3d33c;
-        }
-
-        /* === Buttons === */
-        .btn-save {
-            background-color: #b3d33c;
-            color: #000;
-            border-radius: 6px;
-            transition: all 0.2s ease-in-out;
-        }
-
-        .btn-save:hover {
-            background-color: #a0c32f;
-            color: #000;
-            transform: translateY(-1px);
-        }
-
-        .btn-light.border:hover {
-            background-color: #e9ecef;
-        }
-
-        /* === Toast Notifications === */
-        .toast {
-            border-radius: 6px;
-            font-size: 0.95rem;
-        }
-
-        .toast-success {
-            background-color: #b3d33c;
-            color: #000;
-        }
-
-        .toast-error {
-            background-color: #dc3545;
-            color: #fff;
-        }
-    </style>
-
-
     {{-- PAGE HEADER --}}
-    <div class="d-flex justify-content-between align-items-center mb-4 page-header">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div>
-            <h4 class="fw-bold text-uppercase mb-0">Add New Category</h4>
-            <small>Create a new category or subcategory</small>
+            <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Add New Category</h2>
+            <p class="text-slate-500 text-sm">Create a new category or subcategory</p>
         </div>
-        <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary fw-semibold px-3 shadow-sm">
-            <i class="fa fa-arrow-left mr-1"></i> Back to Categories
+        <a href="{{ route('admin.categories.index') }}"
+            class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium px-4 py-2.5 rounded-lg shadow-sm transition-colors">
+            <i class="fa-solid fa-arrow-left"></i> Back to Categories
         </a>
     </div>
 
-    {{-- TOASTS --}}
-    <div class="position-fixed top-0 right-0 p-3" style="z-index:1100;">
-        @if (session('success'))
-            <div class="toast show fade border-0 toast-success" role="alert">
-                <div class="d-flex">
-                    <div class="toast-body fw-semibold">{{ session('success') }}</div>
-                    <button type="button" class="close m-auto mr-2" data-dismiss="toast">&times;</button>
-                </div>
-            </div>
-        @endif
-        @if ($errors->any())
-            <div class="toast show fade border-0 toast-error" role="alert">
-                <div class="d-flex">
-                    <div class="toast-body fw-semibold">{{ $errors->first() }}</div>
-                    <button type="button" class="close text-white m-auto mr-2" data-dismiss="toast">&times;</button>
-                </div>
-            </div>
-        @endif
-    </div>
-
     {{-- FORM CARD --}}
-    <div class="card border-0 shadow-sm">
-        <div class="card-body p-4">
-            <form action="{{ route('admin.categories.store') }}" method="POST">
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 max-w-3xl">
+        <div class="p-6 md:p-8">
+            <form action="{{ route('admin.categories.store') }}" method="POST" class="space-y-6">
                 @csrf
 
-                <div class="form-group mb-3">
-                    <label class="form-label">Category Name <span class="text-danger">*</span></label>
-                    <input type="text" name="name" value="{{ old('name') }}" class="form-control"
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">
+                        Category Name <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" name="name" value="{{ old('name') }}"
+                        class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
                         placeholder="Enter category name" required>
+                    @error('name')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
-                <div class="form-group mb-3">
-                    <label class="form-label">Parent Category</label>
-                    <select name="parent_id" class="form-control">
-                        <option value="">— None (Top Level Category) —</option>
-                        @foreach ($parents as $parent)
-                            <option value="{{ $parent->id }}" {{ old('parent_id') == $parent->id ? 'selected' : '' }}>
-                                {{ $parent->name }}
-                            </option>
-                        @endforeach
-                    </select>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Parent Category</label>
+                    <div class="relative">
+                        <select name="parent_id"
+                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm appearance-none focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors">
+                            <option value="">— None (Top Level Category) —</option>
+                            @foreach ($parents as $parent)
+                                <option value="{{ $parent->id }}"
+                                    {{ old('parent_id') == $parent->id ? 'selected' : '' }}>
+                                    {{ $parent->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <div
+                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="form-group mb-3">
-                    <label class="form-label">Description</label>
-                    <textarea name="description" rows="3" class="form-control" placeholder="Write short description...">{{ old('description') }}</textarea>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Description</label>
+                    <textarea name="description" rows="4"
+                        class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
+                        placeholder="Write a short description...">{{ old('description') }}</textarea>
                 </div>
 
-                <div class="form-group mb-3">
-                    <label class="form-label">Icon (optional)</label>
-                    <input type="text" name="icon" value="{{ old('icon') }}" class="form-control"
-                        placeholder="e.g. fa fa-car">
-                    <small class="text-muted">Use a valid Font Awesome 4/5 class name</small>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Icon (Optional)</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+                            <i class="fa-solid fa-icons"></i>
+                        </span>
+                        <input type="text" name="icon" value="{{ old('icon') }}"
+                            class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
+                            placeholder="e.g. fa-solid fa-hammer">
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1">Use a valid Font Awesome 6 class name.</p>
                 </div>
 
-                <div class="form-group form-check mb-4">
-                    <input type="checkbox" class="form-check-input" id="is_active" name="is_active" value="1"
-                        checked>
-                    <label class="form-check-label fw-semibold" for="is_active">Active</label>
+                <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-lg border border-slate-100">
+                    <input type="checkbox" id="is_active" name="is_active" value="1" checked
+                        class="w-4 h-4 text-primary bg-white border-gray-300 rounded focus:ring-primary">
+                    <label for="is_active" class="text-sm font-medium text-slate-700 cursor-pointer select-none">
+                        Active Status
+                    </label>
                 </div>
 
-                <div class="d-flex justify-content-end gap-2">
-                    <a href="{{ route('admin.categories.index') }}" class="btn btn-light border">Cancel</a>
-                    <button type="submit" class="btn btn-save fw-semibold px-4">
-                        <i class="fa fa-save mr-1"></i> Save Category
+                <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                    <a href="{{ route('admin.categories.index') }}"
+                        class="px-5 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors">
+                        Cancel
+                    </a>
+                    <button type="submit"
+                        class="px-5 py-2.5 rounded-lg text-sm font-semibold text-white bg-primary hover:bg-teal-700 shadow-md shadow-teal-100 transition-all transform hover:-translate-y-0.5">
+                        <i class="fa-solid fa-save mr-2"></i> Save Category
                     </button>
                 </div>
+
             </form>
         </div>
     </div>
-    @push('scripts')
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/js/fontawesome.min.js"></script>
-        <script>
-            $(document).ready(function() {
-                $('.toast').toast({
-                    delay: 3500
-                }).toast('show');
-            });
-        </script>
-    @endpush
+
+    {{-- ALERTS (Handled via Alpine.js or Tailwind) --}}
+    @if (session('success'))
+        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"
+            class="fixed top-5 right-5 z-50 bg-teal-600 text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-3 transition-opacity duration-500">
+            <i class="fa-solid fa-check-circle"></i>
+            <span class="font-medium">{{ session('success') }}</span>
+            <button @click="show = false" class="text-white/80 hover:text-white"><i
+                    class="fa-solid fa-xmark"></i></button>
+        </div>
+    @endif
+
+    @if ($errors->any())
+        <div x-data="{ show: true }" x-show="show"
+            class="fixed top-5 right-5 z-50 bg-red-500 text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-3">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span class="font-medium">{{ $errors->first() }}</span>
+            <button @click="show = false" class="text-white/80 hover:text-white"><i
+                    class="fa-solid fa-xmark"></i></button>
+        </div>
+    @endif
+
 </x-admin.app>

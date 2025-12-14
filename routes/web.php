@@ -49,7 +49,6 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/logout', 'logout')->name('logout');
 });
 
-// 🧱 Dashboard (Protected)
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
         return view('admin.pages.dashboard.index');

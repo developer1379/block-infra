@@ -1,90 +1,121 @@
 <x-admin.app>
 
+    {{-- 1. LOAD PLUGIN STYLES --}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    {{-- 2. CUSTOM STYLES --}}
     <style>
-        .profile-card {
-            border-radius: 10px;
+        /* Select2 Override to match Tailwind */
+        .select2-container .select2-selection--multiple {
+            min-height: 45px;
+            border-color: #e2e8f0 !important;
+            border-radius: 0.5rem !important;
+            padding: 6px 8px;
+            background-color: #f8fafc;
         }
 
-        .profile-image {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #b3d33c;
+        .select2-container--default.select2-container--focus .select2-selection--multiple {
+            border-color: #0f766e !important;
+            box-shadow: 0 0 0 1px #0f766e;
         }
 
-        .form-label-custom {
-            font-size: 13px;
-            font-weight: 600;
-            color: #444;
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            background-color: #0f766e !important;
+            border: none !important;
+            color: white !important;
+            border-radius: 4px;
+            padding: 2px 8px;
+            margin-top: 4px;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+            color: white !important;
+            border-right: 1px solid rgba(255, 255, 255, 0.3) !important;
+            margin-right: 6px;
         }
     </style>
 
-    {{-- HEADER --}}
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="fw-bold" style="color:#b3d33c;">My Profile</h5>
+    {{-- PAGE HEADER --}}
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+        <div>
+            <h2 class="text-2xl font-bold text-slate-800 tracking-tight">My Profile </h2>
+            <p class="text-slate-500 text-sm">Manage your account settings and preferences</p>
+        </div>
 
-        <a href="{{ route('dashboard') }}" class="btn btn-sm btn-outline-dark">
-            <i class="fa fa-arrow-left mr-1"></i> Back
+        <a href="{{ route('dashboard') }}"
+            class="inline-flex items-center gap-2 bg-white border border-slate-200 text-slate-700 hover:text-slate-900 hover:border-slate-300 text-sm font-medium px-4 py-2.5 rounded-lg shadow-sm transition-colors">
+            <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
         </a>
     </div>
 
     {{-- PROFILE CARD --}}
-    <div class="card shadow profile-card border-0">
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 max-w-4xl mx-auto overflow-hidden">
 
-        <div class="card-body p-4">
+        <div class="p-6 md:p-8">
 
-            {{-- PROFILE IMAGE --}}
-            <div class="text-center mb-4">
+            {{-- PROFILE IMAGE SECTION --}}
+            <div class="flex flex-col items-center justify-center mb-8">
                 @php
                     $imagePath = auth()->user()->contractor->image ?? null;
                 @endphp
+                <div class="relative group">
+                    <img src="{{ $imagePath ? $imagePath : asset('default-avatar.png') }}" alt="Profile"
+                        class="w-28 h-28 rounded-full object-cover border-4 border-primary/20 shadow-md">
+                    <div
+                        class="absolute inset-0 rounded-full bg-black/0 group-hover:bg-black/10 transition-colors pointer-events-none">
+                    </div>
+                </div>
 
-                <img src="{{ $imagePath ? $imagePath : asset('default-avatar.png') }}"
-                    class="profile-image mb-2">
-
-
-                <h5 class="fw-bold mb-0">{{ auth()->user()->name }}</h5>
-                <p class="text-muted small mb-0">{{ auth()->user()->email }}</p>
+                <h3 class="mt-4 text-xl font-bold text-slate-800">{{ auth()->user()->name }}</h3>
+                <p class="text-slate-500 text-sm">{{ auth()->user()->email }}</p>
             </div>
 
-            <hr>
+            <hr class="border-slate-100 mb-8">
 
             {{-- PROFILE FORM --}}
             <form action="{{ route('contractor.profile.update') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                <div class="row">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 
-                    {{-- NAME --}}
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label-custom">Full Name</label>
+                    {{-- Full Name --}}
+                    <div class="col-span-1">
+                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">
+                            Full Name <span class="text-red-500">*</span>
+                        </label>
                         <input type="text" name="name" value="{{ auth()->user()->name }}"
-                            class="form-control form-control-sm border-secondary" required>
+                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
+                            required>
                     </div>
 
-                    {{-- EMAIL --}}
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label-custom">Email</label>
+                    {{-- Email --}}
+                    <div class="col-span-1">
+                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">
+                            Email
+                        </label>
                         <input type="email" name="email" value="{{ auth()->user()->email }}"
-                            class="form-control form-control-sm border-secondary">
+                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors">
                     </div>
 
-                    {{-- PHONE --}}
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label-custom">Phone</label>
+                    {{-- Phone --}}
+                    <div class="col-span-1">
+                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">
+                            Phone
+                        </label>
                         <input type="text" name="phone" value="{{ auth()->user()->contractor->phone }}"
-                            class="form-control form-control-sm border-secondary">
+                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors">
                     </div>
 
-                    {{-- CITY --}}
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label-custom">City</label>
+                    {{-- City --}}
+                    <div class="col-span-1">
+                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">
+                            City
+                        </label>
                         <input type="text" name="city" value="{{ auth()->user()->contractor->city }}"
-                            class="form-control form-control-sm border-secondary">
+                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors">
                     </div>
 
-                    {{-- CATEGORIES --}}
+                    {{-- Categories (Select2) --}}
                     @php
                         $parentCategories = \App\Models\Category::with('subcategories')
                             ->whereNull('parent_id')
@@ -92,65 +123,80 @@
                             ->orderBy('name')
                             ->get();
 
-                        // Correct selected categories from contractor model
                         $selectedCategories = auth()->user()->contractor
                             ? auth()->user()->contractor->categories->pluck('id')->toArray()
                             : [];
                     @endphp
 
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Select Categories (Multiple)</label>
-
-                        <select name="categories[]" multiple class="form-control category-select"
-                            style="min-height: 150px;">
-                            @foreach ($parentCategories as $parent)
-                                @if ($parent->subcategories->count())
-                                    <optgroup label="{{ $parent->name }}">
-                                        @foreach ($parent->subcategories as $child)
-                                            <option value="{{ $child->id }}"
-                                                {{ in_array($child->id, old('categories', $selectedCategories)) ? 'selected' : '' }}>
-                                                {{ $child->name }}
-                                            </option>
-                                        @endforeach
-                                    </optgroup>
-                                @else
-                                    <option value="{{ $parent->id }}"
-                                        {{ in_array($parent->id, old('categories', $selectedCategories)) ? 'selected' : '' }}>
-                                        {{ $parent->name }}
-                                    </option>
-                                @endif
-                            @endforeach
-                        </select>
-
-                        <small class="text-muted">Hold CTRL to select multiple categories</small>
+                    <div class="col-span-1 md:col-span-2">
+                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">
+                            Select Categories (Multiple)
+                        </label>
+                        <div class="relative">
+                            <select name="categories[]" multiple class="category-select w-full" style="display: none;">
+                                @foreach ($parentCategories as $parent)
+                                    @if ($parent->subcategories->count())
+                                        <optgroup label="{{ $parent->name }}" class="font-bold text-slate-800">
+                                            @foreach ($parent->subcategories as $child)
+                                                <option value="{{ $child->id }}"
+                                                    {{ in_array($child->id, old('categories', $selectedCategories)) ? 'selected' : '' }}>
+                                                    {{ $child->name }}
+                                                </option>
+                                            @endforeach
+                                        </optgroup>
+                                    @else
+                                        <option value="{{ $parent->id }}"
+                                            {{ in_array($parent->id, old('categories', $selectedCategories)) ? 'selected' : '' }}>
+                                            {{ $parent->name }}
+                                        </option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1">Select the categories you specialize in.</p>
                     </div>
 
-
-                    {{-- PROFILE PHOTO --}}
-                    <div class="col-md-12 mb-3">
-                        <label class="form-label-custom">Profile Photo</label>
-                        <input type="file" name="image" accept="image/*" style="height: 35px;"
-                            class="form-control form-control-sm border-secondary">
+                    {{-- Profile Photo --}}
+                    <div class="col-span-1 md:col-span-2">
+                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">
+                            Profile Photo
+                        </label>
+                        <input type="file" name="image" accept="image/*"
+                            class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-white hover:file:bg-teal-700">
                     </div>
 
-                    {{-- PASSWORD CHANGE --}}
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label-custom">New Password</label>
-                        <input type="password" name="password" class="form-control form-control-sm border-secondary"
+                    {{-- Password Change Section --}}
+                    <div class="col-span-1 md:col-span-2 mt-2 pt-6 border-t border-slate-100">
+                        <h4 class="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-lock text-primary"></i> Change Password
+                        </h4>
+                    </div>
+
+                    <div class="col-span-1">
+                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">
+                            New Password
+                        </label>
+                        <input type="password" name="password"
+                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
                             placeholder="Leave empty if not changing">
                     </div>
 
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label-custom">Confirm Password</label>
+                    <div class="col-span-1">
+                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">
+                            Confirm Password
+                        </label>
                         <input type="password" name="password_confirmation"
-                            class="form-control form-control-sm border-secondary" placeholder="Confirm password">
+                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
+                            placeholder="Confirm new password">
                     </div>
 
                 </div>
 
-                <div class="text-right mt-3">
-                    <button class="btn px-4 fw-bold" style="background:#b3d33c;color:#000;">
-                        <i class="fa fa-save mr-1"></i> Save Changes
+                {{-- Submit Button --}}
+                <div class="flex justify-end pt-6 border-t border-slate-100">
+                    <button type="submit"
+                        class="px-6 py-2.5 rounded-lg text-sm font-bold text-white bg-primary hover:bg-teal-700 shadow-md shadow-teal-100 transition-all transform hover:-translate-y-0.5">
+                        <i class="fa-solid fa-save mr-2"></i> Save Changes
                     </button>
                 </div>
 
@@ -158,16 +204,37 @@
         </div>
     </div>
 
+    {{-- 3. INITIALIZATION SCRIPTS --}}
     @push('scripts')
+        {{-- Load Libraries --}}
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
         <script>
-            @if (session('success'))
-                Swal.fire({
-                    title: "Profile Updated!",
-                    text: "{{ session('success') }}",
-                    icon: "success",
-                    confirmButtonColor: "#28a745"
+            $(document).ready(function() {
+                // Initialize Select2
+                $('.category-select').select2({
+                    placeholder: "Select categories...",
+                    allowClear: true,
+                    width: '100%',
+                    closeOnSelect: false
                 });
-            @endif
+
+                // Show Success Alert if session exists
+                @if (session('success'))
+                    Swal.fire({
+                        title: "Profile Updated!",
+                        text: "{{ session('success') }}",
+                        icon: "success",
+                        confirmButtonColor: "#0f766e", // primary color
+                        customClass: {
+                            popup: 'rounded-xl',
+                            confirmButton: 'px-4 py-2 rounded-lg font-bold'
+                        }
+                    });
+                @endif
+            });
         </script>
     @endpush
 

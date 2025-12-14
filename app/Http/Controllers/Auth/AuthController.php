@@ -54,7 +54,6 @@ class AuthController extends Controller
             $role = Role::findOrCreate($request->role, 'web');
             $user->assignRole($role);
 
-            // ===== Create Contractor Only if role = contractor =====
             if ($request->role === 'contractor') {
 
                 $contractor = \App\Models\Contractor::create([
@@ -66,7 +65,6 @@ class AuthController extends Controller
                     'is_active'    => false,  // wait for admin approval
                 ]);
 
-                // 🌟 NEW: Attach multiple categories
                 if ($request->filled('categories')) {
                     $contractor->categories()->sync($request->categories);
                 }
@@ -102,7 +100,6 @@ class AuthController extends Controller
             'password' => 'required|min:6',
         ]);
 
-        // Fetch user first
         $user = \App\Models\User::where('email', $request->email)->first();
 
         if (!$user) {

@@ -1,196 +1,221 @@
-<style>
-    .quixnav .metismenu a {
-        display: flex;
-        align-items: center;
-        gap: 18px;
-        color: #eaeaea;
-        font-weight: 500;
-    }
+<nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
 
-    .quixnav .metismenu a:hover {
-        color: #b3d33c !important;
-    }
+    {{-- DASHBOARD --}}
+    <a href="{{ route('dashboard') }}"
+        class="group flex items-center px-3.5 py-2.5 text-sm font-medium rounded-xl transition-all duration-200
+       {{ request()->routeIs('dashboard')
+           ? 'bg-primary text-white shadow-lg shadow-teal-500/30 translate-x-1'
+           : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+        <i class="fa-solid fa-gauge w-5 text-center transition-transform group-hover:scale-110"></i>
+        <span class="ml-3">Dashboard</span>
+    </a>
 
-    .quixnav .metismenu i {
-        font-size: 16px;
-        width: 20px;
-        text-align: center;
-    }
-</style>
-<div class="quixnav">
-
-    <div class="quixnav-scroll">
-        <ul class="metismenu" id="menu">
-
-            {{-- MAIN --}}
-            <li class="nav-label first">MAIN MENU</li>
-
-            <li>
-                <a href="{{ route('dashboard') }}">
-                    <i class="fa-solid fa-gauge me-2"></i>
-                    <span class="nav-text">Dashboard</span>
-                </a>
-            </li>
-
-            {{-- MANAGEMENT --}}
-            <li class="nav-label">MANAGEMENT</li>
-
-            {{-- Categories --}}
-            @can('view categories')
-                <li>
-                    <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
-                        <i class="fa-solid fa-layer-group me-2"></i>
-                        <span class="nav-text">Categories</span>
-                    </a>
-                    <ul aria-expanded="false">
-                        @can('view categories')
-                            <li><a href="{{ route('admin.categories.index') }}">All Categories</a></li>
-                        @endcan
-                        @can('create categories')
-                            <li><a href="{{ route('admin.categories.create') }}">Add New</a></li>
-                        @endcan
-                    </ul>
-                </li>
-            @endcan
-
-            {{-- Works --}}
-            @can('view works')
-                <li>
-                    <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
-                        <i class="fa-solid fa-person-digging me-2"></i>
-                        <span class="nav-text">Works</span>
-                    </a>
-                    <ul aria-expanded="false">
-                        @can('view works')
-                            <li><a href="{{ route('admin.works.index') }}">All Works</a></li>
-                        @endcan
-                        @can('create works')
-                            <li><a href="{{ route('admin.works.create') }}">Add Work</a></li>
-                        @endcan
-                    </ul>
-                </li>
-            @endcan
-
-            {{-- Units --}}
-            @can('view units')
-                <li>
-                    <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
-                        <i class="fa-solid fa-ruler-combined me-2"></i>
-                        <span class="nav-text">Units</span>
-                    </a>
-                    <ul aria-expanded="false">
-                        @can('view units')
-                            <li><a href="{{ route('admin.units.index') }}">All Units</a></li>
-                        @endcan
-                        @can('create units')
-                            <li><a href="{{ route('admin.units.create') }}">Add Unit</a></li>
-                        @endcan
-                    </ul>
-                </li>
-            @endcan
-
-            {{-- Contractors --}}
-            @can('view contractors')
-                <li>
-                    <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
-                        <i class="fa-solid fa-helmet-safety me-2"></i>
-                        <span class="nav-text">Contractors</span>
-                    </a>
-                    <ul aria-expanded="false">
-                        @can('view contractors')
-                            <li><a href="{{ route('admin.contractors.index') }}">All Contractors</a></li>
-                        @endcan
-                        @can('create contractors')
-                            <li><a href="{{ route('admin.contractors.create') }}">Add Contractor</a></li>
-                        @endcan
-                    </ul>
-                </li>
-            @endcan
-
-            {{-- Projects --}}
-            @can('view projects')
-                <li>
-                    <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
-                        <i class="fa-solid fa-diagram-project me-2"></i>
-                        <span class="nav-text">Projects</span>
-                    </a>
-                    <ul aria-expanded="false">
-
-                        {{-- All Projects --}}
-                        @can('view projects')
-                            <li>
-                                <a href="{{ route('admin.projects.index') }}">
-                                    All Projects
-                                </a>
-                            </li>
-                        @endcan
-
-                        {{-- Add Project --}}
-                        @can('create projects')
-                            <li>
-                                <a href="{{ route('admin.projects.create') }}">
-                                    Add Project
-                                </a>
-                            </li>
-                        @endcan
-
-                    </ul>
-                </li>
-            @endcan
-
-
-            {{-- Bids --}}
-            @can('view bids')
-                <li>
-                    <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
-                        <i class="fa-solid fa-gavel me-2"></i>
-                        <span class="nav-text">Bids</span>
-                    </a>
-
-                    <ul aria-expanded="false">
-
-
-
-                        @can('create bids')
-                            <li>
-                                <a href="{{ route('admin.projects.index') }}">
-                                    <i class="fa fa-gavel"></i> Bid on Projects
-                                </a>
-                            </li>
-                        @endcan
-
-                    </ul>
-                </li>
-            @endcan
-
-            {{-- Roles & Permissions --}}
-            @canany(['view roles', 'view permissions'])
-                <li>
-                    <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
-                        <i class="fa-solid fa-user-shield me-2"></i>
-                        <span class="nav-text">Roles & Permissions</span>
-                    </a>
-                    <ul aria-expanded="false">
-                        @can('view roles')
-                            <li><a href="{{ route('admin.roles.index') }}">All Roles</a></li>
-                        @endcan
-                        @can('view permissions')
-                            <li><a href="{{ route('admin.permissions.index') }}">All Permissions</a></li>
-                        @endcan
-                    </ul>
-                </li>
-            @endcanany
-
-            {{-- Contractor Profile --}}
-            @if (auth()->user()->hasRole('contractor'))
-                <li>
-                    <a href="{{ route('contractor.profile') }}" class="has-arrow">
-                        <i class="fa-solid fa-user-shield me-2"></i>
-                        <span class="nav-text">Profile</span>
-                    </a>
-                </li>
-            @endif
-
-        </ul>
+    {{-- SECTION LABEL --}}
+    <div class="pt-6 pb-2 px-4">
+        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Management</p>
     </div>
-</div>
+
+    {{-- CATEGORIES --}}
+    @can('view categories')
+        <div x-data="{ open: {{ request()->routeIs('admin.categories.*') ? 'true' : 'false' }} }" class="space-y-1">
+            <button @click="open = !open"
+                class="w-full group flex items-center justify-between px-3.5 py-2.5 text-sm font-medium rounded-xl transition-all duration-200
+                {{ request()->routeIs('admin.categories.*') ? 'bg-teal-50 text-primary' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                <div class="flex items-center">
+                    <i
+                        class="fa-solid fa-layer-group w-5 text-center transition-colors {{ request()->routeIs('admin.categories.*') ? 'text-primary' : 'text-slate-400 group-hover:text-primary' }}"></i>
+                    <span class="ml-3">Categories</span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-[10px] text-slate-400 transition-transform duration-300"
+                    :class="open ? 'rotate-90 text-primary' : ''"></i>
+            </button>
+
+            <div x-show="open" x-collapse x-cloak class="relative pl-9 space-y-1">
+                {{-- Vertical Guide Line --}}
+                <div class="absolute left-[22px] top-0 bottom-0 w-[1.5px] bg-slate-100"></div>
+
+                @can('view categories')
+                    <a href="{{ route('admin.categories.index') }}"
+                        class="relative block py-2 pl-3 text-sm rounded-lg transition-colors duration-200
+                       {{ request()->routeIs('admin.categories.index') ? 'text-primary font-semibold bg-teal-50/50' : 'text-slate-500 hover:text-primary hover:bg-slate-50' }}">
+                        All Categories
+                    </a>
+                @endcan
+                @can('create categories')
+                    <a href="{{ route('admin.categories.create') }}"
+                        class="relative block py-2 pl-3 text-sm rounded-lg transition-colors duration-200
+                       {{ request()->routeIs('admin.categories.create') ? 'text-primary font-semibold bg-teal-50/50' : 'text-slate-500 hover:text-primary hover:bg-slate-50' }}">
+                        Add New
+                    </a>
+                @endcan
+            </div>
+        </div>
+    @endcan
+
+    {{-- WORKS --}}
+    @can('view works')
+        <div x-data="{ open: {{ request()->routeIs('admin.works.*') ? 'true' : 'false' }} }" class="space-y-1">
+            <button @click="open = !open"
+                class="w-full group flex items-center justify-between px-3.5 py-2.5 text-sm font-medium rounded-xl transition-all duration-200
+                {{ request()->routeIs('admin.works.*') ? 'bg-teal-50 text-primary' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                <div class="flex items-center">
+                    <i
+                        class="fa-solid fa-person-digging w-5 text-center transition-colors {{ request()->routeIs('admin.works.*') ? 'text-primary' : 'text-slate-400 group-hover:text-primary' }}"></i>
+                    <span class="ml-3">Works</span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-[10px] text-slate-400 transition-transform duration-300"
+                    :class="open ? 'rotate-90 text-primary' : ''"></i>
+            </button>
+
+            <div x-show="open" x-collapse x-cloak class="relative pl-9 space-y-1">
+                <div class="absolute left-[22px] top-0 bottom-0 w-[1.5px] bg-slate-100"></div>
+
+                @can('view works')
+                    <a href="{{ route('admin.works.index') }}"
+                        class="relative block py-2 pl-3 text-sm rounded-lg transition-colors duration-200
+                       {{ request()->routeIs('admin.works.index') ? 'text-primary font-semibold bg-teal-50/50' : 'text-slate-500 hover:text-primary hover:bg-slate-50' }}">
+                        All Works
+                    </a>
+                @endcan
+                @can('create works')
+                    <a href="{{ route('admin.works.create') }}"
+                        class="relative block py-2 pl-3 text-sm rounded-lg transition-colors duration-200
+                       {{ request()->routeIs('admin.works.create') ? 'text-primary font-semibold bg-teal-50/50' : 'text-slate-500 hover:text-primary hover:bg-slate-50' }}">
+                        Add Work
+                    </a>
+                @endcan
+            </div>
+        </div>
+    @endcan
+
+    {{-- UNITS --}}
+    @can('view units')
+        <div x-data="{ open: {{ request()->routeIs('admin.units.*') ? 'true' : 'false' }} }" class="space-y-1">
+            <button @click="open = !open"
+                class="w-full group flex items-center justify-between px-3.5 py-2.5 text-sm font-medium rounded-xl transition-all duration-200
+                {{ request()->routeIs('admin.units.*') ? 'bg-teal-50 text-primary' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                <div class="flex items-center">
+                    <i
+                        class="fa-solid fa-ruler-combined w-5 text-center transition-colors {{ request()->routeIs('admin.units.*') ? 'text-primary' : 'text-slate-400 group-hover:text-primary' }}"></i>
+                    <span class="ml-3">Units</span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-[10px] text-slate-400 transition-transform duration-300"
+                    :class="open ? 'rotate-90 text-primary' : ''"></i>
+            </button>
+            <div x-show="open" x-collapse x-cloak class="relative pl-9 space-y-1">
+                <div class="absolute left-[22px] top-0 bottom-0 w-[1.5px] bg-slate-100"></div>
+                @can('view units')
+                    <a href="{{ route('admin.units.index') }}"
+                        class="relative block py-2 pl-3 text-sm rounded-lg transition-colors duration-200 {{ request()->routeIs('admin.units.index') ? 'text-primary font-semibold bg-teal-50/50' : 'text-slate-500 hover:text-primary hover:bg-slate-50' }}">All
+                        Units</a>
+                @endcan
+                @can('create units')
+                    <a href="{{ route('admin.units.create') }}"
+                        class="relative block py-2 pl-3 text-sm rounded-lg transition-colors duration-200 {{ request()->routeIs('admin.units.create') ? 'text-primary font-semibold bg-teal-50/50' : 'text-slate-500 hover:text-primary hover:bg-slate-50' }}">Add
+                        Unit</a>
+                @endcan
+            </div>
+        </div>
+    @endcan
+
+    {{-- CONTRACTORS --}}
+    @can('view contractors')
+        <div x-data="{ open: {{ request()->routeIs('admin.contractors.*') ? 'true' : 'false' }} }" class="space-y-1">
+            <button @click="open = !open"
+                class="w-full group flex items-center justify-between px-3.5 py-2.5 text-sm font-medium rounded-xl transition-all duration-200
+                {{ request()->routeIs('admin.contractors.*') ? 'bg-teal-50 text-primary' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                <div class="flex items-center">
+                    <i
+                        class="fa-solid fa-helmet-safety w-5 text-center transition-colors {{ request()->routeIs('admin.contractors.*') ? 'text-primary' : 'text-slate-400 group-hover:text-primary' }}"></i>
+                    <span class="ml-3">Contractors</span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-[10px] text-slate-400 transition-transform duration-300"
+                    :class="open ? 'rotate-90 text-primary' : ''"></i>
+            </button>
+            <div x-show="open" x-collapse x-cloak class="relative pl-9 space-y-1">
+                <div class="absolute left-[22px] top-0 bottom-0 w-[1.5px] bg-slate-100"></div>
+                @can('view contractors')
+                    <a href="{{ route('admin.contractors.index') }}"
+                        class="relative block py-2 pl-3 text-sm rounded-lg transition-colors duration-200 {{ request()->routeIs('admin.contractors.index') ? 'text-primary font-semibold bg-teal-50/50' : 'text-slate-500 hover:text-primary hover:bg-slate-50' }}">All
+                        Contractors</a>
+                @endcan
+                @can('create contractors')
+                    <a href="{{ route('admin.contractors.create') }}"
+                        class="relative block py-2 pl-3 text-sm rounded-lg transition-colors duration-200 {{ request()->routeIs('admin.contractors.create') ? 'text-primary font-semibold bg-teal-50/50' : 'text-slate-500 hover:text-primary hover:bg-slate-50' }}">Add
+                        Contractor</a>
+                @endcan
+            </div>
+        </div>
+    @endcan
+
+    {{-- PROJECTS --}}
+    @can('view projects')
+        <div x-data="{ open: {{ request()->routeIs('admin.projects.*') ? 'true' : 'false' }} }" class="space-y-1">
+            <button @click="open = !open"
+                class="w-full group flex items-center justify-between px-3.5 py-2.5 text-sm font-medium rounded-xl transition-all duration-200
+                {{ request()->routeIs('admin.projects.*') ? 'bg-teal-50 text-primary' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                <div class="flex items-center">
+                    <i
+                        class="fa-solid fa-diagram-project w-5 text-center transition-colors {{ request()->routeIs('admin.projects.*') ? 'text-primary' : 'text-slate-400 group-hover:text-primary' }}"></i>
+                    <span class="ml-3">Projects</span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-[10px] text-slate-400 transition-transform duration-300"
+                    :class="open ? 'rotate-90 text-primary' : ''"></i>
+            </button>
+            <div x-show="open" x-collapse x-cloak class="relative pl-9 space-y-1">
+                <div class="absolute left-[22px] top-0 bottom-0 w-[1.5px] bg-slate-100"></div>
+                @can('view projects')
+                    <a href="{{ route('admin.projects.index') }}"
+                        class="relative block py-2 pl-3 text-sm rounded-lg transition-colors duration-200 {{ request()->routeIs('admin.projects.index') ? 'text-primary font-semibold bg-teal-50/50' : 'text-slate-500 hover:text-primary hover:bg-slate-50' }}">All
+                        Projects</a>
+                @endcan
+                @can('create projects')
+                    <a href="{{ route('admin.projects.create') }}"
+                        class="relative block py-2 pl-3 text-sm rounded-lg transition-colors duration-200 {{ request()->routeIs('admin.projects.create') ? 'text-primary font-semibold bg-teal-50/50' : 'text-slate-500 hover:text-primary hover:bg-slate-50' }}">Add
+                        Project</a>
+                @endcan
+            </div>
+        </div>
+    @endcan
+
+    {{-- ACCESS CONTROL --}}
+    @canany(['view roles', 'view permissions'])
+        <div x-data="{ open: {{ request()->routeIs('admin.roles.*') || request()->routeIs('admin.permissions.*') ? 'true' : 'false' }} }" class="space-y-1">
+            <button @click="open = !open"
+                class="w-full group flex items-center justify-between px-3.5 py-2.5 text-sm font-medium rounded-xl transition-all duration-200
+                {{ request()->routeIs('admin.roles.*') || request()->routeIs('admin.permissions.*') ? 'bg-teal-50 text-primary' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+                <div class="flex items-center">
+                    <i
+                        class="fa-solid fa-user-shield w-5 text-center transition-colors {{ request()->routeIs('admin.roles.*') || request()->routeIs('admin.permissions.*') ? 'text-primary' : 'text-slate-400 group-hover:text-primary' }}"></i>
+                    <span class="ml-3">Access Control</span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-[10px] text-slate-400 transition-transform duration-300"
+                    :class="open ? 'rotate-90 text-primary' : ''"></i>
+            </button>
+            <div x-show="open" x-collapse x-cloak class="relative pl-9 space-y-1">
+                <div class="absolute left-[22px] top-0 bottom-0 w-[1.5px] bg-slate-100"></div>
+                @can('view roles')
+                    <a href="{{ route('admin.roles.index') }}"
+                        class="relative block py-2 pl-3 text-sm rounded-lg transition-colors duration-200 {{ request()->routeIs('admin.roles.index') ? 'text-primary font-semibold bg-teal-50/50' : 'text-slate-500 hover:text-primary hover:bg-slate-50' }}">Roles</a>
+                @endcan
+                @can('view permissions')
+                    <a href="{{ route('admin.permissions.index') }}"
+                        class="relative block py-2 pl-3 text-sm rounded-lg transition-colors duration-200 {{ request()->routeIs('admin.permissions.index') ? 'text-primary font-semibold bg-teal-50/50' : 'text-slate-500 hover:text-primary hover:bg-slate-50' }}">Permissions</a>
+                @endcan
+            </div>
+        </div>
+    @endcanany
+
+    {{-- CONTRACTOR PROFILE --}}
+    @if (auth()->user()->hasRole('contractor'))
+        <a href="{{ route('contractor.profile') }}"
+            class="group flex items-center px-3.5 py-2.5 text-sm font-medium rounded-xl transition-all duration-200
+           {{ request()->routeIs('contractor.profile')
+               ? 'bg-primary text-white shadow-lg shadow-teal-500/30'
+               : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+            <i class="fa-solid fa-user-gear w-5 text-center transition-transform group-hover:scale-110"></i>
+            <span class="ml-3">My Profile</span>
+        </a>
+    @endif
+
+</nav>

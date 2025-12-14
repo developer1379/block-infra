@@ -1,181 +1,162 @@
 <x-admin.app>
-    <style>
-        .btn-add {
-            background: #b3d33c;
-            color: #000;
-            border-radius: 6px;
-            font-weight: 600;
-            transition: all .2s ease-in-out;
-        }
 
-        .btn-add:hover {
-            background: #a0c32f;
-            color: #000;
-        }
-
-        .status-badge {
-            font-size: 12px;
-            padding: 4px 8px;
-            border-radius: 5px;
-            transition: all .3s ease;
-        }
-
-        .status-active {
-            background: #b3d33c;
-            color: #000;
-        }
-
-        .status-inactive {
-            background: #adb5bd;
-            color: #fff;
-        }
-
-        .table td {
-            vertical-align: middle !important;
-        }
-
-        .toggle-switch {
-            cursor: pointer;
-            transition: all .3s ease;
-        }
-
-        .toast {
-            border-radius: 6px;
-            min-width: 250px;
-        }
-
-        .toast-success {
-            background: #b3d33c;
-            color: #000;
-        }
-
-        .toast-error {
-            background: #dc3545;
-            color: #fff;
-        }
-    </style>
-
-    <div class="page-wrapper">
-        {{-- Header --}}
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h4 class="fw-bold text-uppercase mb-0 text-dark">Contractors</h4>
-                <small class="text-muted">Manage contractor registrations, categories & status</small>
-            </div>
-            <a href="{{ route('admin.contractors.create') }}" class="btn btn-add shadow-sm">
-                <i class="fa fa-plus mr-1"></i> Add Contractor
-            </a>
+    {{-- PAGE HEADER --}}
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+        <div>
+            <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Contractors</h2>
+            <p class="text-slate-500 text-sm">Manage contractor registrations, categories & status</p>
         </div>
 
-        {{-- Toast Container --}}
-        <div id="toast-container" class="position-fixed" style="top:15px; right:15px; z-index:1100;"></div>
-
-        {{-- Contractor Table --}}
-        <div class="card border-0 shadow-sm">
-            <div class="card-body p-3">
-                <div class="table-responsive-lg">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light text-uppercase small">
-                            <tr>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Company</th>
-                                <th>City</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Status</th>
-                                <th class="text-center">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($contractors as $i => $c)
-                                <tr id="row-{{ $c->id }}">
-                                    <td>{{ $i + 1 }}</td>
-                                    <td class="fw-semibold text-dark">{{ $c->name }}</td>
-                                    <td>{{ $c->company_name ?? '—' }}</td>
-                                    <td>{{ $c->city ?? '—' }}</td>
-                                    <td>{{ $c->email ?? '—' }}</td>
-                                    <td>{{ $c->phone ?? '—' }}</td>
-                                    <td>
-                                        <span id="status-badge-{{ $c->id }}"
-                                            class="status-badge {{ $c->is_active ? 'status-active' : 'status-inactive' }}">
-                                            {{ $c->is_active ? 'Active' : 'Inactive' }}
-                                        </span>
-                                    </td>
-                                    <td class="text-center">
-                                        {{-- Toggle --}}
-                                        <button type="button"
-                                            class="btn btn-sm toggle-switch {{ $c->is_active ? 'btn-outline-secondary' : 'btn-outline-success' }}"
-                                            data-id="{{ $c->id }}" title="Toggle Status">
-                                            <i
-                                                class="fa {{ $c->is_active ? 'fa-ban text-danger' : 'fa-check text-success' }}"></i>
-                                        </button>
-
-                                        {{-- View --}}
-                                        <a href="{{ route('admin.contractors.show', $c->id) }}"
-                                            class="btn btn-sm btn-outline-info" title="View Details">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-
-                                        {{-- Edit --}}
-                                        <a href="{{ route('admin.contractors.edit', $c->id) }}"
-                                            class="btn btn-sm btn-outline-primary" title="Edit Contractor">
-                                            <i class="fa fa-edit"></i>
-                                        </a>
-
-                                        {{-- Delete --}}
-                                        <form action="{{ route('admin.contractors.destroy', $c->id) }}" method="POST"
-                                            class="d-inline"
-                                            onsubmit="return confirm('Are you sure you want to delete this contractor?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
-                                                <i class="fa fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    </td>
-
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="9" class="text-center text-muted py-4">
-                                        <i class="fa fa-folder-open mb-2"></i><br>
-                                        No contractors found
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+        <a href="{{ route('admin.contractors.create') }}"
+            class="inline-flex items-center gap-2 bg-primary hover:bg-teal-700 text-white text-sm font-semibold px-4 py-2.5 rounded-lg shadow-sm shadow-teal-100 transition-all transform hover:-translate-y-0.5">
+            <i class="fa-solid fa-plus"></i> Add Contractor
+        </a>
     </div>
 
+    {{-- TOAST CONTAINER (Fixed Position) --}}
+    <div id="toast-container" class="fixed top-5 right-5 z-[60] space-y-3"></div>
+
+    {{-- CONTRACTORS GRID --}}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @forelse ($contractors as $contractor)
+            <div
+                class="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col hover:shadow-md transition-all duration-200 group">
+
+                {{-- Card Header --}}
+                <div class="p-5 flex justify-between items-start border-b border-slate-50">
+                    <div class="flex items-center gap-3">
+                        {{-- Avatar / Icon --}}
+                        <div
+                            class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 border border-slate-200 shadow-sm">
+                            <i class="fa-solid fa-helmet-safety"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-base leading-tight">{{ $contractor->name }}</h3>
+                            <p class="text-xs text-slate-500">{{ $contractor->company_name ?? 'Freelancer' }}</p>
+                        </div>
+                    </div>
+
+                    {{-- Status Badge (Dynamic ID for AJAX) --}}
+                    <span id="status-badge-{{ $contractor->id }}"
+                        class="inline-flex items-center px-2.5 py-0.5 rounded text-[10px] font-bold border uppercase tracking-wide
+                        {{ $contractor->is_active
+                            ? 'bg-green-100 text-green-700 border-green-200'
+                            : 'bg-gray-100 text-gray-500 border-gray-200' }}">
+                        {{ $contractor->is_active ? 'Active' : 'Inactive' }}
+                    </span>
+                </div>
+
+                {{-- Contact Info --}}
+                <div class="p-5 py-4 flex-1 space-y-3">
+
+                    <div class="flex items-center gap-3 text-sm text-slate-600">
+                        <div class="w-6 flex justify-center"><i class="fa-solid fa-envelope text-slate-400"></i></div>
+                        <span class="truncate">{{ $contractor->email ?? 'N/A' }}</span>
+                    </div>
+
+                    <div class="flex items-center gap-3 text-sm text-slate-600">
+                        <div class="w-6 flex justify-center"><i class="fa-solid fa-phone text-slate-400"></i></div>
+                        <span>{{ $contractor->phone ?? 'N/A' }}</span>
+                    </div>
+
+                    <div class="flex items-center gap-3 text-sm text-slate-600">
+                        <div class="w-6 flex justify-center"><i class="fa-solid fa-location-dot text-slate-400"></i>
+                        </div>
+                        <span>{{ $contractor->city ?? 'N/A' }}</span>
+                    </div>
+
+                </div>
+
+                {{-- Footer Actions --}}
+                <div
+                    class="bg-slate-50 px-5 py-3 border-t border-slate-200 rounded-b-xl flex justify-between items-center">
+
+                    {{-- Toggle Status Button --}}
+                    <button type="button"
+                        class="toggle-switch flex items-center gap-1.5 text-xs font-bold transition-colors
+                        {{ $contractor->is_active ? 'text-red-500 hover:text-red-700' : 'text-green-600 hover:text-green-800' }}"
+                        data-id="{{ $contractor->id }}" title="Toggle Status">
+                        <i class="fa-solid {{ $contractor->is_active ? 'fa-ban' : 'fa-check-circle' }}"></i>
+                        <span class="status-text">{{ $contractor->is_active ? 'Deactivate' : 'Activate' }}</span>
+                    </button>
+
+                    <div class="flex items-center gap-2">
+                        <a href="{{ route('admin.contractors.show', $contractor->id) }}"
+                            class="w-8 h-8 rounded-lg bg-white border border-slate-200 text-blue-600 hover:bg-blue-50 flex items-center justify-center transition-colors shadow-sm"
+                            title="View">
+                            <i class="fa-solid fa-eye text-xs"></i>
+                        </a>
+
+                        <a href="{{ route('admin.contractors.edit', $contractor->id) }}"
+                            class="w-8 h-8 rounded-lg bg-white border border-slate-200 text-amber-600 hover:bg-amber-50 flex items-center justify-center transition-colors shadow-sm"
+                            title="Edit">
+                            <i class="fa-solid fa-pen text-xs"></i>
+                        </a>
+
+                        <form action="{{ route('admin.contractors.destroy', $contractor->id) }}" method="POST"
+                            onsubmit="return confirm('Delete this contractor?');">
+                            @csrf @method('DELETE')
+                            <button type="submit"
+                                class="w-8 h-8 rounded-lg bg-white border border-slate-200 text-red-600 hover:bg-red-50 flex items-center justify-center transition-colors shadow-sm"
+                                title="Delete">
+                                <i class="fa-solid fa-trash text-xs"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        @empty
+            <div class="col-span-full bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center">
+                <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fa-solid fa-helmet-safety text-3xl text-slate-300"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-700">No contractors found</h3>
+                <p class="text-slate-500 text-sm mt-1">Get started by adding a new contractor.</p>
+                <a href="{{ route('admin.contractors.create') }}"
+                    class="inline-block mt-4 text-primary font-semibold text-sm hover:underline">
+                    Add Contractor
+                </a>
+            </div>
+        @endforelse
+    </div>
+
+    {{-- AJAX SCRIPT --}}
     @push('scripts')
         <script>
-            // Toast Generator
+            // Toast Function
             function showToast(type, message) {
-                const bg = type === 'success' ? 'toast-success' : 'toast-error';
+                const icon = type === 'success' ? '<i class="fa-solid fa-check-circle"></i>' :
+                    '<i class="fa-solid fa-circle-xmark"></i>';
+                const colorClass = type === 'success' ? 'bg-emerald-500' : 'bg-red-500';
+
                 const toastHTML = `
-                    <div class="toast show fade border-0 ${bg} mb-2">
-                        <div class="d-flex align-items-center">
-                            <div class="toast-body fw-semibold">${message}</div>
-                            <button type="button" class="close ml-3 ${type === 'success' ? '' : 'text-white'}" data-dismiss="toast">&times;</button>
-                        </div>
+                    <div class="flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg text-white ${colorClass} transition-all duration-500 transform translate-y-0 opacity-100 mb-2">
+                        <div class="text-lg">${icon}</div>
+                        <div class="text-sm font-semibold">${message}</div>
+                        <button onclick="this.parentElement.remove()" class="ml-auto text-white/70 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
                     </div>`;
+
                 $('#toast-container').append(toastHTML);
+
+                // Auto remove after 3s
                 setTimeout(() => {
-                    $('#toast-container .toast').first().remove();
-                }, 3500);
+                    $('#toast-container').children().first().fadeOut(500, function() {
+                        $(this).remove();
+                    });
+                }, 3000);
             }
 
-            // Toggle Contractor Status
+            // AJAX Toggle Logic
             $(document).on('click', '.toggle-switch', function() {
                 const btn = $(this);
                 const id = btn.data('id');
                 const badge = $(`#status-badge-${id}`);
+                const icon = btn.find('i');
+                const textSpan = btn.find('.status-text');
 
-                btn.prop('disabled', true);
+                // Disable button temporarily
+                btn.prop('disabled', true).addClass('opacity-50 cursor-wait');
 
                 $.ajax({
                     url: '{{ url('admin/contractors') }}/' + id + '/toggle-status',
@@ -187,18 +168,25 @@
                         if (res.success) {
                             const isActive = res.status === 'active';
 
-                            // Update badge dynamically
-                            badge.removeClass('status-active status-inactive')
-                                .addClass(isActive ? 'status-active' : 'status-inactive')
+                            // 1. Update Badge Styles
+                            badge.removeClass(
+                                    'bg-green-100 text-green-700 border-green-200 bg-gray-100 text-gray-500 border-gray-200'
+                                    )
+                                .addClass(isActive ?
+                                    'bg-green-100 text-green-700 border-green-200' :
+                                    'bg-gray-100 text-gray-500 border-gray-200')
                                 .text(isActive ? 'Active' : 'Inactive');
 
-                            // Update button color & icon
-                            btn.removeClass('btn-outline-success btn-outline-secondary')
-                                .addClass(isActive ? 'btn-outline-secondary' : 'btn-outline-success')
-                                .html(isActive ?
-                                    '<i class="fa fa-ban text-danger"></i>' :
-                                    '<i class="fa fa-check text-success"></i>'
-                                );
+                            // 2. Update Button Styles & Icon
+                            btn.removeClass(
+                                    'text-red-500 hover:text-red-700 text-green-600 hover:text-green-800')
+                                .addClass(isActive ? 'text-red-500 hover:text-red-700' :
+                                    'text-green-600 hover:text-green-800');
+
+                            icon.removeClass('fa-ban fa-check-circle')
+                                .addClass(isActive ? 'fa-ban' : 'fa-check-circle');
+
+                            textSpan.text(isActive ? 'Deactivate' : 'Activate');
 
                             showToast('success',
                                 `Contractor ${isActive ? 'activated' : 'deactivated'} successfully.`);
@@ -210,10 +198,11 @@
                         showToast('error', 'Something went wrong!');
                     },
                     complete: function() {
-                        btn.prop('disabled', false);
+                        btn.prop('disabled', false).removeClass('opacity-50 cursor-wait');
                     }
                 });
             });
         </script>
     @endpush
+
 </x-admin.app>

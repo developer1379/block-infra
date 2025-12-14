@@ -1,118 +1,114 @@
 <x-admin.app>
 
     {{-- HEADER --}}
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="fw-bold" style="color:#b3d33c;">Project Details</h5>
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+        <div>
+            <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Project Details</h2>
+            <p class="text-slate-500 text-sm">View details for {{ $project->title }}</p>
+        </div>
 
-        <a href="{{ route('admin.projects.index') }}" class="btn btn-sm btn-outline-dark">
-            <i class="fa fa-arrow-left mr-1"></i> Back
+        <a href="{{ route('admin.projects.index') }}"
+            class="inline-flex items-center gap-2 bg-white border border-slate-200 text-slate-700 hover:text-slate-900 hover:border-slate-300 text-sm font-medium px-4 py-2.5 rounded-lg shadow-sm transition-colors">
+            <i class="fa-solid fa-arrow-left"></i> Back to List
         </a>
     </div>
 
     {{-- DETAILS CARD --}}
-    <div class="card shadow-sm border-0">
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
 
-        <div class="card-header bg-white py-3 border-0 d-flex justify-content-between align-items-center">
-            <h6 class="fw-bold mb-0">
-                <i class="fa fa-folder-open mr-2" style="color:#b3d33c;"></i>Project Information
-            </h6>
+        <div
+            class="border-b border-gray-100 px-6 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <h3 class="font-bold text-slate-700 flex items-center gap-2">
+                <i class="fa-solid fa-folder-open text-primary"></i> Project Information
+            </h3>
 
-            <a href="{{ route('admin.projects.edit', $project->id) }}" class="btn btn-sm btn-success fw-bold px-3">
-                <i class="fa fa-edit mr-1"></i>Edit
-            </a>
+            @can('edit projects')
+                <a href="{{ route('admin.projects.edit', $project->id) }}"
+                    class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-bold px-4 py-2 rounded-lg shadow-sm transition-colors">
+                    <i class="fa-solid fa-pen-to-square"></i> Edit
+                </a>
+            @endcan
         </div>
 
-        <div class="card-body p-4">
+        <div class="p-6 md:p-8">
 
             {{-- TITLE --}}
-            <h3 class="fw-bold mb-2">{{ $project->title }}</h3>
+            <h1 class="text-3xl font-bold text-slate-900 mb-6">{{ $project->title }}</h1>
 
-            {{-- ⭐ QUILL HTML RENDER --}}
-            <div class="project-description mb-4">
-                {!! $project->description !!}
-            </div>
-
-            {{-- PROJECT DETAILS --}}
-            <div class="row mb-4">
+            {{-- PROJECT DETAILS GRID --}}
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
 
                 {{-- BUDGET --}}
-                <div class="col-md-4 mb-3">
-                    <div class="p-3 bg-light border rounded shadow-sm-sm">
-                        <p class="text-secondary small mb-1">Budget</p>
-                        <h6 class="fw-bold mb-0">
-                            ₹{{ number_format($project->budget_min, 2) }} —
-                            ₹{{ number_format($project->budget_max, 2) }}
-                        </h6>
-                    </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wide mb-1">Budget Range</p>
+                    <h4 class="text-lg font-bold text-slate-800 font-mono">
+                        ₹{{ number_format($project->budget_min, 2) }} <span class="text-slate-400 mx-1">-</span>
+                        ₹{{ number_format($project->budget_max, 2) }}
+                    </h4>
                 </div>
 
                 {{-- LOCATION --}}
-                <div class="col-md-4 mb-3">
-                    <div class="p-3 bg-light border rounded shadow-sm-sm">
-                        <p class="text-secondary small mb-1">Location</p>
-                        <h6 class="fw-bold mb-0">{{ $project->location ?? '—' }}</h6>
-                    </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wide mb-1">Location</p>
+                    <h4 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-location-dot text-primary"></i>
+                        {{ $project->location ?? '—' }}
+                    </h4>
                 </div>
 
                 {{-- STATUS --}}
-                <div class="col-md-4 mb-3">
-                    <div class="p-3 bg-light border rounded shadow-sm-sm">
-                        <p class="text-secondary small mb-1">Status</p>
-                        <span class="badge badge-info px-3 py-1 text-uppercase">
-                            {{ ucfirst($project->status) }}
-                        </span>
-                    </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wide mb-1">Status</p>
+                    <span
+                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold uppercase tracking-wide
+                        {{ $project->status == 'open' ? 'bg-green-100 text-green-700' : '' }}
+                        {{ $project->status == 'closed' ? 'bg-gray-100 text-gray-600' : '' }}
+                        {{ $project->status == 'awarded' ? 'bg-amber-100 text-amber-700' : '' }}">
+                        {{ ucfirst($project->status) }}
+                    </span>
                 </div>
 
             </div>
 
             {{-- CATEGORIES --}}
-            <div class="mb-4">
-                <p class="fw-semibold mb-1">Categories</p>
-
+            <div class="mb-8">
+                <p class="text-sm font-bold text-slate-700 mb-3">Categories</p>
                 @if ($project->categories->count())
-                    @foreach ($project->categories as $cat)
-                        <span class="badge px-3 py-2 mr-1 mb-1"
-                            style="background-color:#b3d33c;color:#000;font-weight:600;border-radius:6px;">
-                            <i class="fa fa-tag mr-1"></i>{{ $cat->name }}
-                        </span>
-                    @endforeach
+                    <div class="flex flex-wrap gap-2">
+                        @foreach ($project->categories as $cat)
+                            <span
+                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold bg-primary/10 text-primary border border-primary/20">
+                                <i class="fa-solid fa-tag text-xs"></i> {{ $cat->name }}
+                            </span>
+                        @endforeach
+                    </div>
                 @else
-                    <p class="text-muted">No categories added.</p>
+                    <p class="text-slate-400 text-sm italic">No categories assigned.</p>
                 @endif
             </div>
 
-            <hr class="my-4">
+            <div class="border-t border-slate-100 my-8"></div>
+
+            {{-- DESCRIPTION (Quill Render) --}}
+            <div>
+                <p class="text-sm font-bold text-slate-700 mb-4 uppercase tracking-wide">Project Description</p>
+                <div
+                    class="prose prose-slate max-w-none prose-img:rounded-xl prose-headings:text-slate-800 prose-a:text-primary">
+                    {!! $project->description !!}
+                </div>
+            </div>
+
+            <div class="border-t border-slate-100 my-8"></div>
 
             {{-- ACTION BUTTONS --}}
-            <div class="mt-3">
-                <a href="{{ route('admin.projects.bids', $project->id) }}" class="btn btn-dark btn-sm fw-bold">
-                    <i class="fa fa-gavel mr-1"></i> View Bids
+            <div class="flex gap-4">
+                <a href="{{ route('admin.projects.bids', $project->id) }}"
+                    class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white text-sm font-bold px-6 py-3 rounded-xl shadow-lg shadow-slate-200 transition-all transform hover:-translate-y-0.5">
+                    <i class="fa-solid fa-gavel"></i> View Bids
                 </a>
             </div>
 
         </div>
     </div>
-
-    {{-- QUILL READABILITY STYLES --}}
-    <style>
-        .project-description img {
-            max-width: 100%;
-            border-radius: 6px;
-            margin: 10px 0;
-        }
-
-        .project-description iframe,
-        .project-description video {
-            max-width: 100%;
-            margin-top: 10px;
-            border-radius: 6px;
-        }
-
-        .project-description p {
-            font-size: 15px;
-            line-height: 1.6;
-        }
-    </style>
 
 </x-admin.app>

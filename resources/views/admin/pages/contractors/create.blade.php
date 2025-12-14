@@ -1,168 +1,223 @@
 <x-admin.app>
+
+    {{-- 1. LOAD PLUGIN STYLES --}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    {{-- 2. CUSTOM STYLES --}}
     <style>
-        .card {
-            border-radius: 10px;
+        /* Select2 Override */
+        .select2-container .select2-selection--multiple {
+            min-height: 45px;
+            border-color: #e2e8f0 !important;
+            border-radius: 0.5rem !important;
+            padding: 6px 8px;
+            background-color: #f8fafc;
         }
 
-        .btn-save {
-            background: #b3d33c;
-            color: #000;
-            border-radius: 6px;
-            font-weight: 600;
+        .select2-container--default.select2-container--focus .select2-selection--multiple {
+            border-color: #0f766e !important;
+            box-shadow: 0 0 0 1px #0f766e;
         }
 
-        .btn-save:hover {
-            background: #a0c32f;
-            color: #000;
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            background-color: #0f766e !important;
+            border: none !important;
+            color: white !important;
+            border-radius: 4px;
+            padding: 2px 8px;
+            margin-top: 4px;
         }
 
-        .form-check-input:checked {
-            background-color: #b3d33c;
-            border-color: #b3d33c;
-        }
-
-        .form-label {
-            font-weight: 500;
-            color: #212529;
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+            color: white !important;
+            border-right: 1px solid rgba(255, 255, 255, 0.3) !important;
+            margin-right: 6px;
         }
     </style>
 
-    <div class="page-wrapper">
-        {{-- Header --}}
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h4 class="fw-bold text-uppercase mb-0 text-dark">Add New Contractor</h4>
-                <small class="text-muted">Create contractor profile & assign category</small>
-            </div>
-            <a href="{{ route('admin.contractors.index') }}" class="btn btn-outline-secondary px-3">
-                <i class="fa fa-arrow-left mr-1"></i> Back
-            </a>
+    {{-- PAGE HEADER --}}
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+        <div>
+            <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Add Contractor</h2>
+            <p class="text-slate-500 text-sm">Create contractor profile & assign category</p>
         </div>
 
-        {{-- Form Card --}}
-        <div class="card border-0 shadow-sm">
-            <div class="card-body p-4">
-                <form action="{{ route('admin.contractors.store') }}" method="POST">
-                    @csrf
+        <a href="{{ route('admin.contractors.index') }}"
+            class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium px-4 py-2.5 rounded-lg shadow-sm transition-colors">
+            <i class="fa-solid fa-arrow-left"></i> Back to List
+        </a>
+    </div>
 
-                    {{-- Name --}}
-                    <div class="mb-3">
-                        <label class="form-label">Full Name <span class="text-danger">*</span></label>
+    {{-- FORM CARD --}}
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 max-w-4xl">
+        <div class="border-b border-gray-100 px-6 py-4">
+            <h3 class="font-bold text-slate-700 flex items-center gap-2">
+                <i class="fa-solid fa-helmet-safety text-primary"></i> Contractor Details
+            </h3>
+        </div>
+
+        <div class="p-6 md:p-8">
+            <form action="{{ route('admin.contractors.store') }}" method="POST">
+                @csrf
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+
+                    {{-- Full Name --}}
+                    <div class="col-span-1">
+                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">
+                            Full Name <span class="text-red-500">*</span>
+                        </label>
                         <input type="text" name="name" value="{{ old('name') }}"
-                            class="form-control @error('name') is-invalid @enderror" placeholder="Enter contractor name"
-                            required>
+                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
+                            placeholder="Enter contractor name" required>
                         @error('name')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- Company Name --}}
-                    <div class="mb-3">
-                        <label class="form-label">Company Name</label>
+                    <div class="col-span-1">
+                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">
+                            Company Name
+                        </label>
                         <input type="text" name="company_name" value="{{ old('company_name') }}"
-                            class="form-control @error('company_name') is-invalid @enderror"
+                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
                             placeholder="Enter company name">
                         @error('company_name')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- Email --}}
-                    <div class="mb-3">
-                        <label class="form-label">Email Address</label>
+                    <div class="col-span-1">
+                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">
+                            Email Address <span class="text-red-500">*</span>
+                        </label>
                         <input type="email" name="email" value="{{ old('email') }}"
-                            class="form-control @error('email') is-invalid @enderror" placeholder="Enter email address">
+                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
+                            placeholder="Enter email address" required>
                         @error('email')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- Phone --}}
-                    <div class="mb-3">
-                        <label class="form-label">Phone Number</label>
+                    <div class="col-span-1">
+                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">
+                            Phone Number
+                        </label>
                         <input type="text" name="phone" value="{{ old('phone') }}"
-                            class="form-control @error('phone') is-invalid @enderror" placeholder="Enter phone number">
+                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
+                            placeholder="Enter phone number">
                         @error('phone')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
                     {{-- City --}}
-                    <div class="mb-3">
-                        <label class="form-label">City</label>
+                    <div class="col-span-1 md:col-span-2">
+                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">
+                            City
+                        </label>
                         <input type="text" name="city" value="{{ old('city') }}"
-                            class="form-control @error('city') is-invalid @enderror" placeholder="Enter city">
+                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
+                            placeholder="Enter city">
                         @error('city')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    {{-- MULTIPLE CATEGORIES --}}
+                    {{-- Multiple Categories (Select2) --}}
                     @php
                         $parentCategories = \App\Models\Category::query()
-                            ->with([
-                                'subcategories' => function ($q) {
-                                    $q->where('is_active', 1);
-                                },
-                            ])
+                            ->with(['subcategories' => fn($q) => $q->where('is_active', 1)])
                             ->whereNull('parent_id')
                             ->where('is_active', 1)
                             ->orderBy('name')
                             ->get();
                     @endphp
 
-                    <div class="mb-3">
-                        <label class="form-label">Select Categories (Multiple)</label>
-
-                        <select name="categories[]" multiple class="form-control category-select">
-                            @foreach ($parentCategories as $parent)
-                                @php $children = $parent->subcategories; @endphp
-
-                                @if ($children->count())
-                                    <optgroup label="{{ $parent->name }}">
-                                        @foreach ($children as $child)
-                                            <option value="{{ $child->id }}" class="text-black"
-                                                {{ in_array($child->id, old('categories', [])) ? 'selected' : '' }}>
-                                                {{ $child->name }}
-                                            </option>
-                                        @endforeach
-                                    </optgroup>
-                                @else
-                                    <option value="{{ $parent->id }}" class="text-black"
-                                        {{ in_array($parent->id, old('categories', [])) ? 'selected' : '' }}>
-                                        {{ $parent->name }}
-                                    </option>
-                                @endif
-                            @endforeach
-                        </select>
-
-                        <small class="text-muted">Hold CTRL to select multiple categories</small>
+                    <div class="col-span-1 md:col-span-2">
+                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">
+                            Select Categories (Multiple)
+                        </label>
+                        <div class="relative">
+                            <select name="categories[]" multiple class="category-select w-full" style="display: none;">
+                                @foreach ($parentCategories as $parent)
+                                    @php $children = $parent->subcategories; @endphp
+                                    @if ($children->count())
+                                        <optgroup label="{{ $parent->name }}">
+                                            @foreach ($children as $child)
+                                                <option value="{{ $child->id }}"
+                                                    {{ collect(old('categories'))->contains($child->id) ? 'selected' : '' }}>
+                                                    {{ $child->name }}
+                                                </option>
+                                            @endforeach
+                                        </optgroup>
+                                    @else
+                                        <option value="{{ $parent->id }}"
+                                            {{ collect(old('categories'))->contains($parent->id) ? 'selected' : '' }}>
+                                            {{ $parent->name }}
+                                        </option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1">Select the categories this contractor specializes in.</p>
                     </div>
-
 
                     {{-- Status --}}
-                    <div class="mb-4">
-                        <label class="form-label d-block">Status</label>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="is_active" id="active"
-                                value="1" {{ old('is_active', 1) == 1 ? 'checked' : '' }}>
-                            <label class="form-check-label" for="active">Active</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="is_active" id="inactive"
-                                value="0" {{ old('is_active') == 0 ? 'checked' : '' }}>
-                            <label class="form-check-label" for="inactive">Inactive</label>
+                    <div class="col-span-1 md:col-span-2">
+                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">
+                            Status
+                        </label>
+                        <div class="flex items-center gap-6">
+                            <label class="inline-flex items-center cursor-pointer">
+                                <input type="radio" name="is_active" value="1"
+                                    {{ old('is_active', 1) == 1 ? 'checked' : '' }}
+                                    class="w-4 h-4 text-primary border-gray-300 focus:ring-primary">
+                                <span class="ml-2 text-sm text-slate-700 font-medium">Active</span>
+                            </label>
+                            <label class="inline-flex items-center cursor-pointer">
+                                <input type="radio" name="is_active" value="0"
+                                    {{ old('is_active') == 0 ? 'checked' : '' }}
+                                    class="w-4 h-4 text-gray-400 border-gray-300 focus:ring-gray-400">
+                                <span class="ml-2 text-sm text-slate-700 font-medium">Inactive</span>
+                            </label>
                         </div>
                     </div>
 
-                    {{-- Submit Button --}}
-                    <div class="d-flex justify-content-end">
-                        <button type="submit" class="btn btn-save px-4">
-                            <i class="fa fa-save mr-1"></i> Save Contractor
-                        </button>
-                    </div>
-                </form>
-            </div>
+                </div>
+
+                {{-- Submit Button --}}
+                <div class="flex justify-end pt-6 border-t border-slate-100">
+                    <button type="submit"
+                        class="px-6 py-2.5 rounded-lg text-sm font-bold text-white bg-primary hover:bg-teal-700 shadow-md shadow-teal-100 transition-all transform hover:-translate-y-0.5">
+                        <i class="fa-solid fa-save mr-2"></i> Save Contractor
+                    </button>
+                </div>
+
+            </form>
         </div>
     </div>
+
+    {{-- 3. INITIALIZATION SCRIPTS --}}
+    @push('scripts')
+        {{-- Load Libraries --}}
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+        <script>
+            $(document).ready(function() {
+                // Initialize Select2
+                $('.category-select').select2({
+                    placeholder: "Select categories...",
+                    allowClear: true,
+                    width: '100%',
+                    closeOnSelect: false
+                });
+            });
+        </script>
+    @endpush
+
 </x-admin.app>
