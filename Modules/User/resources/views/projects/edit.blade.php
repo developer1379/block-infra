@@ -89,7 +89,6 @@
                         ->orderBy('name')
                         ->get();
 
-                    // Get selected IDs (either from old input on error, or database)
                     $selectedIds = old('categories', $project->categories->pluck('id')->toArray());
                 @endphp
 
@@ -149,7 +148,7 @@
                     width: '100%'
                 });
 
-                // 2. Quill Editor
+                // 2. Quill Editor with Image/Video
                 var quill = new Quill('#editor-container', {
                     theme: 'snow',
                     modules: {
@@ -168,7 +167,8 @@
                             }, {
                                 'background': []
                             }],
-                            ['link', 'clean']
+                            ['link', 'image', 'video'], // <--- ADDED image and video
+                            ['clean']
                         ]
                     }
                 });

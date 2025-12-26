@@ -24,6 +24,4 @@
 <body>
     @yield('content')
 
-    {{-- Vite JS --}}
-    {{-- {{ module_vite('build-user', 'resources/assets/js/app.js') }} --}}
 </body>

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace Modules\User\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\Interfaces\BidRepositoryInterface;
 use App\Repositories\Interfaces\ProjectRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
@@ -18,35 +19,27 @@ class ProjectController extends Controller
         $this->bids = $bids;
     }
 
+
     public function index(Request $request)
     {
+        $user_id = Auth::user()->id;
         $filters = [
             'search'     => $request->search,
             'status'     => $request->status,
-            'created_by' => $request->created_by,
-            'category_id' => $request->category_id ?? null, // NEW - category filter support
+            'created_by' => $user_id,
+            'category_id' => $request->category_id ?? null,
         ];
 
         $projects = $this->projects->filterProjects($filters);
 
-        $createdByUsers = $this->projects->getProjectCreators();
 
-        // Check contractor bid status
-        $hasBid = [];
-        if (auth()->user()->hasRole('contractor')) {
-            foreach ($projects as $project) {
-                $hasBid[$project->id] = $this->bids->hasUserBid($project->id, auth()->id());
-            }
-        }
-
-        return view('admin.pages.projects.index', compact('projects', 'createdByUsers', 'hasBid'));
+        return view('user::projects.index', compact('projects'));
     }
 
 
     public function create()
     {
-        // We will load categories inside Blade, same as contractor create/edit
-        return view('admin.pages.projects.create');
+        return view('user::projects.create');
     }
 
 
@@ -68,7 +61,7 @@ class ProjectController extends Controller
         // Repository handles category sync
         $this->projects->create($data);
 
-        return redirect()->route('admin.projects.index')
+        return redirect()->route('user.projects.index')
             ->with('success', 'Project created successfully.');
     }
 
@@ -76,14 +69,14 @@ class ProjectController extends Controller
     public function show($id)
     {
         $project = $this->projects->find($id);
-        return view('admin.pages.projects.show', compact('project'));
+        return view('user::projects.show', compact('project'));
     }
 
 
     public function edit($id)
     {
         $project = $this->projects->find($id);
-        return view('admin.pages.projects.edit', compact('project'));
+        return view('user::projects.edit', compact('project'));
     }
 
 
@@ -102,7 +95,7 @@ class ProjectController extends Controller
         // Repository handles sync
         $this->projects->update($id, $request->all());
 
-        return redirect()->route('admin.projects.index')
+        return redirect()->route('user.projects.index')
             ->with('success', 'Project updated successfully.');
     }
 
@@ -111,7 +104,7 @@ class ProjectController extends Controller
     {
         $this->projects->delete($id);
 
-        return redirect()->route('admin.projects.index')
+        return redirect()->route('user.projects.index')
             ->with('success', 'Project deleted.');
     }
 }

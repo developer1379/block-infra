@@ -84,17 +84,14 @@ class ProjectRepository implements ProjectRepositoryInterface
     {
         $query = Project::query()->with(['createdBy', 'categories']);
 
-        // 🔍 Search
         if (!empty($filters['search'])) {
             $query->where('title', 'like', '%' . $filters['search'] . '%');
         }
 
-        // 📌 Status Filter
         if (!empty($filters['status'])) {
             $query->where('status', $filters['status']);
         }
 
-        // 👤 Admin Filter by Creator
         if (!empty($filters['created_by'])) {
             $query->where('created_by', $filters['created_by']);
         }
@@ -125,11 +122,9 @@ class ProjectRepository implements ProjectRepositoryInterface
             });
         }
 
-        return $query->orderBy('id', 'DESC')->get();
+        return $query->orderBy('id', 'DESC')->paginate(50);
     }
 
-
-    /** ⭐ FETCH USERS FOR DROPDOWN */
     public function getProjectCreators()
     {
         return User::select('id', 'name')->orderBy('name')->get();
