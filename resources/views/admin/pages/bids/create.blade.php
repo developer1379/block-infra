@@ -1,158 +1,181 @@
 <x-admin.app>
 
-    {{-- 1. LOAD REQUIRED STYLES --}}
+    {{-- 1. STYLES --}}
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
-    {{-- 2. CUSTOM OVERRIDES --}}
     <style>
-        /* Match Quill Toolbar to Tailwind Inputs */
+        /* Quill Editor Polish */
         .ql-toolbar.ql-snow {
-            border-color: #e2e8f0;
             border-top-left-radius: 0.5rem;
             border-top-right-radius: 0.5rem;
+            border-color: #e2e8f0;
             background-color: #f8fafc;
+            padding: 8px;
         }
 
         .ql-container.ql-snow {
-            border-color: #e2e8f0;
             border-bottom-left-radius: 0.5rem;
             border-bottom-right-radius: 0.5rem;
+            border-color: #e2e8f0;
             background-color: #fff;
-            min-height: 200px;
-            font-family: 'Inter', sans-serif;
-            /* Match site font */
+            min-height: 220px;
+            font-size: 0.95rem;
+            color: #334155;
+            /* Slate-700 */
         }
 
-        /* Custom File Input Styling */
+        .ql-editor.ql-blank::before {
+            font-style: normal;
+            color: #94a3b8;
+            /* Slate-400 */
+        }
+
+        /* File Upload Customization */
+        .file-upload-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
         input[type="file"]::file-selector-button {
-            background-color: #0f766e;
-            color: white;
-            border: none;
-            padding: 0.3rem 0.8rem;
-            border-radius: 0.375rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-right: 1rem;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        input[type="file"]::file-selector-button:hover {
-            background-color: #115e59;
+            display: none;
+            /* Hide default button for custom styling */
         }
     </style>
 
     {{-- PAGE HEADER --}}
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <div>
-            <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Submit Bid</h2>
-            <p class="text-slate-500 text-sm">Create a proposal for <span
-                    class="font-semibold text-primary">{{ $project->title }}</span></p>
+            <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Submit Proposal</h2>
+            <p class="text-slate-500 text-sm mt-1">
+                For Project: <span class="font-semibold text-primary">{{ $project->title }}</span>
+            </p>
         </div>
 
         <a href="{{ route('admin.projects.show', $project->id) }}"
-            class="inline-flex items-center gap-2 bg-white border border-slate-200 text-slate-700 hover:text-slate-900 hover:border-slate-300 text-sm font-medium px-4 py-2.5 rounded-lg shadow-sm transition-colors">
-            <i class="fa-solid fa-arrow-left"></i> Back to Project
+            class="inline-flex items-center gap-2 bg-white border border-slate-200 text-slate-700 hover:text-slate-900 hover:border-slate-300 text-sm font-medium px-4 py-2.5 rounded-lg shadow-sm transition-all">
+            <i class="fa-solid fa-arrow-left text-xs"></i> Back to Project
         </a>
     </div>
 
-    {{-- BID FORM CARD --}}
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 max-w-5xl mx-auto">
+    {{-- FORM CARD --}}
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 max-w-4xl mx-auto overflow-hidden">
 
-        <div class="border-b border-gray-100 px-6 py-4">
-            <h3 class="font-bold text-slate-700 flex items-center gap-2">
-                <i class="fa-solid fa-gavel text-primary"></i> Proposal Details
+        <div class="bg-slate-50/50 border-b border-slate-100 px-8 py-5">
+            <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                <div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+                    <i class="fa-solid fa-file-contract text-sm"></i>
+                </div>
+                Proposal Details
             </h3>
         </div>
 
-        <div class="p-6 md:p-8">
+        <div class="p-8">
             <form action="{{ route('admin.projects.bid.store', $project->id) }}" method="POST"
                 enctype="multipart/form-data" id="bidForm">
                 @csrf
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div class="space-y-8">
 
-                    {{-- Bid Amount --}}
-                    <div class="col-span-1">
-                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">
-                            Bid Amount (₹) <span class="text-red-500">*</span>
-                        </label>
-                        <div class="relative">
-                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold">₹</span>
-                            <input type="number" name="bid_amount" step="0.01"
-                                class="w-full pl-8 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm font-semibold focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
-                                placeholder="0.00" required>
+                    {{-- 1. Cost & Timeline Grid --}}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                        {{-- Bid Amount --}}
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">
+                                Bid Amount (₹) <span class="text-red-500">*</span>
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <span class="text-slate-400 font-bold">₹</span>
+                                </div>
+                                <input type="number" name="bid_amount" step="0.01" min="0" required
+                                    class="block w-full pl-8 pr-12 py-2.5 border-slate-200 rounded-lg text-slate-800 font-semibold placeholder-slate-300 focus:ring-primary focus:border-primary transition-colors bg-white shadow-sm"
+                                    placeholder="0.00">
+                            </div>
+                        </div>
+
+                        {{-- Delivery Days --}}
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">
+                                Delivery Time <span class="text-red-500">*</span>
+                            </label>
+                            <div class="relative">
+                                <input type="number" name="delivery_days" min="1" required
+                                    class="block w-full pl-4 pr-12 py-2.5 border-slate-200 rounded-lg text-slate-800 font-semibold placeholder-slate-300 focus:ring-primary focus:border-primary transition-colors bg-white shadow-sm"
+                                    placeholder="e.g. 15">
+                                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                    <span class="text-xs font-bold text-slate-400 uppercase">Days</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    {{-- Delivery Days --}}
-                    <div class="col-span-1">
-                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">
-                            Delivery Days <span class="text-red-500">*</span>
-                        </label>
-                        <div class="relative">
-                            <input type="number" name="delivery_days"
-                                class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm font-semibold focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
-                                placeholder="e.g. 7" required>
-                            <span
-                                class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 font-bold uppercase">Days</span>
-                        </div>
-                    </div>
-
-                    {{-- Proposal Text (Quill) --}}
-                    <div class="col-span-1 md:col-span-2">
-                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">
+                    {{-- 2. Proposal Description --}}
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">
                             Proposal Description <span class="text-red-500">*</span>
                         </label>
-
                         <input type="hidden" name="proposal_text" id="proposalInput">
-
-                        <div id="quillEditor"></div>
-
+                        <div id="quillEditor" class="shadow-sm"></div>
                         @error('proposal_text')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            <p class="text-red-500 text-xs mt-1 font-medium">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    {{-- PDF Upload --}}
-                    <div class="col-span-1 md:col-span-2">
-                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">
-                            Attach PDF Proposal (Optional)
+                    {{-- 3. File Attachment --}}
+                    <div
+                        class="bg-slate-50 rounded-xl border border-dashed border-slate-300 p-6 text-center hover:bg-slate-50/80 transition-colors">
+                        <label for="pdfInput" class="cursor-pointer block w-full h-full">
+                            <div class="flex flex-col items-center justify-center gap-2">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center shadow-sm text-slate-400">
+                                    <i class="fa-solid fa-paperclip"></i>
+                                </div>
+                                <div>
+                                    <span class="text-sm font-semibold text-primary hover:text-teal-700">Upload PDF
+                                        Proposal</span>
+                                    <span class="text-sm text-slate-500"> or drag and drop</span>
+                                </div>
+                                <p class="text-xs text-slate-400">PDF up to 5MB (Optional)</p>
+                            </div>
+                            <input type="file" name="proposal_pdf" id="pdfInput" accept="application/pdf"
+                                class="hidden">
                         </label>
 
-                        {{-- Upload Input --}}
-                        <input type="file" name="proposal_pdf" id="pdfInput" accept="application/pdf"
-                            class="block w-full text-sm text-slate-500
-                                   file:mr-4 file:py-2 file:px-4
-                                   file:rounded-full file:border-0
-                                   file:text-xs file:font-semibold
-                                   file:bg-primary/10 file:text-primary
-                                   hover:file:bg-primary/20
-                                   cursor-pointer bg-slate-50 border border-slate-200 rounded-lg p-1">
-                        <p class="text-[10px] text-slate-400 mt-1 pl-1">Max file size: 5MB. Formats allowed: .pdf</p>
-
-                        {{-- PDF Preview Container --}}
-                        <div id="pdfPreviewContainer" class="mt-4 hidden animate-pulse">
-                            <div
-                                class="border-2 border-dashed border-slate-300 rounded-xl p-6 bg-slate-50/50 flex flex-col items-center justify-center text-center">
-                                <div id="pdfIcon"
-                                    class="w-12 h-12 bg-red-100 text-red-500 rounded-full flex items-center justify-center mb-3">
-                                    <i class="fa-solid fa-file-pdf text-xl"></i>
+                        {{-- File Preview --}}
+                        <div id="filePreview"
+                            class="mt-4 hidden text-left bg-white border border-slate-200 rounded-lg p-3 shadow-sm flex items-center justify-between">
+                            <div class="flex items-center gap-3 overflow-hidden">
+                                <div
+                                    class="w-8 h-8 rounded bg-red-50 text-red-500 flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-file-pdf"></i>
                                 </div>
-                                <p id="pdfName" class="text-sm font-bold text-slate-700 mb-2"></p>
-                                <embed id="pdfEmbed" src="" type="application/pdf"
-                                    class="w-full h-[400px] rounded-lg border border-slate-200 shadow-sm hidden">
+                                <div class="min-w-0">
+                                    <p id="fileName" class="text-sm font-medium text-slate-700 truncate">filename.pdf
+                                    </p>
+                                    <p class="text-[10px] text-slate-400">Ready to upload</p>
+                                </div>
                             </div>
+                            <button type="button" id="removeFile"
+                                class="text-slate-400 hover:text-red-500 p-1 rounded-full hover:bg-slate-50 transition-colors">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
                         </div>
                     </div>
 
                 </div>
 
-                {{-- Submit Button --}}
-                <div class="flex justify-end pt-6 border-t border-slate-100">
+                {{-- Footer Actions --}}
+                <div class="flex items-center justify-end gap-4 pt-8 mt-2 border-t border-slate-100">
+                    <a href="{{ route('admin.projects.show', $project->id) }}"
+                        class="text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors">
+                        Cancel
+                    </a>
                     <button type="submit"
-                        class="inline-flex items-center gap-2 bg-primary hover:bg-teal-700 text-white text-sm font-bold px-6 py-2.5 rounded-lg shadow-md shadow-teal-100 transition-all transform hover:-translate-y-0.5">
-                        <i class="fa-solid fa-paper-plane"></i> Submit Bid
+                        class="inline-flex items-center gap-2 bg-primary hover:bg-teal-700 text-white text-sm font-bold px-6 py-2.5 rounded-lg shadow-md shadow-teal-100/50 transition-all transform hover:-translate-y-0.5 focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                        <i class="fa-solid fa-paper-plane text-xs"></i> Submit Proposal
                     </button>
                 </div>
 
@@ -168,10 +191,10 @@
         <script>
             $(document).ready(function() {
 
-                // --- 1. Initialize Quill Editor ---
+                // --- 1. Quill Editor ---
                 var quill = new Quill('#quillEditor', {
                     theme: 'snow',
-                    placeholder: 'Describe your proposal details here...',
+                    placeholder: 'Outline your proposal details, approach, and key deliverables...',
                     modules: {
                         toolbar: [
                             ['bold', 'italic', 'underline'],
@@ -181,43 +204,41 @@
                                 'list': 'bullet'
                             }],
                             [{
-                                'header': [1, 2, false]
+                                'header': [2, 3, false]
                             }],
                             ['clean']
                         ]
                     }
                 });
 
-                // Sync Quill to Hidden Input
+                // Sync on Submit
                 $('#bidForm').on('submit', function() {
                     var html = quill.root.innerHTML;
                     if (html === '<p><br></p>') html = '';
                     $('#proposalInput').val(html);
                 });
 
-                // --- 2. PDF Preview Logic ---
-                $('#pdfInput').on('change', function() {
-                    let file = this.files[0];
-                    let container = $('#pdfPreviewContainer');
-                    let embed = $('#pdfEmbed');
-                    let nameLabel = $('#pdfName');
+                // --- 2. Custom File Upload UI ---
+                const fileInput = $('#pdfInput');
+                const preview = $('#filePreview');
+                const fileName = $('#fileName');
+                const removeBtn = $('#removeFile');
 
-                    if (file && file.type === "application/pdf") {
-                        let fileURL = URL.createObjectURL(file);
-
-                        container.removeClass('hidden').removeClass('animate-pulse');
-                        nameLabel.text(file.name);
-                        embed.attr('src', fileURL).removeClass('hidden');
-
-                        // Scroll to preview
-                        $('html, body').animate({
-                            scrollTop: container.offset().top - 100
-                        }, 500);
-
-                    } else {
-                        container.addClass('hidden');
-                        embed.addClass('hidden').attr('src', '');
+                fileInput.on('change', function() {
+                    if (this.files && this.files[0]) {
+                        if (this.files[0].type !== 'application/pdf') {
+                            alert('Please upload a PDF file.');
+                            this.value = '';
+                            return;
+                        }
+                        fileName.text(this.files[0].name);
+                        preview.removeClass('hidden').addClass('flex');
                     }
+                });
+
+                removeBtn.on('click', function() {
+                    fileInput.val('');
+                    preview.addClass('hidden').removeClass('flex');
                 });
 
             });
