@@ -38,4 +38,8 @@ class Work extends Model
     {
         return $this->belongsTo(Unit::class, 'unit_id');
     }
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'project_works');
+    }
 }

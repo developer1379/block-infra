@@ -19,9 +19,9 @@
     {{-- FILTER SECTION --}}
     @if (auth()->user()->hasRole('contractor'))
         {{-- Contractor Notice --}}
-        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 rounded-r-lg">
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 rounded-r-lg shadow-sm">
             <div class="flex items-center gap-3">
-                <i class="fa-solid fa-info-circle text-blue-500"></i>
+                <i class="fa-solid fa-info-circle text-blue-500 text-lg"></i>
                 <p class="text-sm text-blue-700 font-medium">Projects shown below are based on your assigned categories.
                 </p>
             </div>
@@ -30,10 +30,10 @@
         {{-- Admin Filters --}}
         <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 mb-6">
             <form action="" method="GET">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
 
                     {{-- Search --}}
-                    <div class="col-span-1">
+                    <div class="col-span-1 md:col-span-2">
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Search Title</label>
                         <input type="text" name="search" value="{{ request('search') }}"
                             class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
@@ -45,7 +45,7 @@
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Status</label>
                         <select name="status"
                             class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors">
-                            <option value="">All</option>
+                            <option value="">All Statuses</option>
                             <option value="open" {{ request('status') == 'open' ? 'selected' : '' }}>Open</option>
                             <option value="closed" {{ request('status') == 'closed' ? 'selected' : '' }}>Closed</option>
                             <option value="awarded" {{ request('status') == 'awarded' ? 'selected' : '' }}>Awarded
@@ -53,16 +53,22 @@
                         </select>
                     </div>
 
-                    {{-- Created By --}}
+                    {{-- Category Filter (NEW) --}}
                     <div class="col-span-1">
-                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Created By</label>
-                        <select name="created_by"
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Category</label>
+                        <select name="category_id"
                             class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors">
-                            <option value="">All</option>
-                            @foreach ($createdByUsers as $user)
-                                <option value="{{ $user->id }}"
-                                    {{ request('created_by') == $user->id ? 'selected' : '' }}>
-                                    {{ $user->name }}
+                            <option value="">All Categories</option>
+                            @php
+                                $categories = \App\Models\Category::whereNull('parent_id')
+                                    ->where('is_active', 1)
+                                    ->orderBy('name')
+                                    ->get();
+                            @endphp
+                            @foreach ($categories as $cat)
+                                <option value="{{ $cat->id }}"
+                                    {{ request('category_id') == $cat->id ? 'selected' : '' }}>
+                                    {{ $cat->name }}
                                 </option>
                             @endforeach
                         </select>
@@ -70,9 +76,9 @@
 
                     {{-- Filter Button --}}
                     <div class="col-span-1">
-                        <button
-                            class="w-full md:w-auto px-6 py-2 bg-primary hover:bg-teal-700 text-white text-sm font-bold rounded-lg shadow-sm transition-colors">
-                            <i class="fa-solid fa-filter mr-1"></i> Filter
+                        <button type="submit"
+                            class="w-full px-6 py-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-bold rounded-lg shadow-sm transition-colors">
+                            <i class="fa-solid fa-filter mr-1"></i> Apply
                         </button>
                     </div>
 
@@ -87,36 +93,36 @@
             <div
                 class="bg-white rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-all duration-200 flex flex-col h-full group">
 
-                {{-- Card Header: Status & ID --}}
+                {{-- Card Header: Status & Date --}}
                 <div class="p-5 pb-0">
                     <div class="flex justify-between items-start mb-2">
                         {{-- Status Badge --}}
-                        @if ($project->status == 'open')
-                            <span
-                                class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-green-100 text-green-700 border border-green-200 uppercase tracking-wide">
-                                Open
-                            </span>
-                        @elseif ($project->status == 'closed')
-                            <span
-                                class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-gray-100 text-gray-600 border border-gray-200 uppercase tracking-wide">
-                                Closed
-                            </span>
-                        @elseif ($project->status == 'awarded')
-                            <span
-                                class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-amber-100 text-amber-700 border border-amber-200 uppercase tracking-wide">
-                                Awarded
-                            </span>
-                        @endif
+                        @php
+                            $statusColors = [
+                                'open' => 'bg-green-100 text-green-700 border-green-200',
+                                'closed' => 'bg-gray-100 text-gray-600 border-gray-200',
+                                'awarded' => 'bg-amber-100 text-amber-700 border-amber-200',
+                            ];
+                            $colorClass =
+                                $statusColors[$project->status] ?? 'bg-slate-100 text-slate-600 border-slate-200';
+                        @endphp
+                        <span
+                            class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold border uppercase tracking-wide {{ $colorClass }}">
+                            {{ ucfirst($project->status) }}
+                        </span>
 
-                        {{-- ID --}}
-                        <span class="text-[10px] text-slate-400 font-mono">#{{ $project->id }}</span>
+                        {{-- Date --}}
+                        <span class="text-[10px] text-slate-400 font-medium" title="Created At">
+                            {{ $project->created_at->format('M d, Y') }}
+                        </span>
                     </div>
                 </div>
 
                 {{-- Card Body --}}
                 <div class="p-5 pt-2 flex-1">
                     {{-- Title --}}
-                    <h3 class="text-lg font-bold text-slate-800 mb-3 line-clamp-1" title="{{ $project->title }}">
+                    <h3 class="text-lg font-bold text-slate-800 mb-3 line-clamp-1 group-hover:text-primary transition-colors"
+                        title="{{ $project->title }}">
                         {{ $project->title }}
                     </h3>
 
@@ -128,29 +134,29 @@
                             <i class="fa-solid fa-sack-dollar"></i>
                         </div>
                         <div>
-                            <p class="text-[10px] text-slate-400 font-bold uppercase leading-none mb-1">Budget Range
-                            </p>
-                            <span class="font-mono font-bold tracking-tight">
-                                ₹{{ number_format($project->budget_min) }} -
-                                ₹{{ number_format($project->budget_max) }}
+                            <p class="text-[10px] text-slate-400 font-bold uppercase leading-none mb-1">Est. Budget</p>
+                            <span class="font-mono font-bold tracking-tight text-slate-700">
+                                ₹{{ number_format($project->budget_max, 2) }}
                             </span>
                         </div>
                     </div>
 
                     {{-- Description Snippet --}}
-                    <div class="text-xs text-slate-500 line-clamp-2 mb-4 h-8">
+                    <div class="text-xs text-slate-500 line-clamp-2 mb-4 h-8 leading-relaxed">
                         {{ \Illuminate\Support\Str::limit(strip_tags($project->description), 90) }}
                     </div>
 
                     {{-- Meta Info --}}
                     <div class="flex items-center justify-between text-xs text-slate-400 border-t border-slate-50 pt-3">
                         @if (!auth()->user()->hasRole('contractor'))
-                            <div class="flex items-center gap-1.5" title="Created By">
-                                <i class="fa-regular fa-user"></i> {{ $project->createdBy->name ?? 'Admin' }}
+                            <div class="flex items-center gap-1.5 truncate max-w-[50%]" title="Created By">
+                                <i class="fa-regular fa-user"></i>
+                                <span class="truncate">{{ $project->createdBy->name ?? 'Admin' }}</span>
                             </div>
                         @endif
-                        <div class="flex items-center gap-1.5" title="Location">
-                            <i class="fa-solid fa-location-dot"></i> {{ $project->location ?? 'N/A' }}
+                        <div class="flex items-center gap-1.5 truncate max-w-[50%]" title="Location">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <span class="truncate">{{ $project->location ?? 'Remote' }}</span>
                         </div>
                     </div>
                 </div>
@@ -162,7 +168,12 @@
                     {{-- Left: View Bids --}}
                     <a href="{{ route('admin.projects.bids', $project->id) }}"
                         class="text-xs font-bold text-slate-600 hover:text-primary transition-colors flex items-center gap-1.5 group/bid">
-                        <i class="fa-solid fa-gavel group-hover/bid:scale-110 transition-transform"></i> View Bids
+                        <i class="fa-solid fa-gavel group-hover/bid:scale-110 transition-transform"></i>
+                        View Bids
+                        @if ($project->bids_count > 0)
+                            <span
+                                class="bg-slate-200 text-slate-600 px-1.5 py-0.5 rounded-full text-[9px]">{{ $project->bids_count }}</span>
+                        @endif
                     </a>
 
                     {{-- Right: Actions --}}
@@ -232,7 +243,7 @@
         @endforelse
     </div>
 
-    {{-- PAGINATION (Optional - if your controller sends paginated data) --}}
+    {{-- PAGINATION --}}
     @if ($projects instanceof \Illuminate\Pagination\LengthAwarePaginator)
         <div class="mt-6">
             {{ $projects->withQueryString()->links() }}

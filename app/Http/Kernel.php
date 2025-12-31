@@ -70,6 +70,7 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         'redirect.user.role' => \App\Http\Middleware\RedirectIfUserRole::class,
         'admin.contractor' => \App\Http\Middleware\AdminContractorMiddleware::class,
+        'role' => \App\Http\Middleware\RoleMiddleware::class,
 
     ];
 }

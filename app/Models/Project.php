@@ -41,4 +41,9 @@ class Project extends Model
         return $this->belongsToMany(Category::class, 'project_category', 'project_id', 'category_id')
             ->withTimestamps();
     }
+
+    public function works()
+    {
+        return $this->belongsToMany(Work::class, 'project_works');
+    }
 }
