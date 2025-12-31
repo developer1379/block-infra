@@ -52,7 +52,7 @@ Route::middleware(['web'])->group(function () {
         Route::post('/logout', 'logout')->name('logout');
     });
 
-    Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::middleware(['auth', 'role:admin,contractor'])->group(function () {
         Route::get('/dashboard', function () {
             return view('admin.pages.dashboard.index');
         })->name('dashboard');
@@ -60,7 +60,7 @@ Route::middleware(['web'])->group(function () {
 
 
 
-    Route::middleware(['auth', 'role:admin'])
+    Route::middleware(['auth', 'role:admin,contractor'])
         ->prefix('admin')
         ->name('admin.')
         ->group(function () {
@@ -96,7 +96,7 @@ Route::middleware(['web'])->group(function () {
             )->name('projects.award');
         });
 
-    Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::middleware(['auth', 'role:admin,contractor'])->group(function () {
 
         Route::get(
             'projects/{id}/add-bid',

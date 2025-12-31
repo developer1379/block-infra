@@ -11,25 +11,27 @@ class RoleMiddleware
 {
     /**
      * Handle an incoming request.
-     * * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     * @param  string $role  The role passed from the route (e.g., 'user', 'admin')
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  string ...$roles  <-- Changed to accept multiple roles
      */
-    public function handle(Request $request, Closure $next, string $role): Response
+    public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        // 1. Check if user is logged in
         if (!Auth::check()) {
             return redirect()->route('login');
         }
 
         $user = Auth::user();
 
-        // 2. Check if the user has the required role
-        // This assumes your User model has a hasRole() method
-        if ($user->hasRole($role)) {
-            return $next($request);
+        // Check if the user has ANY of the roles passed in the route
+        foreach ($roles as $role) {
+            // Using Spatie's hasRole, or your custom logic
+            if ($user->hasRole($role)) {
+                return $next($request);
+            }
         }
 
-        // 3. Unauthorized: User logged in but does not have the right role
-        abort(403, 'Unauthorized action.');
+        // If loop finishes without returning, user has none of the required roles
+        abort(403, 'Unauthorized access.');
     }
 }
