@@ -180,7 +180,7 @@
                     <div class="flex items-center gap-2">
 
                         {{-- Track (NEW) --}}
-                        <a href="{{ route('admin.projects.track', $project->id) }}"
+                        <a href="{{ route('admin.projects.tracking', $project->id) }}"
                             class="w-8 h-8 rounded-lg bg-white border border-slate-200 text-indigo-600 hover:bg-indigo-50 hover:border-indigo-200 flex items-center justify-center transition-all shadow-sm"
                             title="Track Progress">
                             <i class="fa-solid fa-chart-line text-xs"></i>

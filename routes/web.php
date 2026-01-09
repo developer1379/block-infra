@@ -107,6 +107,7 @@ Route::middleware(['web'])->group(function () {
     // Admin Routes
     Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
 
+        Route::get('/projects/{project}/track', [ProjectController::class, 'track'])->name('projects.track');
         // Tracking Page
         Route::get('/projects/{id}/tracking', [App\Http\Controllers\Admin\ProjectTrackingController::class, 'show'])
             ->name('projects.tracking');
