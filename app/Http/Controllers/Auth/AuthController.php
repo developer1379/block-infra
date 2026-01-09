@@ -49,6 +49,7 @@ class AuthController extends Controller
 
             if ($request->role === 'contractor') {
                 $contractor = \App\Models\Contractor::create([
+                    'user_id' => $user->id,
                     'name' => $request->name,
                     'email' => $request->email,
                     'phone' => $request->phone,

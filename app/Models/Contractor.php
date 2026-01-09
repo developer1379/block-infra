@@ -27,6 +27,12 @@ class Contractor extends Model
         'is_active' => 'boolean',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+
     public function categoryRelation()
     {
         return $this->belongsTo(Category::class, 'category_id');

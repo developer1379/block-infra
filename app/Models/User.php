@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'user_id'
     ];
 
     /**
@@ -60,8 +61,9 @@ class User extends Authenticatable
     }
     public function contractor()
     {
-        return $this->hasOne(Contractor::class, 'email', 'email');
+        return $this->hasOne(Contractor::class);
     }
+
 
     public function contractorCategories()
     {
