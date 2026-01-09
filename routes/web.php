@@ -98,24 +98,34 @@ Route::middleware(['web'])->group(function () {
 
     Route::middleware(['auth', 'role:admin,contractor'])->group(function () {
 
-        Route::get(
-            'projects/{id}/add-bid',
-            [ContractorBidController::class, 'create']
-        )->name('admin.projects.bid.create');
+        Route::get('projects/{id}/add-bid', [ContractorBidController::class, 'create'])->name('admin.projects.bid.create');
+        Route::post('projects/{id}/add-bid', [ContractorBidController::class, 'store'])->name('admin.projects.bid.store');
+        Route::get('/contractor/profile', [ContractorProfileController::class, 'index'])->name('contractor.profile');
+        Route::post('/contractor/profile/update', [ContractorProfileController::class, 'update'])->name('contractor.profile.update');
+    });
 
-        Route::post(
-            'projects/{id}/add-bid',
-            [ContractorBidController::class, 'store']
-        )->name('admin.projects.bid.store');
+    // Admin Routes
+    Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
 
-        Route::get(
-            '/contractor/profile',
-            [ContractorProfileController::class, 'index']
-        )->name('contractor.profile');
+        // Tracking Page
+        Route::get('/projects/{id}/tracking', [App\Http\Controllers\Admin\ProjectTrackingController::class, 'show'])
+            ->name('projects.tracking');
 
-        Route::post(
-            '/contractor/profile/update',
-            [ContractorProfileController::class, 'update']
-        )->name('contractor.profile.update');
+        // Milestone Actions
+        Route::post('/milestones', [App\Http\Controllers\Admin\ProjectTrackingController::class, 'storeMilestone'])
+            ->name('milestones.store');
+
+        Route::patch('/milestones/{id}/status', [App\Http\Controllers\Admin\ProjectTrackingController::class, 'updateMilestoneStatus'])
+            ->name('milestones.status');
+
+        Route::delete('/milestones/{id}', [App\Http\Controllers\Admin\ProjectTrackingController::class, 'destroyMilestone'])
+            ->name('milestones.destroy');
+    });
+
+    // Contractor Routes
+    Route::prefix('contractor')->name('contractor.')->middleware(['auth'])->group(function () {
+
+        Route::post('/project/progress', [App\Http\Controllers\Contractor\ProjectProgressController::class, 'store'])
+            ->name('project.progress.store');
     });
 });

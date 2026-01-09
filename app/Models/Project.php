@@ -46,4 +46,25 @@ class Project extends Model
     {
         return $this->belongsToMany(Work::class, 'project_works');
     }
+
+    public function milestones()
+    {
+        return $this->hasMany(ProjectMilestone::class);
+    }
+
+    /**
+     * Daily/Weekly progress reports uploaded by the contractor
+     */
+    public function progressUpdates()
+    {
+        return $this->hasMany(ProjectProgressUpdate::class)->latest();
+    }
+
+    /**
+     * Helper to get the latest completion percentage
+     */
+    public function getCurrentProgressAttribute()
+    {
+        return $this->progressUpdates()->first()->progress_percentage ?? 0;
+    }
 }

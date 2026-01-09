@@ -17,6 +17,10 @@ use App\Repositories\Contracts\ContractorProfileRepository;
 use App\Repositories\Interfaces\ProjectAwardRepositoryInterface;
 use App\Repositories\Contracts\ProjectAwardRepository;
 use App\Repositories\Interfaces\ContractorProfileRepositoryInterface;
+use App\Repositories\ProjectMilestone\Interfaces\ProjectMilestoneRepositoryInterface;
+use App\Repositories\ProjectMilestone\ProjectMilestoneRepository;
+use App\Repositories\ProjectProgressUpdate\Interfaces\ProjectProgressUpdateRepositoryInterface;
+use App\Repositories\ProjectProgressUpdate\ProjectProgressUpdateRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,6 +36,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(BidRepositoryInterface::class, BidRepository::class);
         $this->app->bind(ProjectAwardRepositoryInterface::class, ProjectAwardRepository::class);
         $this->app->bind(ContractorProfileRepositoryInterface::class, ContractorProfileRepository::class);
+        $this->app->bind(ProjectMilestoneRepositoryInterface::class, ProjectMilestoneRepository::class);
+        $this->app->bind(ProjectProgressUpdateRepositoryInterface::class, ProjectProgressUpdateRepository::class);
     }
 
     /**
