@@ -102,7 +102,7 @@
                         <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">
                             Phone
                         </label>
-                        <input type="text" name="phone" value="{{ auth()->user()->contractor->phone }}"
+                        <input type="text" name="phone" value="{{ auth()->user()->contractor->phone ?? '' }}"
                             class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors">
                     </div>
 
@@ -111,7 +111,7 @@
                         <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">
                             City
                         </label>
-                        <input type="text" name="city" value="{{ auth()->user()->contractor->city }}"
+                        <input type="text" name="city" value="{{ auth()->user()->contractor->city ?? '' }}"
                             class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors">
                     </div>
 
