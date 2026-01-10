@@ -35,7 +35,7 @@ class ContractorProjectController extends Controller
     {
         // 1. SECURITY: Ensure this project is awarded to the logged-in contractor
         // Use your specific relationship logic here. Example:
-        $isAssigned = $project->award && $project->award->user_id === Auth::id();
+        $isAssigned = $project->award->user_id === Auth::id();
 
         abort_unless($isAssigned, 403, 'You are not authorized to view this project.');
 
@@ -57,7 +57,7 @@ class ContractorProjectController extends Controller
     public function storeProgress(Request $request, Project $project)
     {
         // 1. SECURITY: Check authorization again
-        $isAssigned = $project->award && $project->award->user_id === Auth::id();
+        $isAssigned = $project->award->user_id === Auth::id();
         abort_unless($isAssigned, 403, 'You are not authorized to update this project.');
 
         // 2. Validate Input
