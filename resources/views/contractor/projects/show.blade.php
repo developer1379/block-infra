@@ -5,7 +5,7 @@
             {{-- 1. HEADER --}}
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
-                    <a href="{{ route('contractor.projects.index') }}"
+                    <a href="{{ route('admin.projects.index') }}"
                         class="h-10 w-10 flex items-center justify-center bg-white border border-gray-200 rounded-xl text-gray-500 hover:text-indigo-600 hover:border-indigo-200 shadow-sm transition-all">
                         <i class="bi bi-arrow-left"></i>
                     </a>
