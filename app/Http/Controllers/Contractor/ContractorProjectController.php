@@ -5,27 +5,46 @@ namespace App\Http\Controllers\Contractor;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use App\Repositories\Interfaces\BidRepositoryInterface;
+use App\Repositories\Interfaces\ProjectRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ContractorProjectController extends Controller
 {
+
+    protected $projects;
+    protected $bids;
+
+    public function __construct(ProjectRepositoryInterface $projects, BidRepositoryInterface $bids)
+    {
+        $this->projects = $projects;
+        $this->bids = $bids;
+    }
     /**
      * Display a listing of the projects assigned to this contractor.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Fetch projects where the award belongs to the logged-in user
-        // Assuming you have an 'award' relationship on Project
-        // and a 'user_id' or 'contractor_id' on the Award model
-        $projects = Project::whereHas('award', function ($query) {
-            $query->where('user_id', Auth::id()); // Adjust 'user_id' to your actual foreign key column
-        })
-            ->with(['award', 'createdBy']) // Eager load for performance
-            ->latest()
-            ->paginate(10);
+        $filters = [
+            'search'      => $request->search,
+            'status'      => $request->status,
+            'created_by'  => $request->created_by,
+            'category_id' => $request->category_id ?? null,
+        ];
 
-        return view('contractor.projects.index', compact('projects'));
+        $projects = $this->projects->filterProjects($filters);
+        $createdByUsers = $this->projects->getProjectCreators();
+
+        // Check contractor bid status
+        $hasBid = [];
+        if (auth()->user()->hasRole('contractor')) {
+            foreach ($projects as $project) {
+                $hasBid[$project->id] = $this->bids->hasUserBid($project->id, auth()->id());
+            }
+        }
+
+        return view('contractor.projects.index', compact('projects', 'createdByUsers', 'hasBid'));
     }
 
     /**
