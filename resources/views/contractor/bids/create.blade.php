@@ -1,7 +1,5 @@
 <x-app-layout>
 
-    {{-- 1. STYLES (Moved inside slot to ensure they load in the right place) --}}
-    @push('styles')
         <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
         <style>
             /* Custom Quill Toolbar */
@@ -30,8 +28,6 @@
                 font-style: normal;
             }
         </style>
-    @endpush
-
     <div class="min-h-screen bg-gray-50/50 p-6">
         <div class="max-w-5xl mx-auto space-y-6">
 
@@ -198,8 +194,6 @@
         </div>
     </div>
 
-    {{-- SCRIPTS --}}
-    @push('scripts')
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
@@ -266,6 +260,5 @@
 
             });
         </script>
-    @endpush
 
 </x-app-layout>
