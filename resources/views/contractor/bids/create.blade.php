@@ -4,182 +4,172 @@
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
     <style>
-        /* Quill Editor Polish */
+        /* Quill Editor Customization */
         .ql-toolbar.ql-snow {
             border-top-left-radius: 0.5rem;
             border-top-right-radius: 0.5rem;
-            border-color: #e2e8f0;
-            background-color: #f8fafc;
-            padding: 8px;
+            border-color: #d1d5db;
+            background-color: #f9fafb;
+            padding: 12px;
         }
 
         .ql-container.ql-snow {
             border-bottom-left-radius: 0.5rem;
             border-bottom-right-radius: 0.5rem;
-            border-color: #e2e8f0;
+            border-color: #d1d5db;
             background-color: #fff;
-            min-height: 220px;
+            min-height: 250px;
+            font-family: inherit;
             font-size: 0.95rem;
-            color: #334155;
-            /* Slate-700 */
+            color: #1f2937;
         }
 
         .ql-editor.ql-blank::before {
             font-style: normal;
-            color: #94a3b8;
-            /* Slate-400 */
-        }
-
-        /* File Upload Customization */
-        .file-upload-wrapper {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-            width: 100%;
-        }
-
-        input[type="file"]::file-selector-button {
-            display: none;
-            /* Hide default button for custom styling */
+            color: #9ca3af;
         }
     </style>
 
-    {{-- PAGE HEADER --}}
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-        <div>
-            <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Submit Proposal</h2>
-            <p class="text-slate-500 text-sm mt-1">
-                For Project: <span class="font-semibold text-primary">{{ $project->title }}</span>
-            </p>
-        </div>
+    <div class="min-h-screen bg-gray-50/50 p-6">
+        <div class="max-w-5xl mx-auto space-y-6">
 
-        <a href="{{ route('admin.projects.show', $project->id) }}"
-            class="inline-flex items-center gap-2 bg-white border border-slate-200 text-slate-700 hover:text-slate-900 hover:border-slate-300 text-sm font-medium px-4 py-2.5 rounded-lg shadow-sm transition-all">
-            <i class="fa-solid fa-arrow-left text-xs"></i> Back to Project
-        </a>
-    </div>
-
-    {{-- FORM CARD --}}
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 max-w-4xl mx-auto overflow-hidden">
-
-        <div class="bg-slate-50/50 border-b border-slate-100 px-8 py-5">
-            <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                <div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center">
-                    <i class="fa-solid fa-file-contract text-sm"></i>
+            {{-- PAGE HEADER --}}
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Submit Proposal</h2>
+                    <p class="text-gray-500 text-sm mt-1">
+                        Bidding for: <span class="font-semibold text-indigo-600">{{ $project->title }}</span>
+                    </p>
                 </div>
-                Proposal Details
-            </h3>
-        </div>
 
-        <div class="p-8">
-            <form action="{{ route('contractor.projects.bid.store', $project->id) }}" method="POST"
-                enctype="multipart/form-data" id="bidForm">
-                @csrf
+                <a href="{{ route('contractor.projects.show', $project->id) }}"
+                    class="inline-flex items-center gap-2 bg-white border border-gray-200 text-gray-700 hover:text-gray-900 hover:bg-gray-50 text-sm font-medium px-4 py-2.5 rounded-lg shadow-sm transition-all">
+                    <i class="bi bi-arrow-left"></i> Cancel & Back
+                </a>
+            </div>
 
-                <div class="space-y-8">
+            {{-- FORM CARD --}}
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
 
-                    {{-- 1. Cost & Timeline Grid --}}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                        {{-- Bid Amount --}}
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">
-                                Bid Amount (₹) <span class="text-red-500">*</span>
-                            </label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <span class="text-slate-400 font-bold">₹</span>
-                                </div>
-                                <input type="number" name="bid_amount" step="0.01" min="0" required
-                                    class="block w-full pl-8 pr-12 py-2.5 border-slate-200 rounded-lg text-slate-800 font-semibold placeholder-slate-300 focus:ring-primary focus:border-primary transition-colors bg-white shadow-sm"
-                                    placeholder="0.00">
-                            </div>
-                        </div>
-
-                        {{-- Delivery Days --}}
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">
-                                Delivery Time <span class="text-red-500">*</span>
-                            </label>
-                            <div class="relative">
-                                <input type="number" name="delivery_days" min="1" required
-                                    class="block w-full pl-4 pr-12 py-2.5 border-slate-200 rounded-lg text-slate-800 font-semibold placeholder-slate-300 focus:ring-primary focus:border-primary transition-colors bg-white shadow-sm"
-                                    placeholder="e.g. 15">
-                                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                                    <span class="text-xs font-bold text-slate-400 uppercase">Days</span>
-                                </div>
-                            </div>
-                        </div>
+                {{-- Header Bar --}}
+                <div class="bg-gray-50/50 border-b border-gray-100 px-8 py-5 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center border border-indigo-100">
+                        <i class="bi bi-file-earmark-text text-lg"></i>
                     </div>
-
-                    {{-- 2. Proposal Description --}}
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5">
-                            Proposal Description <span class="text-red-500">*</span>
-                        </label>
-                        <input type="hidden" name="proposal_text" id="proposalInput">
-                        <div id="quillEditor" class="shadow-sm"></div>
-                        @error('proposal_text')
-                            <p class="text-red-500 text-xs mt-1 font-medium">{{ $message }}</p>
-                        @enderror
+                        <h3 class="font-bold text-gray-900">Proposal Details</h3>
+                        <p class="text-xs text-gray-500">Provide accurate estimates to increase your winning chance.</p>
                     </div>
+                </div>
 
-                    {{-- 3. File Attachment --}}
-                    <div
-                        class="bg-slate-50 rounded-xl border border-dashed border-slate-300 p-6 text-center hover:bg-slate-50/80 transition-colors">
-                        <label for="pdfInput" class="cursor-pointer block w-full h-full">
-                            <div class="flex flex-col items-center justify-center gap-2">
-                                <div
-                                    class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center shadow-sm text-slate-400">
-                                    <i class="fa-solid fa-paperclip"></i>
-                                </div>
+                <div class="p-8">
+                    <form action="{{ route('contractor.projects.bid.store', $project->id) }}" method="POST"
+                        enctype="multipart/form-data" id="bidForm">
+                        @csrf
+
+                        <div class="space-y-8">
+
+                            {{-- 1. Cost & Timeline --}}
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                {{-- Bid Amount --}}
                                 <div>
-                                    <span class="text-sm font-semibold text-primary hover:text-teal-700">Upload PDF
-                                        Proposal</span>
-                                    <span class="text-sm text-slate-500"> or drag and drop</span>
+                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
+                                        Total Bid Amount <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                            <span class="text-gray-400 font-bold">₹</span>
+                                        </div>
+                                        <input type="number" name="bid_amount" step="0.01" min="0" required
+                                            class="block w-full pl-8 pr-4 py-3 border-gray-300 rounded-lg text-gray-900 font-semibold placeholder-gray-400 focus:ring-indigo-500 focus:border-indigo-500 transition-colors shadow-sm text-lg"
+                                            placeholder="0.00">
+                                    </div>
+                                    <p class="text-[10px] text-gray-400 mt-1.5 ml-1">Include all taxes and material costs.</p>
                                 </div>
-                                <p class="text-xs text-slate-400">PDF up to 5MB (Optional)</p>
-                            </div>
-                            <input type="file" name="proposal_pdf" id="pdfInput" accept="application/pdf"
-                                class="hidden">
-                        </label>
 
-                        {{-- File Preview --}}
-                        <div id="filePreview"
-                            class="mt-4 hidden text-left bg-white border border-slate-200 rounded-lg p-3 shadow-sm flex items-center justify-between">
-                            <div class="flex items-center gap-3 overflow-hidden">
-                                <div
-                                    class="w-8 h-8 rounded bg-red-50 text-red-500 flex items-center justify-center shrink-0">
-                                    <i class="fa-solid fa-file-pdf"></i>
-                                </div>
-                                <div class="min-w-0">
-                                    <p id="fileName" class="text-sm font-medium text-slate-700 truncate">filename.pdf
-                                    </p>
-                                    <p class="text-[10px] text-slate-400">Ready to upload</p>
+                                {{-- Delivery Days --}}
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
+                                        Estimated Timeline <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <input type="number" name="delivery_days" min="1" required
+                                            class="block w-full pl-4 pr-16 py-3 border-gray-300 rounded-lg text-gray-900 font-semibold placeholder-gray-400 focus:ring-indigo-500 focus:border-indigo-500 transition-colors shadow-sm text-lg"
+                                            placeholder="e.g. 45">
+                                        <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                                            <span class="text-xs font-bold text-gray-400 uppercase bg-gray-100 px-2 py-1 rounded">Days</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-[10px] text-gray-400 mt-1.5 ml-1">From project start date.</p>
                                 </div>
                             </div>
-                            <button type="button" id="removeFile"
-                                class="text-slate-400 hover:text-red-500 p-1 rounded-full hover:bg-slate-50 transition-colors">
-                                <i class="fa-solid fa-xmark"></i>
+
+                            <hr class="border-gray-100">
+
+                            {{-- 2. Proposal Description --}}
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
+                                    Detailed Proposal <span class="text-red-500">*</span>
+                                </label>
+                                <input type="hidden" name="proposal_text" id="proposalInput">
+                                <div id="quillEditor" class="shadow-sm"></div>
+                                @error('proposal_text')
+                                    <p class="text-red-500 text-xs mt-1 font-medium">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <hr class="border-gray-100">
+
+                            {{-- 3. File Attachment --}}
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
+                                    Attach PDF (Optional)
+                                </label>
+
+                                <div class="flex items-center justify-center w-full">
+                                    <label for="pdfInput" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-indigo-50 hover:border-indigo-300 transition-all group">
+                                        <div class="flex flex-col items-center justify-center pt-5 pb-6" id="uploadPlaceholder">
+                                            <div class="w-10 h-10 mb-3 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-400 group-hover:text-indigo-600 transition-colors shadow-sm">
+                                                <i class="bi bi-cloud-arrow-up text-lg"></i>
+                                            </div>
+                                            <p class="mb-1 text-sm text-gray-500"><span class="font-semibold text-indigo-600">Click to upload</span> or drag and drop</p>
+                                            <p class="text-xs text-gray-400">PDF documents only (Max 5MB)</p>
+                                        </div>
+
+                                        {{-- Preview State --}}
+                                        <div id="filePreview" class="hidden flex-col items-center justify-center w-full h-full">
+                                            <div class="flex items-center gap-3 bg-white px-4 py-3 rounded-lg border border-gray-200 shadow-sm">
+                                                <div class="w-8 h-8 rounded bg-red-50 text-red-500 flex items-center justify-center shrink-0">
+                                                    <i class="bi bi-file-earmark-pdf-fill"></i>
+                                                </div>
+                                                <div class="text-left">
+                                                    <p id="fileName" class="text-sm font-medium text-gray-700 truncate max-w-[200px]">filename.pdf</p>
+                                                    <p class="text-[10px] text-green-600 font-medium">Ready to upload</p>
+                                                </div>
+                                                <button type="button" id="removeFile" class="text-gray-400 hover:text-red-500 ml-2 transition-colors">
+                                                    <i class="bi bi-x-circle-fill"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <input type="file" name="proposal_pdf" id="pdfInput" accept="application/pdf" class="hidden">
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        {{-- Footer Actions --}}
+                        <div class="flex items-center justify-end gap-4 pt-8 mt-4">
+                            <button type="submit"
+                                class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold px-8 py-3 rounded-xl shadow-md shadow-indigo-200 transition-all transform hover:-translate-y-0.5 focus:ring-4 focus:ring-indigo-100">
+                                <i class="bi bi-send-fill text-xs"></i> Submit Proposal
                             </button>
                         </div>
-                    </div>
 
+                    </form>
                 </div>
-
-                {{-- Footer Actions --}}
-                <div class="flex items-center justify-end gap-4 pt-8 mt-2 border-t border-slate-100">
-                    <a href="{{ route('admin.projects.show', $project->id) }}"
-                        class="text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors">
-                        Cancel
-                    </a>
-                    <button type="submit"
-                        class="inline-flex items-center gap-2 bg-primary hover:bg-teal-700 text-white text-sm font-bold px-6 py-2.5 rounded-lg shadow-md shadow-teal-100/50 transition-all transform hover:-translate-y-0.5 focus:ring-2 focus:ring-offset-2 focus:ring-primary">
-                        <i class="fa-solid fa-paper-plane text-xs"></i> Submit Proposal
-                    </button>
-                </div>
-
-            </form>
+            </div>
         </div>
     </div>
 
@@ -194,18 +184,12 @@
                 // --- 1. Quill Editor ---
                 var quill = new Quill('#quillEditor', {
                     theme: 'snow',
-                    placeholder: 'Outline your proposal details, approach, and key deliverables...',
+                    placeholder: 'Outline your methodology, key deliverables, and terms...',
                     modules: {
                         toolbar: [
                             ['bold', 'italic', 'underline'],
-                            [{
-                                'list': 'ordered'
-                            }, {
-                                'list': 'bullet'
-                            }],
-                            [{
-                                'header': [2, 3, false]
-                            }],
+                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                            [{ 'header': [2, 3, false] }],
                             ['clean']
                         ]
                     }
@@ -218,8 +202,9 @@
                     $('#proposalInput').val(html);
                 });
 
-                // --- 2. Custom File Upload UI ---
+                // --- 2. Custom File Upload Logic ---
                 const fileInput = $('#pdfInput');
+                const placeholder = $('#uploadPlaceholder');
                 const preview = $('#filePreview');
                 const fileName = $('#fileName');
                 const removeBtn = $('#removeFile');
@@ -232,13 +217,17 @@
                             return;
                         }
                         fileName.text(this.files[0].name);
+                        placeholder.addClass('hidden');
                         preview.removeClass('hidden').addClass('flex');
                     }
                 });
 
-                removeBtn.on('click', function() {
+                removeBtn.on('click', function(e) {
+                    e.preventDefault(); // Prevent opening file dialog
+                    e.stopPropagation();
                     fileInput.val('');
                     preview.addClass('hidden').removeClass('flex');
+                    placeholder.removeClass('hidden');
                 });
 
             });
