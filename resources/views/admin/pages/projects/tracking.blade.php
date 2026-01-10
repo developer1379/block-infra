@@ -24,7 +24,7 @@
                     <div class="p-6">
                         <h6 class="text-gray-400 text-xs uppercase font-bold tracking-wider mb-1">Total Budget</h6>
                         <h3 class="text-2xl font-bold text-gray-800 mb-0">
-                            ${{ number_format($project->award->bid->bid_amount ?? 0, 2) }}</h3>
+                            ₹{{ number_format($project->award->bid->bid_amount ?? 0, 2) }}</h3>
                         <small class="text-green-600 font-medium">Awarded Amount</small>
                     </div>
                 </div>
