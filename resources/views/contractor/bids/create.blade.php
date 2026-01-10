@@ -1,34 +1,36 @@
 <x-app-layout>
 
-    {{-- 1. STYLES --}}
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    {{-- 1. STYLES (Moved inside slot to ensure they load in the right place) --}}
+    @push('styles')
+        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+        <style>
+            /* Custom Quill Toolbar */
+            .ql-toolbar.ql-snow {
+                border-top-left-radius: 0.5rem;
+                border-top-right-radius: 0.5rem;
+                border-color: #d1d5db;
+                background-color: #f9fafb;
+                padding: 12px;
+            }
 
-    <style>
-        /* Quill Editor Customization */
-        .ql-toolbar.ql-snow {
-            border-top-left-radius: 0.5rem;
-            border-top-right-radius: 0.5rem;
-            border-color: #d1d5db;
-            background-color: #f9fafb;
-            padding: 12px;
-        }
+            /* Custom Quill Container */
+            .ql-container.ql-snow {
+                border-bottom-left-radius: 0.5rem;
+                border-bottom-right-radius: 0.5rem;
+                border-color: #d1d5db;
+                background-color: #fff;
+                font-family: inherit;
+                font-size: 0.95rem;
+                color: #1f2937;
+            }
 
-        .ql-container.ql-snow {
-            border-bottom-left-radius: 0.5rem;
-            border-bottom-right-radius: 0.5rem;
-            border-color: #d1d5db;
-            background-color: #fff;
-            min-height: 250px;
-            font-family: inherit;
-            font-size: 0.95rem;
-            color: #1f2937;
-        }
-
-        .ql-editor.ql-blank::before {
-            font-style: normal;
-            color: #9ca3af;
-        }
-    </style>
+            /* Placeholder Text Color */
+            .ql-editor.ql-blank::before {
+                color: #9ca3af;
+                font-style: normal;
+            }
+        </style>
+    @endpush
 
     <div class="min-h-screen bg-gray-50/50 p-6">
         <div class="max-w-5xl mx-auto space-y-6">
@@ -53,7 +55,8 @@
 
                 {{-- Header Bar --}}
                 <div class="bg-gray-50/50 border-b border-gray-100 px-8 py-5 flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center border border-indigo-100">
+                    <div
+                        class="w-10 h-10 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center border border-indigo-100">
                         <i class="bi bi-file-earmark-text text-lg"></i>
                     </div>
                     <div>
@@ -77,14 +80,16 @@
                                         Total Bid Amount <span class="text-red-500">*</span>
                                     </label>
                                     <div class="relative">
-                                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                        <div
+                                            class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                             <span class="text-gray-400 font-bold">₹</span>
                                         </div>
                                         <input type="number" name="bid_amount" step="0.01" min="0" required
                                             class="block w-full pl-8 pr-4 py-3 border-gray-300 rounded-lg text-gray-900 font-semibold placeholder-gray-400 focus:ring-indigo-500 focus:border-indigo-500 transition-colors shadow-sm text-lg"
                                             placeholder="0.00">
                                     </div>
-                                    <p class="text-[10px] text-gray-400 mt-1.5 ml-1">Include all taxes and material costs.</p>
+                                    <p class="text-[10px] text-gray-400 mt-1.5 ml-1">Include all taxes and material
+                                        costs.</p>
                                 </div>
 
                                 {{-- Delivery Days --}}
@@ -96,8 +101,10 @@
                                         <input type="number" name="delivery_days" min="1" required
                                             class="block w-full pl-4 pr-16 py-3 border-gray-300 rounded-lg text-gray-900 font-semibold placeholder-gray-400 focus:ring-indigo-500 focus:border-indigo-500 transition-colors shadow-sm text-lg"
                                             placeholder="e.g. 45">
-                                        <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-                                            <span class="text-xs font-bold text-gray-400 uppercase bg-gray-100 px-2 py-1 rounded">Days</span>
+                                        <div
+                                            class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                                            <span
+                                                class="text-xs font-bold text-gray-400 uppercase bg-gray-100 px-2 py-1 rounded">Days</span>
                                         </div>
                                     </div>
                                     <p class="text-[10px] text-gray-400 mt-1.5 ml-1">From project start date.</p>
@@ -106,13 +113,18 @@
 
                             <hr class="border-gray-100">
 
-                            {{-- 2. Proposal Description --}}
+                            {{-- 2. Proposal Description (Quill Editor) --}}
                             <div>
                                 <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
                                     Detailed Proposal <span class="text-red-500">*</span>
                                 </label>
+
+                                {{-- Hidden Input for Form Submission --}}
                                 <input type="hidden" name="proposal_text" id="proposalInput">
-                                <div id="quillEditor" class="shadow-sm"></div>
+
+                                {{-- Editor Container (Explicit Height Fix) --}}
+                                <div id="quillEditor" style="height: 250px;"></div>
+
                                 @error('proposal_text')
                                     <p class="text-red-500 text-xs mt-1 font-medium">{{ $message }}</p>
                                 @enderror
@@ -127,32 +139,45 @@
                                 </label>
 
                                 <div class="flex items-center justify-center w-full">
-                                    <label for="pdfInput" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-indigo-50 hover:border-indigo-300 transition-all group">
-                                        <div class="flex flex-col items-center justify-center pt-5 pb-6" id="uploadPlaceholder">
-                                            <div class="w-10 h-10 mb-3 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-400 group-hover:text-indigo-600 transition-colors shadow-sm">
+                                    <label for="pdfInput"
+                                        class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-indigo-50 hover:border-indigo-300 transition-all group">
+                                        <div class="flex flex-col items-center justify-center pt-5 pb-6"
+                                            id="uploadPlaceholder">
+                                            <div
+                                                class="w-10 h-10 mb-3 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-400 group-hover:text-indigo-600 transition-colors shadow-sm">
                                                 <i class="bi bi-cloud-arrow-up text-lg"></i>
                                             </div>
-                                            <p class="mb-1 text-sm text-gray-500"><span class="font-semibold text-indigo-600">Click to upload</span> or drag and drop</p>
+                                            <p class="mb-1 text-sm text-gray-500"><span
+                                                    class="font-semibold text-indigo-600">Click to upload</span> or drag
+                                                and drop</p>
                                             <p class="text-xs text-gray-400">PDF documents only (Max 5MB)</p>
                                         </div>
 
                                         {{-- Preview State --}}
-                                        <div id="filePreview" class="hidden flex-col items-center justify-center w-full h-full">
-                                            <div class="flex items-center gap-3 bg-white px-4 py-3 rounded-lg border border-gray-200 shadow-sm">
-                                                <div class="w-8 h-8 rounded bg-red-50 text-red-500 flex items-center justify-center shrink-0">
+                                        <div id="filePreview"
+                                            class="hidden flex-col items-center justify-center w-full h-full">
+                                            <div
+                                                class="flex items-center gap-3 bg-white px-4 py-3 rounded-lg border border-gray-200 shadow-sm">
+                                                <div
+                                                    class="w-8 h-8 rounded bg-red-50 text-red-500 flex items-center justify-center shrink-0">
                                                     <i class="bi bi-file-earmark-pdf-fill"></i>
                                                 </div>
                                                 <div class="text-left">
-                                                    <p id="fileName" class="text-sm font-medium text-gray-700 truncate max-w-[200px]">filename.pdf</p>
-                                                    <p class="text-[10px] text-green-600 font-medium">Ready to upload</p>
+                                                    <p id="fileName"
+                                                        class="text-sm font-medium text-gray-700 truncate max-w-[200px]">
+                                                        filename.pdf</p>
+                                                    <p class="text-[10px] text-green-600 font-medium">Ready to upload
+                                                    </p>
                                                 </div>
-                                                <button type="button" id="removeFile" class="text-gray-400 hover:text-red-500 ml-2 transition-colors">
+                                                <button type="button" id="removeFile"
+                                                    class="text-gray-400 hover:text-red-500 ml-2 transition-colors">
                                                     <i class="bi bi-x-circle-fill"></i>
                                                 </button>
                                             </div>
                                         </div>
 
-                                        <input type="file" name="proposal_pdf" id="pdfInput" accept="application/pdf" class="hidden">
+                                        <input type="file" name="proposal_pdf" id="pdfInput"
+                                            accept="application/pdf" class="hidden">
                                     </label>
                                 </div>
                             </div>
@@ -181,26 +206,35 @@
         <script>
             $(document).ready(function() {
 
-                // --- 1. Quill Editor ---
-                var quill = new Quill('#quillEditor', {
-                    theme: 'snow',
-                    placeholder: 'Outline your methodology, key deliverables, and terms...',
-                    modules: {
-                        toolbar: [
-                            ['bold', 'italic', 'underline'],
-                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                            [{ 'header': [2, 3, false] }],
-                            ['clean']
-                        ]
-                    }
-                });
+                // --- 1. Quill Editor Initialization ---
+                if (document.getElementById('quillEditor')) {
+                    var quill = new Quill('#quillEditor', {
+                        theme: 'snow',
+                        placeholder: 'Outline your methodology, key deliverables, and terms...',
+                        modules: {
+                            toolbar: [
+                                ['bold', 'italic', 'underline'],
+                                [{
+                                    'list': 'ordered'
+                                }, {
+                                    'list': 'bullet'
+                                }],
+                                [{
+                                    'header': [2, 3, false]
+                                }],
+                                ['clean']
+                            ]
+                        }
+                    });
 
-                // Sync on Submit
-                $('#bidForm').on('submit', function() {
-                    var html = quill.root.innerHTML;
-                    if (html === '<p><br></p>') html = '';
-                    $('#proposalInput').val(html);
-                });
+                    // Sync content to hidden input on form submit
+                    $('#bidForm').on('submit', function() {
+                        var html = quill.root.innerHTML;
+                        // Avoid submitting empty paragraph
+                        if (html === '<p><br></p>') html = '';
+                        $('#proposalInput').val(html);
+                    });
+                }
 
                 // --- 2. Custom File Upload Logic ---
                 const fileInput = $('#pdfInput');
@@ -223,7 +257,7 @@
                 });
 
                 removeBtn.on('click', function(e) {
-                    e.preventDefault(); // Prevent opening file dialog
+                    e.preventDefault();
                     e.stopPropagation();
                     fileInput.val('');
                     preview.addClass('hidden').removeClass('flex');
