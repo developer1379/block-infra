@@ -31,10 +31,24 @@ class ContractorProjectController extends Controller
     /**
      * Show the specific project workspace (The UI created in the previous step).
      */
-    public function show($id)
+    public function show(Project $project)
     {
-        $project = Project::find($id);
-        return view('admin.pages.projects.show', compact('project'));
+        // 1. SECURITY: Ensure this project is awarded to the logged-in contractor
+        // Use your specific relationship logic here. Example:
+        $isAssigned = $project->award->awarded_to === Auth::id();
+
+        abort_unless($isAssigned, 403, 'You are not authorized to view this project.');
+
+        // 2. Load necessary data for the view
+        $project->load([
+            'milestones',
+            'progressUpdates' => function ($query) {
+                $query->latest(); // Order history by newest first
+            },
+            'award.bid' // To show the bid amount
+        ]);
+
+        return view('contractor.projects.show', compact('project'));
     }
 
     /**
