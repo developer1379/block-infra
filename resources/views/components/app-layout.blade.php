@@ -74,13 +74,6 @@
                     My Projects
                 </a>
 
-                {{-- Invoices Link (Example) --}}
-                <a href="#"
-                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors">
-                    <i class="bi bi-receipt"></i>
-                    Invoices
-                </a>
-
                 <p class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 mt-6">Account</p>
 
                 {{-- Profile Link --}}
