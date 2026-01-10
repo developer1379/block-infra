@@ -29,7 +29,7 @@ class BidController extends Controller
         $project = $this->projects->find($projectId);
 
         // Load the view inside admin/pages (as requested)
-        return view('admin.pages.bids.create', compact('project'));
+        return view('contractor.bids.create', compact('project'));
     }
 
     /**
@@ -62,7 +62,7 @@ class BidController extends Controller
             'proposal_pdf'  => $pdfPath,   // save path
         ]);
 
-        return redirect()->route('admin.projects.show', $projectId)
+        return redirect()->route('contractor.projects.show', $projectId)
             ->with('success', 'Bid submitted successfully.');
     }
 }

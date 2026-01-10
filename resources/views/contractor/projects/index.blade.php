@@ -188,14 +188,7 @@
                             </a>
                         @endif
 
-                        {{-- Track (Admin Only) --}}
-                        @if (auth()->user()->hasRole('admin'))
-                            <a href="{{ route('admin.projects.tracking', $project->id) }}"
-                                class="w-8 h-8 rounded-lg bg-white border border-slate-200 text-purple-600 hover:bg-purple-50 hover:border-purple-200 flex items-center justify-center transition-all shadow-sm"
-                                title="Track Progress">
-                                <i class="fa-solid fa-chart-pie text-xs"></i>
-                            </a>
-                        @endif
+
 
                         {{-- View --}}
                         <a href="{{ auth()->user()->hasRole('contractor') ? route('contractor.projects.show', $project->id) : route('admin.projects.show', $project->id) }}"
@@ -204,30 +197,6 @@
                             <i class="fa-solid fa-eye text-xs"></i>
                         </a>
 
-                        {{-- Admin Actions --}}
-                        @can('edit projects')
-                            @if (!auth()->user()->hasRole('contractor'))
-                                <a href="{{ route('admin.projects.edit', $project->id) }}"
-                                    class="w-8 h-8 rounded-lg bg-white border border-slate-200 text-amber-600 hover:bg-amber-50 hover:border-amber-200 flex items-center justify-center transition-all shadow-sm"
-                                    title="Edit Project">
-                                    <i class="fa-solid fa-pen text-xs"></i>
-                                </a>
-                            @endif
-                        @endcan
-
-                        @can('delete projects')
-                            @if (!auth()->user()->hasRole('contractor'))
-                                <form action="{{ route('admin.projects.destroy', $project->id) }}" method="POST"
-                                    onsubmit="return confirm('Delete this project?')">
-                                    @csrf @method('DELETE')
-                                    <button type="submit"
-                                        class="w-8 h-8 rounded-lg bg-white border border-slate-200 text-red-600 hover:bg-red-50 hover:border-red-200 flex items-center justify-center transition-all shadow-sm"
-                                        title="Delete Project">
-                                        <i class="fa-solid fa-trash text-xs"></i>
-                                    </button>
-                                </form>
-                            @endif
-                        @endcan
 
                         {{-- Contractor Bid Action --}}
                         @if (auth()->user()->hasRole('contractor') && $project->status == 'open')
