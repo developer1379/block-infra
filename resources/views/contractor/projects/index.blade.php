@@ -199,7 +199,7 @@
                                     <i class="fa-solid fa-check mr-1"></i> Bid Sent
                                 </span>
                             @else
-                                <a href="{{ route('admin.projects.bid.create', $project->id) }}"
+                                <a href="{{ route('contractor.projects.bid.create', $project->id) }}"
                                     class="px-3 py-1.5 bg-primary text-white text-xs font-bold rounded-lg shadow-sm hover:bg-teal-700 hover:shadow-md transition-all">
                                     Bid Now
                                 </a>

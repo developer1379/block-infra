@@ -64,3 +64,4 @@ class BidController extends Controller
             ->with('success', 'Bid submitted successfully.');
     }
 }
+
