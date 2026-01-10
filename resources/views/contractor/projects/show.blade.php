@@ -1,4 +1,4 @@
-<x-admin.app>
+<x-app-layout>
     <div class="min-h-screen bg-gray-50/50 p-6">
         <div class="max-w-7xl mx-auto space-y-6">
 
@@ -380,4 +380,4 @@
             }, 300);
         }
     </script>
-</x-admin.app>
+</x-app-layout>
