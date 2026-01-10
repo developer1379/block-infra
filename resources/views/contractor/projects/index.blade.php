@@ -159,7 +159,7 @@
                     class="bg-slate-50 px-5 py-3 border-t border-slate-100 rounded-b-xl flex justify-between items-center">
 
                     {{-- Left: View Bids --}}
-                    <a href="{{ route('admin.projects.bids', $project->id) }}"
+                    <a href="{{ route('contractor.projects.bids', $project->id) }}"
                         class="text-xs font-bold text-slate-600 hover:text-primary transition-colors flex items-center gap-1.5 group/bid">
                         <i class="fa-solid fa-gavel group-hover/bid:scale-110 transition-transform"></i>
                         View Bids

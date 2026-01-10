@@ -100,6 +100,8 @@ Route::middleware(['web'])->group(function () {
     Route::middleware(['auth', 'role:admin,contractor'])->group(function () {
 
         Route::get('projects/{id}/add-bid', [ContractorBidController::class, 'create'])->name('contractor.projects.bid.create');
+        Route::get('projects/{id}/bids', [ContractorProjectController::class, 'projectBids'])->name('contractor.projects.bids');
+
         Route::post('projects/{id}/add-bid', [ContractorBidController::class, 'store'])->name('contractor.projects.bid.store');
         Route::get('/contractor/profile', [ContractorProfileController::class, 'index'])->name('contractor.profile');
         Route::post('/contractor/profile/update', [ContractorProfileController::class, 'update'])->name('contractor.profile.update');
@@ -125,7 +127,7 @@ Route::middleware(['web'])->group(function () {
     });
 
     // Contractor Routes
-    Route::prefix('contractor')->name('contractor.')->middleware(['auth','role:contractor'])->group(function () {
+    Route::prefix('contractor')->name('contractor.')->middleware(['auth', 'role:contractor'])->group(function () {
 
         Route::post('/project/progress', [App\Http\Controllers\Contractor\ProjectProgressController::class, 'store'])
             ->name('project.progress.store');

@@ -47,6 +47,14 @@ class ContractorProjectController extends Controller
         return view('contractor.projects.index', compact('projects', 'createdByUsers', 'hasBid'));
     }
 
+    public function projectBids($projectId)
+    {
+        $project = $this->projects->find($projectId);
+        $bids = $this->bids->getByProject($projectId);
+
+        return view('contractor.bids.index', compact('project', 'bids'));
+    }
+
     /**
      * Show the specific project workspace (The UI created in the previous step).
      */
