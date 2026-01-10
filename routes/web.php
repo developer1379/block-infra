@@ -100,8 +100,8 @@ Route::middleware(['web'])->group(function () {
     Route::middleware(['auth', 'role:admin,contractor'])->group(function () {
 
 
-        Route::get('projects/{id}/add-bid', [ContractorBidController::class, 'create'])->name('admin.projects.bid.create');
-        Route::post('projects/{id}/add-bid', [ContractorBidController::class, 'store'])->name('admin.projects.bid.store');
+        Route::get('projects/{id}/add-bid-contractor', [ContractorBidController::class, 'create'])->name('admin.projects.bid.create');
+        Route::post('projects/{id}/add-bid-contractor', [ContractorBidController::class, 'store'])->name('admin.projects.bid.store');
 
         Route::get('projects/{id}/add-bid', [ContractorBidController::class, 'create'])->name('contractor.projects.bid.create');
         Route::get('projects/{id}/bids', [ContractorProjectController::class, 'projectBids'])->name('contractor.projects.bids');
