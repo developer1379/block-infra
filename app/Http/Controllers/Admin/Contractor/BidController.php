@@ -46,13 +46,11 @@ class BidController extends Controller
 
         $pdfPath = null;
 
-        // 🔥 HANDLE PDF FILE UPLOAD
         if ($request->hasFile('proposal_pdf')) {
             $pdfPath = $request->file('proposal_pdf')
                 ->store('bids/pdf', 'public');
         }
 
-        // 🔥 SAVE bid using repository
         $this->bids->create([
             'project_id'    => $projectId,
             'contractor_id' => auth()->id(),
