@@ -71,6 +71,8 @@ Route::middleware(['web'])->group(function () {
             Route::resource('permissions', PermissionController::class)->except(['show']);
             Route::resource('contractors', ContractorController::class);
 
+            Route::get('projects/{id}/add-bid', [ContractorBidController::class, 'create'])->name('admin.projects.bid.create');
+
             Route::post(
                 'contractors/{id}/toggle-status',
                 [ContractorController::class, 'toggleStatus']
