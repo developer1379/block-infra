@@ -179,20 +179,32 @@
                     {{-- Right: Actions --}}
                     <div class="flex items-center gap-2">
 
-                        {{-- Track (NEW) --}}
-                        <a href="{{ route('admin.projects.tracking', $project->id) }}"
-                            class="w-8 h-8 rounded-lg bg-white border border-slate-200 text-indigo-600 hover:bg-indigo-50 hover:border-indigo-200 flex items-center justify-center transition-all shadow-sm"
-                            title="Track Progress">
-                            <i class="fa-solid fa-chart-line text-xs"></i>
-                        </a>
+                        {{-- CONTRACTOR: Workspace / Add Progress --}}
+                        @if (auth()->user()->hasRole('contractor') && $project->status == 'awarded')
+                            <a href="{{ route('contractor.projects.show', $project->id) }}"
+                                class="w-8 h-8 rounded-lg bg-white border border-slate-200 text-indigo-600 hover:bg-indigo-50 hover:border-indigo-200 flex items-center justify-center transition-all shadow-sm"
+                                title="Add Progress / Open Workspace">
+                                <i class="fa-solid fa-chart-line text-xs"></i>
+                            </a>
+                        @endif
+
+                        {{-- Track (Admin Only) --}}
+                        @if (auth()->user()->hasRole('admin'))
+                            <a href="{{ route('admin.projects.tracking', $project->id) }}"
+                                class="w-8 h-8 rounded-lg bg-white border border-slate-200 text-purple-600 hover:bg-purple-50 hover:border-purple-200 flex items-center justify-center transition-all shadow-sm"
+                                title="Track Progress">
+                                <i class="fa-solid fa-chart-pie text-xs"></i>
+                            </a>
+                        @endif
 
                         {{-- View --}}
-                        <a href="{{ route('admin.projects.show', $project->id) }}"
+                        <a href="{{ auth()->user()->hasRole('contractor') ? route('contractor.projects.show', $project->id) : route('admin.projects.show', $project->id) }}"
                             class="w-8 h-8 rounded-lg bg-white border border-slate-200 text-blue-600 hover:bg-blue-50 hover:border-blue-200 flex items-center justify-center transition-all shadow-sm"
                             title="View Details">
                             <i class="fa-solid fa-eye text-xs"></i>
                         </a>
 
+                        {{-- Admin Actions --}}
                         @can('edit projects')
                             @if (!auth()->user()->hasRole('contractor'))
                                 <a href="{{ route('admin.projects.edit', $project->id) }}"

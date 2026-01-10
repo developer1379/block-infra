@@ -17,7 +17,8 @@ use App\Http\Controllers\Admin\BidController as AdminBidController;
 use App\Http\Controllers\Admin\ProjectAwardController;
 use App\Http\Controllers\Admin\Contractor\BidController as ContractorBidController;
 use App\Http\Controllers\Admin\Contractor\ProfileController as ContractorProfileController;
-
+use App\Http\Controllers\Contractor\ContractorProjectController;
+use App\Http\Controllers\Contractor\ProjectProgressController;
 use Modules\User\Http\Controllers\UserController;
 
 Route::middleware(['web'])->group(function () {
@@ -128,5 +129,8 @@ Route::middleware(['web'])->group(function () {
 
         Route::post('/project/progress', [App\Http\Controllers\Contractor\ProjectProgressController::class, 'store'])
             ->name('project.progress.store');
+        Route::get('/projects', [ContractorProjectController::class, 'index'])->name('projects.index');
+        Route::get('/projects/{project}', [ContractorProjectController::class, 'show'])->name('projects.show');
+        Route::post('/projects/{project}/progress', [ContractorProjectController::class, 'storeProgress'])->name('projects.progress.store');
     });
 });
