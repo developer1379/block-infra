@@ -125,7 +125,7 @@ Route::middleware(['web'])->group(function () {
     });
 
     // Contractor Routes
-    Route::prefix('contractor')->name('contractor.')->middleware(['auth'])->group(function () {
+    Route::prefix('contractor')->name('contractor.')->middleware(['auth','role:contractor'])->group(function () {
 
         Route::post('/project/progress', [App\Http\Controllers\Contractor\ProjectProgressController::class, 'store'])
             ->name('project.progress.store');
