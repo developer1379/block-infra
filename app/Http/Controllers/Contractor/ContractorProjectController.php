@@ -35,7 +35,7 @@ class ContractorProjectController extends Controller
     {
         // 1. SECURITY: Ensure this project is awarded to the logged-in contractor
         // Use your specific relationship logic here. Example:
-        $isAssigned = $project->award->awarded_to === Auth::id();
+        $isAssigned = $project->award && $project->award->awarded_to === Auth::id();
 
         abort_unless($isAssigned, 403, 'You are not authorized to view this project.');
 
