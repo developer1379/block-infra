@@ -114,7 +114,8 @@
                                                 {{ $milestone->due_date ? $milestone->due_date->format('M d, Y') : '-' }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                ${{ number_format($milestone->amount, 2) }}
+                                                ₹
+                                                {{ number_format($milestone->amount, 2) }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 @switch($milestone->status)
