@@ -28,7 +28,7 @@
                 <p class="mt-1 max-w-2xl text-sm text-gray-500">Fill in the information to post a new project.</p>
             </div>
 
-            <form action="{{ route('user.projects.store') }}" method="POST" id="projectForm" class="p-6 space-y-6">
+            <form action="{{ route('admin.projects.store') }}" method="POST" id="projectForm" class="p-6 space-y-6">
                 @csrf
 
                 <div>
