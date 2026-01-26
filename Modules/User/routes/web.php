@@ -13,6 +13,6 @@ Route::middleware(['web', 'auth', 'role:user'])->group(function () {
             ->name('milestones.comments.store');
     });
 
-    Route::patch('/milestones/{id}/status', [Modules\User\Http\Controllers\ProjectController::class, 'updateMilestoneStatus'])
+    Route::patch('user/milestones/{id}/status', [Modules\User\Http\Controllers\ProjectController::class, 'updateMilestoneStatus'])
         ->name('user.milestones.update');
 });
