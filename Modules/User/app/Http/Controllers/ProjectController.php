@@ -3,6 +3,9 @@
 namespace Modules\User\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\MilestoneComment;
+use App\Models\Project;
+use App\Models\ProjectMilestone;
 use App\Models\Work;
 use App\Repositories\Interfaces\BidRepositoryInterface;
 use App\Repositories\Interfaces\ProjectRepositoryInterface;
@@ -133,5 +136,36 @@ class ProjectController extends Controller
 
         return redirect()->route('user.projects.index')
             ->with('success', 'Project deleted.');
+    }
+
+    public function updateMilestoneStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status'  => 'required|string|in:pending,in_progress,completed,on_hold,paid',
+            'remarks' => 'nullable|string|max:1000',
+        ]);
+
+        $milestone = ProjectMilestone::where('id', $id)->firstOrFail();
+
+        // Optional: Verify user owns the project
+        if ($milestone->project->created_by !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Update Status
+        $milestone->update([
+            'status' => $request->status
+        ]);
+
+        // If remarks exist, add them as a comment so they are preserved
+        if ($request->filled('remarks')) {
+            MilestoneComment::create([
+                'milestone_id' => $milestone->id,
+                'user_id'      => Auth::id(),
+                'content'      => "Status updated to " . ucfirst(str_replace('_', ' ', $request->status)) . ".\nNote: " . $request->remarks,
+            ]);
+        }
+
+        return back()->with('success', 'Milestone status updated.');
     }
 }
