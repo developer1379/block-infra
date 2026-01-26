@@ -60,7 +60,7 @@ class BidController extends Controller
             'proposal_pdf'  => $pdfPath,   // save path
         ]);
 
-        return redirect()->route('contractor.projects.show', $projectId)
+        return redirect()->route('contractor.projects.details', $projectId)
             ->with('success', 'Bid submitted successfully.');
     }
 }
