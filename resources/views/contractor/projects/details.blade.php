@@ -124,7 +124,7 @@
                                             </td>
                                             <td
                                                 class="px-6 py-4 text-right font-mono font-bold text-slate-700 tabular-nums">
-                                                ₹{{ number_format($work->amount, 2) }}
+                                                ₹{{ number_format($total, 2) }}
                                             </td>
                                         </tr>
                                     @endforeach
