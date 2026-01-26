@@ -129,4 +129,38 @@ class ProjectRepository implements ProjectRepositoryInterface
     {
         return User::select('id', 'name')->orderBy('name')->get();
     }
+
+    public function countProjectsByContractor($contractorId)
+    {
+        return Project::whereHas('bids', function ($query) use ($contractorId) {
+            $query->where('contractor_id', $contractorId);
+        })->count();
+    }
+
+    public function getOngoingProjectsByContractor($contractorId)
+    {
+        return Project::whereHas('bids', function ($query) use ($contractorId) {
+            $query->where('contractor_id', $contractorId)
+                  ->where('status', 'awarded');
+        })->with(['bids' => function ($query) use ($contractorId) {
+            $query->where('contractor_id', $contractorId)
+                  ->where('status', 'awarded');
+        }])->get();
+    }
+
+    public function getProjectsByContractor($contractorId)
+    {
+        return Project::whereHas('bids', function ($query) use ($contractorId) {
+            $query->where('contractor_id', $contractorId);
+        })->with(['bids' => function ($query) use ($contractorId) {
+            $query->where('contractor_id', $contractorId);
+        }])->get();
+    }
+
+    public function countBidsByContractor($contractorId)
+    {
+        return \App\Models\Bid::where('contractor_id', $contractorId)->count();
+    }
+
+
 }

@@ -18,6 +18,8 @@ use App\Http\Controllers\Admin\ProjectAwardController;
 use App\Http\Controllers\Admin\Contractor\BidController as ContractorBidController;
 use App\Http\Controllers\Admin\Contractor\ProfileController as ContractorProfileController;
 use App\Http\Controllers\Contractor\ContractorProjectController;
+use App\Http\Controllers\Contractor\DashboardController;
+use App\Http\Controllers\Contractor\ProfileController;
 use App\Http\Controllers\Contractor\ProjectProgressController;
 use Modules\User\Http\Controllers\UserController;
 
@@ -53,7 +55,7 @@ Route::middleware(['web'])->group(function () {
         Route::post('/logout', 'logout')->name('logout');
     });
 
-    Route::middleware(['auth', 'role:admin,contractor'])->group(function () {
+    Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/dashboard', function () {
             return view('admin.pages.dashboard.index');
         })->name('dashboard');
@@ -61,7 +63,7 @@ Route::middleware(['web'])->group(function () {
 
 
 
-    Route::middleware(['auth', 'role:admin,contractor'])
+    Route::middleware(['auth', 'role:admin'])
         ->prefix('admin')
         ->name('admin.')
         ->group(function () {
@@ -97,7 +99,7 @@ Route::middleware(['web'])->group(function () {
             )->name('projects.award');
         });
 
-    Route::middleware(['auth', 'role:admin,contractor'])->group(function () {
+    Route::middleware(['auth', 'role:admin'])->group(function () {
 
 
         Route::get('projects/{id}/add-bid-contractor', [ContractorBidController::class, 'create'])->name('admin.projects.bid.create');
@@ -138,5 +140,12 @@ Route::middleware(['web'])->group(function () {
         Route::get('/projects', [ContractorProjectController::class, 'index'])->name('projects.index');
         Route::get('/projects/{project}', [ContractorProjectController::class, 'show'])->name('projects.show');
         Route::post('/projects/{project}/progress', [ContractorProjectController::class, 'storeProgress'])->name('projects.progress.store');
+
+        Route::get('/dashboard/contractor',[DashboardController::class, 'index'])->name('dashboard.index');
+        Route::get('/update/profile',[ProfileController::class, 'index'])->name('profile.edit');
+        Route::post('/update/profile',[ProfileController::class, 'update'])->name('profile.update');
+        Route::get('/projects/{id}/details', [ContractorProjectController::class, 'details'])->name('projects.details');
+
+        Route::get('project/bids/{id}',[ContractorProjectController::class, 'projectBids'])->name('projects.bids');
     });
 });

@@ -15,4 +15,8 @@ interface ProjectRepositoryInterface
 
     public function filterProjects($filters);
     public function getProjectCreators();
+    public function countProjectsByContractor($contractorId);
+    public function getOngoingProjectsByContractor($contractorId);
+    public function getProjectsByContractor($contractorId);
+    public function countBidsByContractor($contractorId);
 }

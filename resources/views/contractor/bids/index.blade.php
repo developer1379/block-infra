@@ -13,7 +13,7 @@
                     <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Bid Proposals</h1>
                     <p class="text-gray-500 text-sm mt-1">Review and manage {{ $bids->count() }} submitted proposals.</p>
                 </div>
-                <a href="{{ route('admin.projects.index') }}"
+                <a href="{{ route('contractor.projects.index') }}"
                    class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 shadow-sm transition-all">
                     <i class="fa-solid fa-arrow-left"></i> Back
                 </a>

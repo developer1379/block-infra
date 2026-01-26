@@ -21,9 +21,6 @@ class ContractorProjectController extends Controller
         $this->projects = $projects;
         $this->bids = $bids;
     }
-    /**
-     * Display a listing of the projects assigned to this contractor.
-     */
     public function index(Request $request)
     {
         $filters = [
@@ -60,8 +57,7 @@ class ContractorProjectController extends Controller
      */
     public function show(Project $project)
     {
-        // 1. SECURITY: Ensure this project is awarded to the logged-in contractor
-        // Use your specific relationship logic here. Example:
+
         $isAssigned = $project->award && $project->award->awarded_to === Auth::id();
 
         abort_unless($isAssigned, 403, 'You are not authorized to view this project.');
@@ -76,6 +72,12 @@ class ContractorProjectController extends Controller
         ]);
 
         return view('contractor.projects.show', compact('project'));
+    }
+
+    public function details($id)
+    {
+        $project = $this->projects->find($id);
+        return view('contractor.projects.details', compact('project'));
     }
 
     /**

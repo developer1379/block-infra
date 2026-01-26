@@ -14,6 +14,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
@@ -22,7 +25,6 @@
             display: none !important;
         }
 
-        /* Custom Scrollbar for Sidebar */
         .custom-scrollbar::-webkit-scrollbar {
             width: 4px;
         }
@@ -60,14 +62,12 @@
 
                 <p class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 mt-2">Menu</p>
 
-                {{-- Dashboard Link --}}
-                <a href="#"
-                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('contractor.dashboard') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900' }}">
+                <a href="{{ route('contractor.dashboard.index') }}"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('contractor.dashboard.index') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900' }}">
                     <i class="bi bi-grid-1x2-fill"></i>
                     Dashboard
                 </a>
 
-                {{-- Projects Link --}}
                 <a href="{{ route('contractor.projects.index') }}"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('contractor.projects*') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900' }}">
                     <i class="bi bi-briefcase-fill"></i>
@@ -76,14 +76,13 @@
 
                 <p class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 mt-6">Account</p>
 
-                {{-- Profile Link --}}
-                <a href="#"
-                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors">
+                <a href="{{ route('contractor.profile.edit') }}"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors
+                    {{ request()->routeIs('contractor.profile.edit') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900' }}">
                     <i class="bi bi-person-gear"></i>
                     Profile Settings
                 </a>
 
-                {{-- Logout (Mobile only or redundant) --}}
                 <form method="POST" action="{{ route('logout') }}" class="block md:hidden">
                     @csrf
                     <button type="submit"
@@ -148,7 +147,6 @@
 
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50/50">
 
-                {{-- Flash Messages --}}
                 @if (session('success'))
                     <div class="max-w-7xl mx-auto mt-6 px-6" x-data="{ show: true }" x-show="show"
                         x-init="setTimeout(() => show = false, 3000)">
@@ -172,7 +170,6 @@
                     </div>
                 @endif
 
-                {{-- CONTENT SLOT --}}
                 {{ $slot }}
 
                 <footer class="mt-auto py-6 px-6 text-center text-sm text-gray-400 border-t border-gray-200">

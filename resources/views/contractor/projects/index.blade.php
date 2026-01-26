@@ -156,7 +156,7 @@
                             class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-between gap-3">
 
                             {{-- LEFT: Info Link --}}
-                            <a href="{{ auth()->user()->hasRole('contractor') ? route('contractor.projects.show', $project->id) : route('admin.projects.show', $project->id) }}"
+                            <a href="{{ auth()->user()->hasRole('contractor') ? route('contractor.projects.details', $project->id) : route('contractor.projects.details', $project->id) }}"
                                 class="text-sm font-semibold text-gray-500 hover:text-indigo-600 transition-colors">
                                 View Details
                             </a>

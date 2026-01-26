@@ -71,7 +71,7 @@ class AuthController extends Controller
             }
 
             if ($user->hasRole('contractor')) {
-                return redirect()->route('dashboard');
+                return redirect()->route('contractor.dashboard.index');
             }
 
             return redirect()->route('dashboard');
@@ -116,7 +116,7 @@ class AuthController extends Controller
             }
 
             if (auth()->user()->hasRole('contractor')) {
-                return redirect()->route('dashboard');
+                return redirect()->route('contractor.dashboard.index');
             }
 
             return redirect()->route('dashboard');
