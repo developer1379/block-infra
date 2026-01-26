@@ -29,7 +29,11 @@ class ProjectTrackingController extends Controller
             'progressUpdates'
         ])->findOrFail($id);
 
-        return view('admin.pages.projects.tracking', compact('project'));
+        if ($project) {
+            return view('admin.pages.projects.tracking', compact('project'));
+        }else{
+            return redirect()->back()->with('error', 'Project now Awarded Yet.');
+        }
     }
 
     /**
