@@ -25,13 +25,15 @@
 
             {{-- TOP STATS CARDS (Compact) --}}
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {{-- Budget --}}
+
+                {{-- Budget Card (Fixed null crash) --}}
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 flex flex-col justify-between">
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Total Awarded</p>
                             <h3 class="text-xl font-bold text-gray-900 mt-1">
-                                ₹{{ number_format($project->award->bid->bid_amount ?? 0, 2) }}
+                                {{-- SAFE ACCESS: Check if award exists first --}}
+                                ₹{{ number_format($project->award ? $project->award->bid->bid_amount : 0, 2) }}
                             </h3>
                         </div>
                         <div class="p-1.5 bg-green-50 rounded-md text-green-600">
@@ -46,26 +48,43 @@
                     </div>
                 </div>
 
-                {{-- Contractor --}}
+                {{-- Contractor Card (Fixed null crash + Added "Not Awarded" state) --}}
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
                     <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-3">Contractor</p>
-                    <div class="flex items-center gap-3">
-                        @if ($project->award->awardedTo->profile_photo_path)
-                            <img src="{{ asset('storage/' . $project->award->awardedTo->profile_photo_path) }}"
-                                class="h-10 w-10 rounded-full object-cover border border-gray-200">
-                        @else
-                            <div
-                                class="h-10 w-10 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center text-sm font-bold border border-indigo-100">
-                                {{ substr($project->award->awardedTo->name ?? 'U', 0, 1) }}
+
+                    @if ($project->award)
+                        {{-- CASE 1: Project IS Awarded --}}
+                        <div class="flex items-center gap-3">
+                            @if ($project->award->awardedTo->profile_photo_path)
+                                <img src="{{ asset('storage/' . $project->award->awardedTo->profile_photo_path) }}"
+                                    class="h-10 w-10 rounded-full object-cover border border-gray-200">
+                            @else
+                                <div
+                                    class="h-10 w-10 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center text-sm font-bold border border-indigo-100">
+                                    {{ substr($project->award->awardedTo->name ?? 'U', 0, 1) }}
+                                </div>
+                            @endif
+                            <div class="overflow-hidden">
+                                <h4 class="text-sm font-bold text-gray-900 truncate">
+                                    {{ $project->award->awardedTo->name ?? 'Unknown' }}
+                                </h4>
+                                <p class="text-xs text-gray-500 truncate">{{ $project->award->awardedTo->email ?? '-' }}
+                                </p>
                             </div>
-                        @endif
-                        <div class="overflow-hidden">
-                            <h4 class="text-sm font-bold text-gray-900 truncate">
-                                {{ $project->award->awardedTo->name ?? 'Unknown' }}
-                            </h4>
-                            <p class="text-xs text-gray-500 truncate">{{ $project->award->awardedTo->email ?? '-' }}</p>
                         </div>
-                    </div>
+                    @else
+                        {{-- CASE 2: Project NOT Awarded Yet --}}
+                        <div class="flex items-center gap-3 py-1">
+                            <div
+                                class="h-10 w-10 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center border border-gray-200">
+                                <i class="bi bi-person-slash text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-500">Not Awarded Yet</h4>
+                                <p class="text-xs text-gray-400">Waiting for contractor...</p>
+                            </div>
+                        </div>
+                    @endif
                 </div>
 
                 {{-- Progress --}}
@@ -360,7 +379,7 @@
                     } else {
                         backdrop.classList.add('opacity-0');
                         panel.classList.add('opacity-0', 'translate-y-4', 'sm:translate-y-0',
-                        'sm:scale-95');
+                            'sm:scale-95');
                         panel.classList.remove('opacity-100', 'translate-y-0', 'sm:scale-100');
                     }
                 }
