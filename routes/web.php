@@ -102,12 +102,6 @@ Route::middleware(['web'])->group(function () {
     Route::middleware(['auth', 'role:admin'])->group(function () {
 
 
-        Route::get('projects/{id}/add-bid-contractor', [ContractorBidController::class, 'create'])->name('admin.projects.bid.create');
-        Route::post('projects/{id}/add-bid-contractor', [ContractorBidController::class, 'store'])->name('admin.projects.bid.store');
-
-        Route::get('projects/{id}/add-bid', [ContractorBidController::class, 'create'])->name('contractor.projects.bid.create');
-        Route::get('projects/{id}/bids', [ContractorProjectController::class, 'projectBids'])->name('contractor.projects.bids');
-
         Route::post('projects/{id}/add-bid', [ContractorBidController::class, 'store'])->name('contractor.projects.bid.store');
         Route::get('/contractor/profile', [ContractorProfileController::class, 'index'])->name('contractor.profile');
         Route::post('/contractor/profile/update', [ContractorProfileController::class, 'update'])->name('contractor.profile.update');
@@ -141,11 +135,17 @@ Route::middleware(['web'])->group(function () {
         Route::get('/projects/{project}', [ContractorProjectController::class, 'show'])->name('projects.show');
         Route::post('/projects/{project}/progress', [ContractorProjectController::class, 'storeProgress'])->name('projects.progress.store');
 
-        Route::get('/dashboard/contractor',[DashboardController::class, 'index'])->name('dashboard.index');
-        Route::get('/update/profile',[ProfileController::class, 'index'])->name('profile.edit');
-        Route::post('/update/profile',[ProfileController::class, 'update'])->name('profile.update');
+        Route::get('/dashboard/contractor', [DashboardController::class, 'index'])->name('dashboard.index');
+        Route::get('/update/profile', [ProfileController::class, 'index'])->name('profile.edit');
+        Route::post('/update/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::get('/projects/{id}/details', [ContractorProjectController::class, 'details'])->name('projects.details');
 
-        Route::get('project/bids/{id}',[ContractorProjectController::class, 'projectBids'])->name('projects.bids');
+        Route::get('project/bids/{id}', [ContractorProjectController::class, 'projectBids'])->name('projects.bids');
+
+        Route::get('projects/{id}/add-bid-contractor', [ContractorBidController::class, 'create'])->name('admin.projects.bid.create');
+        Route::post('projects/{id}/add-bid-contractor', [ContractorBidController::class, 'store'])->name('admin.projects.bid.store');
+
+        Route::get('projects/{id}/add-bid', [ContractorBidController::class, 'create'])->name('contractor.projects.bid.create');
+        Route::get('projects/{id}/bids', [ContractorProjectController::class, 'projectBids'])->name('contractor.projects.bids');
     });
 });
