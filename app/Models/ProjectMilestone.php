@@ -20,4 +20,9 @@ class ProjectMilestone extends Model
     {
         return $this->belongsTo(Project::class);
     }
+
+    public function comments()
+    {
+        return $this->hasMany(MilestoneComment::class, 'milestone_id');
+    }
 }
