@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class MilestoneComment extends Model
 {
     use HasFactory;
-    protected $guarded = [];
+
+    protected $fillable = ['milestone_id', 'user_id', 'content'];
 
     public function user()
     {
@@ -17,6 +18,6 @@ class MilestoneComment extends Model
 
     public function milestone()
     {
-        return $this->belongsTo(ProjectMilestone::class, 'milestone_id');
+        return $this->belongsTo(ProjectMilestone::class, 'milestone_id'); // Ensure class name matches your milestone model
     }
 }

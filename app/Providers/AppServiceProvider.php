@@ -21,6 +21,8 @@ use App\Repositories\ProjectMilestone\Interfaces\ProjectMilestoneRepositoryInter
 use App\Repositories\ProjectMilestone\ProjectMilestoneRepository;
 use App\Repositories\ProjectProgressUpdate\Interfaces\ProjectProgressUpdateRepositoryInterface;
 use App\Repositories\ProjectProgressUpdate\ProjectProgressUpdateRepository;
+use App\Interfaces\MilestoneCommentRepositoryInterface;
+use App\Repositories\MilestoneCommentRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -38,6 +40,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ContractorProfileRepositoryInterface::class, ContractorProfileRepository::class);
         $this->app->bind(ProjectMilestoneRepositoryInterface::class, ProjectMilestoneRepository::class);
         $this->app->bind(ProjectProgressUpdateRepositoryInterface::class, ProjectProgressUpdateRepository::class);
+        $this->app->bind(MilestoneCommentRepositoryInterface::class, MilestoneCommentRepository::class);
     }
 
     /**
