@@ -120,11 +120,11 @@
                                                 </span>
                                             </td>
                                             <td class="px-6 py-4 text-center font-mono text-slate-600 font-medium">
-                                                {{ $work->pivot->quantity }}
+                                                {{ $work->quantity }}
                                             </td>
                                             <td
                                                 class="px-6 py-4 text-right font-mono font-bold text-slate-700 tabular-nums">
-                                                ₹{{ number_format($total, 2) }}
+                                                ₹{{ number_format($work->amount, 2) }}
                                             </td>
                                         </tr>
                                     @endforeach
