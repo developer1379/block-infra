@@ -124,4 +124,49 @@ class ContractorProjectController extends Controller
         // 6. Redirect back with success message
         return back()->with('success', 'Progress report submitted successfully!');
     }
+
+
+    /**
+     * Show Add Bid Page
+     */
+    public function createBid($projectId)
+    {
+        // Load project via repo
+        $project = $this->projects->find($projectId);
+
+        // Load the view inside admin/pages (as requested)
+        return view('contractor.bids.create', compact('project'));
+    }
+
+    /**
+     * Store Bid (Contractor submission)
+     */
+    public function storeBid(Request $request, $projectId)
+    {
+        $request->validate([
+            'bid_amount'    => 'required|numeric|min:1',
+            'delivery_days' => 'required|integer|min:1',
+            'proposal_text' => 'nullable|string',
+            'proposal_pdf'  => 'nullable|mimes:pdf|max:5120', // max 5MB
+        ]);
+
+        $pdfPath = null;
+
+        if ($request->hasFile('proposal_pdf')) {
+            $pdfPath = $request->file('proposal_pdf')
+                ->store('bids/pdf', 'public');
+        }
+
+        $this->bids->create([
+            'project_id'    => $projectId,
+            'contractor_id' => auth()->id(),
+            'bid_amount'    => $request->bid_amount,
+            'delivery_days' => $request->delivery_days,
+            'proposal_text' => $request->proposal_text,
+            'proposal_pdf'  => $pdfPath,   // save path
+        ]);
+
+        return redirect()->route('contractor.projects.show', $projectId)
+            ->with('success', 'Bid submitted successfully.');
+    }
 }

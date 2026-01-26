@@ -62,7 +62,7 @@
                 </div>
 
                 <div class="p-8">
-                    <form action="{{ route('contractor.projects.bid.store', $project->id) }}" method="POST"
+                    <form action="{{ route('contractor.bids.store', $project->id) }}" method="POST"
                         enctype="multipart/form-data" id="bidForm">
                         @csrf
 

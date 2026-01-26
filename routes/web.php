@@ -148,6 +148,9 @@ Route::middleware(['web'])->group(function () {
 
         Route::get('project/bids/{id}',[ContractorProjectController::class, 'projectBids'])->name('projects.bids');
 
+        Route::get('/project/bids/{id}/create', [ContractorBidController::class, 'create'])->name('bids.create');
+        Route::post('/project/bids/{id}/store', [ContractorBidController::class, 'store'])->name('bids.store');
+
 
     });
 });
