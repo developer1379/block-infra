@@ -19,7 +19,7 @@
     }
 
     /* 2. Professional Google Translate Fixes */
-    /* Remove the unprofessional top banner and reset page position */
+    /* COMPLETELY HIDE THE TOP BAR AND PREVENT LAYOUT JUMPING */
     body {
         top: 0 !important;
         position: static !important;
@@ -33,18 +33,18 @@
         display: none !important;
     }
 
+    /* STYLE THE VISIBLE BUTTON CONTAINER */
     #google_translate_element {
-        min-width: 140px;
+        min-width: 150px;
         display: inline-block;
         vertical-align: middle;
     }
 
-    /* Style the main button box */
     .goog-te-gadget-simple {
         background-color: #ffffff !important;
         border: 1px solid #b3d33c !important;
         /* Brand Lime Green */
-        padding: 5px 10px !important;
+        padding: 6px 12px !important;
         border-radius: 4px !important;
         cursor: pointer !important;
         display: inline-flex !important;
@@ -52,7 +52,7 @@
         text-decoration: none !important;
     }
 
-    /* Hide the Google Icon and "Powered by" text */
+    /* HIDE GOOGLE LOGO BUT KEEP TEXT VISIBLE */
     .goog-te-gadget-icon {
         display: none !important;
     }
@@ -61,7 +61,9 @@
         display: none !important;
     }
 
-    /* CRITICAL FIX: Ensure the selected language text is visible */
+    /* Hides "Powered by" */
+
+    /* FORCE THE LANGUAGE TEXT TO SHOW */
     .goog-te-menu-value {
         margin: 0 !important;
         padding: 0 !important;
@@ -73,12 +75,12 @@
         color: #333 !important;
         font-weight: 700 !important;
         text-transform: uppercase;
-        font-size: 12px !important;
-        text-decoration: none !important;
+        font-size: 11px !important;
+        font-family: inherit !important;
         display: inline-block !important;
     }
 
-    /* Hide the dropdown arrow for a cleaner look */
+    /* HIDE THE DROPDOWN ARROWS */
     .goog-te-menu-value span:nth-child(3),
     .goog-te-menu-value span:nth-child(5) {
         display: none !important;
@@ -135,6 +137,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
                 <a href="{{ route('website.home') }}" class="nav-item nav-link active text-uppercase">Home</a>
+
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle text-uppercase"
                         data-bs-toggle="dropdown">Solutions</a>
@@ -149,10 +152,12 @@
                             Consulting</a>
                     </div>
                 </div>
+
                 <a href="{{ route('website.about') }}" class="nav-item nav-link text-uppercase">About Us</a>
                 <a href="{{ route('website.faqs') }}" class="nav-item nav-link text-uppercase">FAQs</a>
                 <a href="{{ route('website.calculator') }}" class="nav-item nav-link text-uppercase">Calculator</a>
                 <a href="{{ route('website.contact') }}" class="nav-item nav-link text-uppercase">Contact Us</a>
+
                 <a href="{{ route('website.login') }}"
                     class="nav-item nav-link text-dark px-4 ms-3 d-none d-lg-block text-uppercase"
                     style="background-color:#b3d33c; border-radius:0; font-weight:600;">
@@ -162,12 +167,12 @@
         </div>
     </nav>
 </div>
-
+{{-- Google Translate Logic --}}
 <script type="text/javascript">
     function googleTranslateElementInit() {
         new google.translate.TranslateElement({
             pageLanguage: 'en',
-            includedLanguages: 'en,hi',
+            includedLanguages: 'en,hi', // Restricted to English and Hindi only
             layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
             autoDisplay: false
         }, 'google_translate_element');
