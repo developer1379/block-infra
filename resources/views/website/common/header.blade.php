@@ -211,7 +211,7 @@
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
 </script>
 
-<script>
+{{-- <script>
 function removeGoogleBar() {
     const frame = document.querySelector('.goog-te-banner-frame');
     if (frame) {
@@ -221,4 +221,4 @@ function removeGoogleBar() {
 }
 
 setInterval(removeGoogleBar, 500);
-</script>
+</script> --}}
