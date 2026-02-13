@@ -1,7 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     @include('admin.common.head')
+    <style>
+        #google_translate_element {
+            margin: 10px;
+            display: inline-block;
+        }
+
+        .goog-te-banner-frame.skiptranslate {
+            display: none !important;
+        }
+
+        body {
+            top: 0px !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -26,6 +41,9 @@
             </div>
         </div>
 
+        {{-- Add the Translator Dropdown here --}}
+        <div id="google_translate_element" style="position: absolute; right: 20px; z-index: 999; top: 15px;"></div>
+
         @include('admin.common.header')
         @include('admin.common.sidebar')
 
@@ -39,5 +57,17 @@
     </div>
 
     @include('admin.common.scripts')
+
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
+    </script>
 </body>
+
 </html>
