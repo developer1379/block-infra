@@ -3,37 +3,6 @@
 {{-- Head Section --}}
 @include('website.common.head')
 
-<style>
-    /* 1. Hide the Google Translate Top Banner and fix the layout jump */
-    .goog-te-banner-frame.skiptranslate {
-        display: none !important;
-    }
-
-    body {
-        top: 0px !important;
-    }
-
-    /* 2. Hide the 'Original Text' tooltip when hovering over translated words */
-    #goog-gt-tt,
-    .goog-te-balloon-frame {
-        display: none !important;
-    }
-
-    .goog-text-highlight {
-        background: none !important;
-        box-shadow: none !important;
-    }
-
-    /* 3. Hide the Google 'Powered by' logo and branding */
-    .goog-te-gadget img {
-        display: none !important;
-    }
-
-    .goog-te-gadget span {
-        display: none !important;
-    }
-</style>
-
 <body>
 
 
