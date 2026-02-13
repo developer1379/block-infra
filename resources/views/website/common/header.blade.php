@@ -19,32 +19,39 @@
     }
 
     /* 2. Professional Google Translate Fixes */
-    /* COMPLETELY HIDE THE TOP BAR AND PREVENT LAYOUT JUMPING */
+    /* FORCE HIDE the top bar and the "Translated to" banner */
     body {
         top: 0 !important;
         position: static !important;
     }
 
-    .goog-te-banner-frame.skiptranslate {
+    .goog-te-banner-frame.skiptranslate,
+    .goog-te-banner-frame {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    .goog-tooltip,
+    .goog-tooltip:hover {
         display: none !important;
     }
 
-    .goog-te-balloon-frame {
-        display: none !important;
+    .goog-text-highlight {
+        background-color: transparent !important;
+        box-shadow: none !important;
     }
 
-    /* STYLE THE VISIBLE BUTTON CONTAINER */
     #google_translate_element {
         min-width: 150px;
         display: inline-block;
         vertical-align: middle;
     }
 
+    /* Style the main button box */
     .goog-te-gadget-simple {
         background-color: #ffffff !important;
         border: 1px solid #b3d33c !important;
-        /* Brand Lime Green */
-        padding: 6px 12px !important;
+        padding: 5px 10px !important;
         border-radius: 4px !important;
         cursor: pointer !important;
         display: inline-flex !important;
@@ -52,7 +59,7 @@
         text-decoration: none !important;
     }
 
-    /* HIDE GOOGLE LOGO BUT KEEP TEXT VISIBLE */
+    /* Hide the Google Branding but keep text */
     .goog-te-gadget-icon {
         display: none !important;
     }
@@ -61,12 +68,8 @@
         display: none !important;
     }
 
-    /* Hides "Powered by" */
-
-    /* FORCE THE LANGUAGE TEXT TO SHOW */
     .goog-te-menu-value {
         margin: 0 !important;
-        padding: 0 !important;
         display: flex !important;
         align-items: center;
     }
@@ -76,11 +79,10 @@
         font-weight: 700 !important;
         text-transform: uppercase;
         font-size: 11px !important;
-        font-family: inherit !important;
         display: inline-block !important;
     }
 
-    /* HIDE THE DROPDOWN ARROWS */
+    /* Hide arrows */
     .goog-te-menu-value span:nth-child(3),
     .goog-te-menu-value span:nth-child(5) {
         display: none !important;
@@ -129,15 +131,12 @@
                 <i class="bi bi-building me-2" style="color:#b3d33c;"></i>BLOC INFRA
             </h1>
         </a>
-
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
                 <a href="{{ route('website.home') }}" class="nav-item nav-link active text-uppercase">Home</a>
-
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle text-uppercase"
                         data-bs-toggle="dropdown">Solutions</a>
@@ -152,12 +151,10 @@
                             Consulting</a>
                     </div>
                 </div>
-
                 <a href="{{ route('website.about') }}" class="nav-item nav-link text-uppercase">About Us</a>
                 <a href="{{ route('website.faqs') }}" class="nav-item nav-link text-uppercase">FAQs</a>
                 <a href="{{ route('website.calculator') }}" class="nav-item nav-link text-uppercase">Calculator</a>
                 <a href="{{ route('website.contact') }}" class="nav-item nav-link text-uppercase">Contact Us</a>
-
                 <a href="{{ route('website.login') }}"
                     class="nav-item nav-link text-dark px-4 ms-3 d-none d-lg-block text-uppercase"
                     style="background-color:#b3d33c; border-radius:0; font-weight:600;">
@@ -167,16 +164,26 @@
         </div>
     </nav>
 </div>
-{{-- Google Translate Logic --}}
+
+{{-- Script with "Auto-Remove Bar" Logic --}}
 <script type="text/javascript">
     function googleTranslateElementInit() {
         new google.translate.TranslateElement({
             pageLanguage: 'en',
-            includedLanguages: 'en,hi', // Restricted to English and Hindi only
+            includedLanguages: 'en,hi',
             layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
             autoDisplay: false
         }, 'google_translate_element');
     }
+
+    // Forcefully remove the Google top bar if it appears
+    setInterval(function() {
+        var frame = document.querySelector('.goog-te-banner-frame');
+        if (frame) {
+            frame.style.display = 'none';
+            document.body.style.top = '0px';
+        }
+    }, 500);
 </script>
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
 </script>
