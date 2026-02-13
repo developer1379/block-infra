@@ -88,28 +88,6 @@
         display: none !important;
     }
 
-    /* Hide Google top translate bar completely */
-    body {
-        top: 0px !important;
-        position: static !important;
-    }
-
-    /* Hide banner iframe */
-    .goog-te-banner-frame,
-    iframe.goog-te-banner-frame {
-        display: none !important;
-        visibility: hidden !important;
-        height: 0 !important;
-    }
-
-    /* Remove extra spacing Google adds */
-    .skiptranslate {
-        display: none !important;
-    }
-
-    .goog-te-gadget-icon {
-        display: none !important;
-    }
 </style>
 
 <div class="container-fluid bg-light py-1 px-4 d-none d-lg-block border-bottom">
@@ -210,15 +188,3 @@
 </script>
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
 </script>
-
-{{-- <script>
-function removeGoogleBar() {
-    const frame = document.querySelector('.goog-te-banner-frame');
-    if (frame) {
-        frame.remove();
-    }
-    document.body.style.top = '0px';
-}
-
-setInterval(removeGoogleBar, 500);
-</script> --}}
