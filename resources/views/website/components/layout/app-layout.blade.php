@@ -4,22 +4,28 @@
 @include('website.common.head')
 
 <style>
-    /* Keeps the header from jumping down when the translator loads */
-    body {
-        top: 0 !important;
-    }
-
+    /* 1. Hide the Google Translate Top Banner */
     .goog-te-banner-frame.skiptranslate {
         display: none !important;
     }
 
-    .goog-te-gadget {
-        font-family: inherit !important;
+    /* 2. Prevent the body from being pushed down */
+    body {
+        top: 0px !important;
     }
 
-    /* Optional: Hides the "Powered by Google" text for a cleaner look */
-    .goog-te-gadget span {
+    /* 3. Hide the 'Original Text' tooltip that appears on hover (optional but recommended) */
+    .goog-te-balloon-frame {
         display: none !important;
+    }
+
+    #goog-gt-tt {
+        display: none !important;
+    }
+
+    .goog-text-highlight {
+        background: none !important;
+        box-shadow: none !important;
     }
 </style>
 
@@ -42,17 +48,18 @@
     {{-- JavaScript Includes --}}
     @include('website.common.js')
 
-  <script type="text/javascript">
-    function googleTranslateElementInit() {
-        new google.translate.TranslateElement({
-            pageLanguage: 'en',
-            includedLanguages: 'en,hi',
-            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-            autoDisplay: false
-        }, 'google_translate_element');
-    }
-</script>
-<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,hi',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
+    </script>
 
 </body>
 
