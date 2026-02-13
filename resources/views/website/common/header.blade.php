@@ -20,27 +20,10 @@
 
     /* ================= GOOGLE TRANSLATE FIX ================= */
 
-    /* Hide ONLY top translate bar */
-    .goog-te-banner-frame.skiptranslate,
-    .goog-te-banner-frame {
-        display: none !important;
-    }
-
-    body {
-        top: 0px !important;
-        position: static !important;
-    }
-
     /* remove highlight */
     .goog-text-highlight {
         background: transparent !important;
         box-shadow: none !important;
-    }
-
-    /* dropdown container */
-    #google_translate_element {
-        min-width: 150px;
-        display: inline-block;
     }
 
     /* style dropdown */
@@ -50,12 +33,23 @@
         padding: 6px 10px !important;
         border-radius: 4px !important;
         font-size: 12px !important;
-        cursor: pointer;
     }
 
-    /* hide google icon */
     .goog-te-gadget-icon {
         display: none !important;
+    }
+
+    /* ================= MARGIN WHEN GOOGLE BAR APPEARS ================= */
+
+    /* smooth animation */
+    .translate-wrapper {
+        transition: margin-top 0.25s ease;
+    }
+
+    /* push down when translated */
+    .translate-wrapper.translated {
+        margin-top: 42px;
+        /* height of google bar */
     }
 </style>
 
@@ -152,27 +146,30 @@
     </nav>
 </div>
 
-
-<!-- GOOGLE TRANSLATE SCRIPT -->
 <script>
-    function googleTranslateElementInit() {
-        new google.translate.TranslateElement({
-            pageLanguage: 'en',
-            includedLanguages: 'en,hi',
-            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-            autoDisplay: false
-        }, 'google_translate_element');
+function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,hi',
+        autoDisplay: false
+    }, 'google_translate_element');
+}
+
+/* detect google bar and push layout */
+setInterval(function () {
+
+    const banner = document.querySelector('.goog-te-banner-frame');
+    const wrapper = document.querySelector('.translate-wrapper');
+
+    if (!wrapper) return;
+
+    if (banner) {
+        wrapper.classList.add("translated");
+    } else {
+        wrapper.classList.remove("translated");
     }
 
-    /* remove top bar continuously */
-    function removeGoogleBanner() {
-        const banner = document.querySelector('.goog-te-banner-frame');
-        if (banner) {
-            banner.style.display = 'none';
-        }
-        document.body.style.top = '0px';
-    }
-    setInterval(removeGoogleBanner, 500);
+}, 500);
 </script>
 
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
