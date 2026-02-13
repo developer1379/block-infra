@@ -4,28 +4,33 @@
 @include('website.common.head')
 
 <style>
-    /* 1. Hide the Google Translate Top Banner */
+    /* 1. Hide the Google Translate Top Banner and fix the layout jump */
     .goog-te-banner-frame.skiptranslate {
         display: none !important;
     }
 
-    /* 2. Prevent the body from being pushed down */
     body {
         top: 0px !important;
     }
 
-    /* 3. Hide the 'Original Text' tooltip that appears on hover (optional but recommended) */
+    /* 2. Hide the 'Original Text' tooltip when hovering over translated words */
+    #goog-gt-tt,
     .goog-te-balloon-frame {
-        display: none !important;
-    }
-
-    #goog-gt-tt {
         display: none !important;
     }
 
     .goog-text-highlight {
         background: none !important;
         box-shadow: none !important;
+    }
+
+    /* 3. Hide the Google 'Powered by' logo and branding */
+    .goog-te-gadget img {
+        display: none !important;
+    }
+
+    .goog-te-gadget span {
+        display: none !important;
     }
 </style>
 
@@ -48,18 +53,18 @@
     {{-- JavaScript Includes --}}
     @include('website.common.js')
 
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'en',
-                includedLanguages: 'en,hi',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-                autoDisplay: false
-            }, 'google_translate_element');
-        }
-    </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
-    </script>
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            includedLanguages: 'en,hi',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: false, // This helps prevent the intrusive pop-ups
+            multilanguagePage: true
+        }, 'google_translate_element');
+    }
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </body>
 

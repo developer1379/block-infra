@@ -6,11 +6,13 @@
         padding: 0;
         min-width: 200px;
     }
+
     .navbar .dropdown-menu .dropdown-item {
         color: #ddd !important;
         padding: 10px 20px;
         transition: all 0.3s ease;
     }
+
     .navbar .dropdown-menu .dropdown-item:hover,
     .navbar .dropdown-menu .dropdown-item:focus {
         background-color: #b3d33c !important;
@@ -22,6 +24,7 @@
         display: inline-block;
         vertical-align: middle;
     }
+
     .goog-te-gadget-simple {
         background-color: #ffffff !important;
         border: 1px solid #b3d33c !important;
@@ -29,17 +32,27 @@
         border-radius: 2px !important;
         cursor: pointer;
     }
-    .goog-te-gadget img, .goog-te-gadget span, .goog-te-menu-value span:nth-child(3) {
+
+    .goog-te-gadget img,
+    .goog-te-gadget span,
+    .goog-te-menu-value span:nth-child(3) {
         display: none !important;
     }
+
     .goog-te-menu-value span {
         color: #333 !important;
         font-weight: 600;
         text-transform: uppercase;
         font-size: 11px;
     }
-    body { top: 0 !important; }
-    .goog-te-banner-frame.skiptranslate { display: none !important; }
+
+    body {
+        top: 0 !important;
+    }
+
+    .goog-te-banner-frame.skiptranslate {
+        display: none !important;
+    }
 </style>
 
 <div class="container-fluid bg-light py-1 px-4 d-none d-lg-block border-bottom">
@@ -58,7 +71,8 @@
                 <i class="bi bi-envelope-fill me-2" style="color:#b3d33c; font-size:1.1rem;"></i>
                 <div class="text-start">
                     <small class="d-block text-uppercase fw-semibold text-dark">Email Us</small>
-                    <small><a href="mailto:info@blocinfra.com" class="text-muted text-decoration-none">info@blocinfra.com</a></small>
+                    <small><a href="mailto:info@blocinfra.com"
+                            class="text-muted text-decoration-none">info@blocinfra.com</a></small>
                 </div>
             </div>
         </div>
@@ -78,7 +92,7 @@
 </div>
 <div class="container-fluid sticky-top bg-dark shadow-sm px-4 pe-lg-0">
     <nav class="navbar navbar-expand-lg navbar-dark py-2 py-lg-0">
-        <a href="{{ route('website.home') }}" class="navbar-brand">
+        <a href="{{ route('website.home') }}" class="navbar-brand notranslate">
             <h1 class="m-0 fs-2 text-uppercase text-white">
                 <i class="bi bi-building me-2" style="color:#b3d33c;"></i>BLOC INFRA
             </h1>
@@ -93,12 +107,17 @@
                 <a href="{{ route('website.home') }}" class="nav-item nav-link active text-uppercase">Home</a>
 
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle text-uppercase" data-bs-toggle="dropdown">Solutions</a>
+                    <a href="#" class="nav-link dropdown-toggle text-uppercase"
+                        data-bs-toggle="dropdown">Solutions</a>
                     <div class="dropdown-menu m-0 bg-dark border-0 rounded-0">
-                        <a href="{{ route('website.construction') }}" class="dropdown-item text-white-50">Construction</a>
-                        <a href="{{ route('website.infrastructure') }}" class="dropdown-item text-white-50">Infrastructure</a>
-                        <a href="{{ route('website.project-management') }}" class="dropdown-item text-white-50">Project Management</a>
-                        <a href="{{ route('website.design-consulting') }}" class="dropdown-item text-white-50">Design & Consulting</a>
+                        <a href="{{ route('website.construction') }}"
+                            class="dropdown-item text-white-50">Construction</a>
+                        <a href="{{ route('website.infrastructure') }}"
+                            class="dropdown-item text-white-50">Infrastructure</a>
+                        <a href="{{ route('website.project-management') }}" class="dropdown-item text-white-50">Project
+                            Management</a>
+                        <a href="{{ route('website.design-consulting') }}" class="dropdown-item text-white-50">Design &
+                            Consulting</a>
                     </div>
                 </div>
 
