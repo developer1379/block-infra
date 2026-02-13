@@ -1,41 +1,20 @@
 {{-- Professional Google Translate Styling --}}
 <style>
-    /* ===== GOOGLE TRANSLATE FIX ===== */
+    /* ===== GOOGLE TRANSLATE CLEAN FIX ===== */
 
-    /* reset body */
-    body {
-        top: 0 !important;
-        position: static !important;
-    }
-
-    /* remove tooltip + highlight */
-    .goog-tooltip,
-    .goog-tooltip:hover {
-        display: none !important;
-    }
-
+    /* remove highlight */
     .goog-text-highlight {
         background: transparent !important;
         box-shadow: none !important;
     }
 
-    /* ===== WHEN GOOGLE BAR APPEARS ===== */
-    body.translated header.sticky {
-        margin-top: 40px;
-        /* height of google bar */
+    /* remove tooltip */
+    .goog-tooltip,
+    .goog-tooltip:hover {
+        display: none !important;
     }
 
-    /* smooth animation */
-    header.sticky {
-        transition: margin-top .25s ease;
-    }
-
-    /* ===== STYLE DROPDOWN ===== */
-    #google_translate_element {
-        display: inline-block;
-        padding-top: 4px;
-    }
-
+    /* style dropdown */
     .goog-te-gadget-simple {
         background: #f1f5f9 !important;
         border: 1px solid #e2e8f0 !important;
@@ -54,6 +33,18 @@
     .goog-te-menu-value span {
         font-size: 11px !important;
         text-transform: uppercase;
+    }
+
+    /* ===== PUSH HEADER WHEN GOOGLE BAR APPEARS ===== */
+
+    header.sticky {
+        transition: margin-top .25s ease;
+    }
+
+    /* when translate active */
+    header.sticky.translated {
+        margin-top: 42px;
+        /* height of google bar */
     }
 </style>
 
@@ -150,6 +141,7 @@
     </div>
 </header>
 <script>
+    /* INIT GOOGLE */
     function googleTranslateElementInit() {
         new google.translate.TranslateElement({
             pageLanguage: 'en',
@@ -158,18 +150,23 @@
         }, 'google_translate_element');
     }
 
-    /* detect if top bar exists */
-    setInterval(function() {
+    /* DETECT GOOGLE TOP BAR */
+    function handleTranslateBar() {
 
         const banner = document.querySelector('.goog-te-banner-frame');
+        const header = document.querySelector('header.sticky');
+
+        if (!header) return;
 
         if (banner) {
-            document.body.classList.add("translated");
+            header.classList.add("translated");
         } else {
-            document.body.classList.remove("translated");
+            header.classList.remove("translated");
         }
+    }
 
-    }, 500);
+    /* run repeatedly */
+    setInterval(handleTranslateBar, 500);
 </script>
 
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
