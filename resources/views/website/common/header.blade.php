@@ -18,8 +18,8 @@
         color: #000 !important;
     }
 
-    /* 2. Professional Google Translate Styling */
-    /* Prevents the unprofessional top bar and layout jumping */
+    /* 2. Professional Google Translate Fixes */
+    /* Remove the unprofessional top banner and reset page position */
     body {
         top: 0 !important;
         position: static !important;
@@ -29,49 +29,58 @@
         display: none !important;
     }
 
+    .goog-te-balloon-frame {
+        display: none !important;
+    }
+
     #google_translate_element {
-        min-width: 160px;
+        min-width: 140px;
         display: inline-block;
         vertical-align: middle;
     }
 
-    /* The Button Container */
+    /* Style the main button box */
     .goog-te-gadget-simple {
         background-color: #ffffff !important;
         border: 1px solid #b3d33c !important;
         /* Brand Lime Green */
-        padding: 6px 12px !important;
+        padding: 5px 10px !important;
         border-radius: 4px !important;
         cursor: pointer !important;
-        display: inline-block !important;
+        display: inline-flex !important;
+        align-items: center;
+        text-decoration: none !important;
     }
 
-    /* Hide the Google G Icon */
+    /* Hide the Google Icon and "Powered by" text */
     .goog-te-gadget-icon {
         display: none !important;
     }
 
-    /* Hide "Powered by Google" text but keep the language name visible */
-    .goog-te-gadget span {
+    .goog-te-gadget>span {
         display: none !important;
     }
 
-    #google_translate_element .goog-te-gadget-simple>span {
-        display: inline-block !important;
-        /* Forces the language name to show */
+    /* CRITICAL FIX: Ensure the selected language text is visible */
+    .goog-te-menu-value {
+        margin: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+        align-items: center;
     }
 
-    /* Style the Language Text */
     .goog-te-menu-value span {
         color: #333 !important;
         font-weight: 700 !important;
         text-transform: uppercase;
-        font-size: 11px !important;
-        font-family: inherit !important;
+        font-size: 12px !important;
+        text-decoration: none !important;
+        display: inline-block !important;
     }
 
-    /* Remove the little arrow */
-    .goog-te-menu-value span:nth-child(3) {
+    /* Hide the dropdown arrow for a cleaner look */
+    .goog-te-menu-value span:nth-child(3),
+    .goog-te-menu-value span:nth-child(5) {
         display: none !important;
     }
 </style>
@@ -126,7 +135,6 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto py-0">
                 <a href="{{ route('website.home') }}" class="nav-item nav-link active text-uppercase">Home</a>
-
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle text-uppercase"
                         data-bs-toggle="dropdown">Solutions</a>
@@ -141,12 +149,10 @@
                             Consulting</a>
                     </div>
                 </div>
-
                 <a href="{{ route('website.about') }}" class="nav-item nav-link text-uppercase">About Us</a>
                 <a href="{{ route('website.faqs') }}" class="nav-item nav-link text-uppercase">FAQs</a>
                 <a href="{{ route('website.calculator') }}" class="nav-item nav-link text-uppercase">Calculator</a>
                 <a href="{{ route('website.contact') }}" class="nav-item nav-link text-uppercase">Contact Us</a>
-
                 <a href="{{ route('website.login') }}"
                     class="nav-item nav-link text-dark px-4 ms-3 d-none d-lg-block text-uppercase"
                     style="background-color:#b3d33c; border-radius:0; font-weight:600;">
@@ -156,12 +162,12 @@
         </div>
     </nav>
 </div>
-{{-- Google Translate Logic --}}
+
 <script type="text/javascript">
     function googleTranslateElementInit() {
         new google.translate.TranslateElement({
             pageLanguage: 'en',
-            includedLanguages: 'en,hi', // Restricts to English and Hindi only
+            includedLanguages: 'en,hi',
             layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
             autoDisplay: false
         }, 'google_translate_element');
