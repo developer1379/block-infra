@@ -25,11 +25,6 @@
 
 <body>
 
-    {{-- Header --}}
-    <div style="display: flex; justify-content: flex-end; padding: 5px 20px; background: #f8f9fa;">
-        {{-- This creates a small top-bar area specifically for the translator --}}
-        <div id="google_translate_element"></div>
-    </div>
 
     @include('website.common.header')
     {{-- If you use Blade components for header, you can replace the above line with: --}}
