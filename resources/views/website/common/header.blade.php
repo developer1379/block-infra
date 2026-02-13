@@ -1,5 +1,5 @@
 <style>
-    /* Dropdown Menu Fix for Dark Navbar */
+    /* 1. Navbar & Dropdown Styling */
     .navbar .dropdown-menu {
         background-color: #0f1114 !important;
         border: none;
@@ -13,44 +13,65 @@
         transition: all 0.3s ease;
     }
 
-    .navbar .dropdown-menu .dropdown-item:hover,
-    .navbar .dropdown-menu .dropdown-item:focus {
+    .navbar .dropdown-menu .dropdown-item:hover {
         background-color: #b3d33c !important;
         color: #000 !important;
     }
 
-    /* Google Translate Integration */
+    /* 2. Professional Google Translate Styling */
+    /* Prevents the unprofessional top bar and layout jumping */
+    body {
+        top: 0 !important;
+        position: static !important;
+    }
+
+    .goog-te-banner-frame.skiptranslate {
+        display: none !important;
+    }
+
     #google_translate_element {
+        min-width: 160px;
         display: inline-block;
         vertical-align: middle;
     }
 
+    /* The Button Container */
     .goog-te-gadget-simple {
         background-color: #ffffff !important;
         border: 1px solid #b3d33c !important;
-        padding: 4px 8px !important;
-        border-radius: 2px !important;
-        cursor: pointer;
+        /* Brand Lime Green */
+        padding: 6px 12px !important;
+        border-radius: 4px !important;
+        cursor: pointer !important;
+        display: inline-block !important;
     }
 
-    .goog-te-gadget img,
-    .goog-te-gadget span,
-    .goog-te-menu-value span:nth-child(3) {
+    /* Hide the Google G Icon */
+    .goog-te-gadget-icon {
         display: none !important;
     }
 
+    /* Hide "Powered by Google" text but keep the language name visible */
+    .goog-te-gadget span {
+        display: none !important;
+    }
+
+    #google_translate_element .goog-te-gadget-simple>span {
+        display: inline-block !important;
+        /* Forces the language name to show */
+    }
+
+    /* Style the Language Text */
     .goog-te-menu-value span {
         color: #333 !important;
-        font-weight: 600;
+        font-weight: 700 !important;
         text-transform: uppercase;
-        font-size: 11px;
+        font-size: 11px !important;
+        font-family: inherit !important;
     }
 
-    body {
-        top: 0 !important;
-    }
-
-    .goog-te-banner-frame.skiptranslate {
+    /* Remove the little arrow */
+    .goog-te-menu-value span:nth-child(3) {
         display: none !important;
     }
 </style>
@@ -135,3 +156,16 @@
         </div>
     </nav>
 </div>
+{{-- Google Translate Logic --}}
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            includedLanguages: 'en,hi', // Restricts to English and Hindi only
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: false
+        }, 'google_translate_element');
+    }
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
+</script>
