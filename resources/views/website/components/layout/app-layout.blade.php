@@ -59,7 +59,7 @@
             pageLanguage: 'en',
             includedLanguages: 'en,hi',
             layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-            autoDisplay: false, // This helps prevent the intrusive pop-ups
+            autoDisplay: true, // This helps prevent the intrusive pop-ups
             multilanguagePage: true
         }, 'google_translate_element');
     }
