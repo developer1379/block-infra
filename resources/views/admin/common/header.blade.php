@@ -1,47 +1,48 @@
 {{-- Professional Google Translate Styling --}}
 <style>
-    /* Prevents the unprofessional top bar and layout jumping */
+    /* ===== GOOGLE TRANSLATE FIX ===== */
+
+    /* reset body */
     body {
         top: 0 !important;
         position: static !important;
     }
 
-    .goog-te-banner-frame.skiptranslate,
-    .goog-te-banner-frame {
-        display: none !important;
-        visibility: hidden !important;
-    }
-
+    /* remove tooltip + highlight */
     .goog-tooltip,
     .goog-tooltip:hover {
         display: none !important;
     }
 
     .goog-text-highlight {
-        background-color: transparent !important;
+        background: transparent !important;
         box-shadow: none !important;
     }
 
-    /* Style the widget to match your clean UI */
+    /* ===== WHEN GOOGLE BAR APPEARS ===== */
+    body.translated header.sticky {
+        margin-top: 40px;
+        /* height of google bar */
+    }
+
+    /* smooth animation */
+    header.sticky {
+        transition: margin-top .25s ease;
+    }
+
+    /* ===== STYLE DROPDOWN ===== */
     #google_translate_element {
         display: inline-block;
         padding-top: 4px;
     }
 
     .goog-te-gadget-simple {
-        background-color: #f1f5f9 !important;
-        /* Matches your bg-slate-100 search bar */
+        background: #f1f5f9 !important;
         border: 1px solid #e2e8f0 !important;
         padding: 6px 10px !important;
         border-radius: 9999px !important;
-        /* Full rounded to match search bar */
-        cursor: pointer !important;
-        display: inline-flex !important;
-        align-items: center;
-        text-decoration: none !important;
     }
 
-    /* Hide Google branding but keep English/Hindi text visible */
     .goog-te-gadget-icon {
         display: none !important;
     }
@@ -50,41 +51,9 @@
         display: none !important;
     }
 
-    .goog-te-menu-value {
-        margin: 0 !important;
-        display: flex !important;
-        align-items: center;
-    }
-
     .goog-te-menu-value span {
-        color: #334155 !important;
-        /* text-slate-700 */
-        font-weight: 500 !important;
-        text-transform: uppercase;
         font-size: 11px !important;
-        display: inline-block !important;
-    }
-
-    /* Hide arrows and Google branding separators */
-    .goog-te-menu-value span:nth-child(3),
-    .goog-te-menu-value span:nth-child(5) {
-        display: none !important;
-    }
-
-    /* default state */
-    body {
-        top: 0 !important;
-    }
-
-    /* when google adds banner */
-    body.translated {
-        margin-top: 40px;
-        /* height of google bar */
-    }
-
-    /* optional smoother look */
-    header.sticky {
-        transition: margin-top 0.2s ease;
+        text-transform: uppercase;
     }
 </style>
 
