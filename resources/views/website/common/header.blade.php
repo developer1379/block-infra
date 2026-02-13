@@ -177,14 +177,7 @@
         }, 'google_translate_element');
     }
 
-    // Forcefully remove the Google top bar if it appears
-    setInterval(function() {
-        var frame = document.querySelector('.goog-te-banner-frame');
-        if (frame) {
-            frame.style.display = 'none';
-            document.body.style.top = '0px';
-        }
-    }, 500);
+
 </script>
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
 </script>
