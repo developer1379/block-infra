@@ -1,6 +1,6 @@
 {
     "name": "Bloc Infra APP",
-    "short_name": "LPT",
+    "short_name": "Bloc Infra",
     "background_color": "#6777ef",
     "display": "fullscreen",
     "description": "A Progressive Web Application setup for Laravel projects.",
