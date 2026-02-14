@@ -49,8 +49,7 @@
             display: block;
         }
     </style>
-    @if (Request::routeIs('website.login'))
-        <link rel="manifest" href="/manifest.json">
-        @PwaHead
-    @endif
+    <link rel="manifest" href="/manifest.json">
+    @PwaHead
+
 </head>
