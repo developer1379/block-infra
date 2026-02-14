@@ -136,9 +136,9 @@
                 <a href="{{ route('website.contact') }}" class="nav-item nav-link text-uppercase">Contact Us</a>
 
                 <a href="{{ route('website.login') }}"
-                    class="nav-item nav-link text-dark px-4 ms-3 d-none d-lg-block text-uppercase"
-                    style="background:#b3d33c;font-weight:600;">
-                    Login <i class="bi bi-arrow-right"></i>
+                    class="nav-item nav-link text-dark px-4 ms-lg-3 my-2 my-lg-0 text-uppercase d-inline-flex align-self-start align-items-center"
+                    style="background:#b3d33c; font-weight:600; border-radius: 4px;">
+                    Login <i class="bi bi-arrow-right ms-2"></i>
                 </a>
 
             </div>
@@ -147,29 +147,29 @@
 </div>
 
 <script>
-function googleTranslateElementInit() {
-    new google.translate.TranslateElement({
-        pageLanguage: 'en',
-        includedLanguages: 'en,hi',
-        autoDisplay: false
-    }, 'google_translate_element');
-}
-
-/* detect google bar and push layout */
-setInterval(function () {
-
-    const banner = document.querySelector('.goog-te-banner-frame');
-    const wrapper = document.querySelector('.translate-wrapper');
-
-    if (!wrapper) return;
-
-    if (banner) {
-        wrapper.classList.add("translated");
-    } else {
-        wrapper.classList.remove("translated");
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            includedLanguages: 'en,hi',
+            autoDisplay: false
+        }, 'google_translate_element');
     }
 
-}, 500);
+    /* detect google bar and push layout */
+    setInterval(function() {
+
+        const banner = document.querySelector('.goog-te-banner-frame');
+        const wrapper = document.querySelector('.translate-wrapper');
+
+        if (!wrapper) return;
+
+        if (banner) {
+            wrapper.classList.add("translated");
+        } else {
+            wrapper.classList.remove("translated");
+        }
+
+    }, 500);
 </script>
 
 <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
