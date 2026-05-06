@@ -20,6 +20,7 @@ class DashboardController extends Controller
                 'total_projects' => Project::count(),
                 'total_workers' => Worker::count(),
                 'total_payments' => WorkerPayment::sum('amount'),
+                'pending_payments' => WorkerPayment::where('status', 'pending')->count(),
                 'active_projects' => Project::where('status', 'ongoing')->count(),
                 'pending_projects' => Project::where('status', 'open')->count(),
             ];

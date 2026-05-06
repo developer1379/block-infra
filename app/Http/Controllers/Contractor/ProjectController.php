@@ -57,21 +57,42 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-
         $isAssigned = $project->award && $project->award->awarded_to === Auth::id();
-
         abort_unless($isAssigned, 403, 'You are not authorized to view this project.');
 
-        // 2. Load necessary data for the view
         $project->load([
             'milestones',
             'progressUpdates' => function ($query) {
-                $query->latest(); // Order history by newest first
+                $query->latest();
             },
-            'award.bid' // To show the bid amount
+            'award.bid'
         ]);
 
-        return view('contractor.projects.show', compact('project'));
+        // Fetch additional management data
+        $workerCount = \App\Models\Worker::where('contractor_id', Auth::user()->contractor->id)->count();
+        $attendanceToday = \App\Models\ProjectAttendance::where('project_id', $project->id)
+            ->where('attendance_date', date('Y-m-d'))
+            ->count();
+            
+        // 1. Linked Workers (Active on this project based on attendance)
+        $linkedWorkers = \App\Models\Worker::whereHas('attendances', function($q) use ($project) {
+                $q->where('project_id', $project->id);
+            })
+            ->withCount(['attendances' => function($q) use ($project) {
+                $q->where('project_id', $project->id);
+            }])
+            ->get();
+
+        // 2. Total Payouts for this project
+        $totalProjectPayouts = \App\Models\WorkerPayment::where('project_id', $project->id)->sum('amount');
+
+        $materialLogs = \App\Models\MaterialInventory::where('project_id', $project->id)
+            ->with('material')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        return view('contractor.projects.show', compact('project', 'workerCount', 'attendanceToday', 'materialLogs', 'linkedWorkers', 'totalProjectPayouts'));
     }
 
     public function details($id)
@@ -93,22 +114,36 @@ class ProjectController extends Controller
         $request->validate([
             'progress_percentage' => 'required|integer|min:0|max:100',
             'report_description'  => 'required|string|max:2000',
-            'report_file'         => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120', // Max 5MB
+            'report_file'         => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120',
+            'verification_photo'  => 'nullable|string', // Base64 from camera
+            'latitude'            => 'nullable|numeric',
+            'longitude'           => 'nullable|numeric',
+            'location_address'    => 'nullable|string',
         ]);
 
-        // 3. Handle File Upload
+        // 3. Handle File Upload or Camera Photo
         $filePath = null;
-        if ($request->hasFile('report_file')) {
-            // Stores in storage/app/public/progress-reports
+        if ($request->filled('verification_photo')) {
+            $img = $request->verification_photo;
+            $img = str_replace('data:image/jpeg;base64,', '', $img);
+            $img = str_replace(' ', '+', $img);
+            $data = base64_decode($img);
+            $fileName = 'report_' . time() . '_' . uniqid() . '.jpg';
+            $filePath = 'progress-reports/' . $fileName;
+            Storage::disk('public')->put($filePath, $data);
+        } elseif ($request->hasFile('report_file')) {
             $filePath = $request->file('report_file')->store('progress-reports', 'public');
         }
 
         // 4. Create the History Record
         $project->progressUpdates()->create([
-            'user_id'             => Auth::id(), // Optional: track who posted it
+            'user_id'             => Auth::id(),
             'progress_percentage' => $request->progress_percentage,
             'report_description'  => $request->report_description,
             'report_file_path'    => $filePath,
+            'latitude'            => $request->latitude,
+            'longitude'           => $request->longitude,
+            'location_address'    => $request->location_address,
         ]);
 
         // 5. Update the Main Project Progress
@@ -116,12 +151,6 @@ class ProjectController extends Controller
             'current_progress' => $request->progress_percentage
         ]);
 
-        // Optional: If progress is 100%, you might want to change status to 'completed_pending_review'
-        if ($request->progress_percentage == 100) {
-            // $project->update(['status' => 'completed']);
-        }
-
-        // 6. Redirect back with success message
         return back()->with('success', 'Progress report submitted successfully!');
     }
 

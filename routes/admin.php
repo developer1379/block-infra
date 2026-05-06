@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\WorkerController;
 use App\Http\Controllers\Admin\MaterialController;
 use App\Http\Controllers\Admin\FinanceController;
 use App\Http\Controllers\Admin\SiteReportController;
+use App\Http\Controllers\Admin\WorkerPaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +51,7 @@ Route::patch('contractor-documents/{id}/verify', [ContractorController::class, '
 Route::get('projects/{id}/bids', [AdminBidController::class, 'projectBids'])->name('projects.bids');
 Route::post('projects/{projectId}/award/{bidId}', [ProjectAwardController::class, 'award'])->name('projects.award');
 Route::get('projects/{project}/payments', [ProjectController::class, 'payments'])->name('projects.payments');
+Route::post('projects/{id}/payments', [ProjectController::class, 'storePayment'])->name('projects.payments.store');
 
 // Project Tracking & Milestones
 Route::get('/projects/{project}/track', [ProjectController::class, 'track'])->name('projects.track');
@@ -65,3 +67,8 @@ Route::resource('workers', WorkerController::class);
 Route::resource('materials', MaterialController::class);
 Route::resource('finance', FinanceController::class);
 Route::resource('site-reports', SiteReportController::class);
+
+// Worker Payment Verification
+Route::get('worker-payments', [WorkerPaymentController::class, 'index'])->name('worker-payments.index');
+Route::patch('worker-payments/{id}/verify', [WorkerPaymentController::class, 'verify'])->name('worker-payments.verify');
+Route::patch('worker-payments/{id}/reject', [WorkerPaymentController::class, 'reject'])->name('worker-payments.reject');

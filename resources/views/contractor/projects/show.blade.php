@@ -7,7 +7,7 @@
                     <i class="bi bi-arrow-left"></i>
                 </a>
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900">{{ $project->name }}</h1>
+                    <h1 class="text-2xl font-bold text-gray-900">{{ $project->title }}</h1>
                     <div class="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">
                         <span class="bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded border border-indigo-100">
                             {{ __('Project Workspace') }}
@@ -26,148 +26,245 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Left Column: Update & Info -->
-            <div class="lg:col-span-1 space-y-8">
-                <!-- Progress Update Card -->
-                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden group">
-                    <div class="p-6 bg-indigo-600 text-white flex justify-between items-center">
-                        <h3 class="font-bold flex items-center gap-2">
-                            <i class="bi bi-pencil-square"></i> {{ __('Update Progress') }}
-                        </h3>
-                        <span class="text-[10px] bg-white/20 px-2 py-1 rounded-lg backdrop-blur-sm uppercase font-bold tracking-wider">
-                            {{ __('Daily Report') }}
-                        </span>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- Sidebar: Stats & Financials (4 columns) -->
+            <div class="lg:col-span-4 space-y-8">
+                <!-- Workforce Stats Card -->
+                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 group hover:border-indigo-100 transition-all">
+                    <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <i class="bi bi-people text-indigo-600"></i> {{ __('Workforce Status') }}
+                    </h4>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="bg-gray-50 rounded-2xl p-4">
+                            <p class="text-[8px] font-black text-gray-400 uppercase tracking-tighter">{{ __('Assigned') }}</p>
+                            <p class="text-xl font-black text-gray-900">{{ $workerCount }}</p>
+                        </div>
+                        <div class="bg-indigo-50 rounded-2xl p-4">
+                            <p class="text-[8px] font-black text-indigo-400 uppercase tracking-tighter">{{ __('On Site') }}</p>
+                            <p class="text-xl font-black text-indigo-600">{{ $attendanceToday }}</p>
+                        </div>
                     </div>
-
-                    <div class="p-8">
-                        <form action="{{ route('contractor.projects.progress.store', $project->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
-                            @csrf
-
-                            <!-- Progress Slider -->
-                            <div x-data="{ progress: {{ $project->current_progress ?? 0 }} }">
-                                <div class="flex justify-between items-end mb-3">
-                                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ __('Overall Completion') }}</label>
-                                    <span class="text-xl font-black text-indigo-600" x-text="progress + '%'"></span>
+                    
+                    <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">{{ __('Linked Workforce') }}</h4>
+                    <div class="space-y-3 max-h-[250px] overflow-y-auto custom-scrollbar pr-2">
+                        @forelse($linkedWorkers as $worker)
+                            <div class="flex items-center gap-3 p-3 rounded-2xl bg-gray-50/50 border border-transparent hover:border-indigo-100 hover:bg-white transition-all">
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white text-[10px] font-black">
+                                    {{ substr($worker->name, 0, 1) }}
                                 </div>
-                                <input type="range" name="progress_percentage" x-model="progress" min="0" max="100" step="1" 
-                                    class="w-full h-2 bg-gray-100 rounded-lg appearance-none cursor-pointer accent-indigo-600">
-                                <div class="flex justify-between mt-2">
-                                    <span class="text-[8px] font-bold text-gray-300">0%</span>
-                                    <span class="text-[8px] font-bold text-gray-300">100%</span>
-                                </div>
-                            </div>
-
-                            <!-- Description -->
-                            <div class="space-y-2">
-                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ __('Work Summary') }}</label>
-                                <textarea name="report_description" rows="4" required 
-                                    class="w-full rounded-2xl border-gray-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm bg-gray-50/50 p-4 transition-all" 
-                                    placeholder="{{ __('What milestones were achieved today?') }}"></textarea>
-                            </div>
-
-                            <!-- File Upload -->
-                            <div class="space-y-2">
-                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ __('Site Proof / Documents') }}</label>
-                                <div class="relative group/file">
-                                    <input type="file" name="report_file" 
-                                        class="block w-full text-xs text-gray-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all cursor-pointer">
-                                </div>
-                                <p class="text-[10px] text-gray-400 italic mt-1">{{ __('Upload site photos, invoices, or progress charts.') }}</p>
-                            </div>
-
-                            <button type="submit" class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl shadow-xl shadow-indigo-100 transition-all transform hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2">
-                                <i class="bi bi-cloud-arrow-up"></i>
-                                {{ __('Submit Daily Report') }}
-                            </button>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Milestones Card -->
-                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 space-y-6">
-                    <div class="flex items-center justify-between border-b border-gray-50 pb-4">
-                        <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ __('Project Milestones') }}</h4>
-                        <i class="bi bi-flag text-indigo-600"></i>
-                    </div>
-                    <div class="space-y-4">
-                        @forelse($project->milestones as $milestone)
-                            <div class="flex items-center justify-between p-4 rounded-2xl border transition-all {{ $milestone->status == 'paid' ? 'border-emerald-100 bg-emerald-50/30' : 'border-gray-50 bg-gray-50/30' }}">
-                                <div>
-                                    <p class="text-xs font-bold text-gray-900">{{ $milestone->title }}</p>
-                                    <p class="text-[10px] text-gray-400 mt-1">
-                                        <i class="bi bi-calendar3 mr-1"></i> {{ $milestone->due_date ? $milestone->due_date->format('M d, Y') : __('TBD') }}
-                                    </p>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-[10px] font-bold text-gray-900 truncate">{{ $worker->name }}</p>
+                                    <p class="text-[8px] text-gray-400 uppercase tracking-tighter">{{ $worker->specialization ?? 'General' }}</p>
                                 </div>
                                 <div class="text-right">
-                                    <p class="text-sm font-black text-gray-900">₹{{ number_format($milestone->amount) }}</p>
-                                    @if ($milestone->status == 'paid')
-                                        <span class="text-[9px] text-emerald-600 font-bold flex items-center justify-end gap-1">
-                                            <i class="bi bi-check-circle-fill"></i> {{ __('Paid') }}
-                                        </span>
-                                    @else
-                                        <span class="text-[9px] text-gray-400 font-bold">{{ __('Pending') }}</span>
-                                    @endif
+                                    <p class="text-[10px] font-black text-indigo-600">{{ $worker->attendances_count }}</p>
+                                    <p class="text-[7px] text-gray-400 uppercase font-bold tracking-tighter">Days</p>
                                 </div>
                             </div>
                         @empty
-                            <div class="text-center py-6">
-                                <p class="text-xs text-gray-400">{{ __('No financial milestones established.') }}</p>
+                            <div class="text-center py-4">
+                                <p class="text-[10px] text-gray-300 italic">{{ __('No workers linked yet.') }}</p>
                             </div>
+                        @endforelse
+                    </div>
+                    
+                    <a href="{{ route('contractor.attendance.create', ['project_id' => $project->id]) }}" class="mt-4 w-full py-3 bg-indigo-600 text-white text-[10px] font-bold rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all flex items-center justify-center gap-2">
+                        <i class="bi bi-geo-alt"></i> {{ __('Mark New Attendance') }}
+                    </a>
+                </div>
+
+                <!-- Financial Health Card -->
+                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 group">
+                    <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <i class="bi bi-cash-stack text-emerald-600"></i> {{ __('Financial Overview') }}
+                    </h4>
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between items-end mb-1">
+                                <span class="text-[10px] font-bold text-gray-400">{{ __('Total Bid Value') }}</span>
+                                <span class="text-sm font-black text-gray-900">₹{{ number_format($project->award->bid->bid_amount ?? 0) }}</span>
+                            </div>
+                            <div class="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-indigo-500 h-full rounded-full" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-end mb-1">
+                                <span class="text-[10px] font-bold text-gray-400">{{ __('Payments Disbursed') }}</span>
+                                <span class="text-sm font-black text-emerald-600">₹{{ number_format($totalProjectPayouts) }}</span>
+                            </div>
+                            <div class="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
+                                @php 
+                                    $bid = $project->award->bid->bid_amount ?? 1;
+                                    $paid = $totalProjectPayouts;
+                                    $perc = min(100, ($paid / $bid) * 100);
+                                @endphp
+                                <div class="bg-emerald-500 h-full rounded-full transition-all duration-1000" style="width: {{ $perc }}%"></div>
+                            </div>
+                            <p class="text-[8px] text-gray-400 mt-1 italic text-right">{{ number_format($perc, 1) }}% of bid amount spent on wages</p>
+                        </div>
+                        <div class="pt-4 border-t border-gray-50">
+                            <a href="{{ route('contractor.payments.create', ['project_id' => $project->id]) }}" class="w-full py-3 bg-emerald-50 text-emerald-700 text-[10px] font-black rounded-xl hover:bg-emerald-100 transition-all flex items-center justify-center gap-2">
+                                <i class="bi bi-plus-circle"></i> {{ __('Record Wage Payment') }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Inventory Logs -->
+                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ __('Site Inventory') }}</h4>
+                        <a href="{{ route('contractor.inventory.index') }}" class="text-[9px] font-bold text-indigo-600 hover:underline">Manage</a>
+                    </div>
+                    <div class="space-y-3">
+                        @forelse($materialLogs as $log)
+                            <div class="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
+                                <div>
+                                    <p class="text-xs font-bold text-gray-800">{{ $log->material->name }}</p>
+                                    <p class="text-[9px] text-gray-400 uppercase tracking-tighter">{{ $log->log_type }}</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-xs font-black {{ $log->log_type == 'out' ? 'text-rose-500' : 'text-emerald-500' }}">
+                                        {{ $log->log_type == 'out' ? '-' : '+' }}{{ $log->quantity }}
+                                    </p>
+                                </div>
+                            </div>
+                        @empty
+                            <p class="text-[10px] text-gray-300 italic py-4 text-center">{{ __('No logs.') }}</p>
                         @endforelse
                     </div>
                 </div>
             </div>
 
-            <!-- Right Column: Project Timeline -->
-            <div class="lg:col-span-2">
-                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm h-full flex flex-col overflow-hidden">
-                    <div class="px-8 py-6 border-b border-gray-50 flex justify-between items-center bg-gray-50/30">
-                        <h3 class="font-bold text-gray-900 flex items-center gap-2">
-                            <i class="bi bi-clock-history text-indigo-600"></i>
-                            {{ __('Live Project Timeline') }}
-                        </h3>
-                        <span class="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">
-                            {{ $project->progressUpdates->count() }} {{ __('Updates Posted') }}
-                        </span>
+            <!-- Main Content Area (8 columns) -->
+            <div class="lg:col-span-8 space-y-8">
+                <!-- Progress Hub Section -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Secure Progress Update Form -->
+                    <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
+                        <div class="p-6 bg-indigo-600 text-white">
+                            <h3 class="font-bold flex items-center gap-2 text-sm">
+                                <i class="bi bi-shield-check"></i> {{ __('Post Verified Progress') }}
+                            </h3>
+                            <p class="text-[9px] text-indigo-100 mt-1">Requires live photo and location data.</p>
+                        </div>
+                        <div class="p-8 flex-1">
+                            <form action="{{ route('contractor.projects.progress.store', $project->id) }}" method="POST" id="progressForm" class="space-y-6">
+                                @csrf
+                                <input type="hidden" name="verification_photo" id="verification_photo">
+                                <input type="hidden" name="latitude" id="latitude">
+                                <input type="hidden" name="longitude" id="longitude">
+                                <input type="hidden" name="location_address" id="location_address">
+
+                                <div x-data="{ progress: {{ $project->current_progress ?? 0 }} }">
+                                    <div class="flex justify-between items-end mb-3">
+                                        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ __('Project Completion') }}</label>
+                                        <span class="text-2xl font-black text-indigo-600" x-text="progress + '%'"></span>
+                                    </div>
+                                    <input type="range" name="progress_percentage" x-model="progress" min="0" max="100" step="1" 
+                                        class="w-full h-2 bg-gray-100 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+                                </div>
+
+                                <div>
+                                    <textarea name="report_description" rows="3" required 
+                                        class="w-full rounded-2xl border-gray-100 text-sm bg-gray-50/50 p-4 transition-all focus:bg-white" 
+                                        placeholder="{{ __('Describe today\'s site achievements...') }}"></textarea>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-4">
+                                    <button type="button" onclick="startCamera()" class="py-3 bg-gray-50 border border-gray-100 text-gray-600 text-[10px] font-bold rounded-xl hover:bg-indigo-50 hover:text-indigo-600 transition-all flex items-center justify-center gap-2">
+                                        <i class="bi bi-camera"></i> {{ __('Capture Site Photo') }}
+                                    </button>
+                                    <button type="submit" class="py-3 bg-indigo-600 text-white text-[10px] font-black rounded-xl shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all transform active:scale-95">
+                                        {{ __('Submit Daily Report') }}
+                                    </button>
+                                </div>
+                                <div id="locationStatus" class="text-[9px] text-gray-400 italic text-center"></div>
+                            </form>
+                        </div>
                     </div>
 
-                    <div class="p-8 flex-1 overflow-y-auto custom-scrollbar">
-                        <div class="relative space-y-10 pl-6">
-                            <!-- Vertical Timeline Line -->
-                            <div class="absolute top-2 bottom-2 left-[31px] w-[2px] bg-gradient-to-b from-indigo-100 via-gray-50 to-transparent"></div>
-
-                            @forelse($project->progressUpdates->sortByDesc('created_at') as $update)
-                                <div class="relative pl-12 animate-slide-in">
-                                    <!-- Timeline Point -->
-                                    <div class="absolute left-0 top-0 h-10 w-10 rounded-xl bg-white border-2 border-indigo-50 shadow-sm flex items-center justify-center z-10 group hover:border-indigo-600 transition-all">
-                                        <span class="text-[10px] font-black text-indigo-600">{{ $update->progress_percentage }}%</span>
+                    <!-- Milestones Visualization -->
+                    <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 flex flex-col">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="font-bold text-gray-900 text-sm flex items-center gap-2">
+                                <i class="bi bi-check2-square text-indigo-600"></i> {{ __('Project Phases') }}
+                            </h3>
+                            <span class="text-[10px] font-bold text-gray-400">{{ $project->milestones->where('status', 'paid')->count() }} / {{ $project->milestones->count() }} {{ __('Paid') }}</span>
+                        </div>
+                        <div class="space-y-4 flex-1 overflow-y-auto pr-2 custom-scrollbar">
+                            @forelse($project->milestones as $milestone)
+                                <div class="group relative pl-6 pb-6 last:pb-0">
+                                    @if(!$loop->last)
+                                        <div class="absolute left-[7px] top-4 bottom-0 w-0.5 bg-gray-50 group-hover:bg-indigo-100 transition-all"></div>
+                                    @endif
+                                    <div class="absolute left-0 top-1 h-4 w-4 rounded-full border-2 {{ $milestone->status == 'paid' ? 'bg-emerald-500 border-emerald-100' : 'bg-white border-gray-200' }} z-10 transition-all"></div>
+                                    <div class="flex items-center justify-between bg-gray-50/50 group-hover:bg-white group-hover:shadow-lg p-4 rounded-2xl border border-transparent group-hover:border-indigo-50 transition-all">
+                                        <div>
+                                            <p class="text-[10px] font-bold text-gray-900">{{ $milestone->title }}</p>
+                                            <p class="text-[8px] text-gray-400 mt-0.5">{{ $milestone->due_date ? $milestone->due_date->format('M d, Y') : 'Date Pending' }}</p>
+                                        </div>
+                                        <div class="text-right">
+                                            <p class="text-[10px] font-black text-gray-900">₹{{ number_format($milestone->amount) }}</p>
+                                            <span class="text-[8px] font-bold tracking-tighter {{ $milestone->status == 'paid' ? 'text-emerald-600' : 'text-gray-400' }}">{{ strtoupper($milestone->status) }}</span>
+                                        </div>
                                     </div>
+                                </div>
+                            @empty
+                                <div class="text-center py-12">
+                                    <p class="text-xs text-gray-300 italic">{{ __('No billing milestones.') }}</p>
+                                </div>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
 
-                                    <!-- Content Card -->
-                                    <div class="bg-gray-50/50 rounded-2xl p-6 border border-gray-50 hover:bg-white hover:shadow-xl hover:border-indigo-50 transition-all group">
-                                        <div class="flex justify-between items-center mb-3">
-                                            <div class="flex items-center gap-2">
-                                                <div class="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 text-xs font-bold border border-indigo-100">
+                <!-- Massive Activity Timeline -->
+                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm flex flex-col">
+                    <div class="px-8 py-6 border-b border-gray-50 flex justify-between items-center bg-gray-50/20">
+                        <h3 class="font-bold text-gray-900 flex items-center gap-2">
+                            <i class="bi bi-clock-history text-indigo-600"></i>
+                            {{ __('Historical Site Activity') }}
+                        </h3>
+                    </div>
+                    <div class="p-8 max-h-[600px] overflow-y-auto custom-scrollbar">
+                        <div class="relative space-y-12 pl-6">
+                            <div class="absolute top-2 bottom-2 left-[31px] w-[1px] bg-indigo-50"></div>
+                            @forelse($project->progressUpdates as $update)
+                                <div class="relative pl-12">
+                                    <div class="absolute left-0 top-0 h-10 w-10 rounded-2xl bg-white border-2 border-indigo-50 shadow-sm flex items-center justify-center z-10 font-black text-indigo-600 text-[10px]">
+                                        {{ $update->progress_percentage }}%
+                                    </div>
+                                    <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-2xl hover:border-indigo-100 transition-all group">
+                                        <div class="flex justify-between items-start mb-4">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 text-sm font-bold border border-indigo-100">
                                                     {{ substr($update->user->name ?? 'C', 0, 1) }}
                                                 </div>
                                                 <div>
-                                                    <p class="text-xs font-bold text-gray-900">{{ $update->user->name ?? __('Contractor') }}</p>
-                                                    <p class="text-[10px] text-gray-400 font-medium">
-                                                        {{ $update->created_at->format('M d, Y') }} • {{ $update->created_at->format('h:i A') }}
-                                                    </p>
+                                                    <p class="text-sm font-bold text-gray-900">{{ $update->user->name ?? 'Site Manager' }}</p>
+                                                    <p class="text-[10px] text-gray-400">{{ $update->created_at->format('M d, Y - h:i A') }}</p>
                                                 </div>
                                             </div>
-                                            
-                                            @if ($update->report_file_path)
-                                                <a href="{{ asset('storage/' . $update->report_file_path) }}" target="_blank" class="px-3 py-1 bg-white text-indigo-600 border border-indigo-100 rounded-lg text-[10px] font-bold hover:bg-indigo-600 hover:text-white transition-all flex items-center gap-1">
-                                                    <i class="bi bi-paperclip"></i> {{ __('Attachment') }}
+                                            @if($update->latitude)
+                                                <a href="https://www.google.com/maps?q={{ $update->latitude }},{{ $update->longitude }}" target="_blank" class="px-3 py-1.5 bg-emerald-50 text-emerald-600 text-[9px] font-bold rounded-lg border border-emerald-100 hover:bg-emerald-600 hover:text-white transition-all flex items-center gap-1">
+                                                    <i class="bi bi-geo-alt-fill"></i> Site Verified
                                                 </a>
                                             @endif
                                         </div>
-                                        <p class="text-sm text-gray-600 leading-relaxed italic border-l-2 border-indigo-200 pl-4 py-1">
-                                            "{{ $update->report_description }}"
-                                        </p>
+                                        <p class="text-sm text-gray-600 leading-relaxed italic pl-4 border-l-2 border-indigo-200">"{{ $update->report_description }}"</p>
+                                        
+                                        @if ($update->report_file_path)
+                                            <div class="mt-4 pt-4 border-t border-gray-50 flex items-center justify-between">
+                                                <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
+                                                    <i class="bi bi-paperclip"></i> Site Proof Attached
+                                                </span>
+                                                <a href="{{ asset('storage/' . $update->report_file_path) }}" target="_blank" class="h-10 w-10 flex items-center justify-center bg-gray-50 rounded-xl text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             @empty
@@ -175,8 +272,8 @@
                                     <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-200 text-4xl">
                                         <i class="bi bi-journal-text"></i>
                                     </div>
-                                    <h4 class="text-lg font-bold text-gray-900">{{ __('No Timeline Activity') }}</h4>
-                                    <p class="text-gray-500 text-sm max-w-xs mx-auto">{{ __('Submit your first daily report to start building the project history.') }}</p>
+                                    <h4 class="text-lg font-bold text-gray-900">{{ __('No Site Logs') }}</h4>
+                                    <p class="text-gray-500 text-sm max-w-xs mx-auto">{{ __('Historical records will appear here as you submit daily reports.') }}</p>
                                 </div>
                             @endforelse
                         </div>
@@ -185,6 +282,103 @@
             </div>
         </div>
     </div>
+
+    <!-- Camera Modal -->
+    <div id="cameraModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-[32px] w-full max-w-lg overflow-hidden shadow-2xl">
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                <h3 class="font-bold text-gray-900">Verify Site Progress</h3>
+                <button onclick="stopCamera()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="relative aspect-video bg-gray-900">
+                <video id="video" class="w-full h-full object-cover" autoplay playsinline></video>
+                <canvas id="canvas" class="hidden"></canvas>
+                <div class="absolute bottom-6 left-0 right-0 flex justify-center">
+                    <button onclick="takeSnapshot()" class="h-16 w-16 bg-white rounded-full border-4 border-indigo-600 flex items-center justify-center shadow-2xl transform active:scale-90 transition-all">
+                        <div class="h-10 w-10 bg-indigo-600 rounded-full"></div>
+                    </button>
+                </div>
+            </div>
+            <div class="p-4 text-center">
+                <p class="text-[10px] text-gray-400">Position the camera at the work site before capturing.</p>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        let stream = null;
+
+        function startCamera() {
+            const modal = document.getElementById('cameraModal');
+            const video = document.getElementById('video');
+            modal.classList.remove('hidden');
+
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+                .then(s => {
+                    stream = s;
+                    video.srcObject = stream;
+                })
+                .catch(err => {
+                    console.error("Error accessing camera:", err);
+                    alert("Unable to access camera. Please check permissions.");
+                    modal.classList.add('hidden');
+                });
+            
+            // Start Geolocation as well
+            getLocation();
+        }
+
+        function stopCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+            document.getElementById('cameraModal').classList.add('hidden');
+        }
+
+        function takeSnapshot() {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const photoInput = document.getElementById('verification_photo');
+            
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            
+            const dataUrl = canvas.toDataURL('image/jpeg');
+            photoInput.value = dataUrl;
+            
+            stopCamera();
+            alert("Photo captured successfully!");
+        }
+
+        function getLocation() {
+            const status = document.getElementById('locationStatus');
+            const latInput = document.getElementById('latitude');
+            const lonInput = document.getElementById('longitude');
+
+            if (!navigator.geolocation) {
+                status.textContent = "Geolocation is not supported by your browser";
+                return;
+            }
+
+            status.textContent = "Fetching GPS coordinates...";
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    latInput.value = position.coords.latitude;
+                    lonInput.value = position.coords.longitude;
+                    status.textContent = `Location Captured: ${position.coords.latitude.toFixed(4)}, ${position.coords.longitude.toFixed(4)}`;
+                },
+                (error) => {
+                    status.textContent = "Unable to retrieve your location";
+                    console.error(error);
+                }
+            );
+        }
+    </script>
 
     <style>
         @keyframes fadeIn {
@@ -200,6 +394,19 @@
         }
         .animate-slide-in {
             animation: slideIn 0.5s ease-out forwards;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f8fafc;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #cbd5e1;
         }
     </style>
 </x-contractor-layout>

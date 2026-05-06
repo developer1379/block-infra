@@ -229,6 +229,7 @@
         <div x-show="open" x-collapse x-cloak class="relative pl-9 space-y-1">
             <div class="absolute left-[22px] top-0 bottom-0 w-[1.5px] bg-slate-100"></div>
             <a href="{{ route('admin.finance.index') }}" class="relative block py-2 pl-3 text-sm rounded-lg transition-colors duration-200 {{ request()->routeIs('admin.finance.index') ? 'text-primary font-semibold bg-teal-50/50' : 'text-slate-500 hover:text-primary hover:bg-slate-50' }}">Invoices</a>
+            <a href="{{ route('admin.worker-payments.index') }}" class="relative block py-2 pl-3 text-sm rounded-lg transition-colors duration-200 {{ request()->routeIs('admin.worker-payments.index') ? 'text-primary font-semibold bg-teal-50/50' : 'text-slate-500 hover:text-primary hover:bg-slate-50' }}">Wage Verification</a>
         </div>
     </div>
 

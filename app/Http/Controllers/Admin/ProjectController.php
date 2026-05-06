@@ -109,7 +109,48 @@ class ProjectController extends Controller
     {
         try {
             $project = $this->projects->find($id);
-            return view('admin.projects.show', compact('project'));
+            
+            // Stats & Analytics
+            $workerCount = \App\Models\ProjectAttendance::where('project_id', $project->id)
+                ->distinct('worker_id')
+                ->count();
+                
+            $attendanceToday = \App\Models\ProjectAttendance::where('project_id', $project->id)
+                ->whereDate('attendance_date', now())
+                ->count();
+                
+            $totalProjectPayouts = \App\Models\WorkerPayment::where('project_id', $project->id)
+                ->where('status', 'verified')
+                ->sum('amount');
+                
+            $pendingProjectPayouts = \App\Models\WorkerPayment::where('project_id', $project->id)
+                ->where('status', 'pending')
+                ->sum('amount');
+
+            // 1. Linked Workers (Active on this project based on attendance)
+            $linkedWorkers = \App\Models\Worker::whereHas('attendances', function($q) use ($project) {
+                    $q->where('project_id', $project->id);
+                })
+                ->withCount(['attendances' => function($q) use ($project) {
+                    $q->where('project_id', $project->id);
+                }])
+                ->get();
+
+            $materialLogs = \App\Models\MaterialInventory::where('project_id', $project->id)
+                ->with('material')
+                ->latest()
+                ->take(5)
+                ->get();
+
+            return view('admin.projects.show', compact(
+                'project', 
+                'workerCount', 
+                'attendanceToday', 
+                'totalProjectPayouts', 
+                'pendingProjectPayouts',
+                'materialLogs',
+                'linkedWorkers'
+            ));
         } catch (Exception $e) {
             Log::error('Project Show Error: ' . $e->getMessage());
             return back()->with('error', 'Unable to load project details.');
@@ -179,14 +220,42 @@ class ProjectController extends Controller
     {
         try {
             $project = $this->projects->find($id);
-            // Load milestones and invoices
+            // Load milestones, invoices, and direct project payments
             $milestones = \App\Models\ProjectMilestone::where('project_id', $id)->get();
             $invoices = \App\Models\Invoice::where('project_id', $id)->with('payments')->get();
+            $projectPayments = \App\Models\ProjectPayment::where('project_id', $id)->latest()->get();
             
-            return view('admin.projects.payments', compact('project', 'milestones', 'invoices'));
+            return view('admin.projects.payments', compact('project', 'milestones', 'invoices', 'projectPayments'));
         } catch (Exception $e) {
             Log::error('Project Payments Error: ' . $e->getMessage());
             return back()->with('error', 'Unable to load project finances.');
+        }
+    }
+
+    public function storePayment(Request $request, $id)
+    {
+        $request->validate([
+            'amount' => 'required|numeric|min:0',
+            'payment_date' => 'required|date',
+            'payment_method' => 'required|string',
+            'transaction_reference' => 'nullable|string',
+            'notes' => 'nullable|string'
+        ]);
+
+        try {
+            \App\Models\ProjectPayment::create([
+                'project_id' => $id,
+                'amount' => $request->amount,
+                'payment_date' => $request->payment_date,
+                'payment_method' => $request->payment_method,
+                'transaction_reference' => $request->transaction_reference,
+                'notes' => $request->notes
+            ]);
+
+            return back()->with('success', 'Payment recorded successfully.');
+        } catch (Exception $e) {
+            Log::error('Admin Project Store Payment Error: ' . $e->getMessage());
+            return back()->with('error', 'Unable to record payment.');
         }
     }
 }

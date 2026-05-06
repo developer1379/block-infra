@@ -27,6 +27,19 @@
                             </select>
                         </div>
 
+                        <!-- Project Selection -->
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-2">Select Project</label>
+                            <select name="project_id" id="project_select" class="select2 w-full rounded-2xl border-gray-200 bg-gray-50 focus:border-green-500 focus:ring-green-500 transition-all py-3 px-4">
+                                <option value="">General Payment (No Project)</option>
+                                @foreach($projects as $project)
+                                    <option value="{{ $project->id }}" {{ (isset($selected_project_id) && $selected_project_id == $project->id) ? 'selected' : '' }}>
+                                        {{ $project->title }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
                         <!-- Amount -->
                         <div>
                             <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-2">Payment Amount (₹)</label>
@@ -102,8 +115,8 @@
     @push('scripts')
     <script>
         $(document).ready(function() {
-            $('#worker_select').select2({
-                placeholder: 'Search for a worker...',
+            $('#worker_select, #project_select').select2({
+                placeholder: 'Search...',
                 width: '100%'
             });
 
