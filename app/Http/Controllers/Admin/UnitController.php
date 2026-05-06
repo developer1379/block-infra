@@ -21,7 +21,7 @@ class UnitController extends Controller
     {
         try {
             $units = $this->units->all();
-            return view('admin.pages.units.index', compact('units'));
+            return view('admin.units.index', compact('units'));
         } catch (Exception $e) {
             Log::error('Unit Index Error: ' . $e->getMessage());
             return back()->with('error', 'Unable to fetch unit list.');
@@ -30,7 +30,7 @@ class UnitController extends Controller
 
     public function create()
     {
-        return view('admin.pages.units.create');
+        return view('admin.units.create');
     }
 
     public function store(Request $request)
@@ -54,7 +54,7 @@ class UnitController extends Controller
     {
         try {
             $unit = $this->units->find($id);
-            return view('admin.pages.units.edit', compact('unit'));
+            return view('admin.units.edit', compact('unit'));
         } catch (Exception $e) {
             Log::error('Unit Edit Error: ' . $e->getMessage());
             return back()->with('error', 'Unable to load unit details.');
@@ -89,3 +89,4 @@ class UnitController extends Controller
         }
     }
 }
+

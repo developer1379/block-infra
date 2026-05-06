@@ -13,21 +13,35 @@ class ContractorController extends Controller
 {
     public function index()
     {
-        $contractors = Contractor::orderBy('created_at', 'desc')->get();
-        return view('admin.pages.contractors.index', compact('contractors'));
+        try {
+            $contractors = Contractor::orderBy('created_at', 'desc')->get();
+            return view('admin.contractors.index', compact('contractors'));
+        } catch (Exception $e) {
+            Log::error('Contractor Index Error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to load contractors list.');
+        }
     }
 
     public function show($id)
     {
-        $contractor = Contractor::with(['categoryRelation', 'documents'])->findOrFail($id);
-
-        return view('admin.pages.contractors.show', compact('contractor'));
+        try {
+            $contractor = Contractor::with(['categoryRelation', 'documents'])->findOrFail($id);
+            return view('admin.contractors.show', compact('contractor'));
+        } catch (Exception $e) {
+            Log::error('Contractor Show Error: ' . $e->getMessage());
+            return back()->with('error', 'Unable to load contractor details.');
+        }
     }
 
     public function create()
     {
-        $categories = Category::where('is_active', 1)->orderBy('name')->get();
-        return view('admin.pages.contractors.create', compact('categories'));
+        try {
+            $categories = Category::where('is_active', 1)->orderBy('name')->get();
+            return view('admin.contractors.create', compact('categories'));
+        } catch (Exception $e) {
+            Log::error('Contractor Create Error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to load contractor creation form.');
+        }
     }
 
     public function store(Request $request)
@@ -42,16 +56,25 @@ class ContractorController extends Controller
             'is_active' => 'boolean',
         ]);
 
-        Contractor::create($validated);
-
-        return redirect()->route('admin.contractors.index')->with('success', 'Contractor created successfully.');
+        try {
+            Contractor::create($validated);
+            return redirect()->route('admin.contractors.index')->with('success', 'Contractor created successfully.');
+        } catch (Exception $e) {
+            Log::error('Contractor Store Error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to create contractor.');
+        }
     }
 
 
     public function edit($id)
     {
-        $contractor = Contractor::with('documents')->findOrFail($id);
-        return view('admin.pages.contractors.edit', compact('contractor'));
+        try {
+            $contractor = Contractor::with('documents')->findOrFail($id);
+            return view('admin.contractors.edit', compact('contractor'));
+        } catch (Exception $e) {
+            Log::error('Contractor Edit Error: ' . $e->getMessage());
+            return back()->with('error', 'Unable to load contractor for editing.');
+        }
     }
 
     public function update(Request $request, $id)
@@ -64,63 +87,80 @@ class ContractorController extends Controller
             'city'          => 'nullable|string|max:255',
             'categories'     => 'nullable|array',
             'categories.*'   => 'exists:categories,id',
-
             'is_active'     => 'boolean',
         ]);
 
-        $contractor = Contractor::findOrFail($id);
+        try {
+            $contractor = Contractor::findOrFail($id);
 
-        $contractor->update([
-            'name'         => $validated['name'],
-            'company_name' => $validated['company_name'] ?? null,
-            'email'        => $validated['email'] ?? null,
-            'phone'        => $validated['phone'] ?? null,
-            'city'         => $validated['city'] ?? null,
-            'is_active'    => $validated['is_active'] ?? 0,
-        ]);
+            $contractor->update([
+                'name'         => $validated['name'],
+                'company_name' => $validated['company_name'] ?? null,
+                'email'        => $validated['email'] ?? null,
+                'phone'        => $validated['phone'] ?? null,
+                'city'         => $validated['city'] ?? null,
+                'is_active'    => $validated['is_active'] ?? 0,
+            ]);
 
-        if ($request->filled('categories')) {
-            $contractor->categories()->sync($request->categories);
-        } else {
-            $contractor->categories()->sync([]);
+            if ($request->filled('categories')) {
+                $contractor->categories()->sync($request->categories);
+            } else {
+                $contractor->categories()->sync([]);
+            }
+
+            return redirect()
+                ->route('admin.contractors.index')
+                ->with('success', 'Contractor updated successfully.');
+        } catch (Exception $e) {
+            Log::error('Contractor Update Error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to update contractor.');
         }
-
-        return redirect()
-            ->route('admin.contractors.index')
-            ->with('success', 'Contractor updated successfully with categories.');
     }
-
-
 
     public function destroy(Contractor $contractor)
     {
-        $contractor->delete();
-        return back()->with('success', 'Contractor deleted successfully.');
+        try {
+            $contractor->delete();
+            return back()->with('success', 'Contractor deleted successfully.');
+        } catch (Exception $e) {
+            Log::error('Contractor Delete Error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to delete contractor.');
+        }
     }
 
     // 🔄 Toggle Active/Inactive
     public function toggleStatus($id)
     {
-        $contractor = Contractor::findOrFail($id);
-        $contractor->is_active = !$contractor->is_active;
-        $contractor->save();
+        try {
+            $contractor = Contractor::findOrFail($id);
+            $contractor->is_active = !$contractor->is_active;
+            $contractor->save();
 
-        Log::info('🔁 Contractor status changed', [
-            'contractor_id' => $contractor->id,
-            'new_status' => $contractor->is_active,
-        ]);
+            Log::info('🔁 Contractor status changed', [
+                'contractor_id' => $contractor->id,
+                'new_status' => $contractor->is_active,
+            ]);
 
-        return response()->json([
-            'success' => true,
-            'status' => $contractor->is_active ? 'active' : 'inactive'
-        ]);
+            return response()->json([
+                'success' => true,
+                'status' => $contractor->is_active ? 'active' : 'inactive'
+            ]);
+        } catch (Exception $e) {
+            Log::error('Contractor Toggle Status Error: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Failed to toggle status.'], 500);
+        }
     }
 
     public function verify($id)
     {
-        $document = ContractorDocument::findOrFail($id);
-        $document->update(['is_verified' => true]);
-
-        return back()->with('success', 'Document verified successfully.');
+        try {
+            $document = ContractorDocument::findOrFail($id);
+            $document->update(['is_verified' => true]);
+            return back()->with('success', 'Document verified successfully.');
+        } catch (Exception $e) {
+            Log::error('Document Verify Error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to verify document.');
+        }
     }
 }
+

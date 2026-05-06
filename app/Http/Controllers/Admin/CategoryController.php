@@ -18,18 +18,26 @@ class CategoryController extends Controller
 
     public function index()
     {
-        $categories = $this->categories->all();
-        return view('admin.pages.category.index', compact('categories'));
+        try {
+            $categories = $this->categories->all();
+            return view('admin.category.index', compact('categories'));
+        } catch (\Exception $e) {
+            \Log::error('Category Index Error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to load categories.');
+        }
     }
 
     public function create()
     {
-        $parents = $this->categories->getParentCategories();
-        $categories = $this->categories->all();
-
-        return view('admin.pages.category.create', compact('parents', 'categories'));
+        try {
+            $parents = $this->categories->getParentCategories();
+            $categories = $this->categories->all();
+            return view('admin.category.create', compact('parents', 'categories'));
+        } catch (\Exception $e) {
+            \Log::error('Category Create Error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to load category creation form.');
+        }
     }
-
 
     public function store(Request $request)
     {
@@ -41,17 +49,26 @@ class CategoryController extends Controller
             'is_active' => 'boolean',
         ]);
 
-        $this->categories->create($validated);
-
-        return redirect()->route('admin.categories.index')
-            ->with('success', 'Category created successfully!');
+        try {
+            $this->categories->create($validated);
+            return redirect()->route('admin.categories.index')
+                ->with('success', 'Category created successfully!');
+        } catch (\Exception $e) {
+            \Log::error('Category Store Error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to create category.');
+        }
     }
 
     public function edit(Category $category)
     {
-        $parents = $this->categories->getParentCategories()
-            ->where('id', '!=', $category->id);
-        return view('admin.pages.category.edit', compact('category', 'parents'));
+        try {
+            $parents = $this->categories->getParentCategories()
+                ->where('id', '!=', $category->id);
+            return view('admin.category.edit', compact('category', 'parents'));
+        } catch (\Exception $e) {
+            \Log::error('Category Edit Error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to load category details.');
+        }
     }
 
     public function update(Request $request, Category $category)
@@ -64,21 +81,36 @@ class CategoryController extends Controller
             'is_active' => 'boolean',
         ]);
 
-        $this->categories->update($category, $validated);
-
-        return redirect()->route('admin.categories.index')
-            ->with('success', 'Category updated successfully!');
+        try {
+            $this->categories->update($category, $validated);
+            return redirect()->route('admin.categories.index')
+                ->with('success', 'Category updated successfully!');
+        } catch (\Exception $e) {
+            \Log::error('Category Update Error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to update category.');
+        }
     }
 
     public function destroy(Category $category)
     {
-        $this->categories->delete($category);
-        return back()->with('success', 'Category deleted successfully!');
+        try {
+            $this->categories->delete($category);
+            return back()->with('success', 'Category deleted successfully!');
+        } catch (\Exception $e) {
+            \Log::error('Category Delete Error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to delete category.');
+        }
     }
 
     public function getSubcategories($parentId)
     {
-        $subcategories = $this->categories->getSubcategories($parentId);
-        return response()->json($subcategories);
+        try {
+            $subcategories = $this->categories->getSubcategories($parentId);
+            return response()->json($subcategories);
+        } catch (\Exception $e) {
+            \Log::error('Get Subcategories Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to fetch subcategories'], 500);
+        }
     }
 }
+

@@ -3,25 +3,60 @@
 namespace App\Http\Controllers\Contractor;
 
 use App\Http\Controllers\Controller;
-use App\Models\Project;
 use Illuminate\Http\Request;
 use App\Repositories\Interfaces\BidRepositoryInterface;
 use App\Repositories\Interfaces\ProjectRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
 {
-    public function index(Request $request, ProjectRepositoryInterface $projectRepository, BidRepositoryInterface $bidRepository)
+    protected $projects;
+    protected $bids;
+
+    public function __construct(ProjectRepositoryInterface $projects, BidRepositoryInterface $bids)
     {
-        $contractor = Auth::user()->contractor;
+        $this->projects = $projects;
+        $this->bids = $bids;
+    }
 
-        $totalProjects = $projectRepository->countProjectsByContractor($contractor->id);
+    public function index()
+    {
+        try {
+            $user = Auth::user();
+            $contractor = $user->contractor;
 
-        $totalBids = $projectRepository->countBidsByContractor($contractor->id);
+            if (!$contractor) {
+                return redirect()->route('website.home')->with('error', 'Contractor profile not found.');
+            }
 
-        $ongoingProjects = $projectRepository->getOngoingProjectsByContractor($contractor->id);
+            // Stats Calculation
+            $stats = [
+                'total_projects' => $this->projects->countProjectsByContractor($contractor->id),
+                'active_projects' => $this->projects->getOngoingProjectsByContractor($contractor->id)->count(),
+                'total_bids' => $this->projects->countBidsByContractor($contractor->id),
+                // We assume projects awarded to this contractor
+                'earnings' => \App\Models\Bid::where('contractor_id', $user->id)
+                    ->where('status', 'accepted')
+                    ->sum('bid_amount'),
+            ];
 
-        return view('contractor.dashboard.index', compact('totalProjects', 'totalBids', 'ongoingProjects'));
+            $ongoingProjects = $this->projects->getOngoingProjectsByContractor($contractor->id)->take(5);
+            
+            // Get some open projects they might be interested in
+            $availableProjects = \App\Models\Project::where('status', 'open')
+                ->whereDoesntHave('bids', function($q) use ($user) {
+                    $q->where('contractor_id', $user->id);
+                })
+                ->latest()
+                ->take(3)
+                ->get();
+
+            return view('contractor.dashboard.index', compact('stats', 'ongoingProjects', 'availableProjects'));
+
+        } catch (\Exception $e) {
+            Log::error('Contractor Dashboard Error: ' . $e->getMessage());
+            return back()->with('error', 'Unable to load dashboard data.');
+        }
     }
 }

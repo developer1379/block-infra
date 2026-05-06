@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Contractor;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Repositories\Interfaces\ContractorProfileRepositoryInterface;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -21,7 +19,7 @@ class ProfileController extends Controller
     public function index()
     {
         $contractor = $this->profile->getProfile();
-        return view('contractor.profile.edit', compact('contractor'));
+        return view('admin.contractors.profile', compact('contractor'));
     }
 
     /** Update Profile */
@@ -46,3 +44,4 @@ class ProfileController extends Controller
         return back()->with('success', 'Profile updated successfully!');
     }
 }
+

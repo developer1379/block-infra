@@ -28,7 +28,7 @@ class WorkController extends Controller
     {
         try {
             $works = $this->works->all();
-            return view('admin.pages.works.index', compact('works'));
+            return view('admin.works.index', compact('works'));
         } catch (Exception $e) {
             Log::error('Work Index Error: ' . $e->getMessage());
             return back()->with('error', 'Failed to load works list.');
@@ -39,7 +39,7 @@ class WorkController extends Controller
     {
         $categories = $this->categories->getParentOptions();
         $units = $this->units->all();
-        return view('admin.pages.works.create', compact('categories', 'units'));
+        return view('admin.works.create', compact('categories', 'units'));
     }
 
     public function store(Request $request)
@@ -69,7 +69,7 @@ class WorkController extends Controller
             $categories = $this->categories->getParentOptions();
             $units = $this->units->all();
 
-            return view('admin.pages.works.edit', compact('work', 'categories', 'units'));
+            return view('admin.works.edit', compact('work', 'categories', 'units'));
         } catch (Exception $e) {
             Log::error('Work Edit Error: ' . $e->getMessage());
             return back()->with('error', 'Unable to fetch work details.');
@@ -107,3 +107,4 @@ class WorkController extends Controller
         }
     }
 }
+

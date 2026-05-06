@@ -1,237 +1,184 @@
-<x-app-layout>
-    <div class="py-12 bg-gray-50 min-h-screen">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<x-contractor-layout>
+    <div class="p-6 space-y-10 animate-fade-in">
+        <!-- Header & Stats -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div>
+                <h1 class="text-4xl font-black text-gray-900 tracking-tight flex items-center gap-3">
+                    {{ __('Project Hub') }}
+                    <span class="bg-indigo-100 text-indigo-600 text-[10px] font-black uppercase px-3 py-1 rounded-full tracking-widest border border-indigo-200 shadow-sm">Beta</span>
+                </h1>
+                <p class="text-gray-500 text-sm mt-2 font-medium">{{ __('Explore, manage, and scale your construction business with ease.') }}</p>
+            </div>
+            
+            <div class="grid grid-cols-2 sm:flex gap-3">
+                <div class="bg-white px-5 py-3 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-center">
+                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Total Managed') }}</p>
+                    <p class="text-xl font-black text-gray-900">{{ $projects->count() }}</p>
+                </div>
+                <div class="bg-indigo-600 px-5 py-3 rounded-2xl shadow-xl shadow-indigo-100 flex flex-col justify-center text-white">
+                    <p class="text-[10px] font-black text-indigo-100 uppercase tracking-widest">{{ __('Success Rate') }}</p>
+                    <p class="text-xl font-black">94%</p>
+                </div>
+            </div>
+        </div>
 
-            {{-- 1. HEADER SECTION --}}
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-8">
-                <div>
-                    <h2 class="text-3xl font-bold text-gray-900 tracking-tight">Active Projects</h2>
-                    <p class="text-gray-500 text-sm mt-1">Manage construction sites, bids, and progress reports.</p>
+        <!-- Sophisticated Search & Filter -->
+        <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+            <form action="{{ route('contractor.projects.index') }}" method="GET" class="flex flex-col md:flex-row gap-4">
+                <div class="flex-1 relative group">
+                    <i class="bi bi-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-indigo-600 transition-colors"></i>
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="{{ __('Search by project name or site location...') }}" 
+                        class="w-full pl-12 pr-4 py-3.5 bg-gray-50/50 border-transparent rounded-2xl text-sm font-medium focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all outline-none">
                 </div>
 
-                {{-- Admin Add Project --}}
-                @if (auth()->user()->hasRole('admin'))
-                    <a href="{{ route('admin.projects.create') }}"
-                        class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-5 py-2.5 rounded-lg shadow-sm transition-all transform hover:-translate-y-0.5">
-                        <i class="fa-solid fa-plus"></i> Create Project
-                    </a>
-                @endif
-            </div>
+                <div class="flex flex-wrap gap-3">
+                    <select name="status" class="pl-4 pr-10 py-3.5 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all outline-none appearance-none cursor-pointer">
+                        <option value="">{{ __('All Statuses') }}</option>
+                        <option value="open" {{ request('status') == 'open' ? 'selected' : '' }}>{{ __('Open Opportunities') }}</option>
+                        <option value="awarded" {{ request('status') == 'awarded' ? 'selected' : '' }}>{{ __('In Development') }}</option>
+                        <option value="closed" {{ request('status') == 'closed' ? 'selected' : '' }}>{{ __('Completed') }}</option>
+                    </select>
 
-            {{-- 2. FILTERS --}}
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 mb-8">
-                @if (auth()->user()->hasRole('contractor'))
-                    <div
-                        class="flex items-center gap-3 text-indigo-600 bg-indigo-50 p-3 rounded-lg border border-indigo-100">
-                        <i class="fa-solid fa-hard-hat text-xl"></i>
-                        <div>
-                            <p class="text-sm font-bold text-indigo-900">Contractor Mode</p>
-                            <p class="text-xs text-indigo-700">Showing projects matching your trade categories.</p>
+                    <button type="submit" class="px-8 py-3.5 bg-gray-900 text-white rounded-2xl hover:bg-gray-800 transition-all font-black text-sm shadow-xl shadow-gray-200">
+                        {{ __('Search') }}
+                    </button>
+                    
+                    @if (auth()->user()->hasRole('admin'))
+                        <a href="{{ route('admin.projects.create') }}" class="px-6 py-3.5 bg-indigo-600 text-white rounded-2xl hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100 font-black text-sm">
+                            {{ __('New Project') }}
+                        </a>
+                    @endif
+                </div>
+            </form>
+        </div>
+
+        <!-- Premium Full-Fill Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+            @forelse ($projects as $project)
+                <div class="group bg-white rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-2xl hover:shadow-indigo-50 hover:border-indigo-100 transition-all duration-500 flex flex-col overflow-hidden relative">
+                    
+                    <!-- Top Gradient Accent -->
+                    <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r {{ $project->status == 'open' ? 'from-emerald-400 to-teal-500' : ($project->status == 'awarded' ? 'from-indigo-500 to-violet-600' : 'from-gray-300 to-gray-400') }}"></div>
+
+                    <!-- Card Header -->
+                    <div class="p-8 pb-0">
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-all duration-500 border border-gray-100 group-hover:border-indigo-100 group-hover:scale-110">
+                                <i class="bi bi-building-gear text-2xl"></i>
+                            </div>
+                            <div class="flex flex-col items-end gap-2">
+                                <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border 
+                                    {{ $project->status == 'open' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 
+                                       ($project->status == 'awarded' ? 'bg-indigo-50 text-indigo-600 border-indigo-100' : 'bg-gray-50 text-gray-400 border-gray-200') }}">
+                                    {{ __($project->status) }}
+                                </span>
+                                <p class="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">{{ __('ID: #PRJ-') . $project->id }}</p>
+                            </div>
+                        </div>
+
+                        <h3 class="text-xl font-black text-gray-900 group-hover:text-indigo-600 transition-colors leading-tight mb-2 line-clamp-2">
+                            {{ $project->name }}
+                        </h3>
+                        
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-50 text-gray-500 text-[10px] font-black uppercase rounded-lg border border-gray-100">
+                                <i class="bi bi-tag-fill"></i> {{ $project->category->name ?? __('General') }}
+                            </span>
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-50 text-gray-500 text-[10px] font-black uppercase rounded-lg border border-gray-100">
+                                <i class="bi bi-geo-alt-fill"></i> {{ $project->location ?? __('Site A') }}
+                            </span>
                         </div>
                     </div>
-                @else
-                    <form action="" method="GET">
-                        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
-                            {{-- Search --}}
-                            <div class="md:col-span-5">
-                                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Search</label>
-                                <div class="relative">
-                                    <i class="fa-solid fa-search absolute left-3 top-3 text-gray-400"></i>
-                                    <input type="text" name="search" value="{{ request('search') }}"
-                                        class="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500"
-                                        placeholder="Project title, ID, or location...">
+
+                    <!-- Progress / Stats Section -->
+                    <div class="px-8 mb-8 flex-1">
+                        <div class="bg-gray-50/50 rounded-3xl p-6 border border-gray-50 group-hover:bg-white group-hover:border-indigo-50 transition-all">
+                            <div class="flex justify-between items-end mb-4">
+                                <div class="space-y-1">
+                                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Estimated Value') }}</p>
+                                    <p class="text-lg font-black text-gray-900">₹{{ number_format($project->budget_max) }}</p>
+                                </div>
+                                <div class="text-right space-y-1">
+                                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Completion') }}</p>
+                                    <p class="text-lg font-black text-indigo-600">{{ $project->current_progress ?? 0 }}%</p>
                                 </div>
                             </div>
-
-                            {{-- Status --}}
-                            <div class="md:col-span-3">
-                                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Status</label>
-                                <select name="status"
-                                    class="w-full py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500">
-                                    <option value="">All Statuses</option>
-                                    <option value="open" {{ request('status') == 'open' ? 'selected' : '' }}>Open For
-                                        Bids</option>
-                                    <option value="awarded" {{ request('status') == 'awarded' ? 'selected' : '' }}>
-                                        Awarded/Ongoing</option>
-                                    <option value="closed" {{ request('status') == 'closed' ? 'selected' : '' }}>Closed
-                                    </option>
-                                </select>
-                            </div>
-
-                            {{-- Category --}}
-                            <div class="md:col-span-3">
-                                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Category</label>
-                                <select name="category_id"
-                                    class="w-full py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:ring-indigo-500 focus:border-indigo-500">
-                                    <option value="">All Categories</option>
-                                    @foreach (\App\Models\Category::whereNull('parent_id')->where('is_active', 1)->orderBy('name')->get() as $cat)
-                                        <option value="{{ $cat->id }}"
-                                            {{ request('category_id') == $cat->id ? 'selected' : '' }}>
-                                            {{ $cat->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            {{-- Button --}}
-                            <div class="md:col-span-1">
-                                <button type="submit"
-                                    class="w-full py-2 bg-gray-900 hover:bg-gray-800 text-white text-sm font-bold rounded-lg transition-colors">
-                                    Go
-                                </button>
+                            <div class="w-full bg-gray-100 h-2.5 rounded-full overflow-hidden shadow-inner">
+                                <div class="bg-gradient-to-r from-indigo-500 to-violet-600 h-full rounded-full transition-all duration-1000 group-hover:shadow-[0_0_15px_rgba(79,70,229,0.3)]" style="width: {{ $project->current_progress ?? 0 }}%"></div>
                             </div>
                         </div>
-                    </form>
-                @endif
-            </div>
+                    </div>
 
-            {{-- 3. PROJECTS GRID --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                @forelse ($projects as $project)
-                    <div
-                        class="group bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:border-indigo-200 transition-all duration-300 flex flex-col h-full relative overflow-hidden">
-
-                        {{-- Top Status Bar --}}
-                        <div
-                            class="h-1.5 w-full {{ $project->status == 'awarded' ? 'bg-indigo-500' : ($project->status == 'open' ? 'bg-green-500' : 'bg-gray-300') }}">
-                        </div>
-
-                        <div class="p-6 flex-1 flex flex-col">
-
-                            {{-- Header --}}
-                            <div class="flex justify-between items-start mb-4">
-                                <div
-                                    class="bg-gray-50 p-2 rounded-lg text-gray-400 group-hover:text-indigo-600 group-hover:bg-indigo-50 transition-colors">
-                                    <i class="fa-regular fa-building text-xl"></i>
-                                </div>
-                                @php
-                                    $badges = [
-                                        'open' => 'bg-green-100 text-green-700 border-green-200',
-                                        'awarded' => 'bg-indigo-100 text-indigo-700 border-indigo-200',
-                                        'closed' => 'bg-gray-100 text-gray-600 border-gray-200',
-                                    ];
-                                @endphp
-                                <span
-                                    class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide border {{ $badges[$project->status] ?? 'bg-gray-100' }}">
-                                    {{ $project->status }}
-                                </span>
-                            </div>
-
-                            {{-- Title & Budget --}}
-                            <h3
-                                class="text-lg font-bold text-gray-900 mb-1 group-hover:text-indigo-600 transition-colors line-clamp-1">
-                                {{ $project->title }}
-                            </h3>
-                            <p class="text-xs text-gray-500 flex items-center gap-1 mb-4">
-                                <i class="fa-solid fa-location-dot"></i> {{ $project->location ?? 'Remote Location' }}
-                            </p>
-
-                            <div
-                                class="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-100 flex justify-between items-center">
-                                <span class="text-xs font-semibold text-gray-500 uppercase">Est. Budget</span>
-                                <span
-                                    class="text-base font-bold text-gray-900">₹{{ number_format($project->budget_max) }}</span>
-                            </div>
-
-                            {{-- Description --}}
-                            <div class="text-sm text-gray-600 line-clamp-2 mb-4">
-                                {{ strip_tags($project->description) }}
-                            </div>
-
-                            {{-- Progress Bar (Visual Flair) --}}
-                            <div class="mt-auto">
-                                <div class="flex justify-between text-[10px] font-bold text-gray-400 uppercase mb-1">
-                                    <span>Completion</span>
-                                    <span>{{ $project->current_progress ?? 0 }}%</span>
-                                </div>
-                                <div class="w-full bg-gray-100 rounded-full h-1.5">
-                                    <div class="bg-indigo-600 h-1.5 rounded-full"
-                                        style="width: {{ $project->current_progress ?? 0 }}%"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- Footer Actions --}}
-                        <div
-                            class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-between gap-3">
-
-                            {{-- LEFT: Info Link --}}
-                            <a href="{{ auth()->user()->hasRole('contractor') ? route('contractor.projects.details', $project->id) : route('contractor.projects.details', $project->id) }}"
-                                class="text-sm font-semibold text-gray-500 hover:text-indigo-600 transition-colors">
-                                View Details
+                    <!-- Footer Actions -->
+                    <div class="px-8 pb-8 mt-auto">
+                        <div class="grid grid-cols-2 gap-3">
+                            <a href="{{ route('contractor.projects.details', $project->id) }}" class="flex items-center justify-center gap-2 py-3.5 bg-white border border-gray-100 text-gray-600 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-gray-50 hover:text-indigo-600 transition-all">
+                                <i class="bi bi-search"></i>
+                                {{ __('Details') }}
                             </a>
-
-                            {{-- RIGHT: Primary Action Button --}}
-                            <div class="flex items-center gap-2">
-
-                                {{-- 1. CONTRACTOR LOGIC --}}
-                                @if (auth()->user()->hasRole('contractor'))
-                                    {{-- Scenario A: Awarded -> Add Progress --}}
-                                    @if ($project->status == 'awarded')
-                                        <a href="{{ route('contractor.projects.show', $project->id) }}"
-                                            class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold uppercase tracking-wider rounded-lg shadow-md transition-all">
-                                            <i class="fa-solid fa-chart-line"></i> Workspace
+                            
+                            @if (auth()->user()->hasRole('contractor'))
+                                @if ($project->status == 'awarded')
+                                    <a href="{{ route('contractor.projects.show', $project->id) }}" class="flex items-center justify-center gap-2 py-3.5 bg-indigo-600 text-white rounded-2xl text-xs font-black uppercase tracking-widest shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all transform group-hover:-translate-y-1">
+                                        <i class="bi bi-columns-gap"></i>
+                                        {{ __('Workspace') }}
+                                    </a>
+                                @elseif ($project->status == 'open')
+                                    @php $hasBid = isset($hasBid[$project->id]) && $hasBid[$project->id]; @endphp
+                                    @if ($hasBid)
+                                        <div class="flex items-center justify-center gap-2 py-3.5 bg-emerald-50 text-emerald-600 rounded-2xl text-xs font-black uppercase tracking-widest border border-emerald-100">
+                                            <i class="bi bi-check2-all"></i>
+                                            {{ __('Bid Sent') }}
+                                        </div>
+                                    @else
+                                        <a href="{{ route('contractor.bids.create', $project->id) }}" class="flex items-center justify-center gap-2 py-3.5 bg-gray-900 text-white rounded-2xl text-xs font-black uppercase tracking-widest shadow-xl shadow-gray-100 hover:bg-gray-800 transition-all transform group-hover:-translate-y-1">
+                                            <i class="bi bi-send-fill"></i>
+                                            {{ __('Bid Now') }}
                                         </a>
-
-                                        {{-- Scenario B: Open -> Bid Now --}}
-                                    @elseif ($project->status == 'open')
-                                        @if (isset($hasBid[$project->id]) && $hasBid[$project->id])
-                                            <span
-                                                class="inline-flex items-center gap-1 px-3 py-1.5 bg-green-100 text-green-700 text-xs font-bold rounded-lg border border-green-200">
-                                                <i class="fa-solid fa-check"></i> Bid Sent
-                                            </span>
-                                        @else
-                                            <a href="{{ route('contractor.bids.create', $project->id) }}"
-                                                class="inline-flex items-center gap-2 px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white text-xs font-bold uppercase tracking-wider rounded-lg shadow-sm transition-all">
-                                                Bid Now
-                                            </a>
-                                        @endif
                                     @endif
-
-                                    {{-- 2. ADMIN LOGIC --}}
-                                @elseif(auth()->user()->hasRole('admin'))
-                                    <div class="flex items-center gap-1">
-                                        <a href="{{ route('admin.projects.bids', $project->id) }}"
-                                            class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-white rounded-lg transition-colors"
-                                            title="View Bids">
-                                            <i class="fa-solid fa-gavel"></i>
-                                        </a>
-                                        <a href="{{ route('admin.projects.tracking', $project->id) }}"
-                                            class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-white rounded-lg transition-colors"
-                                            title="Track Progress">
-                                            <i class="fa-solid fa-chart-pie"></i>
-                                        </a>
-                                        <a href="{{ route('admin.projects.edit', $project->id) }}"
-                                            class="p-2 text-gray-400 hover:text-amber-600 hover:bg-white rounded-lg transition-colors"
-                                            title="Edit">
-                                            <i class="fa-solid fa-pen"></i>
-                                        </a>
+                                @else
+                                    <div class="flex items-center justify-center gap-2 py-3.5 bg-gray-100 text-gray-400 rounded-2xl text-xs font-black uppercase tracking-widest cursor-not-allowed">
+                                        <i class="bi bi-lock-fill"></i>
+                                        {{ __('Closed') }}
                                     </div>
                                 @endif
-                            </div>
+                            @endif
                         </div>
                     </div>
-                @empty
-                    <div
-                        class="col-span-full py-16 text-center bg-white rounded-xl border-2 border-dashed border-gray-200">
-                        <div
-                            class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-300">
-                            <i class="fa-solid fa-clipboard-list text-3xl"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-gray-900">No projects found</h3>
-                        <p class="text-gray-500 text-sm mt-1">Try adjusting your filters to find what you're looking
-                            for.</p>
+                </div>
+            @empty
+                <div class="col-span-full py-32 flex flex-col items-center justify-center text-center">
+                    <div class="w-32 h-32 bg-gray-50 rounded-full flex items-center justify-center text-gray-200 text-6xl mb-8">
+                        <i class="bi bi-layout-wtf"></i>
                     </div>
-                @endforelse
-            </div>
+                    <h3 class="text-3xl font-black text-gray-900 uppercase tracking-tighter">{{ __('No Matches Found') }}</h3>
+                    <p class="text-gray-500 mt-3 max-w-sm font-medium leading-relaxed">{{ __('Our search bots couldn\'t find any projects matching your parameters. Try adjusting your scope or status filters.') }}</p>
+                    <a href="{{ route('contractor.projects.index') }}" class="mt-10 px-10 py-4 bg-indigo-600 text-white rounded-2xl font-black uppercase text-xs tracking-widest shadow-2xl shadow-indigo-100 hover:bg-indigo-700 transition-all">
+                        {{ __('Reset All Parameters') }}
+                    </a>
+                </div>
+            @endforelse
+        </div>
 
-            {{-- 4. PAGINATION --}}
-            @if ($projects instanceof \Illuminate\Pagination\LengthAwarePaginator)
-                <div class="mt-8">
+        <!-- Pagination -->
+        @if ($projects instanceof \Illuminate\Pagination\LengthAwarePaginator)
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-6 bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+                <p class="text-xs font-black text-gray-400 uppercase tracking-widest">{{ __('Displaying') }} {{ $projects->firstItem() }}-{{ $projects->lastItem() }} {{ __('of') }} {{ $projects->total() }}</p>
+                <div class="pagination-container">
                     {{ $projects->withQueryString()->links() }}
                 </div>
-            @endif
-
-        </div>
+            </div>
+        @endif
     </div>
-</x-app-layout>
+
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .pagination-container nav svg { width: 1.5rem; }
+    </style>
+</x-contractor-layout>

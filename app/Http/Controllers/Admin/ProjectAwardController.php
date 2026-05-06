@@ -25,33 +25,33 @@ class ProjectAwardController extends Controller
 
     public function award($projectId, $bidId)
     {
-        $project = Project::findOrFail($projectId);
+        try {
+            // 1️⃣ Mark selected bid as accepted using repository
+            $this->bids->update($bidId, ['status' => 'accepted']);
 
-        // 1️⃣ Mark selected bid as accepted
-        Bid::where('id', $bidId)->update([
-            'status' => 'accepted'
-        ]);
+            // 2️⃣ Reject all other bids for this project
+            \App\Models\Bid::where('project_id', $projectId)
+                ->where('id', '!=', $bidId)
+                ->update(['status' => 'rejected']);
 
-        // 2️⃣ Reject all other bids for this project
-        Bid::where('project_id', $projectId)
-            ->where('id', '!=', $bidId)
-            ->update(['status' => 'rejected']);
+            // 3️⃣ Save award details using repository
+            $bid = $this->bids->find($bidId);
+            $this->awards->createOrUpdate(
+                ['project_id' => $projectId],
+                [
+                    'bid_id' => $bidId,
+                    'awarded_to' => $bid->contractor_id,
+                    'awarded_at' => now()
+                ]
+            );
 
-        // 3️⃣ Save award details
-        \App\Models\ProjectAward::updateOrCreate(
-            ['project_id' => $projectId],
-            [
-                'bid_id' => $bidId,
-                'awarded_to' => Bid::find($bidId)->contractor_id,
-                'awarded_at' => now()
-            ]
-        );
+            // 4️⃣ Update project status to awarded using repository
+            $this->projects->update($projectId, ['status' => 'awarded']);
 
-        // 4️⃣ Update project status to awarded
-        $project->update([
-            'status' => 'awarded'
-        ]);
-
-        return redirect()->back()->with('success', 'Bid awarded successfully.');
+            return redirect()->back()->with('success', 'Bid awarded successfully.');
+        } catch (\Exception $e) {
+            \Log::error('Project Award Error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to award project.');
+        }
     }
 }

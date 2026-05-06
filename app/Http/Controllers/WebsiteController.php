@@ -13,7 +13,7 @@ class WebsiteController extends Controller
      */
     public function index()
     {
-        return view('website.pages.index');
+        return view('website.index');
     }
 
     /**
@@ -21,7 +21,7 @@ class WebsiteController extends Controller
      */
     public function about()
     {
-        return view('website.pages.about');
+        return view('website.about');
     }
 
     /**
@@ -29,7 +29,7 @@ class WebsiteController extends Controller
      */
     public function construction()
     {
-        return view('website.pages.construction');
+        return view('website.construction');
     }
 
     /**
@@ -37,7 +37,7 @@ class WebsiteController extends Controller
      */
     public function infrastructure()
     {
-        return view('website.pages.infrastructure');
+        return view('website.infrastructure');
     }
 
     /**
@@ -45,7 +45,7 @@ class WebsiteController extends Controller
      */
     public function projectManagement()
     {
-        return view('website.pages.project-management');
+        return view('website.project-management');
     }
 
     /**
@@ -53,7 +53,7 @@ class WebsiteController extends Controller
      */
     public function designConsulting()
     {
-        return view('website.pages.design-consulting');
+        return view('website.design-consulting');
     }
 
     /**
@@ -61,7 +61,7 @@ class WebsiteController extends Controller
      */
     public function clients()
     {
-        return view('website.pages.clients');
+        return view('website.clients');
     }
 
     /**
@@ -69,7 +69,7 @@ class WebsiteController extends Controller
      */
     public function faqs()
     {
-        return view('website.pages.faqs');
+        return view('website.faqs');
     }
 
     /**
@@ -77,7 +77,7 @@ class WebsiteController extends Controller
      */
     public function digitalShramik()
     {
-        return view('website.pages.digitalshramik');
+        return view('website.digitalshramik');
     }
 
     /**
@@ -85,7 +85,7 @@ class WebsiteController extends Controller
      */
     public function contact()
     {
-        return view('website.pages.contact');
+        return view('website.contact');
     }
 
     /**
@@ -93,7 +93,7 @@ class WebsiteController extends Controller
      */
     public function login()
     {
-        return view('website.pages.auth.login');
+        return view('website.auth.login');
     }
 
     /**
@@ -101,7 +101,7 @@ class WebsiteController extends Controller
      */
     public function signup()
     {
-        return view('website.pages.auth.signup');
+        return view('website.auth.signup');
     }
 
     public function calculator()
@@ -114,6 +114,7 @@ class WebsiteController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('website.pages.calculator', compact('categories', 'works'));
+        return view('website.calculator', compact('categories', 'works'));
     }
 }
+

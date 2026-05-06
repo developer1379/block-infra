@@ -13,12 +13,12 @@ class AuthController extends Controller
 {
     public function loginPage()
     {
-        return view('website.pages.auth.login');
+        return view('website.auth.login');
     }
 
     public function registerPage()
     {
-        return view('website.pages.auth.signup');
+        return view('website.auth.signup');
     }
 
     public function register(Request $request)
@@ -136,3 +136,4 @@ class AuthController extends Controller
         return redirect()->route('website.login')->with('success', 'Logged out successfully.');
     }
 }
+

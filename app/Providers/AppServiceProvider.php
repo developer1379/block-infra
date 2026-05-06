@@ -22,7 +22,16 @@ use App\Repositories\ProjectMilestone\ProjectMilestoneRepository;
 use App\Repositories\ProjectProgressUpdate\Interfaces\ProjectProgressUpdateRepositoryInterface;
 use App\Repositories\ProjectProgressUpdate\ProjectProgressUpdateRepository;
 use App\Interfaces\MilestoneCommentRepositoryInterface;
-use App\Repositories\MilestoneCommentRepository;
+use App\Repositories\Interfaces\InvoiceRepositoryInterface;
+use App\Repositories\InvoiceRepository;
+use App\Repositories\Interfaces\WorkerRepositoryInterface;
+use App\Repositories\WorkerRepository;
+use App\Repositories\Interfaces\MaterialRepositoryInterface;
+use App\Repositories\MaterialRepository;
+use App\Repositories\Interfaces\SiteReportRepositoryInterface;
+use App\Repositories\SiteReportRepository;
+use App\Repositories\Interfaces\AttendanceRepositoryInterface;
+use App\Repositories\AttendanceRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -41,6 +50,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProjectMilestoneRepositoryInterface::class, ProjectMilestoneRepository::class);
         $this->app->bind(ProjectProgressUpdateRepositoryInterface::class, ProjectProgressUpdateRepository::class);
         $this->app->bind(MilestoneCommentRepositoryInterface::class, MilestoneCommentRepository::class);
+        $this->app->bind(InvoiceRepositoryInterface::class, InvoiceRepository::class);
+        $this->app->bind(WorkerRepositoryInterface::class, WorkerRepository::class);
+        $this->app->bind(MaterialRepositoryInterface::class, MaterialRepository::class);
+        $this->app->bind(SiteReportRepositoryInterface::class, SiteReportRepository::class);
+        $this->app->bind(AttendanceRepositoryInterface::class, AttendanceRepository::class);
     }
 
     /**

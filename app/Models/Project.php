@@ -36,6 +36,14 @@ class Project extends Model
         return $this->hasOne(ProjectAward::class);
     }
 
+    /**
+     * Awarded contractor
+     */
+    public function contractor()
+    {
+        return $this->belongsTo(Contractor::class, 'contractor_id');
+    }
+
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'project_category', 'project_id', 'category_id')

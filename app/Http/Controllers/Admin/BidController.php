@@ -23,6 +23,7 @@ class BidController extends Controller
         $project = $this->projects->find($projectId);
         $bids = $this->bids->getByProject($projectId);
 
-        return view('admin.pages.bids.index', compact('project', 'bids'));
+        return view('admin.bids.index', compact('project', 'bids'));
     }
 }
+

@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-contractor-layout>
 
         <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
         <style>
@@ -261,4 +261,5 @@
             });
         </script>
 
-</x-app-layout>
+</x-contractor-layout>
+

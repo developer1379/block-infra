@@ -16,7 +16,7 @@ class RoleController extends Controller
     {
         $roles = Role::with('permissions')->orderBy('name')->get();
 
-        return view('admin.pages.roles.index', [
+        return view('admin.roles.index', [
             'roles' => $roles,
         ]);
     }
@@ -25,7 +25,7 @@ class RoleController extends Controller
     {
         $permissions = Permission::orderBy('name')->get();
 
-        return view('admin.pages.roles.create', [
+        return view('admin.roles.create', [
             'permissions' => $permissions,
         ]);
     }
@@ -72,7 +72,7 @@ class RoleController extends Controller
         $permissions = Permission::orderBy('name')->get();
         $assigned    = $role->permissions()->pluck('id')->toArray();
 
-        return view('admin.pages.roles.edit', [
+        return view('admin.roles.edit', [
             'role'        => $role,
             'permissions' => $permissions,
             'assigned'    => $assigned,
@@ -150,3 +150,4 @@ class RoleController extends Controller
         }
     }
 }
+

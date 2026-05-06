@@ -30,7 +30,7 @@ class ProjectTrackingController extends Controller
         ])->findOrFail($id);
 
         if ($project) {
-            return view('admin.pages.projects.tracking', compact('project'));
+            return view('admin.projects.tracking', compact('project'));
         }else{
             return redirect()->back()->with('error', 'Project now Awarded Yet.');
         }
@@ -77,3 +77,4 @@ class ProjectTrackingController extends Controller
         return back()->with('success', 'Milestone deleted.');
     }
 }
+
