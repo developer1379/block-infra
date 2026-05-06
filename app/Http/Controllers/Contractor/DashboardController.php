@@ -42,7 +42,9 @@ class DashboardController extends Controller
                     ->where('status', 'present')
                     ->count(),
                 'total_payments' => \App\Models\WorkerPayment::where('contractor_id', $contractor->id)->sum('amount'),
-                'earnings' => \App\Models\Project::where('contractor_id', $contractor->id)->sum('budget'),
+                'earnings' => \App\Models\Bid::where('contractor_id', Auth::id())
+                    ->where('status', 'accepted')
+                    ->sum('bid_amount'),
             ];
 
             $ongoingProjects = $this->projects->getOngoingProjectsByContractor($contractor->id)->take(5);
