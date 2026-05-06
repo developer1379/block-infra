@@ -9,6 +9,7 @@ use App\Http\Controllers\Contractor\BidController;
 use App\Http\Controllers\Contractor\WorkerController;
 use App\Http\Controllers\Contractor\InventoryController;
 use App\Http\Controllers\Contractor\AttendanceController;
+use App\Http\Controllers\Contractor\WorkerPaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,7 @@ Route::post('/project/bids/{id}/store', [BidController::class, 'store'])->name('
 // Workforce Management
 Route::resource('workers', WorkerController::class);
 Route::resource('attendance', AttendanceController::class);
+Route::resource('payments', WorkerPaymentController::class);
 
 // Site Activities
 Route::resource('site-reports', \App\Http\Controllers\Contractor\SiteReportController::class);

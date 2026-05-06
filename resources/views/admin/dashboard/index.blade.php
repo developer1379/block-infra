@@ -1,280 +1,134 @@
 <x-admin-layout>
-    <div class="space-y-6">
-
-        {{-- HEADER --}}
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+    <div class="space-y-8 animate-fade-in">
+        <!-- Header -->
+        <div class="flex items-center justify-between">
             <div>
-                <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Dashboard Overview</h2>
-                <p class="text-slate-500 text-sm">Welcome back, <strong
-                        class="text-slate-800">{{ Auth::user()->name ?? 'Admin' }}</strong> 👋</p>
+                <h1 class="text-2xl font-bold text-slate-800">Platform Overview</h1>
+                <p class="text-sm text-slate-500">{{ \Carbon\Carbon::now()->format('l, F j, Y') }}</p>
             </div>
-
-            {{-- Optional Date Filter Button for UI polish --}}
-            <button
-                class="flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-primary hover:border-primary transition-colors shadow-sm">
-                <i class="fa-regular fa-calendar"></i>
-                <span>This Month</span>
-                <i class="fa-solid fa-chevron-down text-xs ml-1"></i>
-            </button>
+            <div class="flex items-center gap-2 px-4 py-2 bg-white rounded-xl border border-slate-200 shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                <span class="text-xs font-bold text-slate-600 uppercase tracking-widest">System Online</span>
+            </div>
         </div>
 
-        {{-- STATS CARDS --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-            @php
-                $stats = [
-                    [
-                        'title' => 'Active Projects',
-                        'value' => '24',
-                        'icon' => 'fa-solid fa-building',
-                        'bg_color' => 'bg-emerald-50',
-                        'text_color' => 'text-emerald-600',
-                    ],
-                    [
-                        'title' => 'Contractors',
-                        'value' => '82',
-                        'icon' => 'fa-solid fa-user-tie',
-                        'bg_color' => 'bg-blue-50',
-                        'text_color' => 'text-blue-600',
-                    ],
-                    [
-                        'title' => 'Clients',
-                        'value' => '142',
-                        'icon' => 'fa-solid fa-users',
-                        'bg_color' => 'bg-indigo-50',
-                        'text_color' => 'text-indigo-600',
-                    ],
-                    [
-                        'title' => 'Pending Invoices',
-                        'value' => '12',
-                        'icon' => 'fa-solid fa-file-invoice-dollar',
-                        'bg_color' => 'bg-rose-50',
-                        'text_color' => 'text-rose-600',
-                    ],
-                ];
-            @endphp
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Total Contractors -->
+            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-lg transition-all group">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all">
+                        <i class="fa-solid fa-user-tie text-xl"></i>
+                    </div>
+                    <span class="text-xs font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded-lg">Total</span>
+                </div>
+                <p class="text-sm font-bold text-slate-500 uppercase tracking-wider">Contractors</p>
+                <h3 class="text-3xl font-black text-slate-800 mt-1">{{ number_format($stats['total_contractors']) }}</h3>
+            </div>
 
-            @foreach ($stats as $stat)
-                <div
-                    class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+            <!-- Total Projects -->
+            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-lg transition-all group">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-teal-50 rounded-2xl flex items-center justify-center text-teal-600 group-hover:bg-teal-600 group-hover:text-white transition-all">
+                        <i class="fa-solid fa-building-columns text-xl"></i>
+                    </div>
+                    <span class="text-xs font-bold text-teal-600 bg-teal-50 px-2 py-1 rounded-lg">Live</span>
+                </div>
+                <p class="text-sm font-bold text-slate-500 uppercase tracking-wider">Projects</p>
+                <h3 class="text-3xl font-black text-slate-800 mt-1">{{ number_format($stats['total_projects']) }}</h3>
+            </div>
+
+            <!-- Total Workforce -->
+            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-lg transition-all group">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-600 group-hover:bg-amber-600 group-hover:text-white transition-all">
+                        <i class="fa-solid fa-users-gear text-xl"></i>
+                    </div>
+                    <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded-lg">Workers</span>
+                </div>
+                <p class="text-sm font-bold text-slate-500 uppercase tracking-wider">Workforce</p>
+                <h3 class="text-3xl font-black text-slate-800 mt-1">{{ number_format($stats['total_workers']) }}</h3>
+            </div>
+
+            <!-- Total Payments -->
+            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-lg transition-all group">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-rose-50 rounded-2xl flex items-center justify-center text-rose-600 group-hover:bg-rose-600 group-hover:text-white transition-all">
+                        <i class="fa-solid fa-money-bill-trend-up text-xl"></i>
+                    </div>
+                    <span class="text-xs font-bold text-rose-600 bg-rose-50 px-2 py-1 rounded-lg">Cashflow</span>
+                </div>
+                <p class="text-sm font-bold text-slate-500 uppercase tracking-wider">Total Wages</p>
+                <h3 class="text-3xl font-black text-slate-800 mt-1">₹{{ number_format($stats['total_payments'] / 1000, 1) }}k</h3>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Recent Projects -->
+            <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+                <div class="p-6 border-b border-slate-50 flex items-center justify-between">
+                    <h3 class="font-bold text-slate-800">Recent Projects</h3>
+                    <a href="{{ route('admin.projects.index') }}" class="text-xs font-bold text-indigo-600 hover:underline">View All</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <tbody class="divide-y divide-slate-50">
+                            @foreach($recentProjects as $project)
+                            <tr class="hover:bg-slate-50/50 transition-colors">
+                                <td class="px-6 py-4">
+                                    <p class="text-sm font-bold text-slate-800">{{ $project->title }}</p>
+                                    <p class="text-[10px] text-slate-400 uppercase tracking-tighter">{{ $project->location }}</p>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="px-2 py-0.5 rounded-lg bg-slate-100 text-slate-600 text-[10px] font-black uppercase">
+                                        {{ $project->status }}
+                                    </span>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Recent Workforce Payments -->
+            <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+                <div class="p-6 border-b border-slate-50 flex items-center justify-between">
+                    <h3 class="font-bold text-slate-800">Recent Wage Disbursements</h3>
+                    <span class="text-[10px] font-black text-slate-300 uppercase tracking-widest">Live Feed</span>
+                </div>
+                <div class="p-6 space-y-6">
+                    @forelse($recentPayments as $payment)
                     <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
-                                {{ $stat['title'] }}</p>
-                            <h3 class="text-3xl font-bold text-slate-800">{{ $stat['value'] }}</h3>
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 font-bold text-xs">
+                                {{ substr($payment->worker->name, 0, 1) }}
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-slate-800">{{ $payment->worker->name }}</p>
+                                <p class="text-[10px] text-slate-400">Paid by <span class="font-bold">{{ $payment->contractor->user->name ?? 'Contractor' }}</span></p>
+                            </div>
                         </div>
-                        <div
-                            class="w-12 h-12 rounded-xl flex items-center justify-center {{ $stat['bg_color'] }} {{ $stat['text_color'] }}">
-                            <i class="{{ $stat['icon'] }} text-xl"></i>
+                        <div class="text-right">
+                            <p class="text-sm font-black text-slate-800">₹{{ number_format($payment->amount) }}</p>
+                            <p class="text-[10px] text-slate-400 uppercase">{{ $payment->payment_method }}</p>
                         </div>
                     </div>
-                </div>
-            @endforeach
-        </div>
-
-        {{-- CHARTS + QUICK STATS --}}
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-            {{-- Chart Section --}}
-            <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-                <div class="flex justify-between items-center mb-6 border-b border-gray-50 pb-4">
-                    <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                        <i class="fa-solid fa-chart-column text-primary"></i>
-                        Project Progress
-                    </h3>
-                    <button class="text-slate-400 hover:text-primary"><i class="fa-solid fa-ellipsis"></i></button>
-                </div>
-                <div class="relative h-72 w-full">
-                    <canvas id="projectChart"></canvas>
-                </div>
-            </div>
-
-            {{-- Quick Stats List --}}
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-                <div class="flex justify-between items-center mb-6 border-b border-gray-50 pb-4">
-                    <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                        <i class="fa-solid fa-gauge-high text-primary"></i>
-                        Quick Stats
-                    </h3>
-                </div>
-
-                <div class="space-y-4">
-                    <div
-                        class="flex items-center justify-between p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors group">
-                        <span class="text-sm font-medium text-slate-600 group-hover:text-slate-800">Completed
-                            Projects</span>
-                        <span
-                            class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold shadow-sm">18</span>
-                    </div>
-
-                    <div
-                        class="flex items-center justify-between p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors group">
-                        <span class="text-sm font-medium text-slate-600 group-hover:text-slate-800">Ongoing
-                            Projects</span>
-                        <span
-                            class="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-bold shadow-sm">6</span>
-                    </div>
-
-                    <div
-                        class="flex items-center justify-between p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors group">
-                        <span class="text-sm font-medium text-slate-600 group-hover:text-slate-800">Total Staff</span>
-                        <span
-                            class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold shadow-sm">56</span>
-                    </div>
-
-                    <div
-                        class="flex items-center justify-between p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors group">
-                        <span class="text-sm font-medium text-slate-600 group-hover:text-slate-800">New Leads</span>
-                        <span
-                            class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-bold shadow-sm">12</span>
-                    </div>
+                    @empty
+                    <p class="text-center text-sm text-slate-400 py-10">No recent payments recorded.</p>
+                    @endforelse
                 </div>
             </div>
         </div>
-
-        {{-- RECENT ACTIVITY TABLE --}}
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-            <div class="px-6 py-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-                <h3 class="font-bold text-slate-800 flex items-center gap-2">
-                    <i class="fa-solid fa-clock-rotate-left text-primary"></i>
-                    Recent Activities
-                </h3>
-                <a href="#" class="text-xs font-semibold text-primary hover:underline">View All</a>
-            </div>
-
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr
-                            class="text-xs font-semibold tracking-wide text-slate-500 uppercase border-b border-gray-200 bg-gray-50">
-                            <th class="px-6 py-4">#</th>
-                            <th class="px-6 py-4">Activity</th>
-                            <th class="px-6 py-4">User</th>
-                            <th class="px-6 py-4">Date</th>
-                            <th class="px-6 py-4">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-100">
-                        {{-- Row 1 --}}
-                        <tr class="hover:bg-slate-50 transition-colors">
-                            <td class="px-6 py-4 text-sm font-bold text-slate-700">1</td>
-                            <td class="px-6 py-4 text-sm text-slate-700 font-medium">Project “Metro Line Extension”
-                                updated</td>
-                            <td class="px-6 py-4 text-sm text-slate-500">Arvind Verma</td>
-                            <td class="px-6 py-4 text-sm text-slate-500">Nov 5, 2025</td>
-                            <td class="px-6 py-4">
-                                <span
-                                    class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-emerald-100 text-emerald-800">
-                                    Completed
-                                </span>
-                            </td>
-                        </tr>
-                        {{-- Row 2 --}}
-                        <tr class="hover:bg-slate-50 transition-colors">
-                            <td class="px-6 py-4 text-sm font-bold text-slate-700">2</td>
-                            <td class="px-6 py-4 text-sm text-slate-700 font-medium">New contractor registration
-                                approved</td>
-                            <td class="px-6 py-4 text-sm text-slate-500">Admin</td>
-                            <td class="px-6 py-4 text-sm text-slate-500">Nov 4, 2025</td>
-                            <td class="px-6 py-4">
-                                <span
-                                    class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-sky-100 text-sky-800">
-                                    Approved
-                                </span>
-                            </td>
-                        </tr>
-                        {{-- Row 3 --}}
-                        <tr class="hover:bg-slate-50 transition-colors">
-                            <td class="px-6 py-4 text-sm font-bold text-slate-700">3</td>
-                            <td class="px-6 py-4 text-sm text-slate-700 font-medium">Payment request generated #BLC-233
-                            </td>
-                            <td class="px-6 py-4 text-sm text-slate-500">Finance Dept.</td>
-                            <td class="px-6 py-4 text-sm text-slate-500">Nov 3, 2025</td>
-                            <td class="px-6 py-4">
-                                <span
-                                    class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-amber-100 text-amber-800">
-                                    Pending
-                                </span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
     </div>
 
-    {{-- JS --}}
-    @push('scripts')
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-        <script>
-            const ctx = document.getElementById('projectChart');
-
-            // Global Chart Defaults for better font
-            Chart.defaults.font.family = "'Poppins', sans-serif";
-            Chart.defaults.color = '#64748b';
-
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-                    datasets: [{
-                        label: 'Projects Completed',
-                        data: [3, 5, 8, 10, 9, 13, 15],
-                        // Updated to match the Primary Teal Color (#0f766e)
-                        backgroundColor: '#0f766e',
-                        hoverBackgroundColor: '#115e59',
-                        borderRadius: 8,
-                        barThickness: 24,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            backgroundColor: '#1e293b',
-                            titleColor: '#fff',
-                            bodyColor: '#cbd5e1',
-                            padding: 10,
-                            cornerRadius: 8,
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: {
-                                display: false,
-                                drawBorder: false
-                            },
-                            ticks: {
-                                font: {
-                                    size: 12,
-                                    weight: '500'
-                                }
-                            }
-                        },
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: '#f1f5f9',
-                                borderDash: [4, 4]
-                            },
-                            ticks: {
-                                font: {
-                                    size: 12
-                                }
-                            },
-                            border: {
-                                display: false
-                            }
-                        }
-                    }
-                }
-            });
-        </script>
-    @endpush
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+    </style>
 </x-admin-layout>
-

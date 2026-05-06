@@ -27,9 +27,11 @@ use App\Http\Controllers\Admin\SiteReportController;
 |
 */
 
-Route::get('/dashboard', function () {
-    return view('admin.dashboard.index');
-})->name('dashboard');
+use App\Http\Controllers\Admin\DashboardController;
+
+// ... other imports ...
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 // Resource Management
 Route::resource('categories', CategoryController::class);
@@ -57,6 +59,8 @@ Route::patch('/milestones/{id}/status', [ProjectTrackingController::class, 'upda
 Route::delete('/milestones/{id}', [ProjectTrackingController::class, 'destroyMilestone'])->name('milestones.destroy');
 
 // New Construction Management Routes
+Route::get('workers/{id}/attendance', [WorkerController::class, 'attendance'])->name('workers.attendance');
+Route::get('workers/{id}/payments', [WorkerController::class, 'payments'])->name('workers.payments');
 Route::resource('workers', WorkerController::class);
 Route::resource('materials', MaterialController::class);
 Route::resource('finance', FinanceController::class);

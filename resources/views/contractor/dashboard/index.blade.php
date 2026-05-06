@@ -20,18 +20,18 @@
 
         <!-- Stats Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Total Earnings -->
+            <!-- Total Payments -->
             <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
                 <div class="absolute -right-4 -top-4 w-24 h-24 bg-green-50 rounded-full opacity-50 group-hover:scale-110 transition-transform"></div>
                 <div class="relative">
                     <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center text-green-600 mb-4">
-                        <i class="bi bi-currency-rupee text-2xl"></i>
+                        <i class="bi bi-wallet2 text-2xl"></i>
                     </div>
-                    <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">{{ __('Total Earnings') }}</p>
-                    <h3 class="text-2xl font-bold text-gray-900 mt-1">₹{{ number_format($stats['earnings'], 2) }}</h3>
+                    <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">{{ __('Worker Payments') }}</p>
+                    <h3 class="text-2xl font-bold text-gray-900 mt-1">₹{{ number_format($stats['total_payments'], 2) }}</h3>
                     <p class="text-xs text-green-600 font-medium mt-2 flex items-center gap-1">
-                        <i class="bi bi-arrow-up-right"></i>
-                        <span>{{ __('From accepted bids') }}</span>
+                        <i class="bi bi-check-circle"></i>
+                        <span>{{ __('Paid to workforce') }}</span>
                     </p>
                 </div>
             </div>
@@ -52,36 +52,34 @@
                 </div>
             </div>
 
-            <!-- Total Bids -->
+            <!-- Total Workers -->
             <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
                 <div class="absolute -right-4 -top-4 w-24 h-24 bg-yellow-50 rounded-full opacity-50 group-hover:scale-110 transition-transform"></div>
                 <div class="relative">
                     <div class="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center text-yellow-600 mb-4">
-                        <i class="bi bi-megaphone text-2xl"></i>
+                        <i class="bi bi-people text-2xl"></i>
                     </div>
-                    <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">{{ __('Total Bids') }}</p>
-                    <h3 class="text-2xl font-bold text-gray-900 mt-1">{{ $stats['total_bids'] }}</h3>
+                    <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">{{ __('Total Workforce') }}</p>
+                    <h3 class="text-2xl font-bold text-gray-900 mt-1">{{ $stats['total_workers'] }}</h3>
                     <p class="text-xs text-yellow-600 font-medium mt-2 flex items-center gap-1">
-                        <i class="bi bi-info-circle"></i>
-                        <span>{{ __('Across all projects') }}</span>
+                        <i class="bi bi-person-check"></i>
+                        <span>{{ __('Active workers') }}</span>
                     </p>
                 </div>
             </div>
 
-            <!-- Total Completed -->
+            <!-- Attendance Today -->
             <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
                 <div class="absolute -right-4 -top-4 w-24 h-24 bg-purple-50 rounded-full opacity-50 group-hover:scale-110 transition-transform"></div>
                 <div class="relative">
                     <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-purple-600 mb-4">
-                        <i class="bi bi-check2-circle text-2xl"></i>
+                        <i class="bi bi-calendar-check text-2xl"></i>
                     </div>
-                    <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">{{ __('Success Rate') }}</p>
-                    <h3 class="text-2xl font-bold text-gray-900 mt-1">
-                        {{ $stats['total_bids'] > 0 ? round(($stats['total_projects'] / $stats['total_bids']) * 100) : 0 }}%
-                    </h3>
+                    <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">{{ __('Attendance Today') }}</p>
+                    <h3 class="text-2xl font-bold text-gray-900 mt-1">{{ $stats['attendance_today'] }}</h3>
                     <p class="text-xs text-purple-600 font-medium mt-2 flex items-center gap-1">
-                        <i class="bi bi-trophy"></i>
-                        <span>{{ __('Bid win ratio') }}</span>
+                        <i class="bi bi-geo-alt"></i>
+                        <span>{{ __('Verified on site') }}</span>
                     </p>
                 </div>
             </div>

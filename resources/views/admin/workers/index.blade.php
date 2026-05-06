@@ -57,6 +57,12 @@
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex items-center justify-end gap-2">
+                                        <a href="{{ route('admin.workers.attendance', $worker->id) }}" class="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all" title="View Attendance">
+                                            <i class="fa-solid fa-calendar-check"></i>
+                                        </a>
+                                        <a href="{{ route('admin.workers.payments', $worker->id) }}" class="p-2 text-slate-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all" title="View Payments">
+                                            <i class="fa-solid fa-wallet"></i>
+                                        </a>
                                         <a href="{{ route('admin.workers.edit', $worker->id) }}" class="p-2 text-slate-400 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-all">
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </a>

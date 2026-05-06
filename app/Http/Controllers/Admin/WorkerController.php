@@ -105,4 +105,33 @@ class WorkerController extends Controller
             return back()->with('error', 'Unable to delete worker.');
         }
     }
+
+    public function attendance($id)
+    {
+        try {
+            $worker = $this->workers->find($id);
+            $attendanceRecords = \App\Models\ProjectAttendance::where('worker_id', $id)
+                ->with('project')
+                ->latest('attendance_date')
+                ->paginate(20);
+            return view('admin.workers.attendance', compact('worker', 'attendanceRecords'));
+        } catch (\Exception $e) {
+            Log::error('Admin Worker Attendance Error: ' . $e->getMessage());
+            return back()->with('error', 'Unable to load attendance history.');
+        }
+    }
+
+    public function payments($id)
+    {
+        try {
+            $worker = $this->workers->find($id);
+            $payments = \App\Models\WorkerPayment::where('worker_id', $id)
+                ->latest('payment_date')
+                ->paginate(20);
+            return view('admin.workers.payments', compact('worker', 'payments'));
+        } catch (\Exception $e) {
+            Log::error('Admin Worker Payments Error: ' . $e->getMessage());
+            return back()->with('error', 'Unable to load payment history.');
+        }
+    }
 }

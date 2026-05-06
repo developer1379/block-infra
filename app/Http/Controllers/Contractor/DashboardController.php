@@ -34,11 +34,15 @@ class DashboardController extends Controller
             $stats = [
                 'total_projects' => $this->projects->countProjectsByContractor($contractor->id),
                 'active_projects' => $this->projects->getOngoingProjectsByContractor($contractor->id)->count(),
-                'total_bids' => $this->projects->countBidsByContractor($contractor->id),
-                // We assume projects awarded to this contractor
-                'earnings' => \App\Models\Bid::where('contractor_id', $user->id)
-                    ->where('status', 'accepted')
-                    ->sum('bid_amount'),
+                'total_workers' => \App\Models\Worker::where('contractor_id', $contractor->id)->count(),
+                'attendance_today' => \App\Models\ProjectAttendance::whereHas('project', function($q) use ($contractor) {
+                        $q->where('contractor_id', $contractor->id);
+                    })
+                    ->where('attendance_date', date('Y-m-d'))
+                    ->where('status', 'present')
+                    ->count(),
+                'total_payments' => \App\Models\WorkerPayment::where('contractor_id', $contractor->id)->sum('amount'),
+                'earnings' => \App\Models\Project::where('contractor_id', $contractor->id)->sum('budget'),
             ];
 
             $ongoingProjects = $this->projects->getOngoingProjectsByContractor($contractor->id)->take(5);
