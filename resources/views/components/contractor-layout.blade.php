@@ -265,10 +265,10 @@
                 @endif
 
                 {{ $slot }}
-{{-- 
+
                 <footer class="mt-auto py-6 px-6 text-center text-sm text-gray-400 border-t border-gray-200">
                     &copy; {{ date('Y') }} {{ config('app.name') }}. {{ __('All rights reserved') }}.
-                </footer> --}}
+                </footer>
             </main>
         </div>
     </div>
