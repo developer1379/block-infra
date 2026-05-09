@@ -144,6 +144,7 @@ class ProjectController extends Controller
 
         // 2. Validate Input
         $request->validate([
+            'milestone_id'        => 'required|exists:project_milestones,id',
             'progress_percentage' => 'required|integer|min:0|max:100',
             'report_description'  => 'required|string|max:2000',
             'report_file'         => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120',
@@ -170,6 +171,7 @@ class ProjectController extends Controller
         // 4. Create the History Record
         $project->progressUpdates()->create([
             'user_id'             => Auth::id(),
+            'milestone_id'        => $request->milestone_id,
             'progress_percentage' => $request->progress_percentage,
             'report_description'  => $request->report_description,
             'report_file_path'    => $filePath,

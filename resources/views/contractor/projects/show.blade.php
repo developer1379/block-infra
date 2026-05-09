@@ -141,47 +141,14 @@
             <div class="lg:col-span-8 space-y-8">
                 <!-- Progress Hub Section -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- Secure Progress Update Form -->
-                    <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
-                        <div class="p-6 bg-indigo-600 text-white">
-                            <h3 class="font-bold flex items-center gap-2 text-sm">
-                                <i class="bi bi-shield-check"></i> {{ __('Post Verified Progress') }}
-                            </h3>
-                            <p class="text-[9px] text-indigo-100 mt-1">{{ __('Requires live photo and location data.') }}</p>
+                    <!-- Placeholder for Milestone-Based Progress (Empty for now) -->
+                    <div class="bg-indigo-50 rounded-3xl border border-indigo-100 p-8 flex flex-col items-center justify-center text-center space-y-4">
+                        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-indigo-600 text-2xl shadow-sm border border-indigo-50">
+                            <i class="bi bi-flag"></i>
                         </div>
-                        <div class="p-8 flex-1">
-                            <form action="{{ route('contractor.projects.progress.store', $project->id) }}" method="POST" id="progressForm" class="space-y-6">
-                                @csrf
-                                <input type="hidden" name="verification_photo" id="verification_photo">
-                                <input type="hidden" name="latitude" id="latitude">
-                                <input type="hidden" name="longitude" id="longitude">
-                                <input type="hidden" name="location_address" id="location_address">
-
-                                <div x-data="{ progress: {{ $project->current_progress ?? 0 }} }">
-                                    <div class="flex justify-between items-end mb-3">
-                                        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ __('Project Completion') }}</label>
-                                        <span class="text-2xl font-black text-indigo-600" x-text="progress + '%'"></span>
-                                    </div>
-                                    <input type="range" name="progress_percentage" x-model="progress" min="0" max="100" step="1" 
-                                        class="w-full h-2 bg-gray-100 rounded-lg appearance-none cursor-pointer accent-indigo-600">
-                                </div>
-
-                                <div>
-                                    <textarea name="report_description" rows="3" required 
-                                        class="w-full rounded-2xl border-gray-100 text-sm bg-gray-50/50 p-4 transition-all focus:bg-white" 
-                                        placeholder="{{ __('Describe today\'s site achievements...') }}"></textarea>
-                                </div>
-
-                                <div class="grid grid-cols-2 gap-4">
-                                    <button type="button" onclick="startCamera()" class="py-3 bg-gray-50 border border-gray-100 text-gray-600 text-[10px] font-bold rounded-xl hover:bg-indigo-50 hover:text-indigo-600 transition-all flex items-center justify-center gap-2">
-                                        <i class="bi bi-camera"></i> {{ __('Capture Site Photo') }}
-                                    </button>
-                                    <button type="submit" class="py-3 bg-indigo-600 text-white text-[10px] font-black rounded-xl shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all transform active:scale-95">
-                                        {{ __('Submit Daily Report') }}
-                                    </button>
-                                </div>
-                                <div id="locationStatus" class="text-[9px] text-gray-400 italic text-center"></div>
-                            </form>
+                        <div>
+                            <h3 class="font-bold text-gray-900 text-sm">{{ __('Milestone Progress Tracking') }}</h3>
+                            <p class="text-xs text-gray-500 mt-1">{{ __('Click on a project phase to report your progress.') }}</p>
                         </div>
                     </div>
 
@@ -200,16 +167,22 @@
                                         <div class="absolute left-[7px] top-4 bottom-0 w-0.5 bg-gray-50 group-hover:bg-indigo-100 transition-all"></div>
                                     @endif
                                     <div class="absolute left-0 top-1 h-4 w-4 rounded-full border-2 {{ $milestone->status == 'paid' ? 'bg-emerald-500 border-emerald-100' : 'bg-white border-gray-200' }} z-10 transition-all"></div>
-                                    <div class="flex items-center justify-between bg-gray-50/50 group-hover:bg-white group-hover:shadow-lg p-4 rounded-2xl border border-transparent group-hover:border-indigo-50 transition-all">
+                                    
+                                    <button type="button" 
+                                        onclick="openProgressModal('{{ $milestone->id }}', '{{ $milestone->title }}')"
+                                        {{ $milestone->status == 'paid' ? 'disabled' : '' }}
+                                        class="w-full text-left flex items-center justify-between {{ $milestone->status == 'paid' ? 'bg-emerald-50/50' : 'bg-gray-50/50 hover:bg-white hover:shadow-lg hover:border-indigo-50' }} p-4 rounded-2xl border border-transparent transition-all group">
                                         <div>
                                             <p class="text-[10px] font-bold text-gray-900">{{ $milestone->title }}</p>
                                             <p class="text-[8px] text-gray-400 mt-0.5">{{ $milestone->due_date ? $milestone->due_date->format('M d, Y') : 'Date Pending' }}</p>
                                         </div>
                                         <div class="text-right">
                                             <p class="text-[10px] font-black text-gray-900">₹{{ number_format($milestone->amount) }}</p>
-                                            <span class="text-[8px] font-bold tracking-tighter {{ $milestone->status == 'paid' ? 'text-emerald-600' : 'text-gray-400' }}">{{ strtoupper($milestone->status) }}</span>
+                                            <span class="text-[8px] font-bold tracking-tighter {{ $milestone->status == 'paid' ? 'text-emerald-600' : 'text-indigo-400' }}">
+                                                {{ $milestone->status == 'paid' ? __('COMPLETED') : __('REPORT PROGRESS') }}
+                                            </span>
                                         </div>
-                                    </div>
+                                    </button>
                                 </div>
                             @empty
                                 <div class="text-center py-12">
@@ -283,7 +256,58 @@
         </div>
     </div>
 
-    <!-- Camera Modal -->
+    <!-- Progress Reporting Modal -->
+    <div id="reportProgressModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-[32px] w-full max-w-xl overflow-hidden shadow-2xl animate-fade-in">
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-indigo-600 text-white">
+                <div>
+                    <h3 class="font-bold text-sm flex items-center gap-2">
+                        <i class="bi bi-flag-fill"></i> {{ __('Report Milestone Progress') }}
+                    </h3>
+                    <p class="text-[10px] text-indigo-100 mt-1" id="modalMilestoneTitle"></p>
+                </div>
+                <button onclick="closeProgressModal()" class="text-white/80 hover:text-white transition-colors">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            
+            <form action="{{ route('contractor.projects.progress.store', $project->id) }}" method="POST" id="progressForm" class="p-8 space-y-6">
+                @csrf
+                <input type="hidden" name="milestone_id" id="modalMilestoneId">
+                <input type="hidden" name="verification_photo" id="verification_photo">
+                <input type="hidden" name="latitude" id="latitude">
+                <input type="hidden" name="longitude" id="longitude">
+                <input type="hidden" name="location_address" id="location_address">
+
+                <div x-data="{ progress: 0 }">
+                    <div class="flex justify-between items-end mb-3">
+                        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ __('Phase Completion') }}</label>
+                        <span class="text-2xl font-black text-indigo-600" x-text="progress + '%'"></span>
+                    </div>
+                    <input type="range" name="progress_percentage" x-model="progress" min="0" max="100" step="1" 
+                        class="w-full h-2 bg-gray-100 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+                </div>
+
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 block">{{ __('Daily Progress Report') }}</label>
+                    <textarea name="report_description" rows="3" required 
+                        class="w-full rounded-2xl border-gray-100 text-sm bg-gray-50/50 p-4 transition-all focus:bg-white" 
+                        placeholder="{{ __('What work was completed for this milestone today?') }}"></textarea>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <button type="button" onclick="startCamera()" class="py-3 bg-gray-50 border border-gray-100 text-gray-600 text-[10px] font-bold rounded-xl hover:bg-indigo-50 hover:text-indigo-600 transition-all flex items-center justify-center gap-2">
+                        <i class="bi bi-camera"></i> {{ __('Site Photo') }}
+                    </button>
+                    <button type="submit" class="py-3 bg-indigo-600 text-white text-[10px] font-black rounded-xl shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all">
+                        {{ __('Verify & Submit') }}
+                    </button>
+                </div>
+                <div id="locationStatus" class="text-[9px] text-gray-400 italic text-center"></div>
+            </form>
+        </div>
+    </div>
+
     <div id="cameraModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-[32px] w-full max-w-lg overflow-hidden shadow-2xl">
             <div class="p-6 border-b border-gray-100 flex justify-between items-center">
@@ -305,11 +329,22 @@
                 <p class="text-[10px] text-gray-400">{{ __('Position the camera at the work site before capturing.') }}</p>
             </div>
         </div>
-        
     </div>
 
     <script>
         let stream = null;
+
+        function openProgressModal(milestoneId, title) {
+            document.getElementById('modalMilestoneId').value = milestoneId;
+            document.getElementById('modalMilestoneTitle').innerText = title;
+            document.getElementById('reportProgressModal').classList.remove('hidden');
+            getLocation();
+        }
+
+        function closeProgressModal() {
+            document.getElementById('reportProgressModal').classList.add('hidden');
+            stopCamera();
+        }
 
         function startCamera() {
             const modal = document.getElementById('cameraModal');

@@ -23,4 +23,9 @@ class ProjectProgressUpdate extends Model
     {
         return $this->belongsTo(Project::class);
     }
+
+    public function milestone()
+    {
+        return $this->belongsTo(ProjectMilestone::class, 'milestone_id');
+    }
 }
