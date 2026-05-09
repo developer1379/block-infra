@@ -132,7 +132,7 @@
                                     </td>
                                     <td class="px-6 py-4">
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
-                                            {{ ucfirst($project->status) }}
+                                            {{ __(ucfirst($project->status)) }}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 text-right">
@@ -167,7 +167,7 @@
                     <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:border-indigo-200 transition-all group">
                         <div class="flex justify-between items-start mb-3">
                             <span class="px-2 py-1 bg-indigo-50 text-indigo-700 text-[10px] font-bold rounded uppercase tracking-wider">
-                                {{ $p->category->name ?? 'Project' }}
+                                {{ $p->category->name ?? __('Project') }}
                             </span>
                             <span class="text-[10px] text-gray-400 font-medium">{{ $p->created_at->diffForHumans() }}</span>
                         </div>
@@ -176,7 +176,7 @@
                         <div class="mt-4 flex items-center justify-between">
                             <div class="flex items-center gap-1 text-indigo-600">
                                 <i class="bi bi-geo-alt text-xs"></i>
-                                <span class="text-[10px] font-bold">{{ $p->location ?? 'Multiple Locations' }}</span>
+                                <span class="text-[10px] font-bold">{{ $p->location ?? __('Multiple Locations') }}</span>
                             </div>
                             <a href="{{ route('contractor.projects.details', $p->id) }}" class="text-xs font-bold text-gray-900 hover:text-indigo-600 transition-colors">
                                 {{ __('Bid Now') }} &rarr;

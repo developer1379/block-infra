@@ -19,7 +19,7 @@ class ProfileController extends Controller
     public function index()
     {
         $contractor = $this->profile->getProfile();
-        return view('admin.contractors.profile', compact('contractor'));
+        return view('contractor.profile.edit', compact('contractor'));
     }
 
     /** Update Profile */

@@ -1,135 +1,164 @@
 <x-contractor-layout>
-    <div class="py-12">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            <div class="mb-8">
-                <a href="{{ route('contractor.attendance.index') }}" class="inline-flex items-center text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition-colors mb-4">
-                    <i class="bi bi-arrow-left mr-2"></i> Back to History
-                </a>
-                <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Mark Attendance</h1>
-                <p class="text-gray-500 mt-1">Record worker attendance with real-time GPS location.</p>
+    <div class="p-6 space-y-8 animate-fade-in">
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-center gap-5 bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+            <a href="{{ route('contractor.attendance.index') }}" class="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all shadow-sm">
+                <i class="fa-solid fa-arrow-left"></i>
+            </a>
+            <div>
+                <h1 class="text-3xl font-black text-gray-900 tracking-tight">{{ __('Mark Attendance') }}</h1>
+                <p class="text-gray-500 text-sm font-medium">{{ __('Record worker attendance with real-time GPS location.') }}</p>
             </div>
+        </div>
 
-            <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
-                <form action="{{ route('contractor.attendance.store') }}" method="POST" enctype="multipart/form-data" id="attendanceForm" class="p-8 space-y-8">
-                    @csrf
+        <div class="bg-white rounded-[2.5rem] shadow-xl shadow-indigo-100/20 border border-gray-100 overflow-hidden">
+            <form action="{{ route('contractor.attendance.store') }}" method="POST" enctype="multipart/form-data" id="attendanceForm" class="p-8 space-y-8">
+                @csrf
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <!-- Project Selection -->
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-2">Project</label>
-                            <select name="project_id" required class="select2 w-full rounded-2xl border-gray-200 bg-gray-50 focus:border-indigo-500 focus:ring-indigo-500 transition-all py-3 px-4">
-                                <option value="">Select Project Site</option>
-                                @foreach($projects as $project)
-                                    <option value="{{ $project->id }}">{{ $project->title }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Project Selection -->
+                    <div class="space-y-3">
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Project Site') }}</label>
+                        <select name="project_id" required class="select2-init w-full">
+                            <option value="">{{ __('Select Project Site') }}</option>
+                            @foreach($projects as $project)
+                                <option value="{{ $project->id }}">{{ $project->title }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
-                        <!-- Date -->
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-2">Attendance Date</label>
-                            <div class="relative">
-                                <input type="date" name="attendance_date" required value="{{ date('Y-m-d') }}" readonly
-                                    class="w-full rounded-2xl border-gray-200 bg-gray-100 cursor-not-allowed focus:ring-0 transition-all py-3 px-4 text-gray-500 font-semibold">
-                                <span class="absolute right-4 top-3.5 text-[10px] font-black text-indigo-500 uppercase tracking-tighter bg-indigo-50 px-2 py-0.5 rounded-lg border border-indigo-100">Today Only</span>
-                            </div>
+                    <!-- Worker Selection -->
+                    <div class="space-y-3">
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Worker') }}</label>
+                        <select name="worker_id" required class="select2-init w-full">
+                            <option value="">{{ __('Select Worker') }}</option>
+                            @foreach($workers as $worker)
+                                <option value="{{ $worker->id }}">{{ $worker->name }} ({{ __($worker->specialization) }})</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Status -->
+                    <div class="space-y-3">
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Attendance Status') }}</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="cursor-pointer group">
+                                <input type="radio" name="status" value="present" checked class="peer sr-only">
+                                <div class="py-4 text-center rounded-2xl border border-gray-100 bg-gray-50 text-gray-400 font-black text-[10px] uppercase tracking-widest peer-checked:bg-emerald-50 peer-checked:border-emerald-200 peer-checked:text-emerald-600 transition-all shadow-sm group-hover:bg-white">
+                                    {{ __('Present') }}
+                                </div>
+                            </label>
+                            <label class="cursor-pointer group">
+                                <input type="radio" name="status" value="half_day" class="peer sr-only">
+                                <div class="py-4 text-center rounded-2xl border border-gray-100 bg-gray-50 text-gray-400 font-black text-[10px] uppercase tracking-widest peer-checked:bg-amber-50 peer-checked:border-amber-200 peer-checked:text-amber-600 transition-all shadow-sm group-hover:bg-white">
+                                    {{ __('Half Day') }}
+                                </div>
+                            </label>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <!-- Worker Selection -->
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-2">Worker</label>
-                            <select name="worker_id" required class="select2 w-full rounded-2xl border-gray-200 bg-gray-50 focus:border-indigo-500 focus:ring-indigo-500 transition-all py-3 px-4">
-                                <option value="">Select Worker</option>
-                                @foreach($workers as $worker)
-                                    <option value="{{ $worker->id }}">{{ $worker->name }} ({{ $worker->specialization }})</option>
-                                @endforeach
-                            </select>
+                    <!-- Attendance Date -->
+                    <div class="space-y-3">
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Date') }}</label>
+                        <div class="relative">
+                            <input type="text" value="{{ date('M d, Y') }}" readonly
+                                class="w-full px-6 py-4 bg-gray-50 border-transparent rounded-2xl text-sm font-black text-gray-400 cursor-not-allowed">
+                            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-indigo-500 uppercase tracking-widest bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">
+                                {{ __('Today') }}
+                            </span>
                         </div>
-
-                        <!-- Status -->
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-2">Status</label>
-                            <div class="grid grid-cols-2 gap-2">
-                                <label class="cursor-pointer">
-                                    <input type="radio" name="status" value="present" checked class="peer sr-only">
-                                    <div class="flex items-center justify-center p-3 text-sm font-bold rounded-xl border border-gray-200 bg-white text-gray-500 peer-checked:bg-green-50 peer-checked:border-green-500 peer-checked:text-green-700 transition-all">
-                                        Present
-                                    </div>
-                                </label>
-                                <label class="cursor-pointer">
-                                    <input type="radio" name="status" value="half_day" class="peer sr-only">
-                                    <div class="flex items-center justify-center p-3 text-sm font-bold rounded-xl border border-gray-200 bg-white text-gray-500 peer-checked:bg-amber-50 peer-checked:border-amber-500 peer-checked:text-amber-700 transition-all">
-                                        Half Day
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
+                        <input type="hidden" name="attendance_date" value="{{ date('Y-m-d') }}">
                     </div>
+                </div>
 
-                    <!-- Camera & Geo-Tagging Integrated Section -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <div class="space-y-4">
-                            <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-2">Live Camera Verification</label>
-                            <div class="relative bg-black rounded-3xl overflow-hidden aspect-video shadow-inner border-4 border-white ring-1 ring-gray-200">
-                                <video id="video" class="w-full h-full object-cover" autoplay playsinline></video>
-                                <canvas id="canvas" class="hidden"></canvas>
-                                
-                                <div id="cameraFeedback" class="absolute inset-0 flex items-center justify-center bg-black/60 text-white text-xs font-bold transition-opacity duration-300">
-                                    <div class="text-center">
-                                        <i class="bi bi-camera text-3xl mb-2 animate-pulse"></i>
-                                        <p>Initializing Camera...</p>
-                                    </div>
-                                </div>
-
-                                <!-- GPS Overlay -->
-                                <div class="absolute bottom-4 left-4 right-4 bg-black/40 backdrop-blur-md rounded-xl p-3 text-[10px] text-white border border-white/20">
-                                    <div class="flex items-center justify-between mb-1">
-                                        <span class="flex items-center gap-1"><i class="bi bi-geo-alt-fill text-red-400"></i> GPS TRACKING</span>
-                                        <span id="gpsStatus" class="text-amber-400">WAITING FOR SIGNAL...</span>
-                                    </div>
-                                    <div class="flex gap-3 font-mono opacity-80">
-                                        <span>LAT: <span id="displayLat">--</span></span>
-                                        <span>LNG: <span id="displayLng">--</span></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex gap-2">
-                                <button type="button" onclick="startCamera()" class="flex-1 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2">
-                                    <i class="bi bi-arrow-clockwise"></i> Restart Camera
-                                </button>
-                                <button type="button" id="captureBtn" onclick="captureAndMark()" class="flex-[2] py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl shadow-lg transition-all transform hover:scale-[1.02] flex items-center justify-center gap-2">
-                                    <i class="bi bi-camera-fill"></i> Capture & Mark Attendance
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="space-y-6">
-                            <div>
-                                <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-2">Detailed Notes</label>
-                                <textarea name="notes" rows="4" placeholder="Any remarks about the worker's performance or site conditions today..."
-                                    class="w-full rounded-2xl border-gray-200 bg-gray-50 focus:border-indigo-500 focus:ring-indigo-500 transition-all p-4 text-sm"></textarea>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider mb-2">Overtime (Hours)</label>
-                                <input type="number" name="overtime_hours" step="0.5" value="0" min="0" max="12"
-                                    class="w-full rounded-2xl border-gray-200 bg-gray-50 focus:border-indigo-500 focus:ring-indigo-500 transition-all py-3 px-4">
-                            </div>
+                <!-- Camera & Geo-Tagging Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-8 border-t border-gray-50">
+                    <div class="lg:col-span-7 space-y-4">
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Live Camera Verification') }}</label>
+                        <div class="relative bg-gray-900 rounded-[2.5rem] overflow-hidden aspect-[4/3] md:aspect-video shadow-2xl border-8 border-white ring-1 ring-gray-100">
+                            <video id="video" class="w-full h-full object-cover scale-x-[-1]" autoplay playsinline></video>
+                            <canvas id="canvas" class="hidden"></canvas>
                             
-                            <!-- Hidden Fields for Internal Submission -->
-                            <input type="hidden" name="latitude" id="lat">
-                            <input type="hidden" name="longitude" id="lng">
-                            <input type="hidden" name="location_address" id="address">
-                            <input type="hidden" name="captured_image" id="captured_image">
+                            <div id="cameraFeedback" class="absolute inset-0 flex items-center justify-center bg-gray-900/90 text-white transition-opacity duration-500">
+                                <div class="text-center">
+                                    <div class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+                                        <i class="fa-solid fa-camera text-2xl"></i>
+                                    </div>
+                                    <p class="text-xs font-black uppercase tracking-widest opacity-60">{{ __('Initializing Camera...') }}</p>
+                                </div>
+                            </div>
+
+                            <!-- GPS Overlay -->
+                            <div class="absolute bottom-6 left-6 right-6 bg-gray-900/40 backdrop-blur-xl rounded-2xl p-4 text-white border border-white/20 shadow-2xl">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest">
+                                        <i class="fa-solid fa-satellite-dish text-indigo-400 animate-pulse"></i> 
+                                        {{ __('GPS Signal') }}
+                                    </span>
+                                    <span id="gpsStatus" class="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded bg-amber-500/20 text-amber-400">
+                                        {{ __('Searching...') }}
+                                    </span>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="space-y-1">
+                                        <p class="text-[8px] font-black text-white/40 uppercase tracking-widest">{{ __('Latitude') }}</p>
+                                        <p id="displayLat" class="text-xs font-mono font-bold">--.------</p>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <p class="text-[8px] font-black text-white/40 uppercase tracking-widest">{{ __('Longitude') }}</p>
+                                        <p id="displayLng" class="text-xs font-mono font-bold">--.------</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <button type="button" onclick="startCamera()" class="flex-1 py-4 bg-gray-100 hover:bg-gray-200 text-gray-500 text-[10px] font-black uppercase tracking-widest rounded-2xl transition-all flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-rotate"></i> {{ __('Restart Camera') }}
+                            </button>
+                            <button type="button" id="captureBtn" onclick="captureAndMark()" class="flex-[2] py-4 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-indigo-100 transition-all transform active:scale-95 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-camera-retro"></i> {{ __('Capture & Mark Attendance') }}
+                            </button>
                         </div>
                     </div>
 
-                    <div class="flex items-center justify-end gap-4 pt-6 border-t border-gray-100 hidden">
-                        <button type="submit" id="submitBtn">Submit</button>
+                    <div class="lg:col-span-5 space-y-8">
+                        <div class="space-y-3">
+                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Detailed Notes') }}</label>
+                            <textarea name="notes" rows="5" placeholder="{{ __('Any remarks about the worker\'s performance or site conditions today...') }}"
+                                class="w-full rounded-3xl border-transparent bg-gray-50/50 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 focus:bg-white transition-all p-6 text-sm font-medium outline-none"></textarea>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Overtime') }} ({{ __('Hours') }})</label>
+                            <div class="relative group">
+                                <i class="fa-solid fa-clock absolute left-5 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-indigo-600 transition-colors"></i>
+                                <input type="number" name="overtime_hours" step="0.5" value="0" min="0" max="12"
+                                    class="w-full pl-12 pr-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none">
+                            </div>
+                        </div>
+
+                        <!-- Info Alert -->
+                        <div class="p-6 bg-indigo-50 rounded-3xl border border-indigo-100 space-y-2">
+                            <div class="flex items-center gap-2 text-indigo-600">
+                                <i class="fa-solid fa-circle-info"></i>
+                                <span class="text-[10px] font-black uppercase tracking-widest">{{ __('Important Note') }}</span>
+                            </div>
+                            <p class="text-xs text-indigo-900/60 font-medium leading-relaxed">
+                                {{ __('Attendance requires both a live photo and active GPS coordinates for verification. Please ensure you are at the project site.') }}
+                            </p>
+                        </div>
+                        
+                        <!-- Hidden Fields -->
+                        <input type="hidden" name="latitude" id="lat">
+                        <input type="hidden" name="longitude" id="lng">
+                        <input type="hidden" name="location_address" id="address">
+                        <input type="hidden" name="captured_image" id="captured_image">
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -143,16 +172,19 @@
         // Start Camera
         async function startCamera() {
             try {
+                cameraFeedback.classList.remove('hidden');
+                cameraFeedback.style.opacity = '1';
+                
                 const stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: "environment" }, // Prefer back camera
+                    video: { facingMode: "environment" }, 
                     audio: false 
                 });
                 video.srcObject = stream;
                 cameraFeedback.style.opacity = '0';
-                setTimeout(() => cameraFeedback.classList.add('hidden'), 300);
+                setTimeout(() => cameraFeedback.classList.add('hidden'), 500);
             } catch (err) {
                 console.error("Camera Error:", err);
-                cameraFeedback.innerHTML = `<div class='text-red-400'><i class='bi bi-exclamation-triangle text-2xl'></i><p>Camera Permission Denied</p></div>`;
+                cameraFeedback.innerHTML = `<div class='text-red-400 p-6'><i class='fa-solid fa-circle-exclamation text-3xl mb-3'></i><p class='text-[10px] font-black uppercase tracking-widest'>{{ __('Camera Access Denied') }}</p></div>`;
             }
         }
 
@@ -163,14 +195,18 @@
                     (pos) => {
                         document.getElementById('lat').value = pos.coords.latitude;
                         document.getElementById('lng').value = pos.coords.longitude;
-                        document.getElementById('displayLat').textContent = pos.coords.latitude.toFixed(4);
-                        document.getElementById('displayLng').textContent = pos.coords.longitude.toFixed(4);
-                        document.getElementById('gpsStatus').textContent = "SIGNAL ACTIVE";
-                        document.getElementById('gpsStatus').classList.replace('text-amber-400', 'text-green-400');
+                        document.getElementById('displayLat').textContent = pos.coords.latitude.toFixed(6);
+                        document.getElementById('displayLng').textContent = pos.coords.longitude.toFixed(6);
+                        
+                        const status = document.getElementById('gpsStatus');
+                        status.textContent = "{{ __('Signal Active') }}";
+                        status.classList.remove('bg-amber-500/20', 'text-amber-400');
+                        status.classList.add('bg-emerald-500/20', 'text-emerald-400');
                     },
                     (err) => {
-                        document.getElementById('gpsStatus').textContent = "GPS ERROR: " + err.message;
-                        document.getElementById('gpsStatus').classList.add('text-red-400');
+                        const status = document.getElementById('gpsStatus');
+                        status.textContent = "{{ __('GPS Error') }}";
+                        status.classList.replace('text-amber-400', 'text-red-400');
                     },
                     { enableHighAccuracy: true }
                 );
@@ -182,12 +218,18 @@
             const lat = document.getElementById('lat').value;
 
             if (!lat) {
-                alert("Please wait for GPS signal before marking attendance.");
+                Swal.fire({
+                    icon: 'warning',
+                    title: "{{ __('Waiting for GPS') }}",
+                    text: "{{ __('Please wait for a valid GPS signal before marking attendance.') }}",
+                    confirmButtonText: "{{ __('Got it') }}",
+                    customClass: { confirmButton: 'bg-indigo-600 px-6 py-3 rounded-xl text-white font-bold' }
+                });
                 return;
             }
 
             btn.disabled = true;
-            btn.innerHTML = '<i class="bi bi-hourglass-split animate-spin"></i> Processing...';
+            btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> {{ __('Processing...') }}';
 
             // Snap photo
             canvas.width = video.videoWidth;
@@ -203,72 +245,35 @@
         }
 
         // Initialize
-        window.onload = () => {
+        $(document).ready(function() {
             startCamera();
             watchLocation();
             
-            // Initialize Select2
-            $('.select2').select2({
-                placeholder: 'Search and select...',
+            $('.select2-init').select2({
+                placeholder: '{{ __('Search and select...') }}',
                 width: '100%'
             });
-        };
+        });
     </script>
-    @endpush
-                </form>
-            </div>
-        </div>
-    </div>
-
-    @push('scripts')
-    <script>
-        function getLocation() {
-            const status = document.getElementById('locationStatus');
-            const btn = document.getElementById('locationBtn');
-            const latInput = document.getElementById('lat');
-            const lngInput = document.getElementById('lng');
-            const addrInput = document.getElementById('address');
-
-            if (!navigator.geolocation) {
-                status.textContent = "Geolocation is not supported by your browser";
-                return;
-            }
-
-            status.textContent = "Locating...";
-            btn.disabled = true;
-            btn.innerHTML = '<i class="bi bi-arrow-repeat animate-spin"></i> Locating...';
-
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const lat = position.coords.latitude;
-                    const lng = position.coords.longitude;
-                    
-                    latInput.value = lat.toFixed(6);
-                    lngInput.value = lng.toFixed(6);
-                    
-                    status.textContent = "Location captured successfully!";
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="bi bi-check-lg"></i> Captured';
-                    btn.classList.replace('bg-indigo-600', 'bg-green-600');
-
-                    // Optional: Reverse Geocoding (simple)
-                    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.display_name) {
-                                addrInput.value = data.display_name;
-                            }
-                        })
-                        .catch(err => console.log("Geocoding error:", err));
-                },
-                (error) => {
-                    status.textContent = `Error: ${error.message}`;
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Try Again';
-                },
-                { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
-            );
+    <style>
+        .select2-container--default .select2-selection--single {
+            background-color: rgba(249, 250, 251, 0.5);
+            border: 1px solid transparent;
+            border-radius: 1rem;
+            height: 56px;
+            padding: 12px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            transition: all 0.2s;
         }
-    </script>
+        .select2-container--default.select2-container--open .select2-selection--single {
+            background-color: white;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 54px;
+        }
+    </style>
     @endpush
 </x-contractor-layout>

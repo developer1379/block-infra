@@ -5,7 +5,7 @@
             <div>
                 <h1 class="text-4xl font-black text-gray-900 tracking-tight flex items-center gap-3">
                     {{ __('Project Hub') }}
-                    <span class="bg-indigo-100 text-indigo-600 text-[10px] font-black uppercase px-3 py-1 rounded-full tracking-widest border border-indigo-200 shadow-sm">Beta</span>
+                    <span class="bg-indigo-100 text-indigo-600 text-[10px] font-black uppercase px-3 py-1 rounded-full tracking-widest border border-indigo-200 shadow-sm">{{ __('Beta') }}</span>
                 </h1>
                 <p class="text-gray-500 text-sm mt-2 font-medium">{{ __('Explore, manage, and scale your construction business with ease.') }}</p>
             </div>

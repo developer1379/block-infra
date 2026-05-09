@@ -1,377 +1,239 @@
 <x-contractor-layout>
-
-    {{-- 1. LOAD PLUGIN STYLES --}}
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
-    {{-- 2. CUSTOM STYLES --}}
-    <style>
-        /* Modern Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-
-        /* Select2 Modern Override */
-        .select2-container .select2-selection--multiple {
-            min-height: 48px;
-            border: 1px solid #e2e8f0 !important;
-            border-radius: 0.75rem !important;
-            /* rounded-xl */
-            padding: 8px 12px;
-            background-color: #ffffff;
-            transition: all 0.2s;
-        }
-
-        .select2-container--default.select2-container--focus .select2-selection--multiple {
-            border-color: #0d9488 !important;
-            /* teal-600 */
-            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
-        }
-
-        .select2-container--default .select2-selection--multiple .select2-selection__choice {
-            background-color: #effcfc !important;
-            border: 1px solid #ccfbf1 !important;
-            color: #0f766e !important;
-            /* teal-700 */
-            border-radius: 6px;
-            padding: 4px 10px;
-            font-size: 0.875rem;
-            margin-right: 6px;
-            margin-top: 4px;
-            font-weight: 600;
-        }
-
-        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
-            color: #0f766e !important;
-            border-right: none !important;
-            margin-right: 8px;
-            font-weight: bold;
-        }
-
-        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
-            color: #ef4444 !important;
-            /* red-500 */
-        }
-    </style>
-
-    <div class="min-h-screen bg-slate-50 py-8">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            {{-- PAGE HEADER --}}
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+    <div class="p-6 space-y-8 animate-fade-in">
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+            <div class="flex items-center gap-6">
+                <div class="w-16 h-16 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 shadow-inner">
+                    <i class="fa-solid fa-user-gear text-2xl"></i>
+                </div>
                 <div>
-                    <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Account Settings</h2>
-                    <p class="text-slate-500 mt-1">Manage your public profile and security preferences.</p>
+                    <h1 class="text-3xl font-black text-gray-900 tracking-tight">{{ __('Account Settings') }}</h1>
+                    <p class="text-gray-500 text-sm font-medium">{{ __('Manage your professional identity and security credentials.') }}</p>
                 </div>
-
-                <a href="{{ route('contractor.dashboard.index') }}"
-                    class="group inline-flex items-center gap-2 bg-white border border-slate-200 text-slate-600 hover:text-teal-700 hover:border-teal-200 text-sm font-semibold px-5 py-2.5 rounded-xl shadow-sm hover:shadow-md transition-all duration-200">
-                    <i class="fa-solid fa-arrow-left transition-transform group-hover:-translate-x-1"></i>
-                    <span>Back to Dashboard</span>
-                </a>
             </div>
+            <a href="{{ route('contractor.dashboard.index') }}" class="px-6 py-3 bg-gray-50 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2">
+                <i class="fa-solid fa-arrow-left"></i>
+                {{ __('Back to Command Center') }}
+            </a>
+        </div>
 
-            <form action="{{ route('contractor.profile.update') }}" method="POST" enctype="multipart/form-data">
-                @csrf
+        <form action="{{ route('contractor.profile.update') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
+            @csrf
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-                    {{-- LEFT COLUMN: Profile Card --}}
-                    <div class="lg:col-span-1">
-                        <div
-                            class="bg-white rounded-2xl shadow-xl shadow-slate-200/60 overflow-hidden sticky top-8 border border-slate-100">
-                            {{-- Decorative Banner --}}
-                            <div class="h-32 bg-gradient-to-r from-teal-500 to-cyan-600 relative">
-                                <div class="absolute top-4 right-4 text-white/20">
-                                    <i class="fa-solid fa-shapes text-6xl"></i>
-                                </div>
-                            </div>
-
-                            {{-- Avatar Section --}}
-                            <div class="px-6 pb-6 text-center relative">
-                                <div class="relative -mt-16 inline-block">
-                                    @php $imagePath = auth()->user()->contractor->image ?? null; @endphp
-                                    <img src="{{ $imagePath ? $imagePath : asset('default-avatar.png') }}"
-                                        alt="Profile"
-                                        class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md bg-white">
-
-                                    {{-- Camera Icon Overlay for Upload --}}
-                                    <label for="profile_image"
-                                        class="absolute bottom-1 right-1 bg-slate-800 text-white p-2 rounded-full cursor-pointer hover:bg-teal-600 transition-colors shadow-lg border-2 border-white">
-                                        <i class="fa-solid fa-camera text-xs"></i>
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                <!-- Sidebar: Profile Preview -->
+                <div class="xl:col-span-1 space-y-8">
+                    <div class="bg-white rounded-[2.5rem] shadow-xl shadow-indigo-100/20 border border-gray-100 overflow-hidden sticky top-8">
+                        <div class="h-32 bg-gradient-to-br from-indigo-600 to-violet-700 relative">
+                            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
+                        </div>
+                        
+                        <div class="px-8 pb-10 text-center relative">
+                            <div class="relative -mt-16 inline-block">
+                                @php $imagePath = auth()->user()->contractor->image ?? null; @endphp
+                                <div class="w-32 h-32 rounded-[2.5rem] p-1.5 bg-white shadow-2xl relative group">
+                                    <img id="avatar-preview" src="{{ $imagePath ? $imagePath : asset('default-avatar.png') }}" 
+                                        class="w-full h-full object-cover rounded-[2rem]">
+                                    <label for="image-upload" class="absolute inset-1.5 bg-black/40 rounded-[2rem] opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center cursor-pointer backdrop-blur-sm">
+                                        <i class="fa-solid fa-camera text-white text-xl"></i>
                                     </label>
-                                    <input type="file" id="profile_image" name="image" accept="image/*"
-                                        class="hidden" onchange="previewImage(this)">
+                                    <input type="file" id="image-upload" name="image" class="hidden" accept="image/*" onchange="previewImage(this)">
                                 </div>
+                            </div>
 
-                                <h3 class="mt-3 text-xl font-bold text-slate-800">{{ auth()->user()->name }}</h3>
-                                <p class="text-slate-500 text-sm font-medium">{{ auth()->user()->email }}</p>
+                            <h3 class="mt-4 text-2xl font-black text-gray-900 tracking-tight">{{ auth()->user()->name }}</h3>
+                            <p class="text-indigo-600 text-xs font-black uppercase tracking-widest mb-6">{{ __('Verified Contractor') }}</p>
 
-                                <div class="mt-4 flex flex-wrap justify-center gap-2">
-                                    <span
-                                        class="px-3 py-1 bg-teal-50 text-teal-700 text-xs font-bold rounded-full border border-teal-100">
-                                        Contractor
-                                    </span>
-                                    @if (auth()->user()->contractor->city)
-                                        <span
-                                            class="px-3 py-1 bg-slate-50 text-slate-600 text-xs font-bold rounded-full border border-slate-200">
-                                            <i class="fa-solid fa-location-dot mr-1"></i>
-                                            {{ auth()->user()->contractor->city }}
-                                        </span>
-                                    @endif
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-2xl text-left border border-transparent hover:border-indigo-100 transition-all">
+                                    <i class="fa-solid fa-envelope text-indigo-400"></i>
+                                    <span class="text-xs font-bold text-gray-600 truncate">{{ auth()->user()->email }}</span>
+                                </div>
+                                <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-2xl text-left border border-transparent hover:border-indigo-100 transition-all">
+                                    <i class="fa-solid fa-phone text-indigo-400"></i>
+                                    <span class="text-xs font-bold text-gray-600">{{ auth()->user()->contractor->phone ?? __('No phone listed') }}</span>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    {{-- RIGHT COLUMN: Form Details --}}
-                    <div class="lg:col-span-2 space-y-6">
-
-                        {{-- CARD 1: Personal Information --}}
-                        <div
-                            class="bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-100 p-6 sm:p-8">
-                            <h4
-                                class="text-lg font-bold text-slate-800 border-b border-slate-100 pb-4 mb-6 flex items-center gap-2">
-                                <span
-                                    class="bg-teal-100 text-teal-700 w-8 h-8 flex items-center justify-center rounded-lg">
-                                    <i class="fa-regular fa-id-card"></i>
-                                </span>
-                                Personal Information
-                            </h4>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {{-- Full Name --}}
-                                <div class="col-span-1 md:col-span-2">
-                                    <label
-                                        class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Full
-                                        Name <span class="text-red-500">*</span></label>
-                                    <div class="relative">
-                                        <span
-                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                                            <i class="fa-regular fa-user"></i>
-                                        </span>
-                                        <input type="text" name="name" value="{{ auth()->user()->name }}" required
-                                            class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-700 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all">
-                                    </div>
-                                </div>
-
-                                {{-- Email --}}
-                                <div>
-                                    <label
-                                        class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Email
-                                        Address</label>
-                                    <div class="relative">
-                                        <span
-                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                                            <i class="fa-regular fa-envelope"></i>
-                                        </span>
-                                        <input type="email" name="email" value="{{ auth()->user()->email }}"
-                                            class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-700 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all">
-                                    </div>
-                                </div>
-
-                                {{-- Phone --}}
-                                <div>
-                                    <label
-                                        class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Phone
-                                        Number</label>
-                                    <div class="relative">
-                                        <span
-                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                                            <i class="fa-solid fa-phone-flip"></i>
-                                        </span>
-                                        <input type="text" name="phone"
-                                            value="{{ auth()->user()->contractor->phone ?? '' }}"
-                                            class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-700 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all">
-                                    </div>
-                                </div>
-
-                                {{-- City --}}
-                                <div class="col-span-1 md:col-span-2">
-                                    <label
-                                        class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Location
-                                        (City)</label>
-                                    <div class="relative">
-                                        <span
-                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                                            <i class="fa-solid fa-map-pin"></i>
-                                        </span>
-                                        <input type="text" name="city"
-                                            value="{{ auth()->user()->contractor->city ?? '' }}"
-                                            class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-700 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- CARD 2: Professional Skills --}}
-                        <div
-                            class="bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-100 p-6 sm:p-8">
-                            <h4
-                                class="text-lg font-bold text-slate-800 border-b border-slate-100 pb-4 mb-6 flex items-center gap-2">
-                                <span
-                                    class="bg-indigo-100 text-indigo-700 w-8 h-8 flex items-center justify-center rounded-lg">
-                                    <i class="fa-solid fa-briefcase"></i>
-                                </span>
-                                Skills & Categories
-                            </h4>
-
-                            @php
-                                $parentCategories = \App\Models\Category::with('subcategories')
-                                    ->whereNull('parent_id')
-                                    ->where('is_active', 1)
-                                    ->orderBy('name')
-                                    ->get();
-                                $selectedCategories = auth()->user()->contractor
-                                    ? auth()->user()->contractor->categories->pluck('id')->toArray()
-                                    : [];
-                            @endphp
-
-                            <div>
-                                <label
-                                    class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Specializations</label>
-                                <select name="categories[]" multiple class="category-select w-full">
-                                    @foreach ($parentCategories as $parent)
-                                        @if ($parent->subcategories->count())
-                                            <optgroup label="{{ $parent->name }}">
-                                                @foreach ($parent->subcategories as $child)
-                                                    <option value="{{ $child->id }}"
-                                                        {{ in_array($child->id, old('categories', $selectedCategories)) ? 'selected' : '' }}>
-                                                        {{ $child->name }}
-                                                    </option>
-                                                @endforeach
-                                            </optgroup>
-                                        @else
-                                            <option value="{{ $parent->id }}"
-                                                {{ in_array($parent->id, old('categories', $selectedCategories)) ? 'selected' : '' }}>
-                                                {{ $parent->name }}
-                                            </option>
-                                        @endif
-                                    @endforeach
-                                </select>
-                                <p class="text-xs text-slate-400 mt-2 flex items-center gap-1">
-                                    <i class="fa-solid fa-circle-info"></i> Type to search for categories.
-                                </p>
-                            </div>
-                        </div>
-
-                        {{-- CARD 3: Security --}}
-                        <div
-                            class="bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-100 p-6 sm:p-8">
-                            <h4
-                                class="text-lg font-bold text-slate-800 border-b border-slate-100 pb-4 mb-6 flex items-center gap-2">
-                                <span
-                                    class="bg-red-100 text-red-700 w-8 h-8 flex items-center justify-center rounded-lg">
-                                    <i class="fa-solid fa-shield-halved"></i>
-                                </span>
-                                Security
-                            </h4>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label
-                                        class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">New
-                                        Password</label>
-                                    <div class="relative">
-                                        <span
-                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                                            <i class="fa-solid fa-lock"></i>
-                                        </span>
-                                        <input type="password" name="password" placeholder="••••••••"
-                                            class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-700 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all">
-                                    </div>
-                                </div>
-                                <div>
-                                    <label
-                                        class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Confirm
-                                        Password</label>
-                                    <div class="relative">
-                                        <span
-                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                                            <i class="fa-solid fa-check-double"></i>
-                                        </span>
-                                        <input type="password" name="password_confirmation" placeholder="••••••••"
-                                            class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-700 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 transition-all">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- Submit Area --}}
-                        <div class="flex justify-end pt-4">
-                            <button type="submit"
-                                class="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-teal-600/30 transform transition-all hover:-translate-y-1 hover:shadow-xl">
-                                <span>Save Changes</span>
-                                <i class="fa-solid fa-floppy-disk"></i>
-                            </button>
-                        </div>
-
                     </div>
                 </div>
-            </form>
-        </div>
+
+                <!-- Main Content: Form Fields -->
+                <div class="xl:col-span-2 space-y-8">
+                    <!-- General Information -->
+                    <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 p-10">
+                        <div class="flex items-center gap-4 mb-10 pb-6 border-b border-gray-50">
+                            <div class="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600">
+                                <i class="fa-solid fa-id-badge text-xl"></i>
+                            </div>
+                            <h2 class="text-xl font-black text-gray-900 tracking-tight">{{ __('General Information') }}</h2>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="space-y-3">
+                                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Full Professional Name') }}</label>
+                                <input type="text" name="name" value="{{ auth()->user()->name }}" required
+                                    class="w-full px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none">
+                            </div>
+                            <div class="space-y-3">
+                                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Primary Email Address') }}</label>
+                                <input type="email" name="email" value="{{ auth()->user()->email }}" required
+                                    class="w-full px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none">
+                            </div>
+                            <div class="space-y-3">
+                                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Phone Contact') }}</label>
+                                <input type="text" name="phone" value="{{ auth()->user()->contractor->phone ?? '' }}"
+                                    class="w-full px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none">
+                            </div>
+                            <div class="space-y-3">
+                                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Operating City') }}</label>
+                                <input type="text" name="city" value="{{ auth()->user()->contractor->city ?? '' }}"
+                                    class="w-full px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Expertise & Specializations -->
+                    <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 p-10">
+                        <div class="flex items-center gap-4 mb-10 pb-6 border-b border-gray-50">
+                            <div class="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+                                <i class="fa-solid fa-screwdriver-wrench text-xl"></i>
+                            </div>
+                            <h2 class="text-xl font-black text-gray-900 tracking-tight">{{ __('Expertise & Specializations') }}</h2>
+                        </div>
+
+                        <div class="space-y-3">
+                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Core Service Categories') }}</label>
+                            @php
+                                $parentCategories = \App\Models\Category::with('subcategories')->whereNull('parent_id')->where('is_active', 1)->orderBy('name')->get();
+                                $selectedCategories = auth()->user()->contractor ? auth()->user()->contractor->categories->pluck('id')->toArray() : [];
+                            @endphp
+                            <select name="categories[]" multiple class="category-select-modern w-full">
+                                @foreach ($parentCategories as $parent)
+                                    @if ($parent->subcategories->count())
+                                        <optgroup label="{{ $parent->name }}">
+                                            @foreach ($parent->subcategories as $child)
+                                                <option value="{{ $child->id }}" {{ in_array($child->id, old('categories', $selectedCategories)) ? 'selected' : '' }}>
+                                                    {{ $child->name }}
+                                                </option>
+                                            @endforeach
+                                        </optgroup>
+                                    @else
+                                        <option value="{{ $parent->id }}" {{ in_array($parent->id, old('categories', $selectedCategories)) ? 'selected' : '' }}>
+                                            {{ $parent->name }}
+                                        </option>
+                                    @endif
+                                @endforeach
+                            </select>
+                            <p class="text-[10px] font-bold text-gray-400 mt-2 flex items-center gap-1 uppercase tracking-tighter">
+                                <i class="fa-solid fa-circle-info text-emerald-500"></i> {{ __('Selecting accurate categories helps in better project matching') }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Security Credentials -->
+                    <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 p-10">
+                        <div class="flex items-center gap-4 mb-10 pb-6 border-b border-gray-50">
+                            <div class="w-12 h-12 rounded-2xl bg-rose-50 flex items-center justify-center text-rose-600">
+                                <i class="fa-solid fa-shield-halved text-xl"></i>
+                            </div>
+                            <h2 class="text-xl font-black text-gray-900 tracking-tight">{{ __('Security Credentials') }}</h2>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="space-y-3">
+                                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('New Access Key (Password)') }}</label>
+                                <input type="password" name="password" placeholder="••••••••"
+                                    class="w-full px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none">
+                            </div>
+                            <div class="space-y-3">
+                                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Verify Access Key') }}</label>
+                                <input type="password" name="password_confirmation" placeholder="••••••••"
+                                    class="w-full px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none">
+                            </div>
+                        </div>
+                        <p class="text-[10px] font-bold text-gray-400 mt-6 uppercase tracking-tighter">{{ __('Leave blank if you do not wish to change your password') }}</p>
+                    </div>
+
+                    <!-- Final Actions -->
+                    <div class="flex flex-col sm:flex-row items-center justify-end gap-4 pt-4">
+                        <button type="submit" class="w-full sm:w-auto px-12 py-4 bg-indigo-600 text-white rounded-2xl font-black uppercase text-xs tracking-widest shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all transform active:scale-95 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            {{ __('Synchronize Profile') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 
-    {{-- SCRIPTS --}}
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    @push('scripts')
     <script>
         $(document).ready(function() {
-            // Initialize Select2 with cleaner options
-            $('.category-select').select2({
-                placeholder: "Select your skills...",
-                allowClear: true,
+            $('.category-select-modern').select2({
+                placeholder: "{{ __('Select specializations...') }}",
                 width: '100%',
                 closeOnSelect: false
             });
 
-            // SweetAlert Logic
             @if (session('success'))
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.addEventListener('mouseenter', Swal.stopTimer)
-                        toast.addEventListener('mouseleave', Swal.resumeTimer)
-                    }
-                })
-
-                Toast.fire({
+                Swal.fire({
+                    title: "{{ __('Updated Successfully') }}",
+                    text: "{{ session('success') }}",
                     icon: 'success',
-                    title: "{{ session('success') }}"
-                })
+                    background: '#ffffff',
+                    borderRadius: '2rem',
+                    confirmButtonColor: '#4f46e5',
+                    customClass: {
+                        popup: 'rounded-[2rem]',
+                        confirmButton: 'rounded-xl px-8 py-3 font-black uppercase text-xs tracking-widest'
+                    }
+                });
             @endif
         });
 
-        // Simple Image Preview Script
         function previewImage(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
                 reader.onload = function(e) {
-                    // Update the image src in the DOM
-                    $(input).parent().find('img').attr('src', e.target.result);
+                    $('#avatar-preview').attr('src', e.target.result).addClass('animate-pulse');
+                    setTimeout(() => $('#avatar-preview').removeClass('animate-pulse'), 1000);
                 }
                 reader.readAsDataURL(input.files[0]);
             }
         }
     </script>
+    <style>
+        .select2-container--default .select2-selection--multiple {
+            background-color: rgba(249, 250, 251, 0.5);
+            border: 1px solid transparent;
+            border-radius: 1.25rem;
+            min-height: 56px;
+            padding: 8px;
+            transition: all 0.2s;
+        }
+        .select2-container--default.select2-container--focus .select2-selection--multiple {
+            background-color: white;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            background-color: #eff6ff;
+            border: 1px solid #dbeafe;
+            color: #1e40af;
+            border-radius: 0.75rem;
+            padding: 4px 12px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            margin-top: 4px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+    @endpush
 </x-contractor-layout>
-

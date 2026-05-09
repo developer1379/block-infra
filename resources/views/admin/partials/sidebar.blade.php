@@ -281,9 +281,9 @@
 
     {{-- CONTRACTOR PROFILE --}}
     @if (auth()->user()->hasRole('contractor'))
-        <a href="{{ route('contractor.profile') }}"
+        <a href="{{ route('contractor.profile.edit') }}"
             class="group flex items-center px-3.5 py-2.5 text-sm font-medium rounded-xl transition-all duration-200
-           {{ request()->routeIs('contractor.profile')
+           {{ request()->routeIs('contractor.profile.edit')
                ? 'bg-primary text-white shadow-lg shadow-teal-500/30'
                : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
             <i class="fa-solid fa-user-gear w-5 text-center transition-transform group-hover:scale-110"></i>

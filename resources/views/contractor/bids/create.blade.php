@@ -34,15 +34,15 @@
             {{-- PAGE HEADER --}}
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Submit Proposal</h2>
+                    <h2 class="text-2xl font-bold text-gray-900 tracking-tight">{{ __('Submit Proposal') }}</h2>
                     <p class="text-gray-500 text-sm mt-1">
-                        Bidding for: <span class="font-semibold text-indigo-600">{{ $project->title }}</span>
+                        {{ __('Bidding for') }}: <span class="font-semibold text-indigo-600">{{ $project->title }}</span>
                     </p>
                 </div>
 
                 <a href="{{ route('contractor.projects.show', $project->id) }}"
                     class="inline-flex items-center gap-2 bg-white border border-gray-200 text-gray-700 hover:text-gray-900 hover:bg-gray-50 text-sm font-medium px-4 py-2.5 rounded-lg shadow-sm transition-all">
-                    <i class="bi bi-arrow-left"></i> Cancel & Back
+                    <i class="bi bi-arrow-left"></i> {{ __('Cancel & Back') }}
                 </a>
             </div>
 
@@ -56,8 +56,8 @@
                         <i class="bi bi-file-earmark-text text-lg"></i>
                     </div>
                     <div>
-                        <h3 class="font-bold text-gray-900">Proposal Details</h3>
-                        <p class="text-xs text-gray-500">Provide accurate estimates to increase your winning chance.</p>
+                        <h3 class="font-bold text-gray-900">{{ __('Proposal Details') }}</h3>
+                        <p class="text-xs text-gray-500">{{ __('Provide accurate estimates to increase your winning chance.') }}</p>
                     </div>
                 </div>
 
@@ -73,7 +73,7 @@
                                 {{-- Bid Amount --}}
                                 <div>
                                     <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
-                                        Total Bid Amount <span class="text-red-500">*</span>
+                                        {{ __('Total Bid Amount') }} <span class="text-red-500">*</span>
                                     </label>
                                     <div class="relative">
                                         <div
@@ -84,14 +84,13 @@
                                             class="block w-full pl-8 pr-4 py-3 border-gray-300 rounded-lg text-gray-900 font-semibold placeholder-gray-400 focus:ring-indigo-500 focus:border-indigo-500 transition-colors shadow-sm text-lg"
                                             placeholder="0.00">
                                     </div>
-                                    <p class="text-[10px] text-gray-400 mt-1.5 ml-1">Include all taxes and material
-                                        costs.</p>
+                                    <p class="text-[10px] text-gray-400 mt-1.5 ml-1">{{ __('Include all taxes and material costs.') }}</p>
                                 </div>
 
                                 {{-- Delivery Days --}}
                                 <div>
                                     <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
-                                        Estimated Timeline <span class="text-red-500">*</span>
+                                        {{ __('Estimated Timeline') }} <span class="text-red-500">*</span>
                                     </label>
                                     <div class="relative">
                                         <input type="number" name="delivery_days" min="1" required
@@ -100,10 +99,11 @@
                                         <div
                                             class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
                                             <span
-                                                class="text-xs font-bold text-gray-400 uppercase bg-gray-100 px-2 py-1 rounded">Days</span>
+                                                class="text-xs font-bold text-gray-400 uppercase bg-gray-100 px-2 py-1 rounded">{{ __('Days') }}</span>
                                         </div>
                                     </div>
-                                    <p class="text-[10px] text-gray-400 mt-1.5 ml-1">From project start date.</p>
+                                    </div>
+                                    <p class="text-[10px] text-gray-400 mt-1.5 ml-1">{{ __('From project start date.') }}</p>
                                 </div>
                             </div>
 
@@ -112,7 +112,7 @@
                             {{-- 2. Proposal Description (Quill Editor) --}}
                             <div>
                                 <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
-                                    Detailed Proposal <span class="text-red-500">*</span>
+                                    {{ __('Detailed Proposal') }} <span class="text-red-500">*</span>
                                 </label>
 
                                 {{-- Hidden Input for Form Submission --}}
@@ -131,7 +131,7 @@
                             {{-- 3. File Attachment --}}
                             <div>
                                 <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
-                                    Attach PDF (Optional)
+                                    {{ __('Attach PDF') }} ({{ __('Optional') }})
                                 </label>
 
                                 <div class="flex items-center justify-center w-full">
@@ -144,9 +144,8 @@
                                                 <i class="bi bi-cloud-arrow-up text-lg"></i>
                                             </div>
                                             <p class="mb-1 text-sm text-gray-500"><span
-                                                    class="font-semibold text-indigo-600">Click to upload</span> or drag
-                                                and drop</p>
-                                            <p class="text-xs text-gray-400">PDF documents only (Max 5MB)</p>
+                                                    class="font-semibold text-indigo-600">{{ __('Click to upload') }}</span> {{ __('or drag and drop') }}</p>
+                                            <p class="text-xs text-gray-400">{{ __('PDF documents only (Max 5MB)') }}</p>
                                         </div>
 
                                         {{-- Preview State --}}
@@ -162,7 +161,7 @@
                                                     <p id="fileName"
                                                         class="text-sm font-medium text-gray-700 truncate max-w-[200px]">
                                                         filename.pdf</p>
-                                                    <p class="text-[10px] text-green-600 font-medium">Ready to upload
+                                                    <p class="text-[10px] text-green-600 font-medium">{{ __('Ready to upload') }}
                                                     </p>
                                                 </div>
                                                 <button type="button" id="removeFile"
@@ -184,7 +183,7 @@
                         <div class="flex items-center justify-end gap-4 pt-8 mt-4">
                             <button type="submit"
                                 class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold px-8 py-3 rounded-xl shadow-md shadow-indigo-200 transition-all transform hover:-translate-y-0.5 focus:ring-4 focus:ring-indigo-100">
-                                <i class="bi bi-send-fill text-xs"></i> Submit Proposal
+                                <i class="bi bi-send-fill text-xs"></i> {{ __('Submit Proposal') }}
                             </button>
                         </div>
 
@@ -204,7 +203,7 @@
                 if (document.getElementById('quillEditor')) {
                     var quill = new Quill('#quillEditor', {
                         theme: 'snow',
-                        placeholder: 'Outline your methodology, key deliverables, and terms...',
+                        placeholder: '{{ __('Outline your methodology, key deliverables, and terms...') }}',
                         modules: {
                             toolbar: [
                                 ['bold', 'italic', 'underline'],
@@ -240,7 +239,7 @@
                 fileInput.on('change', function() {
                     if (this.files && this.files[0]) {
                         if (this.files[0].type !== 'application/pdf') {
-                            alert('Please upload a PDF file.');
+                            alert("{{ __('Please upload a PDF file.') }}");
                             this.value = '';
                             return;
                         }

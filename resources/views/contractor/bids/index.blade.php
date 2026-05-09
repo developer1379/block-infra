@@ -6,16 +6,16 @@
             <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
                 <div>
                     <div class="flex items-center gap-2 text-sm text-gray-500 mb-1">
-                        <a href="{{ route('admin.projects.index') }}" class="hover:text-indigo-600 transition-colors">Projects</a>
+                        <a href="{{ route('admin.projects.index') }}" class="hover:text-indigo-600 transition-colors">{{ __('Projects') }}</a>
                         <span>/</span>
                         <span>{{ $project->title }}</span>
                     </div>
-                    <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Bid Proposals</h1>
-                    <p class="text-gray-500 text-sm mt-1">Review and manage {{ $bids->count() }} submitted proposals.</p>
+                    <h1 class="text-2xl font-bold text-gray-900 tracking-tight">{{ __('Bid Proposals') }}</h1>
+                    <p class="text-gray-500 text-sm mt-1">{{ __('Review and manage') }} {{ $bids->count() }} {{ __('submitted proposals.') }}</p>
                 </div>
                 <a href="{{ route('contractor.projects.index') }}"
                    class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 shadow-sm transition-all">
-                    <i class="fa-solid fa-arrow-left"></i> Back
+                    <i class="fa-solid fa-arrow-left"></i> {{ __('Back') }}
                 </a>
             </div>
 
@@ -37,22 +37,22 @@
                                 </div>
                                 <div>
                                     <h3 class="text-sm font-bold text-gray-900">{{ $bid->contractor->name }}</h3>
-                                    <p class="text-xs text-gray-500">{{ $bid->contractor->email ?? 'No email' }}</p>
+                                    <p class="text-xs text-gray-500">{{ $bid->contractor->email ?? __('No email') }}</p>
                                 </div>
                             </div>
 
                             {{-- Status Badge --}}
                             @if ($bid->status == 'accepted')
                                 <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-green-100 text-green-700 border border-green-200">
-                                    <i class="fa-solid fa-check-circle mr-1"></i> Awarded
+                                    <i class="fa-solid fa-check-circle mr-1"></i> {{ __('Awarded') }}
                                 </span>
                             @elseif ($bid->status == 'rejected')
                                 <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-red-100 text-red-700 border border-red-200">
-                                    <i class="fa-solid fa-times-circle mr-1"></i> Rejected
+                                    <i class="fa-solid fa-times-circle mr-1"></i> {{ __('Rejected') }}
                                 </span>
                             @else
                                 <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-gray-100 text-gray-600 border border-gray-200">
-                                    Pending
+                                    {{ __('Pending') }}
                                 </span>
                             @endif
                         </div>
@@ -63,12 +63,12 @@
                             {{-- Key Stats --}}
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="bg-gray-50 p-3 rounded-lg border border-gray-100 text-center">
-                                    <p class="text-[10px] uppercase font-bold text-gray-400 mb-1">Bid Amount</p>
+                                    <p class="text-[10px] uppercase font-bold text-gray-400 mb-1">{{ __('Bid Amount') }}</p>
                                     <p class="text-lg font-bold text-gray-900">₹{{ number_format($bid->bid_amount, 2) }}</p>
                                 </div>
                                 <div class="bg-gray-50 p-3 rounded-lg border border-gray-100 text-center">
-                                    <p class="text-[10px] uppercase font-bold text-gray-400 mb-1">Delivery</p>
-                                    <p class="text-sm font-semibold text-gray-700">{{ $bid->delivery_days }} Days</p>
+                                    <p class="text-[10px] uppercase font-bold text-gray-400 mb-1">{{ __('Delivery') }}</p>
+                                    <p class="text-sm font-semibold text-gray-700">{{ $bid->delivery_days }} {{ __('Days') }}</p>
                                 </div>
                             </div>
 
@@ -78,10 +78,10 @@
                                 @if ($bid->proposal_text)
                                     <button class="viewProposalBtn flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg"
                                             data-proposal="{{ base64_encode($bid->proposal_text) }}">
-                                        <i class="fa-regular fa-eye"></i> Read Proposal
+                                        <i class="fa-regular fa-eye"></i> {{ __('Read Proposal') }}
                                     </button>
                                 @else
-                                    <span class="text-xs text-gray-400 italic">No text proposal</span>
+                                    <span class="text-xs text-gray-400 italic">{{ __('No text proposal') }}</span>
                                 @endif
 
                                 {{-- PDF Link --}}
@@ -100,7 +100,7 @@
                                 <div class="px-5 py-4 bg-gray-50 border-t border-gray-100 flex justify-end">
                                     <button class="awardBtn w-full flex justify-center items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white text-xs font-bold uppercase tracking-wider py-2.5 rounded-lg shadow-sm transition-all transform active:scale-95"
                                             data-id="{{ $bid->id }}" data-project="{{ $project->id }}">
-                                        <i class="fa-solid fa-award"></i> Award Project
+                                        <i class="fa-solid fa-award"></i> {{ __('Award Project') }}
                                     </button>
                                 </div>
                             @endif
@@ -111,8 +111,8 @@
                         <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-300">
                             <i class="fa-solid fa-inbox text-3xl"></i>
                         </div>
-                        <h3 class="text-lg font-bold text-gray-900">No proposals yet</h3>
-                        <p class="text-gray-500 text-sm mt-1">Contractors haven't submitted any bids for this project.</p>
+                        <h3 class="text-lg font-bold text-gray-900">{{ __('No proposals yet') }}</h3>
+                        <p class="text-gray-500 text-sm mt-1">{{ __('Contractors haven\'t submitted any bids for this project.') }}</p>
                     </div>
                 @endforelse
             </div>
@@ -135,7 +135,7 @@
                     {{-- Header --}}
                     <div class="bg-gray-50 px-6 py-4 border-b border-gray-100 flex justify-between items-center">
                         <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2">
-                            <i class="fa-regular fa-file-lines text-indigo-600"></i> Proposal Details
+                            <i class="fa-regular fa-file-lines text-indigo-600"></i> {{ __('Proposal Details') }}
                         </h3>
                         <button type="button" onclick="closeModal()" class="text-gray-400 hover:text-red-500 transition-colors">
                             <i class="fa-solid fa-xmark text-xl"></i>
@@ -152,7 +152,7 @@
                     {{-- Footer --}}
                     <div class="bg-gray-50 px-6 py-3 flex justify-end border-t border-gray-100">
                         <button type="button" onclick="closeModal()" class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm">
-                            Close
+                            {{ __('Close') }}
                         </button>
                     </div>
                 </div>
@@ -197,14 +197,14 @@
                 let projectId = $(this).data("project");
 
                 Swal.fire({
-                    title: "Award this bid?",
-                    text: "This action will officially assign the project and reject all other pending bids.",
+                    title: "{{ __('Award this bid?') }}",
+                    text: "{{ __('This action will officially assign the project and reject all other pending bids.') }}",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#111827", // gray-900
                     cancelButtonColor: "#9ca3af", // gray-400
-                    confirmButtonText: "Yes, Award Project",
-                    cancelButtonText: "Cancel",
+                    confirmButtonText: "{{ __('Yes, Award Project') }}",
+                    cancelButtonText: "{{ __('Cancel') }}",
                     customClass: {
                         popup: 'rounded-2xl',
                         confirmButton: 'px-5 py-2.5 rounded-lg font-bold',

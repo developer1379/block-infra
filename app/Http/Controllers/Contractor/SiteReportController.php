@@ -26,7 +26,7 @@ class SiteReportController extends Controller
     {
         try {
             $contractor = Auth::user()->contractor;
-            $reports = \App\Models\DailySiteReport::where('contractor_id', $contractor->id)->with('project')->latest()->get();
+            $reports = \App\Models\DailySiteReport::where('contractor_id', $contractor->id)->with('project')->latest()->paginate(10);
             return view('contractor.site-reports.index', compact('reports'));
         } catch (\Exception $e) {
             Log::error('Contractor Site Report Index Error: ' . $e->getMessage());

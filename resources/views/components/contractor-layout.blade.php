@@ -8,10 +8,22 @@
 
     <title>{{ config('app.name', 'Construction App') }} - Contractor Portal</title>
 
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -186,7 +198,7 @@
                         class="text-gray-500 hover:text-gray-700 md:hidden focus:outline-none">
                         <i class="bi bi-list text-2xl"></i>
                     </button>
-                    <h2 class="text-lg font-semibold text-gray-700 md:hidden">Contractor Portal</h2>
+                    <h2 class="text-lg font-semibold text-gray-700 md:hidden">{{ __('Contractor Portal') }}</h2>
                 </div>
 
                 <div class="flex items-center gap-4">
@@ -255,7 +267,7 @@
                 {{ $slot }}
 
                 <footer class="mt-auto py-6 px-6 text-center text-sm text-gray-400 border-t border-gray-200">
-                    &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
+                    &copy; {{ date('Y') }} {{ config('app.name') }}. {{ __('All rights reserved') }}.
                 </footer>
             </main>
         </div>

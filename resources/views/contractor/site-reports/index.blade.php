@@ -1,103 +1,146 @@
 <x-contractor-layout>
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Daily Site Reports</h1>
-                    <p class="text-gray-500 mt-1">Manage and track daily progress updates from your construction sites.</p>
-                </div>
-                <a href="{{ route('contractor.site-reports.create') }}" 
-                    class="inline-flex items-center justify-center px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl shadow-sm transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]">
-                    <i class="bi bi-plus-lg mr-2"></i>
-                    New Site Report
-                </a>
+    <div class="p-6 space-y-8 animate-fade-in">
+        <!-- Header Section -->
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+            <div>
+                <h1 class="text-3xl font-black text-gray-900 tracking-tight flex items-center gap-3">
+                    {{ __('Daily Site Reports') }}
+                    <span class="bg-indigo-100 text-indigo-600 text-[10px] font-black uppercase px-3 py-1 rounded-full tracking-widest border border-indigo-200">
+                        {{ $reports->count() }} {{ __('Total') }}
+                    </span>
+                </h1>
+                <p class="text-gray-500 text-sm mt-1 font-medium">{{ __('Manage and track daily progress updates from your construction sites.') }}</p>
             </div>
+            <a href="{{ route('contractor.site-reports.create') }}" 
+                class="w-full lg:w-auto inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-black px-6 py-3.5 rounded-2xl transition-all shadow-xl shadow-indigo-100 transform active:scale-95">
+                <i class="fa-solid fa-plus-circle"></i>
+                {{ __('New Site Report') }}
+            </a>
+        </div>
 
-            <!-- Reports List -->
-            <div class="grid grid-cols-1 gap-6">
-                @forelse ($reports as $report)
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
-                        <div class="p-6">
-                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-                                <div class="flex items-center gap-4">
-                                    <div class="h-14 w-14 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600">
-                                        <i class="bi bi-journal-text text-2xl"></i>
+        <!-- Reports Grid -->
+        <div class="grid grid-cols-1 gap-6">
+            @forelse ($reports as $report)
+                <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl hover:shadow-indigo-500/5 transition-all group">
+                    <div class="p-8">
+                        <div class="flex flex-col xl:flex-row justify-between gap-8">
+                            <!-- Left Section: Info -->
+                            <div class="flex-1 space-y-6">
+                                <div class="flex items-start gap-5">
+                                    <div class="h-16 w-16 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 group-hover:scale-110 transition-transform flex-shrink-0">
+                                        <i class="fa-solid fa-clipboard-check text-2xl"></i>
                                     </div>
                                     <div>
-                                        <h3 class="text-lg font-bold text-gray-900">{{ $report->project->title }}</h3>
-                                        <div class="flex items-center gap-2 text-sm text-gray-500">
-                                            <i class="bi bi-calendar3"></i>
-                                            {{ \Carbon\Carbon::parse($report->report_date)->format('M d, Y') }}
-                                            <span class="mx-1">•</span>
-                                            <i class="bi bi-cloud-sun"></i>
-                                            {{ $report->weather_condition ?? 'Clear' }}
+                                        <h3 class="text-xl font-black text-gray-900">{{ $report->project->title }}</h3>
+                                        <div class="flex flex-wrap items-center gap-3 mt-2">
+                                            <span class="flex items-center gap-1.5 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                                                <i class="fa-solid fa-calendar-day text-indigo-400"></i>
+                                                {{ \Carbon\Carbon::parse($report->report_date)->format('M d, Y') }}
+                                            </span>
+                                            <span class="h-1 w-1 rounded-full bg-gray-200"></span>
+                                            @php
+                                                $weatherIcons = [
+                                                    'Clear' => 'fa-sun text-amber-400',
+                                                    'Cloudy' => 'fa-cloud text-blue-400',
+                                                    'Rainy' => 'fa-cloud-showers-heavy text-indigo-400',
+                                                    'Stormy' => 'fa-bolt text-purple-400',
+                                                    'Windy' => 'fa-wind text-slate-400',
+                                                ];
+                                            @endphp
+                                            <span class="flex items-center gap-1.5 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                                                <i class="fa-solid {{ $weatherIcons[$report->weather_condition] ?? 'fa-cloud text-gray-400' }}"></i>
+                                                {{ __($report->weather_condition ?? 'Clear') }}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="flex flex-col items-end">
-                                    <span class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-1 text-xs">Progress</span>
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-32 bg-gray-100 rounded-full h-2 overflow-hidden">
-                                            <div class="bg-indigo-600 h-full rounded-full" style="width: {{ $report->progress_percentage }}%"></div>
-                                        </div>
-                                        <span class="text-lg font-bold text-indigo-600">{{ $report->progress_percentage }}%</span>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 pt-6 border-t border-gray-50">
-                                <div>
-                                    <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Work Summary</h4>
-                                    <p class="text-gray-700 text-sm leading-relaxed line-clamp-3">
-                                        {{ $report->work_summary }}
-                                    </p>
-                                </div>
-                                <div class="flex flex-col gap-4">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 p-6 bg-gray-50/50 rounded-3xl border border-gray-50">
+                                    <div>
+                                        <h4 class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2">{{ __('Work Performed') }}</h4>
+                                        <p class="text-sm font-bold text-gray-600 leading-relaxed line-clamp-3 italic">
+                                            "{{ $report->work_summary }}"
+                                        </p>
+                                    </div>
                                     @if($report->next_day_plan)
                                     <div>
-                                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Next Day Plan</h4>
-                                        <p class="text-gray-600 text-sm italic">{{ $report->next_day_plan }}</p>
+                                        <h4 class="text-[9px] font-black text-indigo-400 uppercase tracking-widest mb-2">{{ __('Next Day Plan') }}</h4>
+                                        <p class="text-sm font-bold text-indigo-600/80 leading-relaxed line-clamp-2">
+                                            {{ $report->next_day_plan }}
+                                        </p>
                                     </div>
                                     @endif
-                                    
-                                    <div class="flex items-center justify-between mt-auto">
-                                        <div class="flex -space-x-2 overflow-hidden">
-                                            @forelse($report->photos->take(4) as $photo)
-                                                <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover" src="{{ asset('storage/' . $photo->photo_path) }}" alt="Site Photo">
-                                            @empty
-                                                <span class="text-xs text-gray-400 flex items-center gap-1">
-                                                    <i class="bi bi-image"></i> No photos
-                                                </span>
-                                            @endforelse
-                                            @if($report->photos->count() > 4)
-                                                <div class="flex items-center justify-center h-8 w-8 rounded-full bg-gray-100 ring-2 ring-white text-[10px] font-bold text-gray-500">
-                                                    +{{ $report->photos->count() - 4 }}
-                                                </div>
-                                            @endif
-                                        </div>
-                                        <div class="flex items-center gap-2">
-                                            <a href="{{ route('contractor.site-reports.show', $report->id) }}" class="text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition-colors">
-                                                View Details <i class="bi bi-arrow-right ml-1"></i>
-                                            </a>
-                                        </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Section: Progress & Media -->
+                            <div class="xl:w-80 flex flex-col justify-between gap-6">
+                                <div class="bg-indigo-50/50 p-6 rounded-3xl border border-indigo-100/50">
+                                    <div class="flex justify-between items-center mb-3">
+                                        <span class="text-[10px] font-black text-indigo-600 uppercase tracking-widest">{{ __('Overall Progress') }}</span>
+                                        <span class="text-lg font-black text-indigo-600">{{ $report->progress_percentage }}%</span>
                                     </div>
+                                    <div class="w-full bg-indigo-100 rounded-full h-3 overflow-hidden">
+                                        <div class="bg-indigo-600 h-full rounded-full transition-all duration-1000" style="width: {{ $report->progress_percentage }}%"></div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between">
+                                    <div class="flex -space-x-3">
+                                        @forelse($report->photos->take(4) as $photo)
+                                            <div class="h-12 w-12 rounded-2xl ring-4 ring-white overflow-hidden shadow-sm hover:-translate-y-1 transition-transform cursor-pointer">
+                                                <img class="h-full w-full object-cover" src="{{ asset('storage/' . $photo->photo_path) }}" alt="{{ __('Site Photo') }}">
+                                            </div>
+                                        @empty
+                                            <div class="flex items-center gap-2 text-gray-300">
+                                                <i class="fa-solid fa-image-slash"></i>
+                                                <span class="text-[10px] font-black uppercase tracking-widest">{{ __('No site photos') }}</span>
+                                            </div>
+                                        @endforelse
+                                        @if($report->photos->count() > 4)
+                                            <div class="h-12 w-12 rounded-2xl bg-indigo-600 ring-4 ring-white flex items-center justify-center text-[10px] font-black text-white shadow-sm">
+                                                +{{ $report->photos->count() - 4 }}
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <a href="{{ route('contractor.site-reports.show', $report->id) }}" 
+                                       class="h-12 px-6 rounded-2xl bg-white border border-gray-100 flex items-center justify-center text-[10px] font-black text-gray-900 uppercase tracking-widest hover:bg-gray-50 transition-all shadow-sm">
+                                        {{ __('View Details') }}
+                                        <i class="fa-solid fa-arrow-right ml-2 text-indigo-600"></i>
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                @empty
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
-                        <div class="h-20 w-20 bg-gray-50 rounded-full flex items-center justify-center text-gray-300 mx-auto mb-4">
-                            <i class="bi bi-journal-x text-4xl"></i>
-                        </div>
-                        <h2 class="text-xl font-bold text-gray-900 mb-2">No reports found</h2>
-                        <p class="text-gray-500 mb-8">You haven't submitted any site reports yet. Start by creating your first daily update.</p>
-                        <a href="{{ route('contractor.site-reports.create') }}" class="inline-flex items-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-all">
-                            Submit First Report
-                        </a>
+                </div>
+            @empty
+                <div class="py-32 flex flex-col items-center justify-center text-center px-6 bg-white rounded-[2.5rem] border border-gray-100 shadow-sm">
+                    <div class="w-32 h-32 bg-gray-50 rounded-full flex items-center justify-center text-gray-200 text-6xl mb-8">
+                        <i class="fa-solid fa-file-contract"></i>
                     </div>
-                @endforelse
-            </div>
+                    <h3 class="text-3xl font-black text-gray-900 uppercase tracking-tighter">{{ __('No Site Reports Found') }}</h3>
+                    <p class="text-gray-500 mt-3 max-w-sm font-medium leading-relaxed">{{ __('Start tracking your construction progress by submitting your first daily report.') }}</p>
+                    <a href="{{ route('contractor.site-reports.create') }}" class="mt-10 px-10 py-4 bg-indigo-600 text-white rounded-2xl font-black uppercase text-xs tracking-widest shadow-2xl shadow-indigo-100 hover:bg-indigo-700 transition-all transform active:scale-95">
+                        {{ __('Submit First Report') }}
+                    </a>
+                </div>
+            @endforelse
         </div>
+
+        @if($reports->hasPages())
+            <div class="mt-8">
+                {{ $reports->links() }}
+            </div>
+        @endif
     </div>
+
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
 </x-contractor-layout>

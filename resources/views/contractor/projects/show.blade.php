@@ -58,7 +58,7 @@
                                 </div>
                                 <div class="text-right">
                                     <p class="text-[10px] font-black text-indigo-600">{{ $worker->attendances_count }}</p>
-                                    <p class="text-[7px] text-gray-400 uppercase font-bold tracking-tighter">Days</p>
+                                    <p class="text-[7px] text-gray-400 uppercase font-bold tracking-tighter">{{ __('Days') }}</p>
                                 </div>
                             </div>
                         @empty
@@ -101,7 +101,7 @@
                                 @endphp
                                 <div class="bg-emerald-500 h-full rounded-full transition-all duration-1000" style="width: {{ $perc }}%"></div>
                             </div>
-                            <p class="text-[8px] text-gray-400 mt-1 italic text-right">{{ number_format($perc, 1) }}% of bid amount spent on wages</p>
+                            <p class="text-[8px] text-gray-400 mt-1 italic text-right">{{ number_format($perc, 1) }}% {{ __('of bid amount spent on wages') }}</p>
                         </div>
                         <div class="pt-4 border-t border-gray-50">
                             <a href="{{ route('contractor.payments.create', ['project_id' => $project->id]) }}" class="w-full py-3 bg-emerald-50 text-emerald-700 text-[10px] font-black rounded-xl hover:bg-emerald-100 transition-all flex items-center justify-center gap-2">
@@ -115,7 +115,7 @@
                 <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
                     <div class="flex items-center justify-between mb-4">
                         <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ __('Site Inventory') }}</h4>
-                        <a href="{{ route('contractor.inventory.index') }}" class="text-[9px] font-bold text-indigo-600 hover:underline">Manage</a>
+                        <a href="{{ route('contractor.inventory.index') }}" class="text-[9px] font-bold text-indigo-600 hover:underline">{{ __('Manage') }}</a>
                     </div>
                     <div class="space-y-3">
                         @forelse($materialLogs as $log)
@@ -147,7 +147,7 @@
                             <h3 class="font-bold flex items-center gap-2 text-sm">
                                 <i class="bi bi-shield-check"></i> {{ __('Post Verified Progress') }}
                             </h3>
-                            <p class="text-[9px] text-indigo-100 mt-1">Requires live photo and location data.</p>
+                            <p class="text-[9px] text-indigo-100 mt-1">{{ __('Requires live photo and location data.') }}</p>
                         </div>
                         <div class="p-8 flex-1">
                             <form action="{{ route('contractor.projects.progress.store', $project->id) }}" method="POST" id="progressForm" class="space-y-6">
@@ -249,7 +249,7 @@
                                             </div>
                                             @if($update->latitude)
                                                 <a href="https://www.google.com/maps?q={{ $update->latitude }},{{ $update->longitude }}" target="_blank" class="px-3 py-1.5 bg-emerald-50 text-emerald-600 text-[9px] font-bold rounded-lg border border-emerald-100 hover:bg-emerald-600 hover:text-white transition-all flex items-center gap-1">
-                                                    <i class="bi bi-geo-alt-fill"></i> Site Verified
+                                                    <i class="bi bi-geo-alt-fill"></i> {{ __('Site Verified') }}
                                                 </a>
                                             @endif
                                         </div>
@@ -258,7 +258,7 @@
                                         @if ($update->report_file_path)
                                             <div class="mt-4 pt-4 border-t border-gray-50 flex items-center justify-between">
                                                 <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
-                                                    <i class="bi bi-paperclip"></i> Site Proof Attached
+                                                    <i class="bi bi-paperclip"></i> {{ __('Site Proof Attached') }}
                                                 </span>
                                                 <a href="{{ asset('storage/' . $update->report_file_path) }}" target="_blank" class="h-10 w-10 flex items-center justify-center bg-gray-50 rounded-xl text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all">
                                                     <i class="bi bi-eye"></i>
@@ -287,7 +287,7 @@
     <div id="cameraModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-[32px] w-full max-w-lg overflow-hidden shadow-2xl">
             <div class="p-6 border-b border-gray-100 flex justify-between items-center">
-                <h3 class="font-bold text-gray-900">Verify Site Progress</h3>
+                <h3 class="font-bold text-gray-900">{{ __('Verify Site Progress') }}</h3>
                 <button onclick="stopCamera()" class="text-gray-400 hover:text-gray-600 transition-colors">
                     <i class="bi bi-x-lg"></i>
                 </button>
@@ -302,7 +302,7 @@
                 </div>
             </div>
             <div class="p-4 text-center">
-                <p class="text-[10px] text-gray-400">Position the camera at the work site before capturing.</p>
+                <p class="text-[10px] text-gray-400">{{ __('Position the camera at the work site before capturing.') }}</p>
             </div>
         </div>
         
@@ -323,7 +323,7 @@
                 })
                 .catch(err => {
                     console.error("Error accessing camera:", err);
-                    alert("Unable to access camera. Please check permissions.");
+                    alert("{{ __('Unable to access camera. Please check permissions.') }}");
                     modal.classList.add('hidden');
                 });
             
@@ -351,7 +351,7 @@
             photoInput.value = dataUrl;
             
             stopCamera();
-            alert("Photo captured successfully!");
+            alert("{{ __('Photo captured successfully!') }}");
         }
 
         function getLocation() {
@@ -360,20 +360,20 @@
             const lonInput = document.getElementById('longitude');
 
             if (!navigator.geolocation) {
-                status.textContent = "Geolocation is not supported by your browser";
+                status.textContent = "{{ __('Geolocation is not supported by your browser') }}";
                 return;
             }
 
-            status.textContent = "Fetching GPS coordinates...";
+            status.textContent = "{{ __('Fetching GPS coordinates...') }}";
 
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     latInput.value = position.coords.latitude;
                     lonInput.value = position.coords.longitude;
-                    status.textContent = `Location Captured: ${position.coords.latitude.toFixed(4)}, ${position.coords.longitude.toFixed(4)}`;
+                    status.textContent = `{{ __('Location Captured') }}: ${position.coords.latitude.toFixed(4)}, ${position.coords.longitude.toFixed(4)}`;
                 },
                 (error) => {
-                    status.textContent = "Unable to retrieve your location";
+                    status.textContent = "{{ __('Unable to retrieve your location') }}";
                     console.error(error);
                 }
             );

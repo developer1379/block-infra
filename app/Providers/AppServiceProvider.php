@@ -22,6 +22,7 @@ use App\Repositories\ProjectMilestone\ProjectMilestoneRepository;
 use App\Repositories\ProjectProgressUpdate\Interfaces\ProjectProgressUpdateRepositoryInterface;
 use App\Repositories\ProjectProgressUpdate\ProjectProgressUpdateRepository;
 use App\Interfaces\MilestoneCommentRepositoryInterface;
+use App\Repositories\MilestoneCommentRepository;
 use App\Repositories\Interfaces\InvoiceRepositoryInterface;
 use App\Repositories\InvoiceRepository;
 use App\Repositories\Interfaces\WorkerRepositoryInterface;
