@@ -90,15 +90,15 @@
                 {{-- Progress --}}
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
                     <div class="flex justify-between items-end mb-2">
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Progress</p>
-                        <span class="text-lg font-bold text-indigo-600">{{ $project->current_progress }}%</span>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Overall Progress</p>
+                        <span class="text-lg font-bold text-indigo-600">{{ $overallProgress }}%</span>
                     </div>
                     <div class="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
                         <div class="bg-indigo-600 h-2 rounded-full transition-all duration-1000 ease-out relative"
-                            style="width: {{ $project->current_progress }}%;">
+                            style="width: {{ $overallProgress }}%;">
                         </div>
                     </div>
-                    <p class="text-[10px] text-gray-400 mt-2 text-right">Latest Report</p>
+                    <p class="text-[10px] text-gray-400 mt-2 text-right">Weighted by Milestones</p>
                 </div>
             </div>
 
@@ -191,21 +191,28 @@
                                     </div>
                                 </div>
 
-                                {{-- Card Middle: Status --}}
-                                <div class="mb-4">
-                                    @php
-                                        $statusClasses = [
-                                            'completed' => 'bg-emerald-50 text-emerald-700 border-emerald-100',
-                                            'paid' => 'bg-blue-50 text-blue-700 border-blue-100',
-                                            'in_progress' => 'bg-amber-50 text-amber-700 border-amber-100',
-                                            'default' => 'bg-gray-50 text-gray-600 border-gray-100',
-                                        ];
-                                        $class = $statusClasses[$milestone->status] ?? $statusClasses['default'];
-                                    @endphp
-                                    <span
-                                        class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase border {{ $class }}">
-                                        {{ str_replace('_', ' ', $milestone->status) }}
-                                    </span>
+                                {{-- Card Middle: Status & Progress --}}
+                                <div class="mb-4 space-y-3">
+                                    <div class="flex justify-between items-center">
+                                        @php
+                                            $statusClasses = [
+                                                'completed' => 'bg-emerald-50 text-emerald-700 border-emerald-100',
+                                                'paid' => 'bg-blue-50 text-blue-700 border-blue-100',
+                                                'in_progress' => 'bg-amber-50 text-amber-700 border-amber-100',
+                                                'default' => 'bg-gray-50 text-gray-600 border-gray-100',
+                                            ];
+                                            $class = $statusClasses[$milestone->status] ?? $statusClasses['default'];
+                                        @endphp
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase border {{ $class }}">
+                                            {{ str_replace('_', ' ', $milestone->status) }}
+                                        </span>
+                                        <span class="text-[10px] font-bold text-indigo-600">{{ $milestone->progress }}%</span>
+                                    </div>
+                                    
+                                    <div class="w-full bg-gray-50 rounded-full h-1 overflow-hidden">
+                                        <div class="bg-indigo-500 h-full transition-all duration-500" style="width: {{ $milestone->progress }}%"></div>
+                                    </div>
                                 </div>
 
                                 {{-- Card Bottom: Meta Data --}}

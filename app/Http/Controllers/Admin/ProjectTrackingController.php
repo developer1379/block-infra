@@ -30,11 +30,23 @@ class ProjectTrackingController extends Controller
             'works'
         ])->findOrFail($id);
 
-        if ($project) {
-            return view('admin.projects.tracking', compact('project'));
-        }else{
-            return redirect()->back()->with('error', 'Project now Awarded Yet.');
+        // Calculate Overall Progress (Weighted by milestone amount)
+        $totalWeight = $project->milestones->sum('amount');
+        $weightedProgress = 0;
+        
+        if ($totalWeight > 0) {
+            foreach ($project->milestones as $milestone) {
+                $weightedProgress += (($milestone->progress ?? 0) * $milestone->amount);
+            }
+            $overallProgress = round($weightedProgress / $totalWeight);
+        } else {
+            // Fallback to simple average if no amounts are set
+            $overallProgress = $project->milestones->count() > 0 
+                ? round($project->milestones->avg('progress') ?? 0) 
+                : 0;
         }
+
+        return view('admin.projects.tracking', compact('project', 'overallProgress'));
     }
 
     /**
