@@ -139,7 +139,8 @@ class ProjectController extends Controller
     public function storeProgress(Request $request, Project $project)
     {
         // 1. SECURITY: Check authorization again
-        $isAssigned = $project->award->awarded_to === Auth::id();
+        $isAssigned = ($project->award && $project->award->awarded_to === Auth::id()) || 
+                      $project->projectWorks()->where('contractor_id', Auth::id())->exists();
         abort_unless($isAssigned, 403, 'You are not authorized to update this project.');
 
         // 2. Validate Input
@@ -154,7 +155,24 @@ class ProjectController extends Controller
             'location_address'    => 'nullable|string',
         ]);
 
-        // 3. Handle File Upload or Camera Photo
+        // 3. Verify Milestone Ownership
+        $milestone = \App\Models\ProjectMilestone::findOrFail($request->milestone_id);
+        if ($milestone->project_id != $project->id) {
+            abort(403, 'Invalid milestone for this project.');
+        }
+
+        // If partially assigned, check if milestone is linked to their work
+        $isWholeProjectAwarded = $project->award && $project->award->awarded_to === Auth::id();
+        if (!$isWholeProjectAwarded) {
+            if ($milestone->project_work_id) {
+                $work = \App\Models\ProjectWork::find($milestone->project_work_id);
+                if (!$work || $work->contractor_id != Auth::id()) {
+                    abort(403, 'This milestone is not assigned to you.');
+                }
+            }
+        }
+
+        // 4. Handle File Upload or Camera Photo
         $filePath = null;
         if ($request->filled('verification_photo')) {
             $img = $request->verification_photo;
