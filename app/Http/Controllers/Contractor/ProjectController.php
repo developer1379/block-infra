@@ -149,9 +149,9 @@ class ProjectController extends Controller
             'progress_percentage' => 'required|integer|min:0|max:100',
             'report_description'  => 'required|string|max:2000',
             'report_file'         => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120',
-            'verification_photo'  => 'nullable|string', // Base64 from camera
-            'latitude'            => 'nullable|numeric',
-            'longitude'           => 'nullable|numeric',
+            'verification_photo'  => 'required|string', // Mandatory now
+            'latitude'            => 'required|numeric', // Mandatory now
+            'longitude'           => 'required|numeric', // Mandatory now
             'location_address'    => 'nullable|string',
         ]);
 
@@ -172,7 +172,10 @@ class ProjectController extends Controller
             }
         }
 
-        // 4. Handle File Upload or Camera Photo
+        // 4. Update Milestone Progress
+        $milestone->update(['progress' => $request->progress_percentage]);
+
+        // 5. Handle File Upload or Camera Photo
         $filePath = null;
         if ($request->filled('verification_photo')) {
             $img = $request->verification_photo;

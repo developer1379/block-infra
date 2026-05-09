@@ -169,14 +169,20 @@
                                     <div class="absolute left-0 top-1 h-4 w-4 rounded-full border-2 {{ $milestone->status == 'paid' ? 'bg-emerald-500 border-emerald-100' : 'bg-white border-gray-200' }} z-10 transition-all"></div>
                                     
                                     <button type="button" 
-                                        onclick="openProgressModal('{{ $milestone->id }}', '{{ $milestone->title }}')"
+                                        onclick="openProgressModal('{{ $milestone->id }}', '{{ $milestone->title }}', {{ $milestone->progress ?? 0 }})"
                                         {{ $milestone->status == 'paid' ? 'disabled' : '' }}
                                         class="w-full text-left flex items-center justify-between {{ $milestone->status == 'paid' ? 'bg-emerald-50/50' : 'bg-gray-50/50 hover:bg-white hover:shadow-lg hover:border-indigo-50' }} p-4 rounded-2xl border border-transparent transition-all group">
-                                        <div>
-                                            <p class="text-[10px] font-bold text-gray-900">{{ $milestone->title }}</p>
-                                            <p class="text-[8px] text-gray-400 mt-0.5">{{ $milestone->due_date ? $milestone->due_date->format('M d, Y') : 'Date Pending' }}</p>
+                                        <div class="flex-1">
+                                            <div class="flex justify-between items-center mb-2">
+                                                <p class="text-[10px] font-bold text-gray-900">{{ $milestone->title }}</p>
+                                                <span class="text-[10px] font-black text-indigo-600">{{ $milestone->progress }}%</span>
+                                            </div>
+                                            <div class="w-full h-1 bg-gray-200 rounded-full overflow-hidden">
+                                                <div class="h-full bg-indigo-600 transition-all duration-500" style="width: {{ $milestone->progress }}%"></div>
+                                            </div>
+                                            <p class="text-[8px] text-gray-400 mt-2">{{ $milestone->due_date ? $milestone->due_date->format('M d, Y') : 'Date Pending' }}</p>
                                         </div>
-                                        <div class="text-right">
+                                        <div class="text-right pl-6 border-l border-gray-100 ml-6 shrink-0">
                                             <p class="text-[10px] font-black text-gray-900">₹{{ number_format($milestone->amount) }}</p>
                                             <span class="text-[8px] font-bold tracking-tighter {{ $milestone->status == 'paid' ? 'text-emerald-600' : 'text-indigo-400' }}">
                                                 {{ $milestone->status == 'paid' ? __('COMPLETED') : __('REPORT PROGRESS') }}
@@ -271,7 +277,7 @@
                 </button>
             </div>
             
-            <form action="{{ route('contractor.projects.progress.store', $project->id) }}" method="POST" id="progressForm" class="p-8 space-y-6">
+            <form action="{{ route('contractor.projects.progress.store', $project->id) }}" method="POST" id="progressForm" class="p-8 space-y-6" onsubmit="return validateProgressForm()">
                 @csrf
                 <input type="hidden" name="milestone_id" id="modalMilestoneId">
                 <input type="hidden" name="verification_photo" id="verification_photo">
@@ -279,12 +285,12 @@
                 <input type="hidden" name="longitude" id="longitude">
                 <input type="hidden" name="location_address" id="location_address">
 
-                <div x-data="{ progress: 0 }">
+                <div x-data="{ progress: 0 }" id="sliderContainer">
                     <div class="flex justify-between items-end mb-3">
                         <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ __('Phase Completion') }}</label>
-                        <span class="text-2xl font-black text-indigo-600" x-text="progress + '%'"></span>
+                        <span class="text-2xl font-black text-indigo-600" x-text="progress + '%'" id="progressDisplay">0%</span>
                     </div>
-                    <input type="range" name="progress_percentage" x-model="progress" min="0" max="100" step="1" 
+                    <input type="range" name="progress_percentage" x-model="progress" id="progressSlider" min="0" max="100" step="1" 
                         class="w-full h-2 bg-gray-100 rounded-lg appearance-none cursor-pointer accent-indigo-600">
                 </div>
 
@@ -334,15 +340,41 @@
     <script>
         let stream = null;
 
-        function openProgressModal(milestoneId, title) {
+        function openProgressModal(milestoneId, title, progressValue) {
             document.getElementById('modalMilestoneId').value = milestoneId;
             document.getElementById('modalMilestoneTitle').innerText = title;
+            
+            // Sync with Alpine.js if it's already initialized
+            const slider = document.getElementById('progressSlider');
+            if (slider.__x) {
+                slider.__x.$data.progress = progressValue;
+            } else {
+                slider.value = progressValue;
+                document.getElementById('progressDisplay').innerText = progressValue + '%';
+            }
+
             document.getElementById('reportProgressModal').classList.remove('hidden');
             getLocation();
         }
 
+        function validateProgressForm() {
+            const photo = document.getElementById('verification_photo').value;
+            const lat = document.getElementById('latitude').value;
+            
+            if (!photo) {
+                alert('Please capture a site photo before submitting.');
+                return false;
+            }
+            if (!lat) {
+                alert('Location data is required. Please allow location access.');
+                return false;
+            }
+            return true;
+        }
+
         function closeProgressModal() {
             document.getElementById('reportProgressModal').classList.add('hidden');
+            document.getElementById('verification_photo').value = ''; 
             stopCamera();
         }
 
