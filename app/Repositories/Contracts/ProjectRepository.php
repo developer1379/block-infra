@@ -104,21 +104,35 @@ class ProjectRepository implements ProjectRepositoryInterface
         }
 
         if (auth()->user()->hasRole('contractor')) {
-
             $contractor = auth()->user()->contractor;
+            $contractorId = auth()->id();
 
             if (!$contractor) {
-                return collect([]);  // return empty collection
+                return collect([]);
             }
 
             $contractorCategoryIds = $contractor->categories->pluck('id')->toArray();
 
-            if (empty($contractorCategoryIds)) {
-                return collect([]);
-            }
+            $query->where(function ($q) use ($contractorCategoryIds, $contractorId) {
+                // 1. Projects matching contractor categories (if status is open)
+                if (!empty($contractorCategoryIds)) {
+                    $q->whereHas('categories', function ($catQ) use ($contractorCategoryIds) {
+                        $catQ->whereIn('categories.id', $contractorCategoryIds);
+                    })->where('status', 'open');
+                }
 
-            $query->whereHas('categories', function ($q) use ($contractorCategoryIds) {
-                $q->whereIn('categories.id', $contractorCategoryIds);
+                // 2. Projects directly assigned to this contractor
+                $q->orWhere('contractor_id', $contractorId);
+
+                // 3. Projects where they have at least one assigned work item
+                $q->orWhereHas('projectWorks', function ($workQ) use ($contractorId) {
+                    $workQ->where('contractor_id', $contractorId);
+                });
+
+                // 4. Projects where they have submitted a bid (to keep tracking them)
+                $q->orWhereHas('bids', function ($bidQ) use ($contractorId) {
+                    $bidQ->where('contractor_id', $contractorId);
+                });
             });
         }
 
@@ -130,36 +144,63 @@ class ProjectRepository implements ProjectRepositoryInterface
         return User::select('id', 'name')->orderBy('name')->get();
     }
 
-    public function countProjectsByContractor($contractorId)
+    public function countProjectsByContractor($contractorUserId)
     {
-        return Project::whereHas('bids', function ($query) use ($contractorId) {
-            $query->where('contractor_id', $contractorId);
+        $contractor = \App\Models\Contractor::where('user_id', $contractorUserId)->first();
+        $contractorUuid = $contractor ? $contractor->id : null;
+
+        return Project::where(function($q) use ($contractorUserId, $contractorUuid) {
+            if ($contractorUuid) {
+                $q->where('contractor_id', $contractorUuid);
+            }
+            $q->orWhereHas('bids', function ($query) use ($contractorUserId) {
+                  $query->where('contractor_id', $contractorUserId);
+              })
+              ->orWhereHas('projectWorks', function ($query) use ($contractorUserId) {
+                  $query->where('contractor_id', $contractorUserId);
+              });
         })->count();
     }
 
-    public function getOngoingProjectsByContractor($contractorId)
+    public function getOngoingProjectsByContractor($contractorUserId)
     {
-        return Project::whereHas('bids', function ($query) use ($contractorId) {
-            $query->where('contractor_id', $contractorId)
-                  ->where('status', 'awarded');
-        })->with(['bids' => function ($query) use ($contractorId) {
-            $query->where('contractor_id', $contractorId)
-                  ->where('status', 'awarded');
-        }])->get();
+        $contractor = \App\Models\Contractor::where('user_id', $contractorUserId)->first();
+        $contractorUuid = $contractor ? $contractor->id : null;
+
+        return Project::where('status', 'awarded')
+            ->where(function($q) use ($contractorUserId, $contractorUuid) {
+                if ($contractorUuid) {
+                    $q->where('contractor_id', $contractorUuid);
+                }
+                $q->orWhereHas('bids', function ($query) use ($contractorUserId) {
+                      $query->where('contractor_id', $contractorUserId)
+                            ->where('status', 'accepted');
+                  })
+                  ->orWhereHas('projectWorks', function ($query) use ($contractorUserId) {
+                      $query->where('contractor_id', $contractorUserId);
+                  });
+            })->with(['bids' => function ($query) use ($contractorUserId) {
+                $query->where('contractor_id', $contractorUserId);
+            }])->get();
     }
 
-    public function getProjectsByContractor($contractorId)
+    public function getProjectsByContractor($contractorUserId)
     {
-        return Project::where(function($q) use ($contractorId) {
-            $q->where('contractor_id', $contractorId)
-              ->orWhereHas('bids', function ($query) use ($contractorId) {
-                  $query->where('contractor_id', $contractorId);
+        $contractor = \App\Models\Contractor::where('user_id', $contractorUserId)->first();
+        $contractorUuid = $contractor ? $contractor->id : null;
+
+        return Project::where(function($q) use ($contractorUserId, $contractorUuid) {
+            if ($contractorUuid) {
+                $q->where('contractor_id', $contractorUuid);
+            }
+            $q->orWhereHas('bids', function ($query) use ($contractorUserId) {
+                  $query->where('contractor_id', $contractorUserId);
               })
-              ->orWhereHas('projectWorks', function ($query) use ($contractorId) {
-                  $query->where('contractor_id', $contractorId);
+              ->orWhereHas('projectWorks', function ($query) use ($contractorUserId) {
+                  $query->where('contractor_id', $contractorUserId);
               });
-        })->with(['bids' => function ($query) use ($contractorId) {
-            $query->where('contractor_id', $contractorId);
+        })->with(['bids' => function ($query) use ($contractorUserId) {
+            $query->where('contractor_id', $contractorUserId);
         }])->get();
     }
 
@@ -168,32 +209,43 @@ class ProjectRepository implements ProjectRepositoryInterface
         return \App\Models\Bid::where('contractor_id', $contractorId)->count();
     }
 
-    public function directAllocate($projectId, $contractorId)
+    public function directAllocate($projectId, $contractorUserId)
     {
         $project = $this->find($projectId);
         
+        $contractor = \App\Models\Contractor::where('user_id', $contractorUserId)->first();
+        $contractorUuid = $contractor ? $contractor->id : null;
+
         // Update project
         $project->update([
-            'contractor_id' => $contractorId,
+            'contractor_id' => $contractorUuid,
             'status' => 'awarded'
         ]);
 
-        // Update all project works to this contractor
+        // Update all project works to this contractor (using User ID as per our schema)
         \App\Models\ProjectWork::where('project_id', $projectId)
-            ->update(['contractor_id' => $contractorId]);
+            ->update(['contractor_id' => $contractorUserId]);
 
         return $project;
     }
 
-    public function assignWorkToContractor($projectWorkId, $contractorId)
+    public function assignWorkToContractor($projectWorkId, $contractorUserId)
     {
         $work = \App\Models\ProjectWork::findOrFail($projectWorkId);
-        $work->update(['contractor_id' => $contractorId]);
+        $work->update(['contractor_id' => $contractorUserId]);
         
-        // If it's the first work assigned, maybe update project status to 'partially_awarded' or just 'awarded'
+        // Ensure project status is updated
         $project = $work->project;
         if ($project->status == 'open') {
             $project->update(['status' => 'awarded']);
+        }
+
+        // Also update project.contractor_id if not set (optional, but helps with backward compatibility)
+        if (!$project->contractor_id) {
+            $contractor = \App\Models\Contractor::where('user_id', $contractorUserId)->first();
+            if ($contractor) {
+                $project->update(['contractor_id' => $contractor->id]);
+            }
         }
 
         return $work;

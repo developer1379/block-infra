@@ -32,11 +32,11 @@ class DashboardController extends Controller
 
             // Stats Calculation
             $stats = [
-                'total_projects' => $this->projects->countProjectsByContractor($contractor->id),
-                'active_projects' => $this->projects->getOngoingProjectsByContractor($contractor->id)->count(),
+                'total_projects' => $this->projects->countProjectsByContractor(Auth::id()),
+                'active_projects' => $this->projects->getOngoingProjectsByContractor(Auth::id())->count(),
                 'total_workers' => \App\Models\Worker::where('contractor_id', $contractor->id)->count(),
                 'attendance_today' => \App\Models\ProjectAttendance::whereHas('project', function($q) use ($contractor) {
-                        $q->where('contractor_id', $contractor->id);
+                        $q->where('contractor_id', Auth::id());
                     })
                     ->where('attendance_date', date('Y-m-d'))
                     ->where('status', 'present')
@@ -47,7 +47,7 @@ class DashboardController extends Controller
                     ->sum('bid_amount'),
             ];
 
-            $ongoingProjects = $this->projects->getOngoingProjectsByContractor($contractor->id)->take(5);
+            $ongoingProjects = $this->projects->getOngoingProjectsByContractor(Auth::id())->take(5);
             
             // Get some open projects they might be interested in
             $availableProjects = \App\Models\Project::where('status', 'open')

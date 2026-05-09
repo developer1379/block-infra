@@ -142,7 +142,7 @@ class ProjectController extends Controller
                 ->take(5)
                 ->get();
 
-            $contractors = \App\Models\User::role('contractor')->orderBy('name')->get();
+            $contractors = \App\Models\User::role('contractor')->with('contractor')->orderBy('name')->get();
 
             return view('admin.projects.show', compact(
                 'project', 
