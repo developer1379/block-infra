@@ -57,7 +57,8 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        $isAssigned = $project->award && $project->award->awarded_to === Auth::id();
+        $isAssigned = ($project->award && $project->award->awarded_to === Auth::id()) || 
+                      $project->projectWorks()->where('contractor_id', Auth::id())->exists();
         abort_unless($isAssigned, 403, 'You are not authorized to view this project.');
 
         $project->load([

@@ -243,6 +243,88 @@
                         </div>
                     </div>
                 </div>
+                <!-- Project Allocation Hub -->
+                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+                    <div class="px-8 py-6 border-b border-slate-50 bg-slate-50/30 flex justify-between items-center">
+                        <h3 class="font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-handshake text-indigo-600"></i>
+                            {{ __('Project Allocation & Awards') }}
+                        </h3>
+                    </div>
+                    
+                    <div class="p-8 space-y-8">
+                        {{-- Direct Whole Project Allocation --}}
+                        <div class="bg-indigo-50/50 rounded-2xl p-6 border border-indigo-100">
+                            <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-4 flex items-center gap-2">
+                                <i class="fa-solid fa-building-user text-indigo-600"></i> {{ __('Direct Whole Project Allocation') }}
+                            </h4>
+                            <form action="{{ route('admin.projects.allocate-direct', $project->id) }}" method="POST" class="flex flex-col md:flex-row gap-4 items-end">
+                                @csrf
+                                <div class="flex-1 w-full">
+                                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">{{ __('Select Contractor') }}</label>
+                                    <select name="contractor_id" class="w-full h-11 px-4 rounded-xl border-slate-200 text-sm focus:ring-indigo-500 focus:border-indigo-500">
+                                        <option value="">{{ __('Choose a contractor...') }}</option>
+                                        @foreach($contractors as $contractor)
+                                            <option value="{{ $contractor->id }}" {{ $project->contractor_id == $contractor->id ? 'selected' : '' }}>
+                                                {{ $contractor->name }} ({{ $contractor->company_name ?? 'Individual' }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <button type="submit" class="px-6 py-2.5 bg-indigo-600 text-white text-xs font-bold rounded-xl hover:bg-indigo-700 transition-all flex items-center gap-2 whitespace-nowrap h-11">
+                                    <i class="fa-solid fa-check-circle"></i> {{ __('Allocate Project') }}
+                                </button>
+                            </form>
+                            <p class="text-[9px] text-slate-400 mt-3 italic">{{ __('This will assign the entire project and all its work items to the selected contractor.') }}</p>
+                        </div>
+
+                        {{-- Partial Allocation (By Work) --}}
+                        <div>
+                            <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-4 flex items-center gap-2">
+                                <i class="fa-solid fa-layer-group text-indigo-600"></i> {{ __('Partial Allocation (By Work Item)') }}
+                            </h4>
+                            <div class="border border-slate-100 rounded-2xl overflow-hidden">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-slate-50 text-[10px] font-bold text-slate-500 uppercase tracking-widest border-b border-slate-100">
+                                            <th class="px-4 py-3">{{ __('Work Item') }}</th>
+                                            <th class="px-4 py-3">{{ __('Assigned Contractor') }}</th>
+                                            <th class="px-4 py-3 text-right">{{ __('Action') }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-50">
+                                        @foreach($project->works as $work)
+                                            <tr class="text-xs text-slate-600 hover:bg-slate-50/50 transition-colors">
+                                                <td class="px-4 py-3">
+                                                    <div class="font-bold text-slate-800">{{ $work->name }}</div>
+                                                    <div class="text-[10px] text-slate-400">₹{{ number_format($work->pivot->amount, 2) }}</div>
+                                                </td>
+                                                <td class="px-4 py-3">
+                                                    <form action="{{ route('admin.projects.allocate-work', $work->pivot->id) }}" method="POST" id="form-work-{{ $work->pivot->id }}" class="flex items-center gap-2">
+                                                        @csrf
+                                                        <select name="contractor_id" class="text-[10px] border-slate-200 rounded-lg bg-white focus:ring-indigo-500 py-1 pr-8">
+                                                            <option value="">{{ __('Unassigned') }}</option>
+                                                            @foreach($contractors as $contractor)
+                                                                <option value="{{ $contractor->id }}" {{ $work->pivot->contractor_id == $contractor->id ? 'selected' : '' }}>
+                                                                    {{ $contractor->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </form>
+                                                </td>
+                                                <td class="px-4 py-3 text-right">
+                                                    <button type="submit" form="form-work-{{ $work->pivot->id }}" class="p-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-600 hover:text-white transition-all">
+                                                        <i class="fa-solid fa-save"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

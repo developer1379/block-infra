@@ -50,6 +50,8 @@ Route::patch('contractor-documents/{id}/verify', [ContractorController::class, '
 // Project & Bid Management
 Route::get('projects/{id}/bids', [AdminBidController::class, 'projectBids'])->name('projects.bids');
 Route::post('projects/{projectId}/award/{bidId}', [ProjectAwardController::class, 'award'])->name('projects.award');
+Route::post('projects/{projectId}/allocate-direct', [ProjectAwardController::class, 'directAllocate'])->name('projects.allocate-direct');
+Route::post('project-works/{projectWorkId}/allocate', [ProjectAwardController::class, 'allocateWork'])->name('projects.allocate-work');
 Route::get('projects/{project}/payments', [ProjectController::class, 'payments'])->name('projects.payments');
 Route::post('projects/{id}/payments', [ProjectController::class, 'storePayment'])->name('projects.payments.store');
 

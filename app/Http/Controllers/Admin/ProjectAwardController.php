@@ -45,13 +45,54 @@ class ProjectAwardController extends Controller
                 ]
             );
 
-            // 4️⃣ Update project status to awarded using repository
-            $this->projects->update($projectId, ['status' => 'awarded']);
+            // 4️⃣ Update project status to awarded and sync all works to this contractor
+            $this->projects->directAllocate($projectId, $bid->contractor_id);
 
             return redirect()->back()->with('success', 'Bid awarded successfully.');
         } catch (\Exception $e) {
             \Log::error('Project Award Error: ' . $e->getMessage());
             return back()->with('error', 'Failed to award project.');
+        }
+    }
+
+    public function directAllocate(\Illuminate\Http\Request $request, $projectId)
+    {
+        $request->validate([
+            'contractor_id' => 'required|exists:users,id'
+        ]);
+
+        try {
+            $this->projects->directAllocate($projectId, $request->contractor_id);
+
+            $this->awards->createOrUpdate(
+                ['project_id' => $projectId],
+                [
+                    'bid_id' => null,
+                    'awarded_to' => $request->contractor_id,
+                    'awarded_at' => now()
+                ]
+            );
+
+            return redirect()->back()->with('success', 'Project allocated directly to contractor.');
+        } catch (\Exception $e) {
+            \Log::error('Direct Allocation Error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to allocate project.');
+        }
+    }
+
+    public function allocateWork(\Illuminate\Http\Request $request, $projectWorkId)
+    {
+        $request->validate([
+            'contractor_id' => 'required|exists:users,id'
+        ]);
+
+        try {
+            $this->projects->assignWorkToContractor($projectWorkId, $request->contractor_id);
+
+            return redirect()->back()->with('success', 'Work assigned to contractor.');
+        } catch (\Exception $e) {
+            \Log::error('Work Allocation Error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to assign work.');
         }
     }
 }

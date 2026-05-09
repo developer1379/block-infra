@@ -19,4 +19,6 @@ interface ProjectRepositoryInterface
     public function getOngoingProjectsByContractor($contractorId);
     public function getProjectsByContractor($contractorId);
     public function countBidsByContractor($contractorId);
+    public function directAllocate($projectId, $contractorId);
+    public function assignWorkToContractor($projectWorkId, $contractorId);
 }

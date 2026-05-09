@@ -142,6 +142,8 @@ class ProjectController extends Controller
                 ->take(5)
                 ->get();
 
+            $contractors = \App\Models\User::role('contractor')->orderBy('name')->get();
+
             return view('admin.projects.show', compact(
                 'project', 
                 'workerCount', 
@@ -149,7 +151,8 @@ class ProjectController extends Controller
                 'totalProjectPayouts', 
                 'pendingProjectPayouts',
                 'materialLogs',
-                'linkedWorkers'
+                'linkedWorkers',
+                'contractors'
             ));
         } catch (Exception $e) {
             Log::error('Project Show Error: ' . $e->getMessage());

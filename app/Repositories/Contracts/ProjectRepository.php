@@ -150,8 +150,14 @@ class ProjectRepository implements ProjectRepositoryInterface
 
     public function getProjectsByContractor($contractorId)
     {
-        return Project::whereHas('bids', function ($query) use ($contractorId) {
-            $query->where('contractor_id', $contractorId);
+        return Project::where(function($q) use ($contractorId) {
+            $q->where('contractor_id', $contractorId)
+              ->orWhereHas('bids', function ($query) use ($contractorId) {
+                  $query->where('contractor_id', $contractorId);
+              })
+              ->orWhereHas('projectWorks', function ($query) use ($contractorId) {
+                  $query->where('contractor_id', $contractorId);
+              });
         })->with(['bids' => function ($query) use ($contractorId) {
             $query->where('contractor_id', $contractorId);
         }])->get();
@@ -160,6 +166,37 @@ class ProjectRepository implements ProjectRepositoryInterface
     public function countBidsByContractor($contractorId)
     {
         return \App\Models\Bid::where('contractor_id', $contractorId)->count();
+    }
+
+    public function directAllocate($projectId, $contractorId)
+    {
+        $project = $this->find($projectId);
+        
+        // Update project
+        $project->update([
+            'contractor_id' => $contractorId,
+            'status' => 'awarded'
+        ]);
+
+        // Update all project works to this contractor
+        \App\Models\ProjectWork::where('project_id', $projectId)
+            ->update(['contractor_id' => $contractorId]);
+
+        return $project;
+    }
+
+    public function assignWorkToContractor($projectWorkId, $contractorId)
+    {
+        $work = \App\Models\ProjectWork::findOrFail($projectWorkId);
+        $work->update(['contractor_id' => $contractorId]);
+        
+        // If it's the first work assigned, maybe update project status to 'partially_awarded' or just 'awarded'
+        $project = $work->project;
+        if ($project->status == 'open') {
+            $project->update(['status' => 'awarded']);
+        }
+
+        return $work;
     }
 
 

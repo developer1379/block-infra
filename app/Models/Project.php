@@ -52,7 +52,12 @@ class Project extends Model
 
     public function works()
     {
-        return $this->belongsToMany(Work::class, 'project_works');
+        return $this->belongsToMany(Work::class, 'project_works')->withPivot('id', 'quantity', 'amount', 'contractor_id');
+    }
+
+    public function projectWorks()
+    {
+        return $this->hasMany(ProjectWork::class);
     }
 
     public function milestones()
