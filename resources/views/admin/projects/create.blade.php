@@ -2,8 +2,6 @@
 
     {{-- 1. STYLES --}}
     @push('styles')
-        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
         <style>
             /* Admin-specific overrides */
             .select2-container .select2-selection--multiple,
@@ -23,20 +21,6 @@
 
             .ql-editor {
                 min-height: 200px;
-            }
-
-            /* Quill Customization */
-            .ql-toolbar.ql-snow {
-                border-color: #e2e8f0;
-                border-top-left-radius: 0.5rem;
-                border-top-right-radius: 0.5rem;
-                background: #f8fafc;
-            }
-
-            .ql-container.ql-snow {
-                border-color: #e2e8f0;
-                border-bottom-left-radius: 0.5rem;
-                border-bottom-right-radius: 0.5rem;
             }
         </style>
     @endpush
@@ -144,6 +128,7 @@
                         <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">
                             Project Description <span class="text-red-500">*</span>
                         </label>
+                        {{-- The ID quillEditor triggers the global init in admin.partials.scripts --}}
                         <input type="hidden" name="description" id="descriptionInput" value="{{ old('description') }}">
                         <div id="quillEditor">
                             {!! old('description') !!}
@@ -204,39 +189,13 @@
 
     {{-- SCRIPTS --}}
     @push('scripts')
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
         <script>
             $(document).ready(function() {
-                // Init Select2
-                $('.category-select').select2({
-                    placeholder: "Select categories...",
-                    allowClear: true,
-                    width: '100%'
-                });
+                // Select2 Initializer for work search (categories is handled by global category-select class)
                 $('#work_search').select2({
                     placeholder: "Type to search work items...",
                     allowClear: true,
                     width: '100%'
-                });
-
-                // Init Quill
-                var quill = new Quill('#quillEditor', {
-                    theme: 'snow',
-                    placeholder: 'Enter full project description and specifications...',
-                    modules: {
-                        toolbar: [
-                            ['bold', 'italic', 'list'],
-                            ['link', 'image', 'video'],
-                            ['clean']
-                        ]
-                    }
-                });
-
-                // Sync Form on Submit
-                $('#projectForm').on('submit', function() {
-                    $('#descriptionInput').val(quill.root.innerHTML);
                 });
 
                 // --- Works Logic ---

@@ -2,8 +2,6 @@
 
     {{-- 1. STYLES --}}
     @push('styles')
-        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
         <style>
             /* Admin-specific overrides */
             .select2-container .select2-selection--multiple,
@@ -188,8 +186,10 @@
                             Description <span class="text-red-500">*</span>
                         </label>
                         <input type="hidden" name="description" id="descriptionInput"
-                            value="{{ old('description') }}">
-                        <div id="quillEditor"></div>
+                            value="{{ old('description', $project->description) }}">
+                        <div id="quillEditor">
+                            {!! old('description', $project->description) !!}
+                        </div>
                         @error('description')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
@@ -249,41 +249,13 @@
 
     {{-- SCRIPTS --}}
     @push('scripts')
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
         <script>
             $(document).ready(function() {
-                // Init Select2
-                $('.category-select').select2({
-                    placeholder: "Select categories...",
-                    allowClear: true,
-                    width: '100%'
-                });
+                // Select2 for work search
                 $('#work_search').select2({
                     placeholder: "Type to search works...",
                     allowClear: true,
                     width: '100%'
-                });
-
-                // Init Quill
-                var quill = new Quill('#quillEditor', {
-                    theme: 'snow',
-                    modules: {
-                        toolbar: [
-                            ['bold', 'italic', 'list'],
-                            ['link', 'image', 'video'],
-                            ['clean']
-                        ]
-                    }
-                });
-                // Load content
-                var oldContent = `{!! old('description', $project->description) !!}`;
-                if (oldContent) quill.root.innerHTML = oldContent;
-
-                // Sync Form
-                $('#editForm').on('submit', function() {
-                    $('#descriptionInput').val(quill.root.innerHTML);
                 });
 
                 // --- Works Logic ---
@@ -300,7 +272,6 @@
                     var unit = $(data.element).data('unit');
                     var price = parseFloat($(data.element).data('price'));
 
-                    // Add Row Logic (Same as Create)
                     var row =
                         `<tr id="work_row_${id}" class="work-item-row hover:bg-slate-50"><td class="px-4 py-3 text-sm font-medium">${name}<div class="text-xs text-slate-400">Unit: ${unit}</div><input type="hidden" name="works[${id}][amount]" class="input-amount" value="${price}"></td><td class="px-4 py-3 text-sm text-right">₹${price.toFixed(2)}<input type="hidden" class="row-price" value="${price}"></td><td class="px-4 py-3 text-center"><input type="number" name="works[${id}][quantity]" value="1" min="1" class="row-qty w-20 text-center border-slate-200 rounded-md p-1"></td><td class="px-4 py-3 text-sm text-right font-bold">₹<span class="row-total">${price.toFixed(2)}</span></td><td class="px-4 py-3 text-center"><button type="button" onclick="removeWork('${id}')" class="text-red-500"><i class="fa-solid fa-trash"></i></button></td></tr>`;
 
@@ -339,4 +310,3 @@
         </script>
     @endpush
 </x-admin-layout>
-
