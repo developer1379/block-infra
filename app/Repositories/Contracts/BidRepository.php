@@ -25,6 +25,13 @@ class BidRepository implements BidRepositoryInterface
         return Bid::create($data);
     }
 
+    public function update($id, array $data)
+    {
+        $bid = $this->find($id);
+        $bid->update($data);
+        return $bid;
+    }
+
     public function updateStatus($id, $status)
     {
         $bid = $this->find($id);
