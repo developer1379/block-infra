@@ -61,13 +61,32 @@ class ProjectController extends Controller
                       $project->projectWorks()->where('contractor_id', Auth::id())->exists();
         abort_unless($isAssigned, 403, 'You are not authorized to view this project.');
 
+        $contractorUserId = Auth::id();
+        $isWholeProjectAwarded = $project->award && $project->award->awarded_to === $contractorUserId;
+
         $project->load([
-            'milestones',
+            'milestones' => function($q) use ($contractorUserId, $isWholeProjectAwarded) {
+                if (!$isWholeProjectAwarded) {
+                    $q->where(function($sub) use ($contractorUserId) {
+                        $sub->whereNull('project_work_id')
+                            ->orWhereHas('projectWork', function($workQ) use ($contractorUserId) {
+                                $workQ->where('contractor_id', $contractorUserId);
+                            });
+                    });
+                }
+            },
             'progressUpdates' => function ($query) {
                 $query->latest();
             },
             'award.bid'
         ]);
+
+        if (!$isWholeProjectAwarded) {
+            // Filter works if we were to display them (adding this for consistency)
+            $project->setRelation('works', $project->works->filter(function($work) use ($contractorUserId) {
+                return $work->pivot->contractor_id == $contractorUserId;
+            }));
+        }
 
         // Fetch additional management data
         $workerCount = \App\Models\Worker::where('contractor_id', Auth::user()->contractor->id)->count();
@@ -99,6 +118,18 @@ class ProjectController extends Controller
     public function details($id)
     {
         $project = $this->projects->find($id);
+        $contractorUserId = Auth::id();
+
+        // If the project is awarded to this contractor as a whole, show all works
+        $isWholeProjectAwarded = $project->award && $project->award->awarded_to === $contractorUserId;
+
+        if (!$isWholeProjectAwarded) {
+            // Filter works to only show those specifically assigned to this contractor
+            $project->setRelation('works', $project->works->filter(function($work) use ($contractorUserId) {
+                return $work->pivot->contractor_id == $contractorUserId;
+            }));
+        }
+
         return view('contractor.projects.details', compact('project'));
     }
 
