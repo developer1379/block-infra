@@ -134,6 +134,15 @@
                                                 {{ $milestone->description }}
                                             </p>
                                         @endif
+
+                                        @if ($milestone->projectWork)
+                                            <div class="mt-2 flex items-center gap-1.5">
+                                                <span class="px-1.5 py-0.5 bg-indigo-50 text-indigo-600 rounded text-[9px] font-bold uppercase border border-indigo-100">
+                                                    <i class="bi bi-gear-wide-connected mr-0.5"></i>
+                                                    {{ $milestone->projectWork->work->name ?? 'Work Item' }}
+                                                </span>
+                                            </div>
+                                        @endif
                                     </div>
 
                                     {{-- Action Dropdown (Absolute Top Right) --}}
@@ -317,6 +326,16 @@
                                     <input type="text" name="title" required
                                         class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2"
                                         placeholder="e.g. Foundation Complete">
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Associated Work (Optional)</label>
+                                    <select name="project_work_id" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2">
+                                        <option value="">-- No specific work --</option>
+                                        @foreach($project->works as $work)
+                                            <option value="{{ $work->pivot->id }}">{{ $work->name }} ({{ $work->pivot->quantity }} {{ $work->unit->name ?? '' }})</option>
+                                        @endforeach
+                                    </select>
                                 </div>
 
                                 <div class="grid grid-cols-2 gap-3">

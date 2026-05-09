@@ -25,8 +25,9 @@ class ProjectTrackingController extends Controller
         $project = Project::with([
             'award.bid',
             'award.awardedTo',
-            'milestones',
-            'progressUpdates'
+            'milestones.projectWork.work',
+            'progressUpdates',
+            'works'
         ])->findOrFail($id);
 
         if ($project) {
@@ -42,11 +43,12 @@ class ProjectTrackingController extends Controller
     public function storeMilestone(Request $request)
     {
         $data = $request->validate([
-            'project_id'  => 'required|exists:projects,id',
-            'title'       => 'required|string|max:255',
-            'amount'      => 'nullable|numeric|min:0',
-            'due_date'    => 'nullable|date',
-            'description' => 'nullable|string'
+            'project_id'       => 'required|exists:projects,id',
+            'project_work_id'  => 'nullable|exists:project_works,id',
+            'title'            => 'required|string|max:255',
+            'amount'           => 'nullable|numeric|min:0',
+            'due_date'         => 'nullable|date',
+            'description'      => 'nullable|string'
         ]);
 
         $this->milestoneRepo->create($data);
