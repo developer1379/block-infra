@@ -72,6 +72,53 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
             overflow: hidden;
         }
+
+        /* Premium Tooltip */
+        [data-tooltip] {
+            position: relative;
+        }
+        [data-tooltip]:before {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%) translateY(5px);
+            padding: 8px 12px;
+            background: #1e293b;
+            color: #fff;
+            font-size: 10px;
+            line-height: 1.4;
+            font-weight: 600;
+            border-radius: 8px;
+            width: max-content;
+            max-width: 200px;
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+            pointer-events: none;
+        }
+        [data-tooltip]:after {
+            content: '';
+            position: absolute;
+            bottom: calc(100% + 2px);
+            left: 50%;
+            transform: translateX(-50%) translateY(5px);
+            border: 5px solid transparent;
+            border-top-color: #1e293b;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            pointer-events: none;
+        }
+        [data-tooltip]:hover:before, [data-tooltip]:hover:after {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
     </style>
 </head>
 

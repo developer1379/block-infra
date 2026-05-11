@@ -331,8 +331,11 @@
                                     <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Title <span
                                             class="text-red-500">*</span></label>
                                     <input type="text" name="title" required
-                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2"
-                                        placeholder="e.g. Foundation Complete">
+                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2 @error('title') border-red-500 @enderror"
+                                        placeholder="e.g. Foundation Complete" value="{{ old('title') }}">
+                                    @error('title')
+                                        <p class="text-red-500 text-[10px] mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
 
                                 <div>
@@ -348,10 +351,13 @@
                                 <div class="grid grid-cols-2 gap-3">
                                     <div>
                                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Amount
-                                            (₹)</label>
-                                        <input type="number" step="0.01" name="amount"
-                                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2"
-                                            placeholder="0.00">
+                                            (₹) <span class="text-red-500">*</span></label>
+                                        <input type="number" step="0.01" name="amount" required
+                                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2 @error('amount') border-red-500 @enderror"
+                                            placeholder="0.00" value="{{ old('amount') }}">
+                                        @error('amount')
+                                            <p class="text-red-500 text-[10px] mt-1">{{ $message }}</p>
+                                        @enderror
                                     </div>
                                     <div>
                                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Due
@@ -424,6 +430,13 @@
                 modal.classList.add('hidden');
             }, 300);
         }
+
+        {{-- Keep modal open if there are validation errors --}}
+        @if ($errors->any())
+            document.addEventListener('DOMContentLoaded', function() {
+                modal.classList.remove('hidden');
+            });
+        @endif
     </script>
 </x-admin-layout>
 

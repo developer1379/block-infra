@@ -23,5 +23,19 @@
     "Amount": "Amount",
     "Manage": "Manage",
     "View All Projects": "View All Projects",
-    "Contractor Dashboard": "Contractor Dashboard"
+    "Contractor Dashboard": "Contractor Dashboard",
+    "Find and manage all your assigned construction projects here.": "Find and manage all your assigned construction projects here.",
+    "Percentage of successfully completed milestones and projects.": "Percentage of successfully completed milestones and projects.",
+    "The maximum budget allocated by the client for this project.": "The maximum budget allocated by the client for this project.",
+    "Direct access to project daily reports, attendance, and financials.": "Direct access to project daily reports, attendance, and financials.",
+    "Submit your technical and financial proposal for this project.": "Submit your technical and financial proposal for this project.",
+    "Overall completion based on site manager's verified updates.": "Overall completion based on site manager's verified updates.",
+    "Tooltips & Suggestions": "Tooltips & Suggestions",
+    "Suggestions for winning": "Suggestions for winning",
+    "Keep your bid competitive but realistic.": "Keep your bid competitive but realistic.",
+    "A shorter timeline can be an advantage, but ensure you can deliver.": "A shorter timeline can be an advantage, but ensure you can deliver.",
+    "Upload a detailed PDF for complex project scopes.": "Upload a detailed PDF for complex project scopes.",
+    "Include all taxes, labor costs, and material estimations.": "Include all taxes, labor costs, and material estimations.",
+    "Estimated number of days from the date the work order is issued.": "Estimated number of days from the date the work order is issued.",
+    "Current phase of the project lifecycle.": "Current phase of the project lifecycle."
 }

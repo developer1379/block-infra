@@ -5,7 +5,7 @@
             <div>
                 <h1 class="text-4xl font-black text-gray-900 tracking-tight flex items-center gap-3">
                     {{ __('Project Hub') }}
-                    <span class="bg-indigo-100 text-indigo-600 text-[10px] font-black uppercase px-3 py-1 rounded-full tracking-widest border border-indigo-200 shadow-sm">{{ __('Beta') }}</span>
+                    <span class="bg-indigo-100 text-indigo-600 text-[10px] font-black uppercase px-3 py-1 rounded-full tracking-widest border border-indigo-200 shadow-sm cursor-help" data-tooltip="{{ __('Find and manage all your assigned construction projects here.') }}">{{ __('Beta') }}</span>
                 </h1>
                 <p class="text-gray-500 text-sm mt-2 font-medium">{{ __('Explore, manage, and scale your construction business with ease.') }}</p>
             </div>
@@ -15,7 +15,7 @@
                     <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Total Managed') }}</p>
                     <p class="text-xl font-black text-gray-900">{{ $projects->count() }}</p>
                 </div>
-                <div class="bg-indigo-600 px-5 py-3 rounded-2xl shadow-xl shadow-indigo-100 flex flex-col justify-center text-white">
+                <div class="bg-indigo-600 px-5 py-3 rounded-2xl shadow-xl shadow-indigo-100 flex flex-col justify-center text-white cursor-help" data-tooltip="{{ __('Percentage of successfully completed milestones and projects.') }}">
                     <p class="text-[10px] font-black text-indigo-100 uppercase tracking-widest">{{ __('Success Rate') }}</p>
                     <p class="text-xl font-black">94%</p>
                 </div>
@@ -94,7 +94,7 @@
                     <div class="px-8 mb-8 flex-1">
                         <div class="bg-gray-50/50 rounded-3xl p-6 border border-gray-50 group-hover:bg-white group-hover:border-indigo-50 transition-all">
                             <div class="flex justify-between items-end mb-4">
-                                <div class="space-y-1">
+                                <div class="space-y-1 cursor-help" data-tooltip="{{ __('The maximum budget allocated by the client for this project.') }}">
                                     <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Estimated Value') }}</p>
                                     <p class="text-lg font-black text-gray-900">₹{{ number_format($project->budget_max) }}</p>
                                 </div>
@@ -119,7 +119,7 @@
                             
                             @if (auth()->user()->hasRole('contractor'))
                                 @if ($project->status == 'awarded')
-                                    <a href="{{ route('contractor.projects.show', $project->id) }}" class="flex items-center justify-center gap-2 py-3.5 bg-indigo-600 text-white rounded-2xl text-xs font-black uppercase tracking-widest shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all transform group-hover:-translate-y-1">
+                                    <a href="{{ route('contractor.projects.show', $project->id) }}" class="flex items-center justify-center gap-2 py-3.5 bg-indigo-600 text-white rounded-2xl text-xs font-black uppercase tracking-widest shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all transform group-hover:-translate-y-1" data-tooltip="{{ __('Direct access to project daily reports, attendance, and financials.') }}">
                                         <i class="bi bi-columns-gap"></i>
                                         {{ __('Workspace') }}
                                     </a>
@@ -131,7 +131,7 @@
                                             {{ __('Bid Sent') }}
                                         </div>
                                     @else
-                                        <a href="{{ route('contractor.bids.create', $project->id) }}" class="flex items-center justify-center gap-2 py-3.5 bg-gray-900 text-white rounded-2xl text-xs font-black uppercase tracking-widest shadow-xl shadow-gray-100 hover:bg-gray-800 transition-all transform group-hover:-translate-y-1">
+                                        <a href="{{ route('contractor.bids.create', $project->id) }}" class="flex items-center justify-center gap-2 py-3.5 bg-gray-900 text-white rounded-2xl text-xs font-black uppercase tracking-widest shadow-xl shadow-gray-100 hover:bg-gray-800 transition-all transform group-hover:-translate-y-1" data-tooltip="{{ __('Submit your technical and financial proposal for this project.') }}">
                                             <i class="bi bi-send-fill"></i>
                                             {{ __('Bid Now') }}
                                         </a>
