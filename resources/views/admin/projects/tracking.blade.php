@@ -32,8 +32,8 @@
                         <div>
                             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Total Awarded</p>
                             <h3 class="text-xl font-bold text-gray-900 mt-1">
-                                {{-- SAFE ACCESS: Check if award exists first --}}
-                                ₹{{ number_format($project->award ? $project->award->bid->bid_amount : 0, 2) }}
+                                {{-- SAFE ACCESS: Check if award and bid exist first --}}
+                                ₹{{ number_format($project->award?->bid?->bid_amount ?? 0, 2) }}
                             </h3>
                         </div>
                         <div class="p-1.5 bg-green-50 rounded-md text-green-600">

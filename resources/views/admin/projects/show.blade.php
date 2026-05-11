@@ -80,8 +80,7 @@
                     <div class="space-y-6">
                         <div>
                             <div class="flex justify-between items-end mb-1">
-                                <span class="text-[10px] font-bold text-slate-400">{{ __('Project Bid Value') }}</span>
-                                <span class="text-sm font-black text-slate-900">₹{{ number_format($project->award->bid->bid_amount ?? 0) }}</span>
+                                <span class="text-sm font-black text-slate-900">₹{{ number_format($project->award?->bid?->bid_amount ?? 0) }}</span>
                             </div>
                             <div class="w-full bg-slate-100 h-1.5 rounded-full">
                                 <div class="bg-indigo-500 h-full rounded-full" style="width: 100%"></div>
@@ -94,7 +93,7 @@
                             </div>
                             <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
                                 @php 
-                                    $bid = $project->award->bid->bid_amount ?? 1;
+                                    $bid = $project->award?->bid?->bid_amount ?? 1;
                                     $paid = $totalProjectPayouts;
                                     $perc = min(100, ($paid / $bid) * 100);
                                 @endphp
