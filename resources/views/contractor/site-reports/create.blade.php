@@ -128,17 +128,23 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="md:col-span-4 space-y-2">
-                                <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">{{ __('Quantity Used') }}</label>
-                                <input type="number" step="0.01" name="materials[INDEX][quantity]" required placeholder="0.00"
-                                    class="w-full px-5 py-3 bg-slate-50 border-transparent rounded-xl text-xs font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all outline-none">
-                            </div>
-                            <div class="md:col-span-1 flex justify-end">
-                                <button type="button" onclick="this.closest('.material-row').remove()" class="w-10 h-10 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 transition-colors flex items-center justify-center">
-                                    <i class="fa-solid fa-trash-can"></i>
-                                </button>
-                            </div>
-                        </div>
+                    <div class="md:col-span-4 space-y-2">
+                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">{{ __('Link to Milestone') }} ({{ __('Optional') }})</label>
+                        <select name="materials[INDEX][milestone_id]" class="milestone-select w-full px-5 py-3 bg-slate-50 border-transparent rounded-xl text-xs font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all outline-none">
+                            <option value="">{{ __('Select Milestone') }}</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-3 space-y-2">
+                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">{{ __('Quantity Used') }}</label>
+                        <input type="number" step="0.01" name="materials[INDEX][quantity]" required placeholder="0.00"
+                            class="w-full px-5 py-3 bg-slate-50 border-transparent rounded-xl text-xs font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all outline-none">
+                    </div>
+                    <div class="md:col-span-1 flex justify-end">
+                        <button type="button" onclick="this.closest('.material-row').remove()" class="w-10 h-10 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 transition-colors flex items-center justify-center">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                </div>
                     </template>
                 </div>
 
@@ -158,22 +164,56 @@
     @push('scripts')
     <script>
         let materialIndex = 0;
+        let projectMilestones = [];
+
         function addMaterialRow() {
             const container = document.getElementById('material-log-container');
             const template = document.getElementById('material-row-template').innerHTML;
-            const html = template.replace(/INDEX/g, materialIndex);
-            container.insertAdjacentHTML('beforeend', html);
+            let html = template.replace(/INDEX/g, materialIndex);
+            
+            // Build milestone options from cached milestones
+            let options = '<option value="">{{ __("General Project Stock") }}</option>';
+            projectMilestones.forEach(m => {
+                options += `<option value="${m.id}">${m.title}</option>`;
+            });
+            
+            // Replace the milestone-select content in the template
+            // Note: This is a bit hacky because the template is a string. 
+            // Better to use DOM manipulation.
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
+            const select = tempDiv.querySelector('.milestone-select');
+            if (select) {
+                select.innerHTML = options;
+            }
+            container.insertAdjacentHTML('beforeend', tempDiv.innerHTML);
             materialIndex++;
         }
 
         $(document).ready(function() {
-            // Add initial row
-            addMaterialRow();
-
             $('.select2-init').select2({
                 placeholder: '{{ __('Search project...') }}',
                 width: '100%'
+            }).on('change', function() {
+                const projectId = $(this).val();
+                if (projectId) {
+                    fetch(`/contractor/projects/${projectId}/milestones`)
+                        .then(response => response.json())
+                        .then(data => {
+                            projectMilestones = data;
+                            // Clear existing rows or at least their milestone selects if needed
+                            // For now, new rows will have the new milestones
+                        });
+                }
             });
+
+            // Trigger change if project is already selected (e.g. on validation error back)
+            if ($('.select2-init').val()) {
+                $('.select2-init').trigger('change');
+            }
+
+            // Add initial row after a short delay to allow milestones to load
+            setTimeout(addMaterialRow, 500);
 
             document.getElementById('photos').addEventListener('change', function(e) {
                 const previewGrid = document.getElementById('photo-preview-grid');

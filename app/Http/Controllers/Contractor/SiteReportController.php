@@ -49,6 +49,7 @@ class SiteReportController extends Controller
             'photos.*' => 'nullable|image|max:2048',
             'materials' => 'nullable|array',
             'materials.*.id' => 'required|exists:materials,id',
+            'materials.*.milestone_id' => 'nullable|exists:project_milestones,id',
             'materials.*.quantity' => 'required|numeric|min:0.01'
         ]);
 
@@ -81,6 +82,7 @@ class SiteReportController extends Controller
                     \App\Models\MaterialInventory::create([
                         'project_id' => $request->project_id,
                         'material_id' => $mat['id'],
+                        'milestone_id' => $mat['milestone_id'] ?? null,
                         'quantity' => $mat['quantity'],
                         'type' => 'consumption',
                         'entry_date' => $request->report_date,

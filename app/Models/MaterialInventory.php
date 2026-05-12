@@ -12,7 +12,7 @@ class MaterialInventory extends Model
     protected $table = 'material_inventory';
 
     protected $fillable = [
-        'project_id', 'material_id', 'quantity', 'type',
+        'project_id', 'material_id', 'milestone_id', 'quantity', 'type',
         'unit_price', 'vendor_name', 'entry_date', 'notes'
     ];
 
@@ -30,5 +30,10 @@ class MaterialInventory extends Model
     public function material()
     {
         return $this->belongsTo(Material::class);
+    }
+
+    public function milestone()
+    {
+        return $this->belongsTo(ProjectMilestone::class, 'milestone_id');
     }
 }

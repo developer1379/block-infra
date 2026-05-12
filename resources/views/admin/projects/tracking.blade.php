@@ -287,6 +287,24 @@
                                                     {{ $update->report_description }}
                                                 </div>
                                             @endif
+
+                                            {{-- Materials consumed for this milestone update --}}
+                                            @php
+                                                $milestoneMaterials = \App\Models\MaterialInventory::where('milestone_id', $update->milestone_id)
+                                                    ->where('entry_date', '>=', $update->created_at->startOfDay())
+                                                    ->where('entry_date', '<=', $update->created_at->endOfDay())
+                                                    ->with('material')
+                                                    ->get();
+                                            @endphp
+                                            @if($milestoneMaterials->count() > 0)
+                                                <div class="mt-2 flex flex-wrap gap-1.5">
+                                                    @foreach($milestoneMaterials as $mat)
+                                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-[4px] bg-amber-50 text-[9px] font-bold text-amber-700 border border-amber-100">
+                                                            <i class="bi bi-box"></i> {{ $mat->material->name }}: {{ $mat->quantity }} {{ $mat->material->unit }}
+                                                        </span>
+                                                    @endforeach
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 @empty

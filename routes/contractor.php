@@ -31,6 +31,7 @@ Route::post('/profile', [ProfileController::class, 'update'])->name('profile.upd
 // Project Management
 Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
 Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
+Route::get('/projects/{project}/milestones', [ProjectController::class, 'getMilestones'])->name('projects.milestones');
 Route::get('/projects/{id}/details', [ProjectController::class, 'details'])->name('projects.details');
 Route::post('/projects/{project}/progress', [ProjectController::class, 'storeProgress'])->name('projects.progress.store');
 

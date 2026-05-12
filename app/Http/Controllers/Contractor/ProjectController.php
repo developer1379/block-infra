@@ -160,6 +160,9 @@ class ProjectController extends Controller
             'latitude'            => 'required|numeric', // Mandatory now
             'longitude'           => 'required|numeric', // Mandatory now
             'location_address'    => 'nullable|string',
+            'materials'           => 'nullable|array',
+            'materials.*.id'      => 'required|exists:materials,id',
+            'materials.*.quantity'=> 'required|numeric|min:0.01',
         ]);
 
         // 3. Verify Milestone Ownership
@@ -213,6 +216,21 @@ class ProjectController extends Controller
             'current_progress' => $request->progress_percentage
         ]);
 
+        // 6. Handle Material Consumption Logs
+        if ($request->has('materials')) {
+            foreach ($request->materials as $mat) {
+                \App\Models\MaterialInventory::create([
+                    'project_id' => $project->id,
+                    'material_id' => $mat['id'],
+                    'milestone_id' => $request->milestone_id,
+                    'quantity' => $mat['quantity'],
+                    'type' => 'consumption',
+                    'entry_date' => now(),
+                    'notes' => 'Logged via Milestone Report: ' . $milestone->title
+                ]);
+            }
+        }
+
         return back()->with('success', 'Progress report submitted successfully!');
     }
 
@@ -259,5 +277,10 @@ class ProjectController extends Controller
 
         return redirect()->route('contractor.projects.show', $projectId)
             ->with('success', 'Bid submitted successfully.');
+    }
+    public function getMilestones($id)
+    {
+        $milestones = \App\Models\ProjectMilestone::where('project_id', $id)->get(['id', 'title']);
+        return response()->json($milestones);
     }
 }

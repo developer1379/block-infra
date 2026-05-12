@@ -274,6 +274,30 @@
                                                 </a>
                                             </div>
                                         @endif
+
+                                        {{-- Milestone Materials consumed for this update --}}
+                                        @php
+                                            $milestoneMaterials = \App\Models\MaterialInventory::where('milestone_id', $update->milestone_id)
+                                                ->where('entry_date', '>=', $update->created_at->startOfDay())
+                                                ->where('entry_date', '<=', $update->created_at->endOfDay())
+                                                ->with('material')
+                                                ->get();
+                                        @endphp
+                                        @if($milestoneMaterials->count() > 0)
+                                            <div class="mt-4 pt-4 border-t border-gray-50">
+                                                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-3">{{ __('Inventory Consumed') }}</p>
+                                                <div class="flex flex-wrap gap-2">
+                                                    @foreach($milestoneMaterials as $mat)
+                                                        <div class="px-3 py-2 bg-indigo-50/50 rounded-xl border border-indigo-100 flex items-center gap-2">
+                                                            <div class="w-6 h-6 rounded-lg bg-white flex items-center justify-center text-[10px] text-indigo-600 font-bold shadow-sm">
+                                                                <i class="bi bi-box"></i>
+                                                            </div>
+                                                            <span class="text-[10px] font-bold text-indigo-800">{{ $mat->material->name }}: {{ $mat->quantity }} {{ $mat->material->unit }}</span>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             @empty
@@ -329,6 +353,19 @@
                     <textarea name="report_description" rows="3" required 
                         class="w-full rounded-2xl border-gray-100 text-sm bg-gray-50/50 p-4 transition-all focus:bg-white" 
                         placeholder="{{ __('What work was completed for this milestone today?') }}"></textarea>
+                </div>
+
+                {{-- Material Consumption Section --}}
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ __('Material Used for this Milestone') }}</label>
+                        <button type="button" onclick="addMilestoneMaterialRow()" class="text-[10px] font-black text-indigo-600 hover:text-indigo-700 uppercase tracking-tighter">
+                            + {{ __('Add Material') }}
+                        </button>
+                    </div>
+                    <div id="milestoneMaterialRows" class="space-y-3">
+                        <!-- Dynamic Rows -->
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
@@ -449,6 +486,31 @@
             
             stopCamera();
             alert("{{ __('Photo captured successfully!') }}");
+        }
+
+        function addMilestoneMaterialRow() {
+            const container = document.getElementById('milestoneMaterialRows');
+            const rowId = Date.now();
+            const html = `
+                <div class="flex gap-2 items-start animate-fade-in" id="row-${rowId}">
+                    <div class="flex-1">
+                        <select name="materials[${rowId}][id]" required class="w-full rounded-xl border-gray-100 text-[10px] bg-gray-50/50 p-2 focus:bg-white transition-all">
+                            <option value="">{{ __('Select Material') }}</option>
+                            @foreach(\App\Models\Material::orderBy('name')->get() as $material)
+                                <option value="{{ $material->id }}">{{ $material->name }} ({{ $material->unit }})</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="w-24">
+                        <input type="number" name="materials[${rowId}][quantity]" step="0.01" required placeholder="{{ __('Qty') }}" 
+                            class="w-full rounded-xl border-gray-100 text-[10px] bg-gray-50/50 p-2 focus:bg-white transition-all">
+                    </div>
+                    <button type="button" onclick="document.getElementById('row-${rowId}').remove()" class="p-2 text-rose-500 hover:bg-rose-50 rounded-lg transition-all">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
         }
 
         function getLocation() {
