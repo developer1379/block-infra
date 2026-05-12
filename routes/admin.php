@@ -61,6 +61,7 @@ Route::get('/projects/{id}/tracking', [ProjectTrackingController::class, 'show']
 Route::post('/milestones', [ProjectTrackingController::class, 'storeMilestone'])->name('milestones.store');
 Route::patch('/milestones/{id}/status', [ProjectTrackingController::class, 'updateMilestoneStatus'])->name('milestones.status');
 Route::delete('/milestones/{id}', [ProjectTrackingController::class, 'destroyMilestone'])->name('milestones.destroy');
+Route::post('/projects/{id}/allocate-material', [ProjectTrackingController::class, 'allocateMaterial'])->name('projects.allocate-material');
 
 // New Construction Management Routes
 Route::get('workers/{id}/attendance', [WorkerController::class, 'attendance'])->name('workers.attendance');

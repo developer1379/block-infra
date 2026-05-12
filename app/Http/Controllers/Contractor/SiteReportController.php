@@ -39,20 +39,17 @@ class SiteReportController extends Controller
         $contractor = Auth::user()->contractor;
         // Only show projects awarded to this contractor
         $projects = \App\Models\Project::where('contractor_id', $contractor->id)->get();
-        return view('contractor.site-reports.create', compact('projects'));
+        $materials = \App\Models\Material::orderBy('name')->get();
+        return view('contractor.site-reports.create', compact('projects', 'materials'));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'project_id' => 'required|exists:projects,id',
-            'report_date' => 'required|date',
-            'weather_condition' => 'nullable|string',
-            'work_summary' => 'required|string',
-            'challenges' => 'nullable|string',
-            'next_day_plan' => 'nullable|string',
             'progress_percentage' => 'required|integer|min:0|max:100',
-            'photos.*' => 'nullable|image|max:2048'
+            'photos.*' => 'nullable|image|max:2048',
+            'materials' => 'nullable|array',
+            'materials.*.id' => 'required|exists:materials,id',
+            'materials.*.quantity' => 'required|numeric|min:0.01'
         ]);
 
         try {
@@ -77,6 +74,20 @@ class SiteReportController extends Controller
             \App\Models\Project::where('id', $request->project_id)->update([
                 'current_progress' => $request->progress_percentage
             ]);
+
+            // Handle Material Consumption Logs
+            if ($request->has('materials')) {
+                foreach ($request->materials as $mat) {
+                    \App\Models\MaterialInventory::create([
+                        'project_id' => $request->project_id,
+                        'material_id' => $mat['id'],
+                        'quantity' => $mat['quantity'],
+                        'type' => 'consumption',
+                        'entry_date' => $request->report_date,
+                        'notes' => 'Logged via Daily Site Report #' . $report->id
+                    ]);
+                }
+            }
 
             return redirect()->route('contractor.site-reports.index')->with('success', 'Daily site report submitted.');
         } catch (\Exception $e) {

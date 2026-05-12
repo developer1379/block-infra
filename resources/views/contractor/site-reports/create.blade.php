@@ -101,6 +101,47 @@
                     <div id="photo-preview-grid" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-4"></div>
                 </div>
 
+                <!-- Material Consumption Log -->
+                <div class="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-black text-slate-800">{{ __('Material Consumption Log') }}</h3>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{{ __('Track inventory used today') }}</p>
+                        </div>
+                        <button type="button" onclick="addMaterialRow()" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-500/20">
+                            <i class="fa-solid fa-plus mr-1"></i> {{ __('Add Item') }}
+                        </button>
+                    </div>
+
+                    <div id="material-log-container" class="space-y-4">
+                        <!-- Dynamic rows will be added here -->
+                    </div>
+
+                    <template id="material-row-template">
+                        <div class="material-row grid grid-cols-1 md:grid-cols-12 gap-4 items-end animate-fade-in bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+                            <div class="md:col-span-7 space-y-2">
+                                <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">{{ __('Material') }}</label>
+                                <select name="materials[INDEX][id]" required class="w-full px-5 py-3 bg-slate-50 border-transparent rounded-xl text-xs font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all outline-none">
+                                    <option value="">{{ __('Select Material') }}</option>
+                                    @foreach($materials as $material)
+                                        <option value="{{ $material->id }}">{{ $material->name }} ({{ $material->unit }})</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="md:col-span-4 space-y-2">
+                                <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">{{ __('Quantity Used') }}</label>
+                                <input type="number" step="0.01" name="materials[INDEX][quantity]" required placeholder="0.00"
+                                    class="w-full px-5 py-3 bg-slate-50 border-transparent rounded-xl text-xs font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all outline-none">
+                            </div>
+                            <div class="md:col-span-1 flex justify-end">
+                                <button type="button" onclick="this.closest('.material-row').remove()" class="w-10 h-10 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 transition-colors flex items-center justify-center">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
                 <div class="flex flex-col sm:flex-row items-center justify-end gap-4 pt-8 border-t border-gray-50">
                     <a href="{{ route('contractor.site-reports.index') }}" class="w-full sm:w-auto px-10 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-gray-600 transition-all text-center">
                         {{ __('Discard Changes') }}
@@ -116,7 +157,19 @@
 
     @push('scripts')
     <script>
+        let materialIndex = 0;
+        function addMaterialRow() {
+            const container = document.getElementById('material-log-container');
+            const template = document.getElementById('material-row-template').innerHTML;
+            const html = template.replace(/INDEX/g, materialIndex);
+            container.insertAdjacentHTML('beforeend', html);
+            materialIndex++;
+        }
+
         $(document).ready(function() {
+            // Add initial row
+            addMaterialRow();
+
             $('.select2-init').select2({
                 placeholder: '{{ __('Search project...') }}',
                 width: '100%'

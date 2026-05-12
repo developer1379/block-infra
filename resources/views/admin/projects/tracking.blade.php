@@ -298,6 +298,82 @@
                         </div>
                     </div>
                 </div>
+
+                {{-- FULL WIDTH: MATERIAL INVENTORY SECTION --}}
+                <div class="xl:col-span-12 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-gray-800 text-sm uppercase tracking-wide">Material Inventory</h3>
+                        <button onclick="document.getElementById('allocateMaterialModal').classList.remove('hidden')"
+                            class="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-md transition-colors shadow-sm">
+                            <i class="bi bi-box-seam"></i> Allocate Material
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-gray-50 border-b border-gray-200">
+                                <tr>
+                                    <th class="px-6 py-3 text-[10px] font-bold text-gray-500 uppercase tracking-wider">Date</th>
+                                    <th class="px-6 py-3 text-[10px] font-bold text-gray-500 uppercase tracking-wider">Material</th>
+                                    <th class="px-6 py-3 text-[10px] font-bold text-gray-500 uppercase tracking-wider">Qty</th>
+                                    <th class="px-6 py-3 text-[10px] font-bold text-gray-500 uppercase tracking-wider">Type</th>
+                                    <th class="px-6 py-3 text-[10px] font-bold text-gray-500 uppercase tracking-wider">Unit Price</th>
+                                    <th class="px-6 py-3 text-[10px] font-bold text-gray-500 uppercase tracking-wider">Total</th>
+                                    <th class="px-6 py-3 text-[10px] font-bold text-gray-500 uppercase tracking-wider">Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                @forelse($project->inventoryLogs as $log)
+                                    <tr class="hover:bg-gray-50/50 transition-colors">
+                                        <td class="px-6 py-4 text-xs text-gray-600">
+                                            {{ $log->entry_date->format('M d, Y') }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center gap-2">
+                                                <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
+                                                    <i class="bi bi-box"></i>
+                                                </div>
+                                                <span class="text-xs font-bold text-gray-800">{{ $log->material->name }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 text-xs font-semibold text-gray-700">
+                                            {{ $log->quantity }} {{ $log->material->unit }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            @php
+                                                $typeClasses = [
+                                                    'in' => 'bg-green-50 text-green-700 border-green-100',
+                                                    'out' => 'bg-red-50 text-red-700 border-red-100',
+                                                    'purchase' => 'bg-blue-50 text-blue-700 border-blue-100',
+                                                    'consumption' => 'bg-orange-50 text-orange-700 border-orange-100',
+                                                ];
+                                                $typeClass = $typeClasses[$log->type] ?? 'bg-gray-50 text-gray-600 border-gray-100';
+                                            @endphp
+                                            <span class="px-2 py-0.5 rounded text-[9px] font-bold uppercase border {{ $typeClass }}">
+                                                {{ $log->type }}
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 text-xs text-gray-600">
+                                            ₹{{ number_format($log->unit_price, 2) }}
+                                        </td>
+                                        <td class="px-6 py-4 text-xs font-bold text-gray-900">
+                                            ₹{{ number_format($log->quantity * $log->unit_price, 2) }}
+                                        </td>
+                                        <td class="px-6 py-4 text-xs text-gray-500 italic">
+                                            {{ Str::limit($log->notes, 30) }}
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="px-6 py-10 text-center text-gray-400 text-xs">
+                                            No material logs found for this project.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -423,6 +499,45 @@
             setTimeout(() => {
                 modal.classList.add('hidden');
             }, 300);
+        }
+
+        // Allocate Modal Logic
+        const allocateModal = document.getElementById('allocateMaterialModal');
+        const allocateBackdrop = document.getElementById('allocateModalBackdrop');
+        const allocatePanel = document.getElementById('allocateModalPanel');
+
+        const allocateObserver = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'class') {
+                    if (!allocateModal.classList.contains('hidden')) {
+                        setTimeout(() => {
+                            allocateBackdrop.classList.remove('opacity-0');
+                            allocatePanel.classList.remove('opacity-0', 'translate-y-4', 'sm:translate-y-0', 'sm:scale-95');
+                            allocatePanel.classList.add('opacity-100', 'translate-y-0', 'sm:scale-100');
+                        }, 10);
+                    } else {
+                        allocateBackdrop.classList.add('opacity-0');
+                        allocatePanel.classList.add('opacity-0', 'translate-y-4', 'sm:translate-y-0', 'sm:scale-95');
+                        allocatePanel.classList.remove('opacity-100', 'translate-y-0', 'sm:scale-100');
+                    }
+                }
+            });
+        });
+
+        allocateObserver.observe(allocateModal, { attributes: true });
+
+        function closeAllocateModal() {
+            allocateBackdrop.classList.add('opacity-0');
+            allocatePanel.classList.add('opacity-0', 'translate-y-4', 'sm:translate-y-0', 'sm:scale-95');
+            allocatePanel.classList.remove('opacity-100', 'translate-y-0', 'sm:scale-100');
+            setTimeout(() => {
+                allocateModal.classList.add('hidden');
+            }, 300);
+        }
+
+        function updateDefaultPrice(select) {
+            const price = select.options[select.selectedIndex].getAttribute('data-price');
+            document.getElementById('alloc_unit_price').value = price || 0;
         }
     </script>
 </x-admin-layout>

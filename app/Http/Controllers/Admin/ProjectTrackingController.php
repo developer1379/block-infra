@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Project; // Or use ProjectRepositoryInterface
+use App\Models\Material;
+use App\Models\MaterialInventory;
 use App\Repositories\ProjectMilestone\Interfaces\ProjectMilestoneRepositoryInterface;
 
 class ProjectTrackingController extends Controller
@@ -27,8 +29,11 @@ class ProjectTrackingController extends Controller
             'award.awardedTo',
             'milestones.projectWork.work',
             'progressUpdates',
-            'works'
+            'works',
+            'inventoryLogs.material'
         ])->findOrFail($id);
+
+        $materials = Material::orderBy('name')->get();
 
         // Calculate Overall Progress (Weighted by milestone amount)
         $totalWeight = $project->milestones->sum('amount');
@@ -46,7 +51,7 @@ class ProjectTrackingController extends Controller
                 : 0;
         }
 
-        return view('admin.projects.tracking', compact('project', 'overallProgress'));
+        return view('admin.projects.tracking', compact('project', 'overallProgress', 'materials'));
     }
 
     /**
@@ -89,6 +94,34 @@ class ProjectTrackingController extends Controller
     {
         $this->milestoneRepo->delete($id);
         return back()->with('success', 'Milestone deleted.');
+    }
+
+    /**
+     * Allocate Material to Project
+     */
+    public function allocateMaterial(Request $request)
+    {
+        $request->validate([
+            'project_id' => 'required|exists:projects,id',
+            'material_id' => 'required|exists:materials,id',
+            'quantity' => 'required|numeric|min:0.01',
+            'unit_price' => 'nullable|numeric|min:0',
+            'notes' => 'nullable|string',
+            'entry_date' => 'required|date'
+        ]);
+
+        MaterialInventory::create([
+            'project_id' => $request->project_id,
+            'material_id' => $request->material_id,
+            'quantity' => $request->quantity,
+            'type' => 'in', // Allocation is an 'in' for the project site
+            'unit_price' => $request->unit_price,
+            'entry_date' => $request->entry_date,
+            'notes' => $request->notes,
+            'vendor_name' => 'Admin Allocation'
+        ]);
+
+        return back()->with('success', 'Material allocated to project successfully.');
     }
 }
 

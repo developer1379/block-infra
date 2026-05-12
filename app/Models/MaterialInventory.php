@@ -16,6 +16,10 @@ class MaterialInventory extends Model
         'unit_price', 'vendor_name', 'entry_date', 'notes'
     ];
 
+    protected $casts = [
+        'entry_date' => 'date'
+    ];
+
     public function project()
     {
         return $this->belongsTo(Project::class);

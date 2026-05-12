@@ -52,6 +52,16 @@
                                     </div>
                                     @error('unit') <p class="text-[10px] text-red-500 font-bold mt-1 ml-1">{{ $message }}</p> @enderror
                                 </div>
+
+                                <div class="space-y-2">
+                                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Default Unit Price <span class="text-red-500">*</span></label>
+                                    <div class="relative group">
+                                        <i class="fa-solid fa-indian-rupee-sign absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-600 transition-colors"></i>
+                                        <input type="number" name="price" step="0.01" required value="{{ old('price', $material->price) }}" placeholder="0.00"
+                                            class="w-full pl-11 pr-4 py-3.5 bg-slate-50/50 border-slate-100 rounded-2xl text-sm font-medium focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none">
+                                    </div>
+                                    @error('price') <p class="text-[10px] text-red-500 font-bold mt-1 ml-1">{{ $message }}</p> @enderror
+                                </div>
                             </div>
 
                             <div class="space-y-2">

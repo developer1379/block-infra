@@ -80,4 +80,9 @@ class Project extends Model
     {
         return $this->progressUpdates()->first()->progress_percentage ?? 0;
     }
+
+    public function inventoryLogs()
+    {
+        return $this->hasMany(MaterialInventory::class);
+    }
 }

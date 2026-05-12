@@ -111,29 +111,59 @@
                     </div>
                 </div>
 
-                <!-- Recent Inventory Logs -->
-                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ __('Site Inventory') }}</h4>
-                        <a href="{{ route('contractor.inventory.index') }}" class="text-[9px] font-bold text-indigo-600 hover:underline">{{ __('Manage') }}</a>
+                <!-- Site Inventory & Stock Card -->
+                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 group">
+                    <div class="flex items-center justify-between mb-6">
+                        <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                            <i class="bi bi-box-seam text-indigo-600"></i> {{ __('Site Stock Inventory') }}
+                        </h4>
+                        <a href="{{ route('contractor.inventory.index') }}" class="px-3 py-1 bg-gray-50 text-gray-500 rounded-lg text-[8px] font-black uppercase tracking-widest hover:bg-indigo-50 hover:text-indigo-600 transition-all">
+                            {{ __('Full Log') }}
+                        </a>
                     </div>
-                    <div class="space-y-3">
-                        @forelse($materialLogs as $log)
-                            <div class="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
-                                <div>
-                                    <p class="text-xs font-bold text-gray-800">{{ $log->material->name }}</p>
-                                    <p class="text-[9px] text-gray-400 uppercase tracking-tighter">{{ $log->log_type }}</p>
+                    
+                    <div class="space-y-4">
+                        @forelse($stockLevels as $stock)
+                            <div class="p-4 rounded-2xl bg-gray-50/50 border border-transparent hover:border-indigo-100 hover:bg-white transition-all">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
+                                            <i class="bi bi-box"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-[10px] font-bold text-gray-900">{{ $stock->material->name }}</p>
+                                            <p class="text-[8px] text-gray-400 font-bold">₹{{ number_format($stock->material->price, 2) }} / {{ $stock->material->unit }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-xs font-black {{ $stock->current_stock > 0 ? 'text-gray-900' : 'text-rose-500' }}">
+                                            {{ $stock->current_stock }} {{ $stock->material->unit }}
+                                        </p>
+                                        <p class="text-[7px] text-gray-400 uppercase font-black tracking-tighter">{{ __('Available') }}</p>
+                                    </div>
                                 </div>
-                                <div class="text-right">
-                                    <p class="text-xs font-black {{ $log->log_type == 'out' ? 'text-rose-500' : 'text-emerald-500' }}">
-                                        {{ $log->log_type == 'out' ? '-' : '+' }}{{ $log->quantity }}
-                                    </p>
+                                <div class="w-full h-1 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full {{ $stock->current_stock > 10 ? 'bg-indigo-500' : 'bg-rose-500' }} transition-all duration-1000" style="width: {{ min(100, $stock->current_stock * 2) }}%"></div>
                                 </div>
                             </div>
                         @empty
-                            <p class="text-[10px] text-gray-300 italic py-4 text-center">{{ __('No logs.') }}</p>
+                            <div class="text-center py-8">
+                                <p class="text-[10px] text-gray-300 italic">{{ __('No material stock assigned to this site.') }}</p>
+                            </div>
                         @endforelse
                     </div>
+
+                    @if($stockLevels->isNotEmpty())
+                        <div class="mt-6 pt-6 border-t border-gray-50">
+                            <div class="flex justify-between items-center bg-indigo-50 rounded-2xl p-4">
+                                <div>
+                                    <p class="text-[8px] font-black text-indigo-400 uppercase tracking-tighter">{{ __('Total Stock Value') }}</p>
+                                    <p class="text-sm font-black text-indigo-600">₹{{ number_format($stockLevels->sum(fn($s) => $s->current_stock * $s->material->price)) }}</p>
+                                </div>
+                                <i class="bi bi-shield-check text-indigo-200 text-2xl"></i>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
 

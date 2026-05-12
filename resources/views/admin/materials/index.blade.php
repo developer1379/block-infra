@@ -17,6 +17,7 @@
                         <tr>
                             <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Material Name</th>
                             <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Unit</th>
+                            <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Unit Price</th>
                             <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Description</th>
                             <th class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">Actions</th>
                         </tr>
@@ -36,6 +37,10 @@
                                     <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 text-[10px] font-bold uppercase tracking-tight">
                                         {{ $material->unit }}
                                     </span>
+                                <td class="px-6 py-4">
+                                    <span class="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-bold">
+                                        ₹{{ number_format($material->price, 2) }}
+                                    </span>
                                 </td>
                                 <td class="px-6 py-4 text-sm text-slate-500">
                                     {{ Str::limit($material->description, 50) }}
@@ -50,7 +55,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="px-6 py-20 text-center text-slate-400">
+                                <td colspan="5" class="px-6 py-20 text-center text-slate-400">
                                     <i class="fa-solid fa-boxes-stacked text-4xl mb-3"></i>
                                     <p>No materials defined in inventory.</p>
                                 </td>

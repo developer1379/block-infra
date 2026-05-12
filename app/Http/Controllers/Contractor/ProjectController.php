@@ -112,7 +112,14 @@ class ProjectController extends Controller
             ->take(5)
             ->get();
 
-        return view('contractor.projects.show', compact('project', 'workerCount', 'attendanceToday', 'materialLogs', 'linkedWorkers', 'totalProjectPayouts'));
+        // 3. Current Stock Levels
+        $stockLevels = \App\Models\MaterialInventory::where('project_id', $project->id)
+            ->select('material_id', \Illuminate\Support\Facades\DB::raw('SUM(CASE WHEN type IN ("in", "purchase") THEN quantity ELSE -quantity END) as current_stock'))
+            ->groupBy('material_id')
+            ->with('material')
+            ->get();
+
+        return view('contractor.projects.show', compact('project', 'workerCount', 'attendanceToday', 'materialLogs', 'linkedWorkers', 'totalProjectPayouts', 'stockLevels'));
     }
 
     public function details($id)
