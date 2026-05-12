@@ -16,6 +16,8 @@ class MaterialInventory extends Model
         'unit_price', 'vendor_name', 'entry_date', 'notes'
     ];
 
+    const UPDATED_AT = null;
+
     protected $casts = [
         'entry_date' => 'date'
     ];

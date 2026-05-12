@@ -11,6 +11,8 @@ class Material extends Model
 
     protected $fillable = ['name', 'unit', 'price', 'description'];
 
+    const UPDATED_AT = null;
+
     public function inventory()
     {
         return $this->hasMany(MaterialInventory::class);

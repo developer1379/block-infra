@@ -11,6 +11,8 @@ class SitePhoto extends Model
 
     protected $fillable = ['report_id', 'photo_path', 'caption'];
 
+    const UPDATED_AT = null;
+
     public function report()
     {
         return $this->belongsTo(DailySiteReport::class, 'report_id');

@@ -14,6 +14,8 @@ class DailySiteReport extends Model
         'work_summary', 'challenges', 'next_day_plan', 'progress_percentage'
     ];
 
+    const UPDATED_AT = null;
+
     public function project()
     {
         return $this->belongsTo(Project::class);
