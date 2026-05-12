@@ -63,7 +63,7 @@ class ProjectTrackingController extends Controller
             'project_id'       => 'required|exists:projects,id',
             'project_work_id'  => 'nullable|exists:project_works,id',
             'title'            => 'required|string|max:255',
-            'amount'           => 'nullable|numeric|min:0',
+            'amount'           => 'required|numeric|min:0',
             'due_date'         => 'nullable|date',
             'description'      => 'nullable|string'
         ]);

@@ -61,6 +61,21 @@
                     </div>
                 </div>
 
+                {{-- Bidding Suggestions --}}
+                <div class="px-8 py-4 bg-amber-50 border-b border-amber-100 flex items-start gap-3">
+                    <div class="mt-0.5 text-amber-600">
+                        <i class="bi bi-lightbulb-fill"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-[11px] font-bold text-amber-800 uppercase tracking-wider mb-1">{{ __('Suggestions for winning') }}</p>
+                        <ul class="text-[11px] text-amber-700 space-y-1 list-disc list-inside">
+                            <li>{{ __('Keep your bid competitive but realistic.') }}</li>
+                            <li>{{ __('A shorter timeline can be an advantage, but ensure you can deliver.') }}</li>
+                            <li>{{ __('Upload a detailed PDF for complex project scopes.') }}</li>
+                        </ul>
+                    </div>
+                </div>
+
                 <div class="p-8">
                     <form action="{{ route('contractor.bids.store', $project->id) }}" method="POST"
                         enctype="multipart/form-data" id="bidForm">
@@ -72,8 +87,9 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 {{-- Bid Amount --}}
                                 <div>
-                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
+                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-1.5">
                                         {{ __('Total Bid Amount') }} <span class="text-red-500">*</span>
+                                        <i class="bi bi-info-circle text-gray-400 cursor-help" data-tooltip="{{ __('Include all taxes, labor costs, and material estimations.') }}"></i>
                                     </label>
                                     <div class="relative">
                                         <div
@@ -89,8 +105,9 @@
 
                                 {{-- Delivery Days --}}
                                 <div>
-                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
+                                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-1.5">
                                         {{ __('Estimated Timeline') }} <span class="text-red-500">*</span>
+                                        <i class="bi bi-info-circle text-gray-400 cursor-help" data-tooltip="{{ __('Estimated number of days from the date the work order is issued.') }}"></i>
                                     </label>
                                     <div class="relative">
                                         <input type="number" name="delivery_days" min="1" required

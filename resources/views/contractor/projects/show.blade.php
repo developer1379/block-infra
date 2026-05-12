@@ -39,7 +39,7 @@
                             <p class="text-[8px] font-black text-gray-400 uppercase tracking-tighter">{{ __('Assigned') }}</p>
                             <p class="text-xl font-black text-gray-900">{{ $workerCount }}</p>
                         </div>
-                        <div class="bg-indigo-50 rounded-2xl p-4">
+                        <div class="bg-indigo-50 rounded-2xl p-4 cursor-help" data-tooltip="{{ __('Number of workers verified on site today.') }}">
                             <p class="text-[8px] font-black text-indigo-400 uppercase tracking-tighter">{{ __('On Site') }}</p>
                             <p class="text-xl font-black text-indigo-600">{{ $attendanceToday }}</p>
                         </div>
@@ -79,10 +79,10 @@
                         <i class="bi bi-cash-stack text-emerald-600"></i> {{ __('Financial Overview') }}
                     </h4>
                     <div class="space-y-6">
-                        <div>
+                        <div class="cursor-help" data-tooltip="{{ __('The maximum budget allocated by the client for this project.') }}">
                             <div class="flex justify-between items-end mb-1">
                                 <span class="text-[10px] font-bold text-gray-400">{{ __('Total Bid Value') }}</span>
-                                <span class="text-sm font-black text-gray-900">₹{{ number_format($project->award->bid->bid_amount ?? 0) }}</span>
+                                <span class="text-sm font-black text-gray-900">₹{{ number_format($project->award?->bid?->bid_amount ?? 0) }}</span>
                             </div>
                             <div class="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
                                 <div class="bg-indigo-500 h-full rounded-full" style="width: 100%"></div>
@@ -95,7 +95,7 @@
                             </div>
                             <div class="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
                                 @php 
-                                    $bid = $project->award->bid->bid_amount ?? 1;
+                                    $bid = $project->award?->bid?->bid_amount ?? 1;
                                     $paid = $totalProjectPayouts;
                                     $perc = min(100, ($paid / $bid) * 100);
                                 @endphp
@@ -185,7 +185,7 @@
                     <!-- Milestones Visualization -->
                     <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 flex flex-col">
                         <div class="flex items-center justify-between mb-6">
-                            <h3 class="font-bold text-gray-900 text-sm flex items-center gap-2">
+                            <h3 class="font-bold text-gray-900 text-sm flex items-center gap-2 cursor-help" data-tooltip="{{ __('Track current completion status of each project phase.') }}">
                                 <i class="bi bi-check2-square text-indigo-600"></i> {{ __('Project Phases') }}
                             </h3>
                             <span class="text-[10px] font-bold text-gray-400">{{ $project->milestones->where('status', 'paid')->count() }} / {{ $project->milestones->count() }} {{ __('Paid') }}</span>

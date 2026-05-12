@@ -39,9 +39,10 @@
                 <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
                     <div class="p-8">
                         <div class="flex items-center justify-between mb-8">
-                            <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest border 
+                            <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest border cursor-help 
                                 {{ $project->status == 'open' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 
-                                   ($project->status == 'awarded' ? 'bg-indigo-50 text-indigo-700 border-indigo-100' : 'bg-gray-50 text-gray-600 border-gray-200') }}">
+                                   ($project->status == 'awarded' ? 'bg-indigo-50 text-indigo-700 border-indigo-100' : 'bg-gray-50 text-gray-600 border-gray-200') }}"
+                                data-tooltip="{{ __('Current phase of the project lifecycle.') }}">
                                 {{ __($project->status) }}
                             </span>
                             <span class="text-xs font-bold text-gray-400 bg-gray-50 px-3 py-1 rounded-full border border-gray-100">
@@ -138,7 +139,7 @@
 
                     <div class="space-y-6">
                         <!-- Budget Widget -->
-                        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-700 p-6 text-white shadow-xl shadow-indigo-200">
+                        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-700 p-6 text-white shadow-xl shadow-indigo-200 cursor-help" data-tooltip="{{ __('The maximum budget allocated by the client for this project.') }}">
                             <div class="relative z-10">
                                 <p class="text-indigo-100 text-[10px] font-bold uppercase tracking-wider mb-1">{{ __('Total Budget') }}</p>
                                 <div class="text-3xl font-extrabold flex items-baseline gap-1">

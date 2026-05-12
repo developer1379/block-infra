@@ -200,5 +200,18 @@
     "New Password": "नया पासवर्ड",
     "Confirm Password": "पासवर्ड की पुष्टि करें",
     "Save Changes": "परिवर्तन सहेजें",
-    "Select your skills...": "अपने कौशल चुनें..."
+    "Select your skills...": "अपने कौशल चुनें...",
+    "Find and manage all your assigned construction projects here.": "यहाँ अपने सभी सौंपे गए निर्माण प्रोजेक्ट्स खोजें और प्रबंधित करें।",
+    "Percentage of successfully completed milestones and projects.": "सफलतापूर्वक पूरे किए गए मील के पत्थरों और प्रोजेक्ट्स का प्रतिशत।",
+    "The maximum budget allocated by the client for this project.": "इस प्रोजेक्ट के लिए क्लाइंट द्वारा आवंटित अधिकतम बजट।",
+    "Direct access to project daily reports, attendance, and financials.": "प्रोजेक्ट दैनिक रिपोर्ट, उपस्थिति और वित्तीय जानकारी तक सीधी पहुँच।",
+    "Submit your technical and financial proposal for this project.": "इस प्रोजेक्ट के लिए अपना तकनीकी और वित्तीय प्रस्ताव सबमिट करें।",
+    "Overall completion based on site manager's verified updates.": "साइट मैनेजर के सत्यापित अपडेट के आधार पर समग्र पूर्णता।",
+    "Suggestions for winning": "जीतने के लिए सुझाव",
+    "Keep your bid competitive but realistic.": "अपनी बोली को प्रतिस्पर्धी लेकिन यथार्थवादी रखें।",
+    "A shorter timeline can be an advantage, but ensure you can deliver.": "कम समय सीमा एक लाभ हो सकती है, लेकिन सुनिश्चित करें कि आप समय पर काम पूरा कर सकें।",
+    "Upload a detailed PDF for complex project scopes.": "जटिल प्रोजेक्ट स्कोप के लिए विस्तृत पीडीएफ अपलोड करें।",
+    "Include all taxes, labor costs, and material estimations.": "सभी कर, श्रम लागत और सामग्री अनुमान शामिल करें।",
+    "Estimated number of days from the date the work order is issued.": "कार्य आदेश जारी होने की तिथि से दिनों की अनुमानित संख्या।",
+    "Current phase of the project lifecycle.": "प्रोजेक्ट जीवनचक्र का वर्तमान चरण।"
 }
