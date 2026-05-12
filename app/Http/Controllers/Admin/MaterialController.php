@@ -42,7 +42,7 @@ class MaterialController extends Controller
         ]);
 
         try {
-            $this->materials->create($request->all());
+            $this->materials->create($request->only(['name', 'unit', 'price', 'description']));
             return redirect()->route('admin.materials.index')->with('success', 'Material created successfully.');
         } catch (\Exception $e) {
             Log::error('Admin Material Store Error: ' . $e->getMessage());
@@ -67,7 +67,7 @@ class MaterialController extends Controller
 
         try {
             $material = \App\Models\Material::findOrFail($id);
-            $material->update($request->all());
+            $material->update($request->only(['name', 'unit', 'price', 'description']));
             return redirect()->route('admin.materials.index')->with('success', 'Material updated successfully.');
         } catch (\Exception $e) {
             Log::error('Admin Material Update Error: ' . $e->getMessage());

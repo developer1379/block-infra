@@ -468,6 +468,83 @@
         </div>
     </div>
 
+    {{-- ALLOCATE MATERIAL MODAL --}}
+    <div id="allocateMaterialModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity opacity-0 ease-out duration-300" onclick="closeAllocateModal()" id="allocateModalBackdrop"></div>
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4 text-center">
+                <div class="relative transform overflow-hidden rounded-xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95 duration-300 ease-out" id="allocateModalPanel">
+                    <form action="{{ route('admin.projects.allocate-material', $project->id) }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="project_id" value="{{ $project->id }}">
+
+                        <div class="bg-white px-5 pt-5 pb-4">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-emerald-50">
+                                    <i class="bi bi-box-seam text-emerald-600 text-sm"></i>
+                                </div>
+                                <h3 class="text-base font-bold leading-6 text-gray-900">Allocate Material</h3>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Select Material <span class="text-red-500">*</span></label>
+                                    <select name="material_id" required onchange="updateDefaultPrice(this)"
+                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2">
+                                        <option value="">-- Choose Material --</option>
+                                        @foreach($materials as $material)
+                                            <option value="{{ $material->id }}" data-price="{{ $material->price }}">
+                                                {{ $material->name }} ({{ $material->unit }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Quantity <span class="text-red-500">*</span></label>
+                                        <input type="number" step="0.01" name="quantity" required
+                                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2"
+                                            placeholder="0.00">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Unit Price (₹)</label>
+                                        <input type="number" step="0.01" name="unit_price" id="alloc_unit_price"
+                                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2"
+                                            placeholder="0.00">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Entry Date <span class="text-red-500">*</span></label>
+                                    <input type="date" name="entry_date" required value="{{ date('Y-m-d') }}"
+                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2">
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Notes</label>
+                                    <textarea name="notes" rows="2"
+                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2"
+                                        placeholder="Optional allocation notes..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 px-5 py-3 flex flex-row-reverse gap-2 border-t border-gray-100">
+                            <button type="submit"
+                                class="inline-flex w-auto justify-center rounded-md bg-emerald-600 px-3 py-2 text-xs font-bold text-white shadow-sm hover:bg-emerald-500 transition-colors">
+                                Allocate
+                            </button>
+                            <button type="button" onclick="closeAllocateModal()"
+                                class="inline-flex w-auto justify-center rounded-md bg-white px-3 py-2 text-xs font-bold text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 transition-colors">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{-- Script --}}
     <script>
         const modal = document.getElementById('addMilestoneModal');
@@ -549,7 +626,11 @@
         {{-- Keep modal open if there are validation errors --}}
         @if ($errors->any())
             document.addEventListener('DOMContentLoaded', function() {
-                modal.classList.remove('hidden');
+                @if(old('material_id'))
+                    allocateModal.classList.remove('hidden');
+                @else
+                    modal.classList.remove('hidden');
+                @endif
             });
         @endif
     </script>

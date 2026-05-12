@@ -37,6 +37,7 @@
                                     <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 text-[10px] font-bold uppercase tracking-tight">
                                         {{ $material->unit }}
                                     </span>
+                                </td>
                                 <td class="px-6 py-4">
                                     <span class="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-bold">
                                         ₹{{ number_format($material->price, 2) }}
