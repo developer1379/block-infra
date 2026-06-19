@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Contractor;
 use App\Models\ContractorDocument;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Exception;
@@ -50,7 +51,7 @@ class ContractorController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'company_name' => 'nullable|string|max:255',
-            'email' => 'nullable|email|max:255',
+            'email' => 'required|email|max:255|unique:users,email',
             'phone' => 'nullable|string|max:20',
             'city' => 'nullable|string|max:255',
             'category_id' => 'nullable|exists:categories,id',
@@ -58,9 +59,36 @@ class ContractorController extends Controller
         ]);
 
         try {
-            Contractor::create($validated);
-            return redirect()->route('admin.contractors.index')->with('success', 'Contractor created successfully.');
+            \DB::beginTransaction();
+
+            $password = '12345678';
+            $user = User::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'password' => \Illuminate\Support\Facades\Hash::make($password),
+            ]);
+
+            $role = \Spatie\Permission\Models\Role::findOrCreate('contractor', 'web');
+            $user->assignRole($role);
+
+            $contractor = Contractor::create([
+                'user_id' => $user->id,
+                'name' => $validated['name'],
+                'company_name' => $validated['company_name'] ?? null,
+                'email' => $validated['email'],
+                'phone' => $validated['phone'] ?? null,
+                'city' => $validated['city'] ?? null,
+                'is_active' => $validated['is_active'] ?? 0,
+            ]);
+
+            if ($request->filled('category_id')) {
+                $contractor->categories()->sync([$request->category_id]);
+            }
+
+            \DB::commit();
+            return redirect()->route('admin.contractors.index')->with('success', 'Contractor created successfully with default password: ' . $password);
         } catch (Exception $e) {
+            \DB::rollBack();
             Log::error('Contractor Store Error: ' . $e->getMessage());
             return back()->with('error', 'Failed to create contractor.');
         }
@@ -104,8 +132,26 @@ class ContractorController extends Controller
                 'is_active'    => $validated['is_active'] ?? 0,
             ]);
 
-            // Also update the associated User if it exists
-            if ($contractor->user) {
+            // Also update or create the associated User if it exists
+            $user = $contractor->user;
+            if (!$user && $validated['email']) {
+                $user = User::where('email', $validated['email'])->first();
+                if ($user) {
+                    $contractor->update(['user_id' => $user->id]);
+                } else {
+                    $password = !empty($validated['password']) ? $validated['password'] : '12345678';
+                    $user = User::create([
+                        'name'     => $validated['name'],
+                        'email'    => $validated['email'],
+                        'password' => \Illuminate\Support\Facades\Hash::make($password),
+                    ]);
+                    $role = \Spatie\Permission\Models\Role::findOrCreate('contractor', 'web');
+                    $user->assignRole($role);
+                    $contractor->update(['user_id' => $user->id]);
+                }
+            }
+
+            if ($user) {
                 $userData = [
                     'name'  => $validated['name'],
                     'email' => $validated['email'],
@@ -113,7 +159,7 @@ class ContractorController extends Controller
                 if (!empty($validated['password'])) {
                     $userData['password'] = \Illuminate\Support\Facades\Hash::make($validated['password']);
                 }
-                $contractor->user->update($userData);
+                $user->update($userData);
             }
 
             if ($request->filled('categories')) {
