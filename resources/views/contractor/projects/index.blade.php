@@ -55,96 +55,92 @@
         <!-- Premium Full-Fill Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
             @forelse ($projects as $project)
-                <div class="group bg-white sm:rounded-[2.5rem] rounded-none border border-gray-100 shadow-sm hover:shadow-2xl hover:shadow-indigo-50 hover:border-indigo-100 transition-all duration-500 flex flex-col overflow-hidden relative">
+                <div class="group bg-white rounded-none border border-slate-200 hover:border-slate-400 hover:shadow-md transition-all duration-300 flex flex-col overflow-hidden relative">
                     
-                    <!-- Top Gradient Accent -->
-                    <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r {{ $project->status == 'open' ? 'from-emerald-400 to-teal-500' : ($project->status == 'awarded' ? 'from-indigo-500 to-violet-600' : 'from-gray-300 to-gray-400') }}"></div>
+                    <!-- Top Status Colored Accent Line (flat, no radius) -->
+                    <div class="h-1.5 w-full {{ $project->status == 'open' ? 'bg-emerald-500' : ($project->status == 'awarded' ? 'bg-indigo-600' : 'bg-slate-400') }}"></div>
 
-                    <!-- Card Header -->
-                    <div class="p-8 pb-0">
-                        <div class="flex justify-between items-start mb-6">
-                            <div class="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-all duration-500 border border-gray-100 group-hover:border-indigo-100 group-hover:scale-110">
-                                <i class="bi bi-building-gear text-2xl"></i>
-                            </div>
-                            <div class="flex flex-col items-end gap-2">
-                                <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border 
-                                    {{ $project->status == 'open' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 
-                                       ($project->status == 'awarded' ? 'bg-indigo-50 text-indigo-600 border-indigo-100' : 'bg-gray-50 text-gray-400 border-gray-200') }}">
-                                    {{ __($project->status) }}
-                                </span>
-                                <p class="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">{{ __('ID: #PRJ-') . $project->id }}</p>
-                            </div>
+                    <!-- Card Header (compact padding) -->
+                    <div class="p-5 pb-0">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="px-2.5 py-0.5 rounded-none text-[9px] font-bold uppercase tracking-widest border 
+                                {{ $project->status == 'open' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 
+                                   ($project->status == 'awarded' ? 'bg-indigo-50 text-indigo-700 border-indigo-200' : 'bg-slate-50 text-slate-500 border-slate-200') }}">
+                                {{ __($project->status) }}
+                            </span>
+                            <p class="text-[9px] font-mono text-slate-400">{{ __('ID: #PRJ-') . $project->id }}</p>
                         </div>
 
-                        <h3 class="text-xl font-black text-gray-900 group-hover:text-indigo-600 transition-colors leading-tight mb-2 line-clamp-2">
+                        <h3 class="text-lg font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors leading-snug line-clamp-1 mb-1">
                             {{ $project->title }}
                         </h3>
 
-                        <p class="text-xs text-gray-500 line-clamp-2 mb-4 font-medium">
+                        <p class="text-xs text-slate-500 line-clamp-2 mb-3 leading-relaxed font-medium">
                             {{ $project->description ?? __('No description provided.') }}
                         </p>
                         
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-50 text-gray-500 text-[10px] font-black uppercase rounded-lg border border-gray-100">
+                        <!-- Tags Section (compact, rounded-none) -->
+                        <div class="flex flex-wrap gap-1.5 mb-4">
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-50 text-slate-500 text-[9px] font-bold uppercase rounded-none border border-slate-100">
                                 <i class="bi bi-tag-fill"></i> {{ $project->category->name ?? __('General') }}
                             </span>
-                            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-50 text-gray-500 text-[10px] font-black uppercase rounded-lg border border-gray-100">
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-50 text-slate-500 text-[9px] font-bold uppercase rounded-none border border-slate-100">
                                 <i class="bi bi-geo-alt-fill"></i> {{ $project->location ?? __('Site A') }}
                             </span>
-                            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-50 text-gray-500 text-[10px] font-black uppercase rounded-lg border border-gray-100">
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-50 text-slate-500 text-[9px] font-bold uppercase rounded-none border border-slate-100">
                                 <i class="bi bi-calendar-event-fill"></i> {{ $project->created_at->format('M d, Y') }}
                             </span>
                         </div>
                     </div>
 
-                    <!-- Progress / Stats Section -->
-                    <div class="px-8 mb-8 flex-1">
-                        <div class="bg-gray-50/50 rounded-3xl p-6 border border-gray-50 group-hover:bg-white group-hover:border-indigo-50 transition-all">
-                            <div class="flex justify-between items-end mb-4">
-                                <div class="space-y-1 cursor-help" data-tooltip="{{ __('The budget range allocated by the client.') }}">
-                                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Estimated Budget') }}</p>
-                                    <p class="text-sm font-black text-gray-900">₹{{ number_format($project->budget_min) }} - ₹{{ number_format($project->budget_max) }}</p>
+                    <!-- Progress / Stats Section (compact padding) -->
+                    <div class="px-5 mb-5 flex-1">
+                        <div class="bg-slate-50/50 rounded-none p-4 border border-slate-100 group-hover:bg-white group-hover:border-slate-200 transition-all">
+                            <div class="flex justify-between items-end mb-2">
+                                <div class="space-y-0.5">
+                                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{{ __('Estimated Budget') }}</p>
+                                    <p class="text-sm font-extrabold text-slate-800">₹{{ number_format($project->budget_min) }} - ₹{{ number_format($project->budget_max) }}</p>
                                 </div>
-                                <div class="text-right space-y-1">
-                                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Completion') }}</p>
-                                    <p class="text-lg font-black text-indigo-600">{{ $project->current_progress ?? 0 }}%</p>
+                                <div class="text-right space-y-0.5">
+                                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{{ __('Completion') }}</p>
+                                    <p class="text-sm font-extrabold text-indigo-600">{{ $project->current_progress ?? 0 }}%</p>
                                 </div>
                             </div>
-                            <div class="w-full bg-gray-100 h-2.5 rounded-full overflow-hidden shadow-inner">
-                                <div class="bg-gradient-to-r from-indigo-500 to-violet-600 h-full rounded-full transition-all duration-1000 group-hover:shadow-[0_0_15px_rgba(79,70,229,0.3)]" style="width: {{ $project->current_progress ?? 0 }}%"></div>
+                            <div class="w-full bg-slate-200 h-1.5 rounded-none overflow-hidden">
+                                <div class="bg-indigo-600 h-full rounded-none transition-all duration-1000" style="width: {{ $project->current_progress ?? 0 }}%"></div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Footer Actions -->
-                    <div class="px-8 pb-8 mt-auto">
-                        <div class="grid grid-cols-2 gap-3">
-                            <a href="{{ route('contractor.projects.details', $project->id) }}" class="flex items-center justify-center gap-2 py-3.5 bg-white border border-gray-100 text-gray-600 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-gray-50 hover:text-indigo-600 transition-all">
+                    <!-- Footer Actions (rounded-none buttons, compact padding) -->
+                    <div class="px-5 pb-5 mt-auto">
+                        <div class="grid grid-cols-2 gap-2">
+                            <a href="{{ route('contractor.projects.details', $project->id) }}" class="flex items-center justify-center gap-1 py-2.5 bg-white border border-slate-200 text-slate-600 rounded-none text-[10px] font-bold uppercase tracking-wider hover:bg-slate-50 hover:text-indigo-600 hover:border-slate-400 transition-all">
                                 <i class="bi bi-search"></i>
                                 {{ __('Details') }}
                             </a>
                             
                             @if (auth()->user()->hasRole('contractor'))
                                 @if ($project->status == 'awarded')
-                                    <a href="{{ route('contractor.projects.show', $project->id) }}" class="flex items-center justify-center gap-2 py-3.5 bg-indigo-600 text-white rounded-2xl text-xs font-black uppercase tracking-widest shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all transform group-hover:-translate-y-1" data-tooltip="{{ __('Direct access to project daily reports, attendance, and financials.') }}">
+                                    <a href="{{ route('contractor.projects.show', $project->id) }}" class="flex items-center justify-center gap-1 py-2.5 bg-indigo-600 text-white border border-transparent rounded-none text-[10px] font-bold uppercase tracking-wider hover:bg-indigo-700 transition-all" data-tooltip="{{ __('Direct access to workspace.') }}">
                                         <i class="bi bi-columns-gap"></i>
                                         {{ __('Workspace') }}
                                     </a>
                                 @elseif ($project->status == 'open')
                                     @php $hasBid = isset($hasBid[$project->id]) && $hasBid[$project->id]; @endphp
                                     @if ($hasBid)
-                                        <div class="flex items-center justify-center gap-2 py-3.5 bg-emerald-50 text-emerald-600 rounded-2xl text-xs font-black uppercase tracking-widest border border-emerald-100">
+                                        <div class="flex items-center justify-center gap-1 py-2.5 bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-none text-[10px] font-bold uppercase tracking-wider">
                                             <i class="bi bi-check2-all"></i>
                                             {{ __('Bid Sent') }}
                                         </div>
                                     @else
-                                        <a href="{{ route('contractor.bids.create', $project->id) }}" class="flex items-center justify-center gap-2 py-3.5 bg-gray-900 text-white rounded-2xl text-xs font-black uppercase tracking-widest shadow-xl shadow-gray-100 hover:bg-gray-800 transition-all transform group-hover:-translate-y-1" data-tooltip="{{ __('Submit your technical and financial proposal for this project.') }}">
+                                        <a href="{{ route('contractor.bids.create', $project->id) }}" class="flex items-center justify-center gap-1 py-2.5 bg-slate-900 text-white border border-transparent rounded-none text-[10px] font-bold uppercase tracking-wider hover:bg-slate-800 transition-all">
                                             <i class="bi bi-send-fill"></i>
                                             {{ __('Bid Now') }}
                                         </a>
                                     @endif
                                 @else
-                                    <div class="flex items-center justify-center gap-2 py-3.5 bg-gray-100 text-gray-400 rounded-2xl text-xs font-black uppercase tracking-widest cursor-not-allowed">
+                                    <div class="flex items-center justify-center gap-1 py-2.5 bg-slate-100 text-slate-400 border border-slate-200 rounded-none text-[10px] font-bold uppercase tracking-wider cursor-not-allowed">
                                         <i class="bi bi-lock-fill"></i>
                                         {{ __('Closed') }}
                                     </div>
