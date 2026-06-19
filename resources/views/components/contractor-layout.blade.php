@@ -119,6 +119,11 @@
             visibility: visible;
             transform: translateX(-50%) translateY(0);
         }
+
+        /* Globally remove border radius from all elements to ensure a flat design */
+        [class*="rounded-"] {
+            border-radius: 0px !important;
+        }
     </style>
 </head>
 

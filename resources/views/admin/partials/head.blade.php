@@ -114,4 +114,9 @@
     [x-cloak] {
         display: none !important;
     }
+
+    /* Globally remove border radius from all elements to ensure a flat design */
+    [class*="rounded-"] {
+        border-radius: 0px !important;
+    }
 </style>
