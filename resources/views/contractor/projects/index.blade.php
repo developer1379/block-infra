@@ -55,7 +55,7 @@
         <!-- Premium Full-Fill Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
             @forelse ($projects as $project)
-                <div class="group bg-white rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-2xl hover:shadow-indigo-50 hover:border-indigo-100 transition-all duration-500 flex flex-col overflow-hidden relative">
+                <div class="group bg-white sm:rounded-[2.5rem] rounded-none border border-gray-100 shadow-sm hover:shadow-2xl hover:shadow-indigo-50 hover:border-indigo-100 transition-all duration-500 flex flex-col overflow-hidden relative">
                     
                     <!-- Top Gradient Accent -->
                     <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r {{ $project->status == 'open' ? 'from-emerald-400 to-teal-500' : ($project->status == 'awarded' ? 'from-indigo-500 to-violet-600' : 'from-gray-300 to-gray-400') }}"></div>
@@ -77,8 +77,12 @@
                         </div>
 
                         <h3 class="text-xl font-black text-gray-900 group-hover:text-indigo-600 transition-colors leading-tight mb-2 line-clamp-2">
-                            {{ $project->name }}
+                            {{ $project->title }}
                         </h3>
+
+                        <p class="text-xs text-gray-500 line-clamp-2 mb-4 font-medium">
+                            {{ $project->description ?? __('No description provided.') }}
+                        </p>
                         
                         <div class="flex flex-wrap gap-2 mb-6">
                             <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-50 text-gray-500 text-[10px] font-black uppercase rounded-lg border border-gray-100">
@@ -87,6 +91,9 @@
                             <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-50 text-gray-500 text-[10px] font-black uppercase rounded-lg border border-gray-100">
                                 <i class="bi bi-geo-alt-fill"></i> {{ $project->location ?? __('Site A') }}
                             </span>
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-50 text-gray-500 text-[10px] font-black uppercase rounded-lg border border-gray-100">
+                                <i class="bi bi-calendar-event-fill"></i> {{ $project->created_at->format('M d, Y') }}
+                            </span>
                         </div>
                     </div>
 
@@ -94,9 +101,9 @@
                     <div class="px-8 mb-8 flex-1">
                         <div class="bg-gray-50/50 rounded-3xl p-6 border border-gray-50 group-hover:bg-white group-hover:border-indigo-50 transition-all">
                             <div class="flex justify-between items-end mb-4">
-                                <div class="space-y-1 cursor-help" data-tooltip="{{ __('The maximum budget allocated by the client for this project.') }}">
-                                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Estimated Value') }}</p>
-                                    <p class="text-lg font-black text-gray-900">₹{{ number_format($project->budget_max) }}</p>
+                                <div class="space-y-1 cursor-help" data-tooltip="{{ __('The budget range allocated by the client.') }}">
+                                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Estimated Budget') }}</p>
+                                    <p class="text-sm font-black text-gray-900">₹{{ number_format($project->budget_min) }} - ₹{{ number_format($project->budget_max) }}</p>
                                 </div>
                                 <div class="text-right space-y-1">
                                     <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Completion') }}</p>

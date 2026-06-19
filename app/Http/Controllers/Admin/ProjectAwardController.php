@@ -57,6 +57,11 @@ class ProjectAwardController extends Controller
 
     public function directAllocate(\Illuminate\Http\Request $request, $projectId)
     {
+        $project = \App\Models\Project::findOrFail($projectId);
+        if ($project->contractor_id && $request->filled('contractor_id')) {
+            return back()->with('error', 'Project is already allocated to a contractor.');
+        }
+
         $request->validate([
             'contractor_id' => 'nullable|exists:users,id'
         ]);
