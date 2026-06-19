@@ -113,6 +113,27 @@
                             class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors">
                     </div>
 
+                    {{-- Password --}}
+                    <div class="col-span-1">
+                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">
+                            New Password (Leave blank to keep current)
+                        </label>
+                        <input type="password" name="password"
+                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors">
+                        @error('password')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Confirm Password --}}
+                    <div class="col-span-1">
+                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">
+                            Confirm Password
+                        </label>
+                        <input type="password" name="password_confirmation"
+                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors">
+                    </div>
+
                     {{-- Multiple Categories (Select2) --}}
                     @php
                         $parentCategories = \App\Models\Category::query()

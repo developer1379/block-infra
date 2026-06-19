@@ -69,4 +69,12 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Category::class, 'contractor_category', 'contractor_id', 'category_id')
             ->withTimestamps();
     }
+
+    public function hasVerifiedEmail()
+    {
+        if ($this->hasRole('admin')) {
+            return true;
+        }
+        return ! is_null($this->email_verified_at);
+    }
 }

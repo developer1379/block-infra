@@ -8,6 +8,7 @@ use App\Models\Contractor;
 use App\Models\ContractorDocument;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Exception;
 
 class ContractorController extends Controller
 {
@@ -79,20 +80,21 @@ class ContractorController extends Controller
 
     public function update(Request $request, $id)
     {
+        $contractor = Contractor::findOrFail($id);
+
         $validated = $request->validate([
             'name'          => 'required|string|max:255',
             'company_name'  => 'nullable|string|max:255',
-            'email'         => 'nullable|email',
+            'email'         => 'nullable|email|unique:users,email,' . ($contractor->user_id ?? 'NULL') . ',id',
             'phone'         => 'nullable|string|max:20',
             'city'          => 'nullable|string|max:255',
             'categories'     => 'nullable|array',
             'categories.*'   => 'exists:categories,id',
             'is_active'     => 'boolean',
+            'password'      => 'nullable|string|min:6|confirmed',
         ]);
 
         try {
-            $contractor = Contractor::findOrFail($id);
-
             $contractor->update([
                 'name'         => $validated['name'],
                 'company_name' => $validated['company_name'] ?? null,
@@ -101,6 +103,18 @@ class ContractorController extends Controller
                 'city'         => $validated['city'] ?? null,
                 'is_active'    => $validated['is_active'] ?? 0,
             ]);
+
+            // Also update the associated User if it exists
+            if ($contractor->user) {
+                $userData = [
+                    'name'  => $validated['name'],
+                    'email' => $validated['email'],
+                ];
+                if (!empty($validated['password'])) {
+                    $userData['password'] = \Illuminate\Support\Facades\Hash::make($validated['password']);
+                }
+                $contractor->user->update($userData);
+            }
 
             if ($request->filled('categories')) {
                 $contractor->categories()->sync($request->categories);
