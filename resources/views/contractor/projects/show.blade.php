@@ -200,8 +200,8 @@
                                     
                                     <button type="button" 
                                         onclick="openProgressModal('{{ $milestone->id }}', '{{ $milestone->title }}', {{ $milestone->progress ?? 0 }})"
-                                        {{ $milestone->status == 'paid' ? 'disabled' : '' }}
-                                        class="w-full text-left flex items-center justify-between {{ $milestone->status == 'paid' ? 'bg-emerald-50/50' : 'bg-gray-50/50 hover:bg-white hover:shadow-lg hover:border-indigo-50' }} p-4 rounded-2xl border border-transparent transition-all group">
+                                        {{ ($milestone->status == 'paid' || $milestone->status == 'completed' || $milestone->progress >= 100) ? 'disabled' : '' }}
+                                        class="w-full text-left flex items-center justify-between {{ ($milestone->status == 'paid' || $milestone->status == 'completed') ? 'bg-emerald-50/50' : 'bg-gray-50/50 hover:bg-white hover:shadow-lg hover:border-indigo-50' }} p-4 rounded-2xl border border-transparent transition-all group">
                                         <div class="flex-1">
                                             <div class="flex justify-between items-center mb-2">
                                                 <p class="text-[10px] font-bold text-gray-900">{{ $milestone->title }}</p>
@@ -214,9 +214,23 @@
                                         </div>
                                         <div class="text-right pl-6 border-l border-gray-100 ml-6 shrink-0">
                                             <p class="text-[10px] font-black text-gray-900">₹{{ number_format($milestone->amount) }}</p>
-                                            <span class="text-[8px] font-bold tracking-tighter {{ $milestone->status == 'paid' ? 'text-emerald-600' : 'text-indigo-400' }}">
-                                                {{ $milestone->status == 'paid' ? __('COMPLETED') : __('REPORT PROGRESS') }}
-                                            </span>
+                                            @if($milestone->status == 'paid')
+                                                <span class="text-[8px] font-bold tracking-tighter text-emerald-600">
+                                                    {{ __('PAID') }}
+                                                </span>
+                                            @elseif($milestone->status == 'completed')
+                                                <span class="text-[8px] font-bold tracking-tighter text-teal-600">
+                                                    {{ __('COMPLETED') }}
+                                                </span>
+                                            @elseif($milestone->progress >= 100)
+                                                <span class="text-[8px] font-bold tracking-tighter text-amber-500 animate-pulse">
+                                                    {{ __('PENDING VERIFICATION') }}
+                                                </span>
+                                            @else
+                                                <span class="text-[8px] font-bold tracking-tighter text-indigo-400">
+                                                    {{ __('REPORT PROGRESS') }}
+                                                </span>
+                                            @endif
                                         </div>
                                     </button>
                                 </div>

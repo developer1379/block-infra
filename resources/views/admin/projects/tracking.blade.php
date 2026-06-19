@@ -195,17 +195,23 @@
                                 <div class="mb-4 space-y-3">
                                     <div class="flex justify-between items-center">
                                         @php
+                                            $isPendingVerification = ($milestone->progress >= 100 && !in_array($milestone->status, ['completed', 'paid']));
                                             $statusClasses = [
                                                 'completed' => 'bg-emerald-50 text-emerald-700 border-emerald-100',
                                                 'paid' => 'bg-blue-50 text-blue-700 border-blue-100',
                                                 'in_progress' => 'bg-amber-50 text-amber-700 border-amber-100',
                                                 'default' => 'bg-gray-50 text-gray-600 border-gray-100',
                                             ];
-                                            $class = $statusClasses[$milestone->status] ?? $statusClasses['default'];
+                                            $class = $isPendingVerification 
+                                                ? 'bg-rose-50 text-rose-700 border-rose-100 animate-pulse' 
+                                                : ($statusClasses[$milestone->status] ?? $statusClasses['default']);
+                                            $statusText = $isPendingVerification 
+                                                ? 'Pending Verification' 
+                                                : str_replace('_', ' ', $milestone->status);
                                         @endphp
                                         <span
                                             class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase border {{ $class }}">
-                                            {{ str_replace('_', ' ', $milestone->status) }}
+                                            {{ $statusText }}
                                         </span>
                                         <span class="text-[10px] font-bold text-indigo-600">{{ $milestone->progress }}%</span>
                                     </div>
@@ -226,6 +232,18 @@
                                         ₹{{ number_format($milestone->amount, 2) }}
                                     </div>
                                 </div>
+
+                                @if($isPendingVerification)
+                                    <div class="mt-3 pt-3 border-t border-gray-100">
+                                        <form action="{{ route('admin.milestones.status', $milestone->id) }}" method="POST">
+                                            @csrf @method('PATCH')
+                                            <input type="hidden" name="status" value="completed">
+                                            <button type="submit" class="w-full py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold rounded transition-colors shadow-sm flex items-center justify-center gap-1">
+                                                <i class="bi bi-shield-check"></i> Verify & Approve Completed
+                                            </button>
+                                        </form>
+                                    </div>
+                                @endif
                             </div>
                         @empty
                             <div
