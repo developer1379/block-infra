@@ -213,13 +213,13 @@ class ProjectRepository implements ProjectRepositoryInterface
     {
         $project = $this->find($projectId);
         
-        $contractor = \App\Models\Contractor::where('user_id', $contractorUserId)->first();
+        $contractor = $contractorUserId ? \App\Models\Contractor::where('user_id', $contractorUserId)->first() : null;
         $contractorUuid = $contractor ? $contractor->id : null;
 
         // Update project
         $project->update([
             'contractor_id' => $contractorUuid,
-            'status' => 'awarded'
+            'status' => $contractorUuid ? 'awarded' : 'open'
         ]);
 
         // Update all project works to this contractor (using User ID as per our schema)
@@ -236,15 +236,17 @@ class ProjectRepository implements ProjectRepositoryInterface
         
         // Ensure project status is updated
         $project = $work->project;
-        if ($project->status == 'open') {
-            $project->update(['status' => 'awarded']);
-        }
+        if ($contractorUserId) {
+            if ($project->status == 'open') {
+                $project->update(['status' => 'awarded']);
+            }
 
-        // Also update project.contractor_id if not set (optional, but helps with backward compatibility)
-        if (!$project->contractor_id) {
-            $contractor = \App\Models\Contractor::where('user_id', $contractorUserId)->first();
-            if ($contractor) {
-                $project->update(['contractor_id' => $contractor->id]);
+            // Also update project.contractor_id if not set (optional, but helps with backward compatibility)
+            if (!$project->contractor_id) {
+                $contractor = \App\Models\Contractor::where('user_id', $contractorUserId)->first();
+                if ($contractor) {
+                    $project->update(['contractor_id' => $contractor->id]);
+                }
             }
         }
 

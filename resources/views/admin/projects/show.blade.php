@@ -264,8 +264,8 @@
                                     <select name="contractor_id" class="w-full h-11 px-4 rounded-xl border-slate-200 text-sm focus:ring-indigo-500 focus:border-indigo-500">
                                         <option value="">{{ __('Choose a contractor...') }}</option>
                                         @foreach($contractors as $contractor)
-                                            <option value="{{ $contractor->id }}" {{ $project->contractor_id == $contractor->id ? 'selected' : '' }}>
-                                                {{ $contractor->name }} ({{ $contractor->company_name ?? 'Individual' }})
+                                            <option value="{{ $contractor->id }}" {{ $project->contractor_id == $contractor->contractor?->id ? 'selected' : '' }}>
+                                                {{ $contractor->name }} ({{ $contractor->contractor?->company_name ?? 'Individual' }})
                                             </option>
                                         @endforeach
                                     </select>

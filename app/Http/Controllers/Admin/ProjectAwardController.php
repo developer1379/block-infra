@@ -58,7 +58,7 @@ class ProjectAwardController extends Controller
     public function directAllocate(\Illuminate\Http\Request $request, $projectId)
     {
         $request->validate([
-            'contractor_id' => 'required|exists:users,id'
+            'contractor_id' => 'nullable|exists:users,id'
         ]);
 
         try {
@@ -69,11 +69,11 @@ class ProjectAwardController extends Controller
                 [
                     'bid_id' => null,
                     'awarded_to' => $request->contractor_id,
-                    'awarded_at' => now()
+                    'awarded_at' => $request->contractor_id ? now() : null
                 ]
             );
 
-            return redirect()->back()->with('success', 'Project allocated directly to contractor.');
+            return redirect()->back()->with('success', 'Project allocation updated successfully.');
         } catch (\Exception $e) {
             \Log::error('Direct Allocation Error: ' . $e->getMessage());
             return back()->with('error', 'Failed to allocate project.');
@@ -83,13 +83,13 @@ class ProjectAwardController extends Controller
     public function allocateWork(\Illuminate\Http\Request $request, $projectWorkId)
     {
         $request->validate([
-            'contractor_id' => 'required|exists:users,id'
+            'contractor_id' => 'nullable|exists:users,id'
         ]);
 
         try {
             $this->projects->assignWorkToContractor($projectWorkId, $request->contractor_id);
 
-            return redirect()->back()->with('success', 'Work assigned to contractor.');
+            return redirect()->back()->with('success', 'Work assignment updated.');
         } catch (\Exception $e) {
             \Log::error('Work Allocation Error: ' . $e->getMessage());
             return back()->with('error', 'Failed to assign work.');
