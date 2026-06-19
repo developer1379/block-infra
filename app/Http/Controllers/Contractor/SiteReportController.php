@@ -45,6 +45,13 @@ class SiteReportController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'project_id' => 'required|exists:projects,id',
+            'report_date' => 'required|date',
+            'weather_condition' => 'required|string',
+            'work_summary' => 'required|string',
+            'challenges' => 'nullable|string',
+            'next_day_plan' => 'nullable|string',
             'progress_percentage' => 'required|integer|min:0|max:100',
             'photos.*' => 'nullable|image|max:2048',
             'materials' => 'nullable|array',
