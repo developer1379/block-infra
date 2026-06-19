@@ -76,7 +76,7 @@
                         </h3>
 
                         <p class="text-xs text-slate-500 line-clamp-2 mb-3 leading-relaxed font-medium">
-                            {{ $project->description ?? __('No description provided.') }}
+                            {{ $project->description ? strip_tags($project->description) : __('No description provided.') }}
                         </p>
                         
                         <!-- Tags Section (compact, rounded-none) -->
