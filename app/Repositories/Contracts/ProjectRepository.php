@@ -105,15 +105,16 @@ class ProjectRepository implements ProjectRepositoryInterface
 
         if (auth()->user()->hasRole('contractor')) {
             $contractor = auth()->user()->contractor;
-            $contractorId = auth()->id();
+            $contractorUserId = auth()->id();
 
             if (!$contractor) {
                 return collect([]);
             }
 
+            $contractorUuid = $contractor->id;
             $contractorCategoryIds = $contractor->categories->pluck('id')->toArray();
 
-            $query->where(function ($q) use ($contractorCategoryIds, $contractorId) {
+            $query->where(function ($q) use ($contractorCategoryIds, $contractorUserId, $contractorUuid) {
                 // 1. Projects matching contractor categories (if status is open)
                 if (!empty($contractorCategoryIds)) {
                     $q->whereHas('categories', function ($catQ) use ($contractorCategoryIds) {
@@ -122,16 +123,16 @@ class ProjectRepository implements ProjectRepositoryInterface
                 }
 
                 // 2. Projects directly assigned to this contractor
-                $q->orWhere('contractor_id', $contractorId);
+                $q->orWhere('contractor_id', $contractorUuid);
 
                 // 3. Projects where they have at least one assigned work item
-                $q->orWhereHas('projectWorks', function ($workQ) use ($contractorId) {
-                    $workQ->where('contractor_id', $contractorId);
+                $q->orWhereHas('projectWorks', function ($workQ) use ($contractorUserId) {
+                    $workQ->where('contractor_id', $contractorUserId);
                 });
 
                 // 4. Projects where they have submitted a bid (to keep tracking them)
-                $q->orWhereHas('bids', function ($bidQ) use ($contractorId) {
-                    $bidQ->where('contractor_id', $contractorId);
+                $q->orWhereHas('bids', function ($bidQ) use ($contractorUserId) {
+                    $bidQ->where('contractor_id', $contractorUserId);
                 });
             });
         }

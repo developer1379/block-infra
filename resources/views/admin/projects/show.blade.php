@@ -257,23 +257,49 @@
                             <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-4 flex items-center gap-2">
                                 <i class="fa-solid fa-building-user text-indigo-600"></i> {{ __('Direct Whole Project Allocation') }}
                             </h4>
-                            <form action="{{ route('admin.projects.allocate-direct', $project->id) }}" method="POST" class="flex flex-col md:flex-row gap-4 items-end">
-                                @csrf
-                                <div class="flex-1 w-full">
-                                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">{{ __('Select Contractor') }}</label>
-                                    <select name="contractor_id" class="w-full h-11 px-4 rounded-xl border-slate-200 text-sm focus:ring-indigo-500 focus:border-indigo-500">
-                                        <option value="">{{ __('Choose a contractor...') }}</option>
-                                        @foreach($contractors as $contractor)
-                                            <option value="{{ $contractor->id }}" {{ $project->contractor_id == $contractor->contractor?->id ? 'selected' : '' }}>
-                                                {{ $contractor->name }} ({{ $contractor->contractor?->company_name ?? 'Individual' }})
-                                            </option>
-                                        @endforeach
-                                    </select>
+                            @if($project->contractor_id)
+                                <div class="bg-white rounded-xl p-4 border border-indigo-50 flex items-center justify-between">
+                                    <div>
+                                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ __('Allocated Contractor') }}</p>
+                                        <p class="text-sm font-bold text-slate-800 mt-1">
+                                            {{ $project->contractor->name ?? 'Unknown Contractor' }} 
+                                            @if($project->contractor->company_name)
+                                                ({{ $project->contractor->company_name }})
+                                            @endif
+                                        </p>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="px-3 py-1 bg-emerald-50 text-emerald-700 rounded-lg border border-emerald-100 text-[10px] font-black uppercase">
+                                            {{ __('Awarded & Allocated') }}
+                                        </span>
+                                        <form action="{{ route('admin.projects.allocate-direct', $project->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to unassign this contractor? This will also revert project status to open.');">
+                                            @csrf
+                                            <input type="hidden" name="contractor_id" value="">
+                                            <button type="submit" class="p-1 text-rose-600 hover:bg-rose-50 rounded transition-colors" title="Unassign Contractor">
+                                                <i class="fa-solid fa-circle-xmark text-lg"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
-                                <button type="submit" class="px-6 py-2.5 bg-indigo-600 text-white text-xs font-bold rounded-xl hover:bg-indigo-700 transition-all flex items-center gap-2 whitespace-nowrap h-11">
-                                    <i class="fa-solid fa-check-circle"></i> {{ __('Allocate Project') }}
-                                </button>
-                            </form>
+                            @else
+                                <form action="{{ route('admin.projects.allocate-direct', $project->id) }}" method="POST" class="flex flex-col md:flex-row gap-4 items-end">
+                                    @csrf
+                                    <div class="flex-1 w-full">
+                                        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">{{ __('Select Contractor') }}</label>
+                                        <select name="contractor_id" class="w-full h-11 px-4 rounded-xl border-slate-200 text-sm focus:ring-indigo-500 focus:border-indigo-500">
+                                            <option value="">{{ __('Choose a contractor...') }}</option>
+                                            @foreach($contractors as $contractor)
+                                                <option value="{{ $contractor->id }}" {{ $project->contractor_id == $contractor->contractor?->id ? 'selected' : '' }}>
+                                                    {{ $contractor->name }} ({{ $contractor->contractor?->company_name ?? 'Individual' }})
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="px-6 py-2.5 bg-indigo-600 text-white text-xs font-bold rounded-xl hover:bg-indigo-700 transition-all flex items-center gap-2 whitespace-nowrap h-11">
+                                        <i class="fa-solid fa-check-circle"></i> {{ __('Allocate Project') }}
+                                    </button>
+                                </form>
+                            @endif
                             <p class="text-[9px] text-slate-400 mt-3 italic">{{ __('This will assign the entire project and all its work items to the selected contractor.') }}</p>
                         </div>
 
