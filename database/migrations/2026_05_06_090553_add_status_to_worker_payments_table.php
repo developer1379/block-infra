@@ -10,10 +10,12 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::table('worker_payments', function (Blueprint $table) {
-            // Add the status column, defaulting to 'pending'
-            $table->string('status')->default('pending')->after('amount');
-        });
+        if (!Schema::hasColumn('worker_payments', 'status')) {
+            Schema::table('worker_payments', function (Blueprint $table) {
+                // Add the status column, defaulting to 'pending'
+                $table->string('status')->default('pending')->after('amount');
+            });
+        }
     }
 
     public function down()

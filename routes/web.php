@@ -60,4 +60,23 @@ Route::get('/dashboard', function () {
         return redirect()->route('contractor.dashboard.index');
     }
     return redirect()->route('website.home');
-})->middleware(['auth'])->name('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+// Forgot/Reset Password Routes
+Route::middleware('guest')->group(function () {
+    Route::get('/forgot-password', [AuthController::class, 'forgotPasswordPage'])->name('password.request');
+    Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
+    Route::get('/reset-password/{token}', [AuthController::class, 'resetPasswordPage'])->name('password.reset');
+    Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
+});
+
+// Email Verification Routes
+Route::middleware('auth')->group(function () {
+    Route::get('/email/verify', [AuthController::class, 'verifyNotice'])->name('verification.notice');
+    Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])
+        ->middleware(['signed'])
+        ->name('verification.verify');
+    Route::post('/email/verification-notification', [AuthController::class, 'verifyResend'])
+        ->middleware(['throttle:6,1'])
+        ->name('verification.send');
+});

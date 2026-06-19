@@ -279,6 +279,18 @@
         </div>
     @endcanany
 
+    {{-- EMAIL SETTINGS --}}
+    @if (auth()->user()->hasRole('admin'))
+        <a href="{{ route('admin.settings.edit') }}"
+            class="group flex items-center px-3.5 py-2.5 text-sm font-medium rounded-xl transition-all duration-200
+           {{ request()->routeIs('admin.settings.edit')
+               ? 'bg-primary text-white shadow-lg shadow-teal-500/30'
+               : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+            <i class="fa-solid fa-envelope-open-text w-5 text-center transition-transform group-hover:scale-110 {{ request()->routeIs('admin.settings.edit') ? 'text-white' : 'text-slate-400 group-hover:text-primary' }}"></i>
+            <span class="ml-3">Email Settings</span>
+        </a>
+    @endif
+
     {{-- CONTRACTOR PROFILE --}}
     @if (auth()->user()->hasRole('contractor'))
         <a href="{{ route('contractor.profile.edit') }}"

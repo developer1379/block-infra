@@ -29,10 +29,13 @@ use App\Http\Controllers\Admin\WorkerPaymentController;
 */
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\SettingController;
 
 // ... other imports ...
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/settings', [SettingController::class, 'edit'])->name('settings.edit');
+Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
 
 // Resource Management
 Route::resource('categories', CategoryController::class);
