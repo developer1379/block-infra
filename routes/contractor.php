@@ -47,6 +47,7 @@ Route::resource('payments', WorkerPaymentController::class);
 
 // Site Activities
 Route::resource('site-reports', \App\Http\Controllers\Contractor\SiteReportController::class);
+Route::resource('feedback', \App\Http\Controllers\Contractor\FeedbackController::class);
 Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
 Route::post('/inventory', [InventoryController::class, 'store'])->name('inventory.store');
 

@@ -1,0 +1,29 @@
+
+   INFO  Running migrations.  
+
+  2026_06_20_083106_create_feedback_table .......................... 98ms FAIL
+
+   Illuminate\Database\QueryException 
+
+  SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'feedback' already exists (Connection: mysql, SQL: create table `feedback` (`id` bigint unsigned not null auto_increment primary key, `contractor_id` bigint unsigned not null, `project_id` bigint unsigned null, `type` varchar(255) not null default 'issue', `subject` varchar(255) not null, `description` text not null, `attachment` varchar(255) null, `status` varchar(255) not null default 'pending', `admin_reply` text null, `created_at` timestamp null, `updated_at` timestamp null) default character set utf8mb4 collate 'utf8mb4_unicode_ci')
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:829
+    825▕                     $this->getName(), $query, $this->prepareBindings($bindings), $e
+    826▕                 );
+    827▕             }
+    828▕ 
+  ➜ 829▕             throw new QueryException(
+    830▕                 $this->getName(), $query, $this->prepareBindings($bindings), $e
+    831▕             );
+    832▕         }
+    833▕     }
+
+      [2m+9 vendor frames [22m
+
+  10  database/migrations/2026_06_20_083106_create_feedback_table.php:14
+      Illuminate\Support\Facades\Facade::__callStatic("create")
+      [2m+24 vendor frames [22m
+
+  35  artisan:35
+      Illuminate\Foundation\Console\Kernel::handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+

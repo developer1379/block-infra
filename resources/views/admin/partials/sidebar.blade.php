@@ -251,6 +251,24 @@
         </div>
     </div>
 
+    {{-- SUPPORT & FEEDBACK --}}
+    <div x-data="{ open: {{ request()->routeIs('admin.feedback.*') ? 'true' : 'false' }} }" class="space-y-1">
+        <button @click="open = !open"
+            class="w-full group flex items-center justify-between px-3.5 py-2.5 text-sm font-medium rounded-xl transition-all duration-200
+            {{ request()->routeIs('admin.feedback.*') ? 'bg-teal-50 text-primary' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900' }}">
+            <div class="flex items-center">
+                <i class="fa-solid fa-headset w-5 text-center transition-colors {{ request()->routeIs('admin.feedback.*') ? 'text-primary' : 'text-slate-400 group-hover:text-primary' }}"></i>
+                <span class="ml-3">Support & Issues</span>
+            </div>
+            <i class="fa-solid fa-chevron-right text-[10px] text-slate-400 transition-transform duration-300"
+                :class="open ? 'rotate-90 text-primary' : ''"></i>
+        </button>
+        <div x-show="open" x-collapse x-cloak class="relative pl-9 space-y-1">
+            <div class="absolute left-[22px] top-0 bottom-0 w-[1.5px] bg-slate-100"></div>
+            <a href="{{ route('admin.feedback.index') }}" class="relative block py-2 pl-3 text-sm rounded-lg transition-colors duration-200 {{ request()->routeIs('admin.feedback.index') ? 'text-primary font-semibold bg-teal-50/50' : 'text-slate-500 hover:text-primary hover:bg-slate-50' }}">Contractor Tickets</a>
+        </div>
+    </div>
+
     {{-- ACCESS CONTROL --}}
     @canany(['view roles', 'view permissions'])
         <div x-data="{ open: {{ request()->routeIs('admin.roles.*') || request()->routeIs('admin.permissions.*') ? 'true' : 'false' }} }" class="space-y-1">

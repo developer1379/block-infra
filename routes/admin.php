@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\MaterialController;
 use App\Http\Controllers\Admin\FinanceController;
 use App\Http\Controllers\Admin\SiteReportController;
 use App\Http\Controllers\Admin\WorkerPaymentController;
+use App\Http\Controllers\Admin\FeedbackController;
 
 /*
 |--------------------------------------------------------------------------
@@ -78,3 +79,6 @@ Route::resource('site-reports', SiteReportController::class);
 Route::get('worker-payments', [WorkerPaymentController::class, 'index'])->name('worker-payments.index');
 Route::patch('worker-payments/{id}/verify', [WorkerPaymentController::class, 'verify'])->name('worker-payments.verify');
 Route::patch('worker-payments/{id}/reject', [WorkerPaymentController::class, 'reject'])->name('worker-payments.reject');
+
+// Support & Feedback
+Route::resource('feedback', FeedbackController::class)->only(['index', 'show', 'update']);

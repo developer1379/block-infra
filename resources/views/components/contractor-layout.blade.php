@@ -193,6 +193,14 @@
                     {{ __('Site Reports') }}
                 </a>
 
+                <p class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 mt-6">{{ __('Help & Support') }}</p>
+
+                <a href="{{ route('contractor.feedback.index') }}"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('contractor.feedback*') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900' }}">
+                    <i class="bi bi-headset"></i>
+                    {{ __('Site Issues & Feedback') }}
+                </a>
+
                 <p class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 mt-6">{{ __('Financials') }}</p>
 
                 <a href="{{ route('contractor.invoices.index') }}"
