@@ -51,7 +51,15 @@ class ProjectTrackingController extends Controller
                 : 0;
         }
 
-        return view('admin.projects.tracking', compact('project', 'overallProgress', 'materials'));
+        $groupedMaterials = \App\Models\MaterialInventory::where('project_id', $project->id)
+            ->with(['material' => function($q) {
+                $q->select('id', 'name', 'unit');
+            }])
+            ->orderBy('entry_date', 'desc')
+            ->get()
+            ->groupBy('material_id');
+
+        return view('admin.projects.tracking', compact('project', 'overallProgress', 'materials', 'groupedMaterials'));
     }
 
     /**
