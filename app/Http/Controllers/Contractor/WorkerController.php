@@ -56,10 +56,21 @@ class WorkerController extends Controller
                 $data['identity_proof'] = $request->file('identity_proof')->store('workers/identity', 'public');
             }
             
-            $this->workers->create($data);
+            $worker = $this->workers->create($data);
+            
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'worker' => $worker,
+                    'message' => 'Worker added successfully.'
+                ]);
+            }
             return redirect()->route('contractor.workers.index')->with('success', 'Worker added to your team.');
         } catch (\Exception $e) {
             Log::error('Contractor Worker Store Error: ' . $e->getMessage());
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => 'Unable to add worker.']);
+            }
             return back()->with('error', 'Unable to add worker.')->withInput();
         }
     }

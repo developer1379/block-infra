@@ -30,11 +30,12 @@
                     <!-- Worker Selection -->
                     <div class="space-y-3">
                         <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Worker') }}</label>
-                        <select name="worker_id" required class="select2-init w-full">
+                        <select name="worker_id" id="workerSelect" required class="select2-init w-full">
                             <option value="">{{ __('Select Worker') }}</option>
                             @foreach($workers as $worker)
                                 <option value="{{ $worker->id }}">{{ $worker->name }} ({{ __($worker->specialization) }})</option>
                             @endforeach
+                            <option value="other">{{ __('Other (Add New Worker)') }}</option>
                         </select>
                     </div>
                 </div>
@@ -162,6 +163,58 @@
         </div>
     </div>
 
+    <!-- Add Worker Modal -->
+    <div id="addWorkerModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-[32px] w-full max-w-lg overflow-hidden shadow-2xl animate-fade-in">
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-indigo-600 text-white">
+                <h3 class="font-bold text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-user-plus"></i> {{ __('Add New Worker') }}
+                </h3>
+                <button type="button" onclick="closeWorkerModal()" class="text-white/80 hover:text-white transition-colors">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form id="addWorkerForm" class="p-6 space-y-4">
+                @csrf
+                <input type="hidden" name="status" value="active">
+                <div>
+                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Name') }}</label>
+                    <input type="text" name="name" required class="w-full rounded-xl border-gray-100 bg-gray-50/50 p-3 focus:bg-white transition-all text-sm">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Phone') }}</label>
+                    <input type="text" name="phone" class="w-full rounded-xl border-gray-100 bg-gray-50/50 p-3 focus:bg-white transition-all text-sm">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Specialization') }}</label>
+                    <input type="text" name="specialization" class="w-full rounded-xl border-gray-100 bg-gray-50/50 p-3 focus:bg-white transition-all text-sm">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Daily Wage') }}</label>
+                        <input type="number" name="daily_wage" step="0.01" class="w-full rounded-xl border-gray-100 bg-gray-50/50 p-3 focus:bg-white transition-all text-sm">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Identity Type') }}</label>
+                        <select name="identity_type" required class="w-full rounded-xl border-gray-100 bg-gray-50/50 p-3 focus:bg-white transition-all text-sm">
+                            <option value="aadhar">{{ __('Aadhar') }}</option>
+                            <option value="pan">{{ __('PAN') }}</option>
+                            <option value="voter_id">{{ __('Voter ID') }}</option>
+                            <option value="driving_license">{{ __('Driving License') }}</option>
+                            <option value="other">{{ __('Other') }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="pt-4 border-t border-gray-100 flex justify-end gap-3">
+                    <button type="button" onclick="closeWorkerModal()" class="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-600 text-xs font-bold hover:bg-gray-50">{{ __('Cancel') }}</button>
+                    <button type="submit" id="addWorkerBtn" class="px-5 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 flex items-center gap-2">
+                        {{ __('Save Worker') }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     @push('scripts')
     <script>
         const video = document.getElementById('video');
@@ -253,7 +306,70 @@
                 placeholder: '{{ __('Search and select...') }}',
                 width: '100%'
             });
+
+            // Handle "Other" selection for Worker
+            $('#workerSelect').on('change', function() {
+                if ($(this).val() === 'other') {
+                    document.getElementById('addWorkerModal').classList.remove('hidden');
+                    // Reset to empty so 'other' isn't accidentally submitted if closed
+                    $(this).val('').trigger('change.select2');
+                }
+            });
+
+            // Handle AJAX form submission for new Worker
+            $('#addWorkerForm').on('submit', function(e) {
+                e.preventDefault();
+                let formData = new FormData(this);
+                let btn = $('#addWorkerBtn');
+                btn.prop('disabled', true).html('<i class="fa-solid fa-spinner animate-spin"></i> Saving...');
+                
+                $.ajax({
+                    url: "{{ route('contractor.workers.store') }}",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'Accept': 'application/json'
+                    },
+                    success: function(response) {
+                        if(response.success) {
+                            let worker = response.worker;
+                            let newOption = new Option(worker.name + ' (' + (worker.specialization || 'N/A') + ')', worker.id, false, true);
+                            $('#workerSelect').append(newOption).trigger('change');
+                            closeWorkerModal();
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: response.message,
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                        } else {
+                            Swal.fire('Error', response.message, 'error');
+                        }
+                    },
+                    error: function(xhr) {
+                        let errors = xhr.responseJSON?.errors;
+                        let msg = 'Failed to add worker.';
+                        if(errors) {
+                            msg = Object.values(errors).map(e => e.join('\n')).join('\n');
+                        }
+                        Swal.fire('Error', msg, 'error');
+                    },
+                    complete: function() {
+                        btn.prop('disabled', false).html('{{ __('Save Worker') }}');
+                    }
+                });
+            });
         });
+
+        function closeWorkerModal() {
+            document.getElementById('addWorkerModal').classList.add('hidden');
+            document.getElementById('addWorkerForm').reset();
+        }
     </script>
     <style>
         .select2-container--default .select2-selection--single {
