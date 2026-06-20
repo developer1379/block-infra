@@ -118,23 +118,99 @@
                 </div>
 
                 <!-- Site Inventory -->
-                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
-                    <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">{{ __('Latest Material Logs') }}</h4>
-                    <div class="space-y-3">
-                        @forelse($materialLogs as $log)
-                            <div class="flex items-center justify-between py-2 border-b border-slate-50 last:border-0">
+                <div x-data="{ openMaterialId: null }" class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 relative">
+                    <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">{{ __('Site Inventory Overview') }}</h4>
+                    <div class="space-y-2">
+                        @forelse($groupedMaterials as $materialId => $logs)
+                            @php
+                                $material = $logs->first()->material;
+                                $totalIn = $logs->where('log_type', 'in')->sum('quantity');
+                                $totalOut = $logs->where('log_type', 'out')->sum('quantity');
+                                $balance = $totalIn - $totalOut;
+                            @endphp
+                            <div @click="openMaterialId = {{ $material->id }}" class="flex items-center justify-between p-3 rounded-xl border border-slate-50 hover:border-indigo-100 hover:bg-indigo-50/30 cursor-pointer transition-all group">
                                 <div>
-                                    <p class="text-xs font-bold text-slate-800">{{ $log->material->name }}</p>
-                                    <p class="text-[9px] text-slate-400 uppercase">{{ $log->log_type }}</p>
+                                    <p class="text-xs font-bold text-slate-800 group-hover:text-indigo-700 transition-colors">{{ $material->name }}</p>
+                                    <p class="text-[9px] text-slate-400 uppercase flex items-center gap-1 mt-0.5">
+                                        <span class="text-emerald-500"><i class="fa-solid fa-arrow-down"></i> In: {{ $totalIn }}</span> | 
+                                        <span class="text-rose-500"><i class="fa-solid fa-arrow-up"></i> Out: {{ $totalOut }}</span>
+                                    </p>
                                 </div>
-                                <p class="text-xs font-black {{ $log->log_type == 'out' ? 'text-rose-500' : 'text-emerald-500' }}">
-                                    {{ $log->log_type == 'out' ? '-' : '+' }}{{ $log->quantity }}
-                                </p>
+                                <div class="text-right">
+                                    <p class="text-sm font-black {{ $balance <= 0 ? 'text-rose-600' : 'text-emerald-600' }}">
+                                        {{ $balance }}
+                                    </p>
+                                    <p class="text-[8px] font-bold text-slate-400 uppercase">{{ $material->unit ?? 'Unit' }}</p>
+                                </div>
                             </div>
                         @empty
-                            <p class="text-[10px] text-slate-300 italic py-4 text-center">{{ __('No recent movement.') }}</p>
+                            <p class="text-[10px] text-slate-300 italic py-4 text-center">{{ __('No materials recorded for this site.') }}</p>
                         @endforelse
                     </div>
+
+                    <!-- Modals for Material Transactions -->
+                    @foreach($groupedMaterials as $materialId => $logs)
+                        @php
+                            $material = $logs->first()->material;
+                        @endphp
+                        <div x-show="openMaterialId === {{ $material->id }}" x-cloak
+                             class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 animate-fade-in">
+                            <div @click.away="openMaterialId = null" class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col overflow-hidden">
+                                <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                                    <div>
+                                        <h3 class="text-lg font-bold text-slate-800">{{ $material->name }} {{ __('Transactions') }}</h3>
+                                        <p class="text-[10px] text-slate-500 uppercase tracking-widest mt-1">{{ __('Unit:') }} {{ $material->unit ?? 'Unit' }}</p>
+                                    </div>
+                                    <button @click="openMaterialId = null" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-200 text-slate-500 hover:bg-rose-100 hover:text-rose-600 transition-colors">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
+                                </div>
+                                <div class="p-0 overflow-y-auto custom-scrollbar flex-1">
+                                    <table class="w-full text-left border-collapse">
+                                        <thead class="bg-slate-50/80 sticky top-0 z-10 backdrop-blur-sm">
+                                            <tr>
+                                                <th class="px-6 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('Date') }}</th>
+                                                <th class="px-6 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('Type') }}</th>
+                                                <th class="px-6 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('Qty') }}</th>
+                                                <th class="px-6 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('By') }}</th>
+                                                <th class="px-6 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('Notes') }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-slate-50">
+                                            @foreach($logs as $log)
+                                                <tr class="hover:bg-slate-50/50 transition-colors">
+                                                    <td class="px-6 py-3">
+                                                        <p class="text-xs font-bold text-slate-800">{{ $log->created_at->format('M d, Y') }}</p>
+                                                        <p class="text-[9px] text-slate-400">{{ $log->created_at->format('h:i A') }}</p>
+                                                    </td>
+                                                    <td class="px-6 py-3">
+                                                        @if($log->log_type == 'in')
+                                                            <span class="px-2 py-1 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-md text-[9px] font-bold uppercase tracking-widest flex items-center gap-1 w-max">
+                                                                <i class="fa-solid fa-arrow-down"></i> IN
+                                                            </span>
+                                                        @else
+                                                            <span class="px-2 py-1 bg-rose-50 text-rose-700 border border-rose-100 rounded-md text-[9px] font-bold uppercase tracking-widest flex items-center gap-1 w-max">
+                                                                <i class="fa-solid fa-arrow-up"></i> OUT
+                                                            </span>
+                                                        @endif
+                                                    </td>
+                                                    <td class="px-6 py-3 text-xs font-black {{ $log->log_type == 'in' ? 'text-emerald-600' : 'text-rose-600' }}">
+                                                        {{ $log->log_type == 'in' ? '+' : '-' }}{{ $log->quantity }}
+                                                    </td>
+                                                    <td class="px-6 py-3 text-xs text-slate-600 font-medium">
+                                                        {{ $log->user ? $log->user->name : 'System' }}
+                                                    </td>
+                                                    <td class="px-6 py-3 text-[10px] text-slate-500 italic max-w-[150px] truncate" title="{{ $log->notes }}">
+                                                        {{ $log->notes ?: '-' }}
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
             </div>
 

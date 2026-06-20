@@ -136,11 +136,15 @@ class ProjectController extends Controller
                 }])
                 ->get();
 
-            $materialLogs = \App\Models\MaterialInventory::where('project_id', $project->id)
-                ->with('material')
-                ->latest()
-                ->take(5)
-                ->get();
+            $groupedMaterials = \App\Models\MaterialInventory::where('project_id', $project->id)
+                ->with(['material' => function($q) {
+                    $q->select('id', 'name', 'unit');
+                }, 'user' => function($q) {
+                    $q->select('id', 'name');
+                }])
+                ->orderBy('created_at', 'desc')
+                ->get()
+                ->groupBy('material_id');
 
             $contractors = \App\Models\User::role('contractor')->with('contractor')->orderBy('name')->get();
 
@@ -150,7 +154,7 @@ class ProjectController extends Controller
                 'attendanceToday', 
                 'totalProjectPayouts', 
                 'pendingProjectPayouts',
-                'materialLogs',
+                'groupedMaterials',
                 'linkedWorkers',
                 'contractors'
             ));
