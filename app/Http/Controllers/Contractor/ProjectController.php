@@ -108,7 +108,7 @@ class ProjectController extends Controller
 
         $materialLogs = \App\Models\MaterialInventory::where('project_id', $project->id)
             ->with('material')
-            ->latest()
+            ->latest('entry_date')
             ->take(5)
             ->get();
 

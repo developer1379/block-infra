@@ -137,12 +137,11 @@ class ProjectController extends Controller
                 ->get();
 
             $groupedMaterials = \App\Models\MaterialInventory::where('project_id', $project->id)
+            $groupedMaterials = \App\Models\MaterialInventory::where('project_id', $project->id)
                 ->with(['material' => function($q) {
                     $q->select('id', 'name', 'unit');
-                }, 'user' => function($q) {
-                    $q->select('id', 'name');
                 }])
-                ->orderBy('created_at', 'desc')
+                ->orderBy('entry_date', 'desc')
                 ->get()
                 ->groupBy('material_id');
 

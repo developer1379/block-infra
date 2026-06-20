@@ -124,8 +124,8 @@
                         @forelse($groupedMaterials as $materialId => $logs)
                             @php
                                 $material = $logs->first()->material;
-                                $totalIn = $logs->where('log_type', 'in')->sum('quantity');
-                                $totalOut = $logs->where('log_type', 'out')->sum('quantity');
+                                $totalIn = $logs->whereIn('type', ['in', 'purchase'])->sum('quantity');
+                                $totalOut = $logs->where('type', 'consumption')->sum('quantity');
                                 $balance = $totalIn - $totalOut;
                             @endphp
                             <div @click="openMaterialId = {{ $material->id }}" class="flex items-center justify-between p-3 rounded-xl border border-slate-50 hover:border-indigo-100 hover:bg-indigo-50/30 cursor-pointer transition-all group">
@@ -172,7 +172,7 @@
                                                 <th class="px-6 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('Date') }}</th>
                                                 <th class="px-6 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('Type') }}</th>
                                                 <th class="px-6 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('Qty') }}</th>
-                                                <th class="px-6 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('By') }}</th>
+                                                <th class="px-6 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('Vendor') }}</th>
                                                 <th class="px-6 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ __('Notes') }}</th>
                                             </tr>
                                         </thead>
@@ -180,11 +180,10 @@
                                             @foreach($logs as $log)
                                                 <tr class="hover:bg-slate-50/50 transition-colors">
                                                     <td class="px-6 py-3">
-                                                        <p class="text-xs font-bold text-slate-800">{{ $log->created_at->format('M d, Y') }}</p>
-                                                        <p class="text-[9px] text-slate-400">{{ $log->created_at->format('h:i A') }}</p>
+                                                        <p class="text-xs font-bold text-slate-800">{{ $log->entry_date ? $log->entry_date->format('M d, Y') : '-' }}</p>
                                                     </td>
                                                     <td class="px-6 py-3">
-                                                        @if($log->log_type == 'in')
+                                                        @if(in_array($log->type, ['in', 'purchase']))
                                                             <span class="px-2 py-1 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-md text-[9px] font-bold uppercase tracking-widest flex items-center gap-1 w-max">
                                                                 <i class="fa-solid fa-arrow-down"></i> IN
                                                             </span>
@@ -194,11 +193,11 @@
                                                             </span>
                                                         @endif
                                                     </td>
-                                                    <td class="px-6 py-3 text-xs font-black {{ $log->log_type == 'in' ? 'text-emerald-600' : 'text-rose-600' }}">
-                                                        {{ $log->log_type == 'in' ? '+' : '-' }}{{ $log->quantity }}
+                                                    <td class="px-6 py-3 text-xs font-black {{ in_array($log->type, ['in', 'purchase']) ? 'text-emerald-600' : 'text-rose-600' }}">
+                                                        {{ in_array($log->type, ['in', 'purchase']) ? '+' : '-' }}{{ $log->quantity }}
                                                     </td>
                                                     <td class="px-6 py-3 text-xs text-slate-600 font-medium">
-                                                        {{ $log->user ? $log->user->name : 'System' }}
+                                                        {{ $log->vendor_name ?: 'System' }}
                                                     </td>
                                                     <td class="px-6 py-3 text-[10px] text-slate-500 italic max-w-[150px] truncate" title="{{ $log->notes }}">
                                                         {{ $log->notes ?: '-' }}
