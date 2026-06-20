@@ -1,7 +1,7 @@
 <x-contractor-layout>
-    <div class="p-6 space-y-8 animate-fade-in">
+    <div class="p-3 md:p-6 space-y-4 md:space-y-8 animate-fade-in">
         <!-- Header -->
-        <div class="flex flex-col md:flex-row md:items-center gap-5 bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+        <div class="flex flex-col md:flex-row md:items-center gap-5 bg-white p-3 md:p-6 rounded-3xl border border-gray-100 shadow-sm">
             <a href="{{ route('contractor.workers.index') }}" class="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all shadow-sm">
                 <i class="fa-solid fa-arrow-left"></i>
             </a>
@@ -11,21 +11,21 @@
             </div>
         </div>
 
-        <form action="{{ route('contractor.workers.update', $worker->id) }}" method="POST" class="grid grid-cols-1 xl:grid-cols-12 gap-8">
+        <form action="{{ route('contractor.workers.update', $worker->id) }}" method="POST" class="grid grid-cols-1 xl:grid-cols-12 gap-4 md:gap-8">
             @csrf
             @method('PUT')
             
             <!-- Main Details -->
-            <div class="xl:col-span-8 space-y-8">
+            <div class="xl:col-span-8 space-y-4 md:space-y-8">
                 <div class="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
-                    <div class="px-8 py-6 border-b border-gray-50 bg-gray-50/30 flex items-center justify-between">
+                    <div class="px-4 md:px-8 py-3 md:py-6 border-b border-gray-50 bg-gray-50/30 flex items-center justify-between">
                         <h3 class="font-black text-gray-900 flex items-center gap-3 text-sm uppercase tracking-widest">
                             <i class="fa-solid fa-id-card text-indigo-600"></i>
                             {{ __('Worker Information') }}
                         </h3>
                     </div>
-                    <div class="p-8 space-y-8">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="p-4 md:p-8 space-y-4 md:space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                             <div class="space-y-3">
                                 <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Full Name') }}</label>
                                 <div class="relative group">
@@ -44,7 +44,7 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                             <div class="space-y-3">
                                 <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Skill Specialization') }}</label>
                                 <div class="relative">
@@ -72,8 +72,8 @@
             </div>
 
             <!-- Sidebar Actions -->
-            <div class="xl:col-span-4 space-y-8">
-                <div class="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm p-8 space-y-8 sticky top-8">
+            <div class="xl:col-span-4 space-y-4 md:space-y-8">
+                <div class="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm p-4 md:p-8 space-y-4 md:space-y-8 sticky top-8">
                     <div class="space-y-4">
                         <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Current Status') }}</label>
                         <div class="grid grid-cols-2 gap-3">

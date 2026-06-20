@@ -1,7 +1,7 @@
 <x-contractor-layout>
-    <div class="p-6 space-y-8 animate-fade-in">
+    <div class="p-3 md:p-6 space-y-4 md:space-y-8 animate-fade-in">
         <!-- Header Section -->
-        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3 md:gap-6">
             <div>
                 <h1 class="text-3xl font-black text-gray-900 tracking-tight flex items-center gap-3">
                     {{ __('Material Inventory') }}
@@ -12,15 +12,15 @@
                 <p class="text-gray-500 text-sm mt-1 font-medium">{{ __('Track material consumption, purchases, and adjustments across projects.') }}</p>
             </div>
             <button @click="$dispatch('open-modal', 'add-inventory-log')" 
-                class="w-full lg:w-auto inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-black px-6 py-3.5 rounded-2xl transition-all shadow-xl shadow-indigo-100 transform active:scale-95">
+                class="w-full lg:w-auto inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-black px-3 md:px-6 py-3.5 rounded-2xl transition-all shadow-xl shadow-indigo-100 transform active:scale-95">
                 <i class="fa-solid fa-plus-circle"></i>
                 {{ __('Add Material Log') }}
             </button>
         </div>
 
         <!-- Inventory Stats -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-white p-6 rounded-[2.5rem] border border-gray-100 shadow-sm group hover:border-blue-200 transition-all">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
+            <div class="bg-white p-3 md:p-6 rounded-[2.5rem] border border-gray-100 shadow-sm group hover:border-blue-200 transition-all">
                 <div class="flex items-center gap-5">
                     <div class="h-14 w-14 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform">
                         <i class="fa-solid fa-cart-flatbed text-2xl"></i>
@@ -31,7 +31,7 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-white p-6 rounded-[2.5rem] border border-gray-100 shadow-sm group hover:border-orange-200 transition-all">
+            <div class="bg-white p-3 md:p-6 rounded-[2.5rem] border border-gray-100 shadow-sm group hover:border-orange-200 transition-all">
                 <div class="flex items-center gap-5">
                     <div class="h-14 w-14 rounded-2xl bg-orange-50 flex items-center justify-center text-orange-600 group-hover:scale-110 transition-transform">
                         <i class="fa-solid fa-trowel-bricks text-2xl"></i>
@@ -42,7 +42,7 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-white p-6 rounded-[2.5rem] border border-gray-100 shadow-sm group hover:border-purple-200 transition-all">
+            <div class="bg-white p-3 md:p-6 rounded-[2.5rem] border border-gray-100 shadow-sm group hover:border-purple-200 transition-all">
                 <div class="flex items-center gap-5">
                     <div class="h-14 w-14 rounded-2xl bg-purple-50 flex items-center justify-center text-purple-600 group-hover:scale-110 transition-transform">
                         <i class="fa-solid fa-diagram-project text-2xl"></i>
@@ -62,32 +62,32 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-gray-50/50 border-b border-gray-50">
-                            <th class="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Date') }}</th>
-                            <th class="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Project') }}</th>
-                            <th class="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Material') }}</th>
-                            <th class="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Type') }}</th>
-                            <th class="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">{{ __('Quantity') }}</th>
-                            <th class="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Notes') }}</th>
+                            <th class="px-4 md:px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Date') }}</th>
+                            <th class="px-4 md:px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Project') }}</th>
+                            <th class="px-4 md:px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Material') }}</th>
+                            <th class="px-4 md:px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Type') }}</th>
+                            <th class="px-4 md:px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">{{ __('Quantity') }}</th>
+                            <th class="px-4 md:px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Notes') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-50">
                         @forelse ($inventoryLogs as $log)
                             <tr class="hover:bg-gray-50/80 transition-all group">
-                                <td class="px-8 py-6">
+                                <td class="px-4 md:px-8 py-3 md:py-6">
                                     <span class="text-sm font-black text-gray-900">{{ \Carbon\Carbon::parse($log->entry_date)->format('M d, Y') }}</span>
                                 </td>
-                                <td class="px-8 py-6">
+                                <td class="px-4 md:px-8 py-3 md:py-6">
                                     <div class="flex flex-col">
                                         <span class="text-sm font-black text-gray-900">{{ $log->project->title }}</span>
                                         <span class="text-[9px] font-black text-gray-400 uppercase tracking-tighter">{{ __('Site Location') }}</span>
                                     </div>
                                 </td>
-                                <td class="px-8 py-6">
+                                <td class="px-4 md:px-8 py-3 md:py-6">
                                     <span class="px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-slate-50 text-slate-600 border border-slate-100">
                                         {{ $log->material->name }}
                                     </span>
                                 </td>
-                                <td class="px-8 py-6">
+                                <td class="px-4 md:px-8 py-3 md:py-6">
                                     @php
                                         $typeClasses = [
                                             'purchase' => 'bg-emerald-50 text-emerald-600 border-emerald-100',
@@ -99,11 +99,11 @@
                                         {{ __($log->type) }}
                                     </span>
                                 </td>
-                                <td class="px-8 py-6 text-right">
+                                <td class="px-4 md:px-8 py-3 md:py-6 text-right">
                                     <span class="text-sm font-black text-gray-900">{{ number_format($log->quantity, 2) }}</span>
                                     <span class="text-[10px] font-bold text-gray-400 ml-1">{{ $log->material->unit }}</span>
                                 </td>
-                                <td class="px-8 py-6">
+                                <td class="px-4 md:px-8 py-3 md:py-6">
                                     <p class="text-xs font-bold text-gray-500 italic max-w-[200px] truncate">{{ $log->notes ?? '-' }}</p>
                                 </td>
                             </tr>
@@ -116,7 +116,7 @@
             <!-- Mobile List -->
             <div class="md:hidden divide-y divide-gray-50">
                 @forelse ($inventoryLogs as $log)
-                    <div class="p-6 space-y-4 hover:bg-gray-50 transition-all">
+                    <div class="p-3 md:p-6 space-y-4 hover:bg-gray-50 transition-all">
                         <div class="flex justify-between items-start">
                             <div>
                                 <h4 class="text-base font-black text-gray-900">{{ $log->material->name }}</h4>
@@ -137,7 +137,7 @@
             </div>
 
             @if($inventoryLogs->isEmpty())
-                <div class="py-32 flex flex-col items-center justify-center text-center px-6">
+                <div class="py-32 flex flex-col items-center justify-center text-center px-3 md:px-6">
                     <div class="w-32 h-32 bg-gray-50 rounded-full flex items-center justify-center text-gray-200 text-6xl mb-8">
                         <i class="fa-solid fa-box-open"></i>
                     </div>
@@ -184,7 +184,7 @@
                  x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                  class="inline-block w-full max-w-2xl p-0 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-2xl rounded-[2.5rem]">
                 
-                <div class="p-8 pb-0 flex items-center justify-between">
+                <div class="p-4 md:p-8 pb-0 flex items-center justify-between">
                     <div>
                         <h3 class="text-3xl font-black text-gray-900 tracking-tight">{{ __('New Material Log') }}</h3>
                         <p class="text-gray-500 text-sm font-medium mt-1">{{ __('Record consumption or stock-in for materials.') }}</p>
@@ -194,14 +194,14 @@
                     </button>
                 </div>
 
-                <form action="{{ route('contractor.inventory.store') }}" method="POST" class="p-8 space-y-6">
+                <form action="{{ route('contractor.inventory.store') }}" method="POST" class="p-4 md:p-8 space-y-3 md:space-y-6">
                     @csrf
                     
-                    <div class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-3 md:space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
                             <div class="md:col-span-2 space-y-2">
                                 <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Project Site') }}</label>
-                                <select name="project_id" required class="w-full px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none appearance-none cursor-pointer">
+                                <select name="project_id" required class="w-full px-3 md:px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none appearance-none cursor-pointer">
                                     <option value="">{{ __('Select Awarded Project') }}</option>
                                     @foreach($projects as $project)
                                         <option value="{{ $project->id }}">{{ $project->title }}</option>
@@ -211,7 +211,7 @@
 
                             <div class="space-y-2">
                                 <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Material Item') }}</label>
-                                <select name="material_id" required class="w-full px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none appearance-none cursor-pointer">
+                                <select name="material_id" required class="w-full px-3 md:px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none appearance-none cursor-pointer">
                                     <option value="">{{ __('Select Material') }}</option>
                                     @foreach($materials as $material)
                                         <option value="{{ $material->id }}">{{ $material->name }} ({{ $material->unit }})</option>
@@ -221,7 +221,7 @@
 
                             <div class="space-y-2">
                                 <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Log Type') }}</label>
-                                <select name="type" required class="w-full px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none appearance-none cursor-pointer">
+                                <select name="type" required class="w-full px-3 md:px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none appearance-none cursor-pointer">
                                     <option value="purchase">{{ __('Purchase (Stock In)') }}</option>
                                     <option value="consumption" selected>{{ __('Consumption (Stock Out)') }}</option>
                                     <option value="adjustment">{{ __('Adjustment') }}</option>
@@ -229,24 +229,24 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
                             <div class="space-y-2">
                                 <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Quantity') }}</label>
                                 <div class="relative">
                                     <input type="number" name="quantity" step="0.01" required placeholder="0.00"
-                                           class="w-full px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-xl font-black text-gray-900 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none">
+                                           class="w-full px-3 md:px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-xl font-black text-gray-900 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none">
                                 </div>
                             </div>
 
                             <div class="space-y-2">
                                 <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Entry Date') }}</label>
                                 <input type="date" name="entry_date" required value="{{ date('Y-m-d') }}"
-                                       class="w-full px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none">
+                                       class="w-full px-3 md:px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none">
                             </div>
                         </div>
 
-                        <div class="p-6 bg-slate-50/50 rounded-3xl border border-slate-100 space-y-4">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="p-3 md:p-6 bg-slate-50/50 rounded-3xl border border-slate-100 space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
                                 <div class="space-y-2">
                                     <label class="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Unit Price') }} ({{ __('Optional') }})</label>
                                     <input type="number" name="unit_price" step="0.01" placeholder="₹ 0.00"
@@ -263,7 +263,7 @@
                         <div class="space-y-2">
                             <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Notes & Remarks') }}</label>
                             <textarea name="notes" rows="2" placeholder="{{ __('Any additional details...') }}"
-                                      class="w-full px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none"></textarea>
+                                      class="w-full px-3 md:px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none"></textarea>
                         </div>
                     </div>
 

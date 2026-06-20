@@ -1,7 +1,7 @@
 <x-contractor-layout>
-    <div class="p-6 space-y-8 animate-fade-in">
+    <div class="p-3 md:p-6 space-y-4 md:space-y-8 animate-fade-in">
         <!-- Header & Stats -->
-        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3 md:gap-6">
             <div>
                 <h1 class="text-3xl font-black text-gray-900 tracking-tight flex items-center gap-3">
                     {{ __('My Workforce') }}
@@ -12,7 +12,7 @@
                 <p class="text-gray-500 text-sm mt-1 font-medium">{{ __('Manage laborers and skilled workers assigned to your projects') }}</p>
             </div>
             <div class="flex items-center gap-3 w-full lg:w-auto">
-                <a href="{{ route('contractor.workers.create') }}" class="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-black px-6 py-3.5 rounded-2xl transition-all shadow-xl shadow-indigo-100 transform active:scale-95">
+                <a href="{{ route('contractor.workers.create') }}" class="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-black px-3 md:px-6 py-3.5 rounded-2xl transition-all shadow-xl shadow-indigo-100 transform active:scale-95">
                     <i class="fa-solid fa-plus-circle"></i>
                     {{ __('Add New Worker') }}
                 </a>
@@ -36,7 +36,7 @@
         </div>
 
         <!-- Worker Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="workerGrid">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6" id="workerGrid">
             @forelse($workers as $worker)
                 <div class="worker-card group bg-white rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-2xl hover:shadow-indigo-50 hover:border-indigo-100 transition-all duration-500 flex flex-col overflow-hidden relative" 
                      data-name="{{ strtolower($worker->name) }}" 
@@ -50,7 +50,7 @@
                         </span>
                     </div>
 
-                    <div class="p-8">
+                    <div class="p-4 md:p-8">
                         <div class="flex items-center gap-4 mb-6">
                             <div class="w-16 h-16 rounded-3xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-all duration-500 border border-gray-100 group-hover:border-indigo-100 group-hover:scale-110">
                                 <i class="fa-solid fa-user-gear text-2xl"></i>
@@ -99,7 +99,7 @@
                         </div>
                     </div>
 
-                    <div class="mt-auto p-8 pt-0 flex gap-3">
+                    <div class="mt-auto p-4 md:p-8 pt-0 flex gap-3">
                         <a href="{{ route('contractor.workers.edit', $worker->id) }}" class="flex-1 py-3.5 bg-gray-900 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest text-center shadow-xl shadow-gray-100 hover:bg-gray-800 transition-all transform hover:-translate-y-1">
                             {{ __('Edit Profile') }}
                         </a>

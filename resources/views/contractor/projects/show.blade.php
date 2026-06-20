@@ -1,5 +1,5 @@
 <x-contractor-layout>
-    <div class="p-6 space-y-8 animate-fade-in">
+    <div class="p-3 md:p-6 space-y-4 md:space-y-8 animate-fade-in">
         <!-- Header Section -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div class="flex items-center gap-4">
@@ -26,11 +26,11 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-8">
             <!-- Sidebar: Stats & Financials (4 columns) -->
-            <div class="lg:col-span-4 space-y-8">
+            <div class="lg:col-span-4 space-y-4 md:space-y-8">
                 <!-- Workforce Stats Card -->
-                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 group hover:border-indigo-100 transition-all">
+                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-3 md:p-6 group hover:border-indigo-100 transition-all">
                     <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                         <i class="bi bi-people text-indigo-600"></i> {{ __('Workforce Status') }}
                     </h4>
@@ -74,11 +74,11 @@
                 </div>
 
                 <!-- Financial Health Card -->
-                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 group">
+                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-3 md:p-6 group">
                     <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                         <i class="bi bi-cash-stack text-emerald-600"></i> {{ __('Financial Overview') }}
                     </h4>
-                    <div class="space-y-6">
+                    <div class="space-y-3 md:space-y-6">
                         <div class="cursor-help" data-tooltip="{{ __('The maximum budget allocated by the client for this project.') }}">
                             <div class="flex justify-between items-end mb-1">
                                 <span class="text-[10px] font-bold text-gray-400">{{ __('Total Bid Value') }}</span>
@@ -112,7 +112,7 @@
                 </div>
 
                 <!-- Site Inventory & Stock Card -->
-                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 group">
+                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-3 md:p-6 group">
                     <div class="flex items-center justify-between mb-6">
                         <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
                             <i class="bi bi-box-seam text-indigo-600"></i> {{ __('Site Stock Inventory') }}
@@ -147,7 +147,7 @@
                                 </div>
                             </div>
                         @empty
-                            <div class="text-center py-8">
+                            <div class="text-center py-4 md:py-8">
                                 <p class="text-[10px] text-gray-300 italic">{{ __('No material stock assigned to this site.') }}</p>
                             </div>
                         @endforelse
@@ -168,11 +168,11 @@
             </div>
 
             <!-- Main Content Area (8 columns) -->
-            <div class="lg:col-span-8 space-y-8">
+            <div class="lg:col-span-8 space-y-4 md:space-y-8">
                 <!-- Progress Hub Section -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                     <!-- Placeholder for Milestone-Based Progress (Empty for now) -->
-                    <div class="bg-indigo-50 rounded-3xl border border-indigo-100 p-8 flex flex-col items-center justify-center text-center space-y-4">
+                    <div class="bg-indigo-50 rounded-3xl border border-indigo-100 p-4 md:p-8 flex flex-col items-center justify-center text-center space-y-4">
                         <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-indigo-600 text-2xl shadow-sm border border-indigo-50">
                             <i class="bi bi-flag"></i>
                         </div>
@@ -183,7 +183,7 @@
                     </div>
 
                     <!-- Milestones Visualization -->
-                    <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 flex flex-col">
+                    <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-4 md:p-8 flex flex-col">
                         <div class="flex items-center justify-between mb-6">
                             <h3 class="font-bold text-gray-900 text-sm flex items-center gap-2 cursor-help" data-tooltip="{{ __('Track current completion status of each project phase.') }}">
                                 <i class="bi bi-check2-square text-indigo-600"></i> {{ __('Project Phases') }}
@@ -245,13 +245,13 @@
 
                 <!-- Massive Activity Timeline -->
                 <div class="bg-white rounded-3xl border border-gray-100 shadow-sm flex flex-col">
-                    <div class="px-8 py-6 border-b border-gray-50 flex justify-between items-center bg-gray-50/20">
+                    <div class="px-4 md:px-8 py-3 md:py-6 border-b border-gray-50 flex justify-between items-center bg-gray-50/20">
                         <h3 class="font-bold text-gray-900 flex items-center gap-2">
                             <i class="bi bi-clock-history text-indigo-600"></i>
                             {{ __('Historical Site Activity') }}
                         </h3>
                     </div>
-                    <div class="p-8 max-h-[600px] overflow-y-auto custom-scrollbar">
+                    <div class="p-4 md:p-8 max-h-[600px] overflow-y-auto custom-scrollbar">
                         <div class="relative space-y-12 pl-6">
                             <div class="absolute top-2 bottom-2 left-[31px] w-[1px] bg-indigo-50"></div>
                             @forelse($project->progressUpdates as $update)
@@ -259,7 +259,7 @@
                                     <div class="absolute left-0 top-0 h-10 w-10 rounded-2xl bg-white border-2 border-indigo-50 shadow-sm flex items-center justify-center z-10 font-black text-indigo-600 text-[10px]">
                                         {{ $update->progress_percentage }}%
                                     </div>
-                                    <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm hover:shadow-2xl hover:border-indigo-100 transition-all group">
+                                    <div class="bg-white rounded-3xl p-3 md:p-6 border border-gray-100 shadow-sm hover:shadow-2xl hover:border-indigo-100 transition-all group">
                                         <div class="flex justify-between items-start mb-4">
                                             <div class="flex items-center gap-3">
                                                 <div class="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 text-sm font-bold border border-indigo-100">
@@ -333,7 +333,7 @@
     <!-- Progress Reporting Modal -->
     <div id="reportProgressModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-[32px] w-full max-w-xl overflow-hidden shadow-2xl animate-fade-in">
-            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-indigo-600 text-white">
+            <div class="p-3 md:p-6 border-b border-gray-100 flex justify-between items-center bg-indigo-600 text-white">
                 <div>
                     <h3 class="font-bold text-sm flex items-center gap-2">
                         <i class="bi bi-flag-fill"></i> {{ __('Report Milestone Progress') }}
@@ -345,7 +345,7 @@
                 </button>
             </div>
             
-            <form action="{{ route('contractor.projects.progress.store', $project->id) }}" method="POST" id="progressForm" class="p-8 space-y-6" onsubmit="return validateProgressForm()">
+            <form action="{{ route('contractor.projects.progress.store', $project->id) }}" method="POST" id="progressForm" class="p-4 md:p-8 space-y-3 md:space-y-6" onsubmit="return validateProgressForm()">
                 @csrf
                 <input type="hidden" name="milestone_id" id="modalMilestoneId">
                 <input type="hidden" name="verification_photo" id="verification_photo">
@@ -397,7 +397,7 @@
 
     <div id="cameraModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-[32px] w-full max-w-lg overflow-hidden shadow-2xl">
-            <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+            <div class="p-3 md:p-6 border-b border-gray-100 flex justify-between items-center">
                 <h3 class="font-bold text-gray-900">{{ __('Verify Site Progress') }}</h3>
                 <button onclick="stopCamera()" class="text-gray-400 hover:text-gray-600 transition-colors">
                     <i class="bi bi-x-lg"></i>

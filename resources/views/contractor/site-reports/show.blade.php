@@ -1,8 +1,8 @@
 <x-contractor-layout>
-    <div class="p-6 space-y-8 animate-fade-in">
+    <div class="p-3 md:p-6 space-y-4 md:space-y-8 animate-fade-in">
         <!-- Header Section -->
-        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
-            <div class="flex items-center gap-6">
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3 md:gap-6 bg-white p-4 md:p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+            <div class="flex items-center gap-3 md:gap-6">
                 <a href="{{ route('contractor.site-reports.index') }}" class="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all">
                     <i class="fa-solid fa-arrow-left text-xl"></i>
                 </a>
@@ -13,18 +13,18 @@
                     </p>
                 </div>
             </div>
-            <div class="flex items-center gap-4 bg-indigo-50 px-6 py-4 rounded-2xl border border-indigo-100">
+            <div class="flex items-center gap-4 bg-indigo-50 px-3 md:px-6 py-4 rounded-2xl border border-indigo-100">
                 <span class="text-[10px] font-black text-indigo-400 uppercase tracking-widest">{{ __('Completion') }}</span>
                 <span class="text-3xl font-black text-indigo-600">{{ $report->progress_percentage }}%</span>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-4 md:gap-8">
             <!-- Main Content Area -->
-            <div class="xl:col-span-2 space-y-8">
+            <div class="xl:col-span-2 space-y-4 md:space-y-8">
                 <!-- Detailed Summary Cards -->
                 <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="p-8 space-y-10">
+                    <div class="p-4 md:p-8 space-y-10">
                         <!-- Work Summary -->
                         <div class="space-y-4">
                             <div class="flex items-center gap-3">
@@ -33,12 +33,12 @@
                                 </div>
                                 <h3 class="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('Work Performed Today') }}</h3>
                             </div>
-                            <div class="p-8 bg-gray-50/50 rounded-3xl border border-gray-100 text-gray-700 leading-relaxed font-bold italic whitespace-pre-wrap">
+                            <div class="p-4 md:p-8 bg-gray-50/50 rounded-3xl border border-gray-100 text-gray-700 leading-relaxed font-bold italic whitespace-pre-wrap">
                                 "{{ $report->work_summary }}"
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                             <!-- Challenges -->
                             @if($report->challenges)
                             <div class="space-y-4">
@@ -48,7 +48,7 @@
                                     </div>
                                     <h3 class="text-xs font-black text-red-400 uppercase tracking-[0.2em]">{{ __('Challenges & Issues') }}</h3>
                                 </div>
-                                <div class="p-6 bg-red-50/30 rounded-3xl border border-red-100 text-red-700 text-sm font-bold leading-relaxed">
+                                <div class="p-3 md:p-6 bg-red-50/30 rounded-3xl border border-red-100 text-red-700 text-sm font-bold leading-relaxed">
                                     {{ $report->challenges }}
                                 </div>
                             </div>
@@ -63,7 +63,7 @@
                                     </div>
                                     <h3 class="text-xs font-black text-emerald-400 uppercase tracking-[0.2em]">{{ __('Next Day Strategy') }}</h3>
                                 </div>
-                                <div class="p-6 bg-emerald-50/30 rounded-3xl border border-emerald-100 text-emerald-700 text-sm font-bold leading-relaxed">
+                                <div class="p-3 md:p-6 bg-emerald-50/30 rounded-3xl border border-emerald-100 text-emerald-700 text-sm font-bold leading-relaxed">
                                     {{ $report->next_day_plan }}
                                 </div>
                             </div>
@@ -73,7 +73,7 @@
                 </div>
 
                 <!-- Media Gallery -->
-                <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 p-8 space-y-6">
+                <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 p-4 md:p-8 space-y-3 md:space-y-6">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <div class="h-10 w-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600">
@@ -86,7 +86,7 @@
                         </span>
                     </div>
 
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-6">
                         @forelse($report->photos as $photo)
                             <div class="group relative aspect-square rounded-[2rem] overflow-hidden bg-gray-50 border border-gray-100 shadow-sm hover:shadow-xl transition-all cursor-pointer">
                                 <img src="{{ asset('storage/' . $photo->photo_path) }}" alt="{{ __('Site Photo') }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
@@ -107,14 +107,14 @@
             </div>
 
             <!-- Sidebar Information -->
-            <div class="space-y-8">
+            <div class="space-y-4 md:space-y-8">
                 <!-- Metadata Card -->
-                <div class="bg-indigo-600 rounded-[2.5rem] p-8 text-white shadow-2xl shadow-indigo-200 overflow-hidden relative">
+                <div class="bg-indigo-600 rounded-[2.5rem] p-4 md:p-8 text-white shadow-2xl shadow-indigo-200 overflow-hidden relative">
                     <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
                     <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-indigo-400/20 rounded-full blur-3xl"></div>
                     
                     <h4 class="text-[10px] font-black text-indigo-200 uppercase tracking-widest mb-8 relative">{{ __('Report Intelligence') }}</h4>
-                    <div class="space-y-8 relative">
+                    <div class="space-y-4 md:space-y-8 relative">
                         <div class="flex items-center gap-5">
                             <div class="h-12 w-12 bg-white/10 rounded-2xl flex items-center justify-center text-xl">
                                 <i class="fa-solid fa-clock-rotate-left"></i>
@@ -155,7 +155,7 @@
                 </div>
 
                 <!-- Project Snapshot -->
-                <div class="bg-white rounded-[2.5rem] border border-gray-100 p-8 shadow-sm space-y-6">
+                <div class="bg-white rounded-[2.5rem] border border-gray-100 p-4 md:p-8 shadow-sm space-y-3 md:space-y-6">
                     <h4 class="text-xs font-black text-gray-900 uppercase tracking-widest">{{ __('Project Snapshot') }}</h4>
                     <div class="space-y-4">
                         <div class="p-5 bg-gray-50 rounded-2xl border border-gray-100">
@@ -170,7 +170,7 @@
                         </div>
                     </div>
                     <a href="{{ route('contractor.projects.show', $report->project->id) }}" 
-                       class="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-gray-900 text-white text-[10px] font-black uppercase tracking-widest rounded-2xl hover:bg-black transition-all shadow-lg shadow-gray-200 transform active:scale-95">
+                       class="w-full inline-flex items-center justify-center gap-2 px-3 md:px-6 py-4 bg-gray-900 text-white text-[10px] font-black uppercase tracking-widest rounded-2xl hover:bg-black transition-all shadow-lg shadow-gray-200 transform active:scale-95">
                         <i class="fa-solid fa-arrow-up-right-from-square"></i>
                         {{ __('Full Project Intelligence') }}
                     </a>

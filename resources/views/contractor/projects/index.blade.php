@@ -1,7 +1,7 @@
 <x-contractor-layout>
-    <div class="p-6 space-y-10 animate-fade-in">
+    <div class="p-3 md:p-6 space-y-10 animate-fade-in">
         <!-- Header & Stats -->
-        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 md:gap-6">
             <div>
                 <h1 class="text-4xl font-black text-gray-900 tracking-tight flex items-center gap-3">
                     {{ __('Project Hub') }}
@@ -23,7 +23,7 @@
         </div>
 
         <!-- Sophisticated Search & Filter -->
-        <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+        <div class="bg-white p-3 md:p-6 rounded-3xl border border-gray-100 shadow-sm">
             <form action="{{ route('contractor.projects.index') }}" method="GET" class="flex flex-col md:flex-row gap-4">
                 <div class="flex-1 relative group">
                     <i class="bi bi-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-indigo-600 transition-colors"></i>
@@ -39,12 +39,12 @@
                         <option value="closed" {{ request('status') == 'closed' ? 'selected' : '' }}>{{ __('Completed') }}</option>
                     </select>
 
-                    <button type="submit" class="px-8 py-3.5 bg-gray-900 text-white rounded-2xl hover:bg-gray-800 transition-all font-black text-sm shadow-xl shadow-gray-200">
+                    <button type="submit" class="px-4 md:px-8 py-3.5 bg-gray-900 text-white rounded-2xl hover:bg-gray-800 transition-all font-black text-sm shadow-xl shadow-gray-200">
                         {{ __('Search') }}
                     </button>
                     
                     @if (auth()->user()->hasRole('admin'))
-                        <a href="{{ route('admin.projects.create') }}" class="px-6 py-3.5 bg-indigo-600 text-white rounded-2xl hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100 font-black text-sm">
+                        <a href="{{ route('admin.projects.create') }}" class="px-3 md:px-6 py-3.5 bg-indigo-600 text-white rounded-2xl hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100 font-black text-sm">
                             {{ __('New Project') }}
                         </a>
                     @endif
@@ -53,7 +53,7 @@
         </div>
 
         <!-- Premium Full-Fill Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-8">
             @forelse ($projects as $project)
                 <div class="group bg-white rounded-none border border-slate-200 hover:border-slate-400 hover:shadow-md transition-all duration-300 flex flex-col overflow-hidden relative">
                     
@@ -165,7 +165,7 @@
 
         <!-- Pagination -->
         @if ($projects instanceof \Illuminate\Pagination\LengthAwarePaginator)
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-6 bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 md:gap-6 bg-white p-4 md:p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
                 <p class="text-xs font-black text-gray-400 uppercase tracking-widest">{{ __('Displaying') }} {{ $projects->firstItem() }}-{{ $projects->lastItem() }} {{ __('of') }} {{ $projects->total() }}</p>
                 <div class="pagination-container">
                     {{ $projects->withQueryString()->links() }}

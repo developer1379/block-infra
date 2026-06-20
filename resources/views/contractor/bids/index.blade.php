@@ -1,6 +1,6 @@
 <x-contractor-layout>
-    <div class="min-h-screen bg-gray-50/50 p-6">
-        <div class="max-w-7xl mx-auto space-y-6">
+    <div class="min-h-screen bg-gray-50/50 p-3 md:p-6">
+        <div class="max-w-7xl mx-auto space-y-3 md:space-y-6">
 
             {{-- 1. HEADER --}}
             <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
@@ -20,7 +20,7 @@
             </div>
 
             {{-- 2. BIDS GRID --}}
-            <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-6">
                 @forelse ($bids as $bid)
                     {{-- Filter for Contractor View --}}
                     @if (auth()->user()->hasRole('contractor') && $bid->contractor_id != auth()->id())
@@ -133,7 +133,7 @@
                 <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-2xl border border-gray-100">
 
                     {{-- Header --}}
-                    <div class="bg-gray-50 px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+                    <div class="bg-gray-50 px-3 md:px-6 py-4 border-b border-gray-100 flex justify-between items-center">
                         <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2">
                             <i class="fa-regular fa-file-lines text-indigo-600"></i> {{ __('Proposal Details') }}
                         </h3>
@@ -143,14 +143,14 @@
                     </div>
 
                     {{-- Body --}}
-                    <div class="px-6 py-6 max-h-[60vh] overflow-y-auto custom-scrollbar">
+                    <div class="px-3 md:px-6 py-3 md:py-6 max-h-[60vh] overflow-y-auto custom-scrollbar">
                         <div id="proposalContent" class="prose prose-sm max-w-none text-gray-600">
                             {{-- Content injected via JS --}}
                         </div>
                     </div>
 
                     {{-- Footer --}}
-                    <div class="bg-gray-50 px-6 py-3 flex justify-end border-t border-gray-100">
+                    <div class="bg-gray-50 px-3 md:px-6 py-3 flex justify-end border-t border-gray-100">
                         <button type="button" onclick="closeModal()" class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm">
                             {{ __('Close') }}
                         </button>

@@ -1,5 +1,5 @@
 <x-contractor-layout>
-    <div class="p-6 space-y-8 animate-fade-in">
+    <div class="p-3 md:p-6 space-y-4 md:space-y-8 animate-fade-in">
         <!-- Header Section -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
@@ -19,9 +19,9 @@
         </div>
 
         <!-- Stats Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
             <!-- Total Payments -->
-            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+            <div class="bg-white p-3 md:p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
                 <div class="absolute -right-4 -top-4 w-24 h-24 bg-green-50 rounded-full opacity-50 group-hover:scale-110 transition-transform"></div>
                 <div class="relative">
                     <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center text-green-600 mb-4">
@@ -37,7 +37,7 @@
             </div>
 
             <!-- Active Projects -->
-            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+            <div class="bg-white p-3 md:p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
                 <div class="absolute -right-4 -top-4 w-24 h-24 bg-blue-50 rounded-full opacity-50 group-hover:scale-110 transition-transform"></div>
                 <div class="relative">
                     <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 mb-4">
@@ -53,7 +53,7 @@
             </div>
 
             <!-- Total Workers -->
-            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+            <div class="bg-white p-3 md:p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
                 <div class="absolute -right-4 -top-4 w-24 h-24 bg-yellow-50 rounded-full opacity-50 group-hover:scale-110 transition-transform"></div>
                 <div class="relative">
                     <div class="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center text-yellow-600 mb-4">
@@ -69,7 +69,7 @@
             </div>
 
             <!-- Attendance Today -->
-            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+            <div class="bg-white p-3 md:p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
                 <div class="absolute -right-4 -top-4 w-24 h-24 bg-purple-50 rounded-full opacity-50 group-hover:scale-110 transition-transform"></div>
                 <div class="relative">
                     <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-purple-600 mb-4">
@@ -85,7 +85,7 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
             <!-- Active Projects Table -->
             <div class="lg:col-span-2 space-y-4">
                 <div class="flex items-center justify-between">
@@ -100,16 +100,16 @@
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-gray-50/50">
-                                    <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">{{ __('Project Name') }}</th>
-                                    <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">{{ __('Progress') }}</th>
-                                    <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">{{ __('Status') }}</th>
-                                    <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider text-right">{{ __('Action') }}</th>
+                                    <th class="px-3 md:px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">{{ __('Project Name') }}</th>
+                                    <th class="px-3 md:px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">{{ __('Progress') }}</th>
+                                    <th class="px-3 md:px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">{{ __('Status') }}</th>
+                                    <th class="px-3 md:px-6 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider text-right">{{ __('Action') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
                                 @forelse($ongoingProjects as $project)
                                 <tr class="hover:bg-gray-50/50 transition-colors">
-                                    <td class="px-6 py-4">
+                                    <td class="px-3 md:px-6 py-4">
                                         <div class="flex items-center gap-3">
                                             <div class="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold">
                                                 {{ substr($project->name, 0, 1) }}
@@ -120,7 +120,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="px-3 md:px-6 py-4">
                                         <div class="w-full max-w-[100px]">
                                             <div class="flex items-center justify-between mb-1">
                                                 <span class="text-[10px] font-bold text-gray-400">{{ $project->current_progress }}%</span>
@@ -130,12 +130,12 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="px-3 md:px-6 py-4">
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
                                             {{ __(ucfirst($project->status)) }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 text-right">
+                                    <td class="px-3 md:px-6 py-4 text-right">
                                         <a href="{{ route('contractor.projects.show', $project->id) }}" class="inline-flex items-center gap-1 text-sm font-bold text-indigo-600 hover:text-indigo-800">
                                             {{ __('Manage') }}
                                             <i class="bi bi-chevron-right text-[10px]"></i>
@@ -144,7 +144,7 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="4" class="px-6 py-12 text-center">
+                                    <td colspan="4" class="px-3 md:px-6 py-12 text-center">
                                         <div class="flex flex-col items-center justify-center text-gray-400">
                                             <i class="bi bi-inbox text-4xl mb-2"></i>
                                             <p class="text-sm">{{ __('No ongoing projects found.') }}</p>
@@ -184,7 +184,7 @@
                         </div>
                     </div>
                     @empty
-                    <div class="bg-gray-50 border border-dashed border-gray-200 p-6 rounded-2xl text-center">
+                    <div class="bg-gray-50 border border-dashed border-gray-200 p-3 md:p-6 rounded-2xl text-center">
                         <p class="text-xs text-gray-500">{{ __('Check back later for new projects.') }}</p>
                     </div>
                     @endforelse

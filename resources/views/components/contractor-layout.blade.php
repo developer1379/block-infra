@@ -134,7 +134,7 @@
         <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
             class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:inset-0 flex flex-col">
 
-            <div class="flex items-center justify-center h-16 border-b border-gray-200 bg-white px-6">
+            <div class="flex items-center justify-center h-16 border-b border-gray-200 bg-white px-3 md:px-6">
                 <div class="flex items-center gap-2">
                     <div
                         class="h-8 w-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">
@@ -244,7 +244,7 @@
         <div class="flex-1 flex flex-col overflow-hidden">
 
             <header
-                class="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-6 sticky top-0 z-30">
+                class="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-3 md:px-6 sticky top-0 z-30">
                 <div class="flex items-center gap-4">
                     <button @click="sidebarOpen = !sidebarOpen"
                         class="text-gray-500 hover:text-gray-700 md:hidden focus:outline-none">
@@ -294,7 +294,7 @@
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50/50">
 
                 @if (session('success'))
-                    <div class="max-w-7xl mx-auto mt-6 px-6" x-data="{ show: true }" x-show="show"
+                    <div class="max-w-7xl mx-auto mt-6 px-3 md:px-6" x-data="{ show: true }" x-show="show"
                         x-init="setTimeout(() => show = false, 3000)">
                         <div
                             class="bg-green-100 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center shadow-sm">
@@ -305,7 +305,7 @@
                 @endif
 
                 @if ($errors->any())
-                    <div class="max-w-7xl mx-auto mt-6 px-6">
+                    <div class="max-w-7xl mx-auto mt-6 px-3 md:px-6">
                         <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg shadow-sm">
                             <ul class="list-disc list-inside text-sm">
                                 @foreach ($errors->all() as $error)
@@ -318,7 +318,7 @@
 
                 {{ $slot }}
 
-                <footer class="mt-auto py-6 px-6 text-center text-sm text-gray-400 border-t border-gray-200">
+                <footer class="mt-auto py-3 md:py-6 px-3 md:px-6 text-center text-sm text-gray-400 border-t border-gray-200">
                     &copy; {{ date('Y') }} {{ config('app.name') }}. {{ __('All rights reserved') }}.
                 </footer>
             </main>

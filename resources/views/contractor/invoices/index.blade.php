@@ -1,6 +1,6 @@
 <x-contractor-layout>
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto sm:px-3 md:px-6 lg:px-4 md:px-8">
             <div class="flex items-center justify-between mb-8">
                 <div>
                     <h1 class="text-3xl font-bold text-gray-900">{{ __('Invoices & Payments') }}</h1>

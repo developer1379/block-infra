@@ -1,7 +1,7 @@
 <x-contractor-layout>
-    <div class="p-6 space-y-8 animate-fade-in">
+    <div class="p-3 md:p-6 space-y-4 md:space-y-8 animate-fade-in">
         <!-- Header Section -->
-        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3 md:gap-6">
             <div>
                 <h1 class="text-3xl font-black text-gray-900 tracking-tight flex items-center gap-3">
                     {{ __('Daily Site Reports') }}
@@ -12,20 +12,20 @@
                 <p class="text-gray-500 text-sm mt-1 font-medium">{{ __('Manage and track daily progress updates from your construction sites.') }}</p>
             </div>
             <a href="{{ route('contractor.site-reports.create') }}" 
-                class="w-full lg:w-auto inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-black px-6 py-3.5 rounded-2xl transition-all shadow-xl shadow-indigo-100 transform active:scale-95">
+                class="w-full lg:w-auto inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-black px-3 md:px-6 py-3.5 rounded-2xl transition-all shadow-xl shadow-indigo-100 transform active:scale-95">
                 <i class="fa-solid fa-plus-circle"></i>
                 {{ __('New Site Report') }}
             </a>
         </div>
 
         <!-- Reports Grid -->
-        <div class="grid grid-cols-1 gap-6">
+        <div class="grid grid-cols-1 gap-3 md:gap-6">
             @forelse ($reports as $report)
                 <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl hover:shadow-indigo-500/5 transition-all group">
-                    <div class="p-8">
-                        <div class="flex flex-col xl:flex-row justify-between gap-8">
+                    <div class="p-4 md:p-8">
+                        <div class="flex flex-col xl:flex-row justify-between gap-4 md:gap-8">
                             <!-- Left Section: Info -->
-                            <div class="flex-1 space-y-6">
+                            <div class="flex-1 space-y-3 md:space-y-6">
                                 <div class="flex items-start gap-5">
                                     <div class="h-16 w-16 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 group-hover:scale-110 transition-transform flex-shrink-0">
                                         <i class="fa-solid fa-clipboard-check text-2xl"></i>
@@ -55,7 +55,7 @@
                                     </div>
                                 </div>
 
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 p-6 bg-gray-50/50 rounded-3xl border border-gray-50">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-6 p-3 md:p-6 bg-gray-50/50 rounded-3xl border border-gray-50">
                                     <div>
                                         <h4 class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2">{{ __('Work Performed') }}</h4>
                                         <p class="text-sm font-bold text-gray-600 leading-relaxed line-clamp-3 italic">
@@ -74,8 +74,8 @@
                             </div>
 
                             <!-- Right Section: Progress & Media -->
-                            <div class="xl:w-80 flex flex-col justify-between gap-6">
-                                <div class="bg-indigo-50/50 p-6 rounded-3xl border border-indigo-100/50">
+                            <div class="xl:w-80 flex flex-col justify-between gap-3 md:gap-6">
+                                <div class="bg-indigo-50/50 p-3 md:p-6 rounded-3xl border border-indigo-100/50">
                                     <div class="flex justify-between items-center mb-3">
                                         <span class="text-[10px] font-black text-indigo-600 uppercase tracking-widest">{{ __('Overall Progress') }}</span>
                                         <span class="text-lg font-black text-indigo-600">{{ $report->progress_percentage }}%</span>
@@ -104,7 +104,7 @@
                                         @endif
                                     </div>
                                     <a href="{{ route('contractor.site-reports.show', $report->id) }}" 
-                                       class="h-12 px-6 rounded-2xl bg-white border border-gray-100 flex items-center justify-center text-[10px] font-black text-gray-900 uppercase tracking-widest hover:bg-gray-50 transition-all shadow-sm">
+                                       class="h-12 px-3 md:px-6 rounded-2xl bg-white border border-gray-100 flex items-center justify-center text-[10px] font-black text-gray-900 uppercase tracking-widest hover:bg-gray-50 transition-all shadow-sm">
                                         {{ __('View Details') }}
                                         <i class="fa-solid fa-arrow-right ml-2 text-indigo-600"></i>
                                     </a>
@@ -114,7 +114,7 @@
                     </div>
                 </div>
             @empty
-                <div class="py-32 flex flex-col items-center justify-center text-center px-6 bg-white rounded-[2.5rem] border border-gray-100 shadow-sm">
+                <div class="py-32 flex flex-col items-center justify-center text-center px-3 md:px-6 bg-white rounded-[2.5rem] border border-gray-100 shadow-sm">
                     <div class="w-32 h-32 bg-gray-50 rounded-full flex items-center justify-center text-gray-200 text-6xl mb-8">
                         <i class="fa-solid fa-file-contract"></i>
                     </div>

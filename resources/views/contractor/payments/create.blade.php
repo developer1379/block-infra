@@ -1,7 +1,7 @@
 <x-contractor-layout>
-    <div class="p-6 space-y-8 animate-fade-in">
+    <div class="p-3 md:p-6 space-y-4 md:space-y-8 animate-fade-in">
         <!-- Header -->
-        <div class="flex flex-col md:flex-row md:items-center gap-5 bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+        <div class="flex flex-col md:flex-row md:items-center gap-5 bg-white p-3 md:p-6 rounded-3xl border border-gray-100 shadow-sm">
             <a href="{{ route('contractor.payments.index') }}" class="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 transition-all shadow-sm">
                 <i class="fa-solid fa-arrow-left"></i>
             </a>
@@ -12,10 +12,10 @@
         </div>
 
         <div class="bg-white rounded-[2.5rem] shadow-xl shadow-emerald-100/20 border border-gray-100 overflow-hidden">
-            <form action="{{ route('contractor.payments.store') }}" method="POST" class="p-8 space-y-8">
+            <form action="{{ route('contractor.payments.store') }}" method="POST" class="p-4 md:p-8 space-y-4 md:space-y-8">
                 @csrf
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                     <!-- Worker Selection -->
                     <div class="space-y-3">
                         <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Select Worker') }}</label>
@@ -43,7 +43,7 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
                     <!-- Amount -->
                     <div class="space-y-3">
                         <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Payment Amount') }} (₹)</label>
@@ -67,7 +67,7 @@
                     <!-- Payment Method -->
                     <div class="space-y-3">
                         <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Payment Method') }}</label>
-                        <select name="payment_method" required class="w-full px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 focus:bg-white transition-all outline-none cursor-pointer appearance-none">
+                        <select name="payment_method" required class="w-full px-3 md:px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 focus:bg-white transition-all outline-none cursor-pointer appearance-none">
                             <option value="cash">{{ __('Cash') }}</option>
                             <option value="bank_transfer">{{ __('Bank Transfer') }}</option>
                             <option value="upi">{{ __('UPI (GPay/PhonePe)') }}</option>
@@ -76,11 +76,11 @@
                     </div>
                 </div>
 
-                <div class="p-8 bg-emerald-50/50 rounded-[2.5rem] border border-emerald-100/50 space-y-6">
+                <div class="p-4 md:p-8 bg-emerald-50/50 rounded-[2.5rem] border border-emerald-100/50 space-y-3 md:space-y-6">
                     <h3 class="text-[10px] font-black text-emerald-600 uppercase tracking-widest flex items-center gap-2">
                         <i class="fa-solid fa-calendar-range"></i> {{ __('Wage Period Selection') }}
                     </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
                         <div class="space-y-2">
                             <label class="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Period Start') }}</label>
                             <input type="date" name="period_start" class="w-full px-5 py-3 bg-white border-transparent rounded-xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-emerald-500/10 transition-all outline-none">
@@ -92,7 +92,7 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                     <div class="space-y-3">
                         <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Transaction Reference / UPI ID') }}</label>
                         <div class="relative group">
@@ -104,7 +104,7 @@
                     <div class="space-y-3">
                         <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Notes') }}</label>
                         <textarea name="notes" rows="1" placeholder="{{ __('e.g. Paid for last week\'s foundation work...') }}"
-                            class="w-full px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 focus:bg-white transition-all outline-none"></textarea>
+                            class="w-full px-3 md:px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 focus:bg-white transition-all outline-none"></textarea>
                     </div>
                 </div>
 

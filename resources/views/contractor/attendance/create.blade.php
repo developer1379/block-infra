@@ -1,7 +1,7 @@
 <x-contractor-layout>
-    <div class="p-6 space-y-8 animate-fade-in">
+    <div class="p-3 md:p-6 space-y-4 md:space-y-8 animate-fade-in">
         <!-- Header -->
-        <div class="flex flex-col md:flex-row md:items-center gap-5 bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+        <div class="flex flex-col md:flex-row md:items-center gap-5 bg-white p-3 md:p-6 rounded-3xl border border-gray-100 shadow-sm">
             <a href="{{ route('contractor.attendance.index') }}" class="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all shadow-sm">
                 <i class="fa-solid fa-arrow-left"></i>
             </a>
@@ -12,10 +12,10 @@
         </div>
 
         <div class="bg-white rounded-[2.5rem] shadow-xl shadow-indigo-100/20 border border-gray-100 overflow-hidden">
-            <form action="{{ route('contractor.attendance.store') }}" method="POST" enctype="multipart/form-data" id="attendanceForm" class="p-8 space-y-8">
+            <form action="{{ route('contractor.attendance.store') }}" method="POST" enctype="multipart/form-data" id="attendanceForm" class="p-4 md:p-8 space-y-4 md:space-y-8">
                 @csrf
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                     <!-- Project Selection -->
                     <div class="space-y-3">
                         <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Project Site') }}</label>
@@ -40,7 +40,7 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                     <!-- Status -->
                     <div class="space-y-3">
                         <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Attendance Status') }}</label>
@@ -65,7 +65,7 @@
                         <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Date') }}</label>
                         <div class="relative">
                             <input type="text" value="{{ date('M d, Y') }}" readonly
-                                class="w-full px-6 py-4 bg-gray-50 border-transparent rounded-2xl text-sm font-black text-gray-400 cursor-not-allowed">
+                                class="w-full px-3 md:px-6 py-4 bg-gray-50 border-transparent rounded-2xl text-sm font-black text-gray-400 cursor-not-allowed">
                             <span class="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-indigo-500 uppercase tracking-widest bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">
                                 {{ __('Today') }}
                             </span>
@@ -75,7 +75,7 @@
                 </div>
 
                 <!-- Camera & Geo-Tagging Section -->
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-8 border-t border-gray-50">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-8 pt-8 border-t border-gray-50">
                     <div class="lg:col-span-7 space-y-4">
                         <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Live Camera Verification') }}</label>
                         <div class="relative bg-gray-900 rounded-[2.5rem] overflow-hidden aspect-[4/3] md:aspect-video shadow-2xl border-8 border-white ring-1 ring-gray-100">
@@ -125,11 +125,11 @@
                         </div>
                     </div>
 
-                    <div class="lg:col-span-5 space-y-8">
+                    <div class="lg:col-span-5 space-y-4 md:space-y-8">
                         <div class="space-y-3">
                             <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Detailed Notes') }}</label>
                             <textarea name="notes" rows="5" placeholder="{{ __('Any remarks about the worker\'s performance or site conditions today...') }}"
-                                class="w-full rounded-3xl border-transparent bg-gray-50/50 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 focus:bg-white transition-all p-6 text-sm font-medium outline-none"></textarea>
+                                class="w-full rounded-3xl border-transparent bg-gray-50/50 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 focus:bg-white transition-all p-3 md:p-6 text-sm font-medium outline-none"></textarea>
                         </div>
                         
                         <div class="space-y-3">
@@ -142,7 +142,7 @@
                         </div>
 
                         <!-- Info Alert -->
-                        <div class="p-6 bg-indigo-50 rounded-3xl border border-indigo-100 space-y-2">
+                        <div class="p-3 md:p-6 bg-indigo-50 rounded-3xl border border-indigo-100 space-y-2">
                             <div class="flex items-center gap-2 text-indigo-600">
                                 <i class="fa-solid fa-circle-info"></i>
                                 <span class="text-[10px] font-black uppercase tracking-widest">{{ __('Important Note') }}</span>
@@ -166,7 +166,7 @@
     <!-- Add Worker Modal -->
     <div id="addWorkerModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-[32px] w-full max-w-lg overflow-hidden shadow-2xl animate-fade-in">
-            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-indigo-600 text-white">
+            <div class="p-3 md:p-6 border-b border-gray-100 flex justify-between items-center bg-indigo-600 text-white">
                 <h3 class="font-bold text-sm flex items-center gap-2">
                     <i class="fa-solid fa-user-plus"></i> {{ __('Add New Worker') }}
                 </h3>
@@ -174,7 +174,7 @@
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-            <form id="addWorkerForm" class="p-6 space-y-4">
+            <form id="addWorkerForm" class="p-3 md:p-6 space-y-4">
                 @csrf
                 <input type="hidden" name="status" value="active">
                 <div>
@@ -237,7 +237,7 @@
                 setTimeout(() => cameraFeedback.classList.add('hidden'), 500);
             } catch (err) {
                 console.error("Camera Error:", err);
-                cameraFeedback.innerHTML = `<div class='text-red-400 p-6'><i class='fa-solid fa-circle-exclamation text-3xl mb-3'></i><p class='text-[10px] font-black uppercase tracking-widest'>{{ __('Camera Access Denied') }}</p></div>`;
+                cameraFeedback.innerHTML = `<div class='text-red-400 p-3 md:p-6'><i class='fa-solid fa-circle-exclamation text-3xl mb-3'></i><p class='text-[10px] font-black uppercase tracking-widest'>{{ __('Camera Access Denied') }}</p></div>`;
             }
         }
 
@@ -276,7 +276,7 @@
                     title: "{{ __('Waiting for GPS') }}",
                     text: "{{ __('Please wait for a valid GPS signal before marking attendance.') }}",
                     confirmButtonText: "{{ __('Got it') }}",
-                    customClass: { confirmButton: 'bg-indigo-600 px-6 py-3 rounded-xl text-white font-bold' }
+                    customClass: { confirmButton: 'bg-indigo-600 px-3 md:px-6 py-3 rounded-xl text-white font-bold' }
                 });
                 return;
             }

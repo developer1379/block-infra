@@ -28,8 +28,8 @@
                 font-style: normal;
             }
         </style>
-    <div class="min-h-screen bg-gray-50/50 p-6">
-        <div class="max-w-5xl mx-auto space-y-6">
+    <div class="min-h-screen bg-gray-50/50 p-3 md:p-6">
+        <div class="max-w-5xl mx-auto space-y-3 md:space-y-6">
 
             {{-- PAGE HEADER --}}
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -50,7 +50,7 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
 
                 {{-- Header Bar --}}
-                <div class="bg-gray-50/50 border-b border-gray-100 px-8 py-5 flex items-center gap-3">
+                <div class="bg-gray-50/50 border-b border-gray-100 px-4 md:px-8 py-5 flex items-center gap-3">
                     <div
                         class="w-10 h-10 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center border border-indigo-100">
                         <i class="bi bi-file-earmark-text text-lg"></i>
@@ -62,7 +62,7 @@
                 </div>
 
                 {{-- Bidding Suggestions --}}
-                <div class="px-8 py-4 bg-amber-50 border-b border-amber-100 flex items-start gap-3">
+                <div class="px-4 md:px-8 py-4 bg-amber-50 border-b border-amber-100 flex items-start gap-3">
                     <div class="mt-0.5 text-amber-600">
                         <i class="bi bi-lightbulb-fill"></i>
                     </div>
@@ -76,15 +76,15 @@
                     </div>
                 </div>
 
-                <div class="p-8">
+                <div class="p-4 md:p-8">
                     <form action="{{ route('contractor.bids.store', $project->id) }}" method="POST"
                         enctype="multipart/form-data" id="bidForm">
                         @csrf
 
-                        <div class="space-y-8">
+                        <div class="space-y-4 md:space-y-8">
 
                             {{-- 1. Cost & Timeline --}}
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                                 {{-- Bid Amount --}}
                                 <div>
                                     <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-1.5">
@@ -199,7 +199,7 @@
                         {{-- Footer Actions --}}
                         <div class="flex items-center justify-end gap-4 pt-8 mt-4">
                             <button type="submit"
-                                class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold px-8 py-3 rounded-xl shadow-md shadow-indigo-200 transition-all transform hover:-translate-y-0.5 focus:ring-4 focus:ring-indigo-100">
+                                class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold px-4 md:px-8 py-3 rounded-xl shadow-md shadow-indigo-200 transition-all transform hover:-translate-y-0.5 focus:ring-4 focus:ring-indigo-100">
                                 <i class="bi bi-send-fill text-xs"></i> {{ __('Submit Proposal') }}
                             </button>
                         </div>

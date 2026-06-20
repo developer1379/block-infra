@@ -1,7 +1,7 @@
 <x-contractor-layout>
-    <div class="p-6 space-y-8 animate-fade-in">
+    <div class="p-3 md:p-6 space-y-4 md:space-y-8 animate-fade-in">
         <!-- Header Section -->
-        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3 md:gap-6">
             <div>
                 <h1 class="text-3xl font-black text-gray-900 tracking-tight flex items-center gap-3">
                     {{ __('Worker Attendance') }}
@@ -12,7 +12,7 @@
                 <p class="text-gray-500 text-sm mt-1 font-medium">{{ __('Track and manage geo-tagged attendance for your workforce.') }}</p>
             </div>
             <a href="{{ route('contractor.attendance.create') }}" 
-                class="w-full lg:w-auto inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-black px-6 py-3.5 rounded-2xl transition-all shadow-xl shadow-indigo-100 transform active:scale-95">
+                class="w-full lg:w-auto inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-black px-3 md:px-6 py-3.5 rounded-2xl transition-all shadow-xl shadow-indigo-100 transform active:scale-95">
                 <i class="fa-solid fa-location-crosshairs"></i>
                 {{ __('Mark New Attendance') }}
             </a>
@@ -29,7 +29,7 @@
                     <option value="">{{ __('All Projects') }}</option>
                 </select>
             </div>
-            <button class="px-6 py-3 bg-gray-900 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-gray-800 transition-all shadow-lg shadow-gray-100">
+            <button class="px-3 md:px-6 py-3 bg-gray-900 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-gray-800 transition-all shadow-lg shadow-gray-100">
                 {{ __('Apply Filters') }}
             </button>
         </div>
@@ -41,20 +41,20 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-gray-50/50 border-b border-gray-50">
-                            <th class="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Date') }}</th>
-                            <th class="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Worker') }}</th>
-                            <th class="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Project') }}</th>
-                            <th class="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Status') }}</th>
-                            <th class="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">{{ __('Verification') }}</th>
+                            <th class="px-4 md:px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Date') }}</th>
+                            <th class="px-4 md:px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Worker') }}</th>
+                            <th class="px-4 md:px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Project') }}</th>
+                            <th class="px-4 md:px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('Status') }}</th>
+                            <th class="px-4 md:px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">{{ __('Verification') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-50">
                         @forelse ($attendanceRecords as $record)
                             <tr class="hover:bg-gray-50/80 transition-all group">
-                                <td class="px-8 py-6">
+                                <td class="px-4 md:px-8 py-3 md:py-6">
                                     <span class="text-sm font-black text-gray-900">{{ \Carbon\Carbon::parse($record->attendance_date)->format('M d, Y') }}</span>
                                 </td>
-                                <td class="px-8 py-6">
+                                <td class="px-4 md:px-8 py-3 md:py-6">
                                     <div class="flex items-center gap-4">
                                         <div class="h-10 w-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 font-black text-xs group-hover:scale-110 transition-transform">
                                             {{ substr($record->worker->name, 0, 1) }}
@@ -65,10 +65,10 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-8 py-6">
+                                <td class="px-4 md:px-8 py-3 md:py-6">
                                     <p class="text-sm font-bold text-gray-600 truncate max-w-[200px]">{{ $record->project->title }}</p>
                                 </td>
-                                <td class="px-8 py-6">
+                                <td class="px-4 md:px-8 py-3 md:py-6">
                                     @php
                                         $statusClasses = [
                                             'present' => 'bg-emerald-50 text-emerald-600 border-emerald-100',
@@ -80,7 +80,7 @@
                                         {{ __(str_replace('_', ' ', $record->status)) }}
                                     </span>
                                 </td>
-                                <td class="px-8 py-6">
+                                <td class="px-4 md:px-8 py-3 md:py-6">
                                     <div class="flex items-center justify-center gap-3">
                                         @if($record->verification_photo)
                                             <a href="{{ asset('storage/' . $record->verification_photo) }}" target="_blank" 
@@ -110,7 +110,7 @@
             <!-- Mobile Card View -->
             <div class="md:hidden divide-y divide-gray-50">
                 @forelse ($attendanceRecords as $record)
-                    <div class="p-6 space-y-4 bg-white hover:bg-gray-50 transition-all">
+                    <div class="p-3 md:p-6 space-y-4 bg-white hover:bg-gray-50 transition-all">
                         <div class="flex justify-between items-start">
                             <div class="flex items-center gap-3">
                                 <div class="h-12 w-12 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 font-black">
@@ -151,7 +151,7 @@
 
             <!-- Global Empty State -->
             @if($attendanceRecords->isEmpty())
-                <div class="py-32 flex flex-col items-center justify-center text-center px-6">
+                <div class="py-32 flex flex-col items-center justify-center text-center px-3 md:px-6">
                     <div class="w-32 h-32 bg-gray-50 rounded-full flex items-center justify-center text-gray-200 text-6xl mb-8">
                         <i class="fa-solid fa-calendar-xmark"></i>
                     </div>

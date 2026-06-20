@@ -1,8 +1,8 @@
 <x-contractor-layout>
-    <div class="p-6 space-y-8 animate-fade-in">
+    <div class="p-3 md:p-6 space-y-4 md:space-y-8 animate-fade-in">
         <!-- Header -->
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
-            <div class="flex items-center gap-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-6 bg-white p-4 md:p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+            <div class="flex items-center gap-3 md:gap-6">
                 <div class="w-16 h-16 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 shadow-inner">
                     <i class="fa-solid fa-user-gear text-2xl"></i>
                 </div>
@@ -11,24 +11,24 @@
                     <p class="text-gray-500 text-sm font-medium">{{ __('Manage your professional identity and security credentials.') }}</p>
                 </div>
             </div>
-            <a href="{{ route('contractor.dashboard.index') }}" class="px-6 py-3 bg-gray-50 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2">
+            <a href="{{ route('contractor.dashboard.index') }}" class="px-3 md:px-6 py-3 bg-gray-50 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2">
                 <i class="fa-solid fa-arrow-left"></i>
                 {{ __('Back to Command Center') }}
             </a>
         </div>
 
-        <form action="{{ route('contractor.profile.update') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
+        <form action="{{ route('contractor.profile.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4 md:space-y-8">
             @csrf
 
-            <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-4 md:gap-8">
                 <!-- Sidebar: Profile Preview -->
-                <div class="xl:col-span-1 space-y-8">
+                <div class="xl:col-span-1 space-y-4 md:space-y-8">
                     <div class="bg-white rounded-[2.5rem] shadow-xl shadow-indigo-100/20 border border-gray-100 overflow-hidden sticky top-8">
                         <div class="h-32 bg-gradient-to-br from-indigo-600 to-violet-700 relative">
                             <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
                         </div>
                         
-                        <div class="px-8 pb-10 text-center relative">
+                        <div class="px-4 md:px-8 pb-10 text-center relative">
                             <div class="relative -mt-16 inline-block">
                                 @php $imagePath = auth()->user()->contractor->image ?? null; @endphp
                                 <div class="w-32 h-32 rounded-[2.5rem] p-1.5 bg-white shadow-2xl relative group">
@@ -59,7 +59,7 @@
                 </div>
 
                 <!-- Main Content: Form Fields -->
-                <div class="xl:col-span-2 space-y-8">
+                <div class="xl:col-span-2 space-y-4 md:space-y-8">
                     <!-- General Information -->
                     <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 p-10">
                         <div class="flex items-center gap-4 mb-10 pb-6 border-b border-gray-50">
@@ -69,26 +69,26 @@
                             <h2 class="text-xl font-black text-gray-900 tracking-tight">{{ __('General Information') }}</h2>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                             <div class="space-y-3">
                                 <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Full Professional Name') }}</label>
                                 <input type="text" name="name" value="{{ auth()->user()->name }}" required
-                                    class="w-full px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none">
+                                    class="w-full px-3 md:px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none">
                             </div>
                             <div class="space-y-3">
                                 <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Primary Email Address') }}</label>
                                 <input type="email" name="email" value="{{ auth()->user()->email }}" required
-                                    class="w-full px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none">
+                                    class="w-full px-3 md:px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none">
                             </div>
                             <div class="space-y-3">
                                 <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Phone Contact') }}</label>
                                 <input type="text" name="phone" value="{{ auth()->user()->contractor->phone ?? '' }}"
-                                    class="w-full px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none">
+                                    class="w-full px-3 md:px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none">
                             </div>
                             <div class="space-y-3">
                                 <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Operating City') }}</label>
                                 <input type="text" name="city" value="{{ auth()->user()->contractor->city ?? '' }}"
-                                    class="w-full px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none">
+                                    class="w-full px-3 md:px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none">
                             </div>
                         </div>
                     </div>
@@ -140,16 +140,16 @@
                             <h2 class="text-xl font-black text-gray-900 tracking-tight">{{ __('Security Credentials') }}</h2>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                             <div class="space-y-3">
                                 <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('New Access Key (Password)') }}</label>
                                 <input type="password" name="password" placeholder="••••••••"
-                                    class="w-full px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none">
+                                    class="w-full px-3 md:px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none">
                             </div>
                             <div class="space-y-3">
                                 <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Verify Access Key') }}</label>
                                 <input type="password" name="password_confirmation" placeholder="••••••••"
-                                    class="w-full px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none">
+                                    class="w-full px-3 md:px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none">
                             </div>
                         </div>
                         <p class="text-[10px] font-bold text-gray-400 mt-6 uppercase tracking-tighter">{{ __('Leave blank if you do not wish to change your password') }}</p>
@@ -186,7 +186,7 @@
                     confirmButtonColor: '#4f46e5',
                     customClass: {
                         popup: 'rounded-[2rem]',
-                        confirmButton: 'rounded-xl px-8 py-3 font-black uppercase text-xs tracking-widest'
+                        confirmButton: 'rounded-xl px-4 md:px-8 py-3 font-black uppercase text-xs tracking-widest'
                     }
                 });
             @endif

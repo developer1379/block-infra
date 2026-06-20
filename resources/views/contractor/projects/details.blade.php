@@ -1,5 +1,5 @@
 <x-contractor-layout>
-    <div class="p-6 space-y-8 animate-fade-in">
+    <div class="p-3 md:p-6 space-y-4 md:space-y-8 animate-fade-in">
         <!-- Breadcrumbs & Header -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div class="flex items-center gap-4">
@@ -18,13 +18,13 @@
             
             <div class="flex items-center gap-3">
                 @if (auth()->user()->hasRole('contractor') && $project->status == 'open')
-                    <a href="{{ route('contractor.bids.create', $project->id) }}" class="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all shadow-indigo-200 shadow-lg font-bold text-sm">
+                    <a href="{{ route('contractor.bids.create', $project->id) }}" class="flex items-center gap-2 px-3 md:px-6 py-2.5 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all shadow-indigo-200 shadow-lg font-bold text-sm">
                         <i class="bi bi-gavel"></i>
                         {{ __('Bid on Project') }}
                     </a>
                 @endif
                 @if (auth()->user()->hasRole('admin'))
-                    <a href="{{ route('admin.projects.edit', $project->id) }}" class="flex items-center gap-2 px-6 py-2.5 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-all font-bold text-sm">
+                    <a href="{{ route('admin.projects.edit', $project->id) }}" class="flex items-center gap-2 px-3 md:px-6 py-2.5 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-all font-bold text-sm">
                         <i class="bi bi-pencil-square"></i>
                         {{ __('Edit Project') }}
                     </a>
@@ -32,12 +32,12 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
             <!-- Main Content Area -->
-            <div class="lg:col-span-2 space-y-8">
+            <div class="lg:col-span-2 space-y-4 md:space-y-8">
                 <!-- Overview Card -->
                 <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
-                    <div class="p-8">
+                    <div class="p-4 md:p-8">
                         <div class="flex items-center justify-between mb-8">
                             <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest border cursor-help 
                                 {{ $project->status == 'open' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 
@@ -61,7 +61,7 @@
 
                 <!-- Scope of Works -->
                 <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
-                    <div class="px-8 py-6 border-b border-gray-50 bg-gray-50/30 flex justify-between items-center">
+                    <div class="px-4 md:px-8 py-3 md:py-6 border-b border-gray-50 bg-gray-50/30 flex justify-between items-center">
                         <h3 class="font-bold text-gray-900 flex items-center gap-2">
                             <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center text-sm">
                                 <i class="bi bi-list-check"></i>
@@ -78,10 +78,10 @@
                             <table class="w-full text-left">
                                 <thead class="bg-gray-50/50 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
                                     <tr>
-                                        <th class="px-8 py-4">{{ __('Work Item') }}</th>
-                                        <th class="px-8 py-4 text-center">{{ __('Unit') }}</th>
-                                        <th class="px-8 py-4 text-center">{{ __('Quantity') }}</th>
-                                        <th class="px-8 py-4 text-right">{{ __('Estimated Cost') }}</th>
+                                        <th class="px-4 md:px-8 py-4">{{ __('Work Item') }}</th>
+                                        <th class="px-4 md:px-8 py-4 text-center">{{ __('Unit') }}</th>
+                                        <th class="px-4 md:px-8 py-4 text-center">{{ __('Quantity') }}</th>
+                                        <th class="px-4 md:px-8 py-4 text-right">{{ __('Estimated Cost') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-50">
@@ -92,25 +92,25 @@
                                             $total = $rate * $work->pivot->quantity;
                                         @endphp
                                         <tr class="hover:bg-gray-50/50 transition-colors">
-                                            <td class="px-8 py-4">
+                                            <td class="px-4 md:px-8 py-4">
                                                 <div class="font-bold text-gray-900">{{ $work->name }}</div>
                                             </td>
-                                            <td class="px-8 py-4 text-center">
+                                            <td class="px-4 md:px-8 py-4 text-center">
                                                 <span class="inline-block bg-gray-100 text-gray-500 text-[10px] font-bold px-2 py-0.5 rounded-lg uppercase">
                                                     {{ $work->unit->name ?? '-' }}
                                                 </span>
                                             </td>
-                                            <td class="px-8 py-4 text-center font-bold text-gray-700">{{ $work->pivot->quantity }}</td>
-                                            <td class="px-8 py-4 text-right font-extrabold text-gray-900">₹{{ number_format($total, 2) }}</td>
+                                            <td class="px-4 md:px-8 py-4 text-center font-bold text-gray-700">{{ $work->pivot->quantity }}</td>
+                                            <td class="px-4 md:px-8 py-4 text-right font-extrabold text-gray-900">₹{{ number_format($total, 2) }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                                 <tfoot class="bg-gray-50/80 border-t border-gray-100">
                                     <tr>
-                                        <td colspan="3" class="px-8 py-5 text-right text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                                        <td colspan="3" class="px-4 md:px-8 py-5 text-right text-[10px] font-bold text-gray-400 uppercase tracking-widest">
                                             {{ __('Total Estimated Budget') }}
                                         </td>
-                                        <td class="px-8 py-5 text-right text-indigo-600 text-xl font-extrabold">
+                                        <td class="px-4 md:px-8 py-5 text-right text-indigo-600 text-xl font-extrabold">
                                             ₹{{ number_format($project->budget_max, 2) }}
                                         </td>
                                     </tr>
@@ -130,16 +130,16 @@
             </div>
 
             <!-- Sidebar Info -->
-            <div class="space-y-8">
+            <div class="space-y-4 md:space-y-8">
                 <!-- Summary Card -->
-                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 space-y-8">
+                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-4 md:p-8 space-y-4 md:space-y-8">
                     <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 border-b border-gray-50 pb-2">
                         {{ __('Project Summary') }}
                     </h4>
 
-                    <div class="space-y-6">
+                    <div class="space-y-3 md:space-y-6">
                         <!-- Budget Widget -->
-                        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-700 p-6 text-white shadow-xl shadow-indigo-200 cursor-help" data-tooltip="{{ __('The maximum budget allocated by the client for this project.') }}">
+                        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-700 p-3 md:p-6 text-white shadow-xl shadow-indigo-200 cursor-help" data-tooltip="{{ __('The maximum budget allocated by the client for this project.') }}">
                             <div class="relative z-10">
                                 <p class="text-indigo-100 text-[10px] font-bold uppercase tracking-wider mb-1">{{ __('Total Budget') }}</p>
                                 <div class="text-3xl font-extrabold flex items-baseline gap-1">
@@ -186,7 +186,7 @@
 
                 <!-- Admin Bid Summary -->
                 @if (auth()->user()->hasRole('admin'))
-                    <div class="bg-gray-900 rounded-3xl p-8 text-white space-y-6">
+                    <div class="bg-gray-900 rounded-3xl p-4 md:p-8 text-white space-y-3 md:space-y-6">
                         <div class="flex justify-between items-center">
                             <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ __('Bid Activity') }}</h4>
                             <span class="px-2 py-0.5 bg-indigo-600 rounded text-[10px] font-bold">{{ $project->bids->count() }} {{ __('Total') }}</span>
