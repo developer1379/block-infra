@@ -137,7 +137,6 @@ class ProjectController extends Controller
                 ->get();
 
             $groupedMaterials = \App\Models\MaterialInventory::where('project_id', $project->id)
-            $groupedMaterials = \App\Models\MaterialInventory::where('project_id', $project->id)
                 ->with(['material' => function($q) {
                     $q->select('id', 'name', 'unit');
                 }])
