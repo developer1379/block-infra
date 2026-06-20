@@ -345,34 +345,64 @@
                         </button>
                     </div>
 
-                    <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-6 relative">
-                        <div class="space-y-2">
-                            @forelse($groupedMaterials as $materialId => $logs)
-                                @php
-                                    $material = $logs->first()->material;
-                                    $totalIn = $logs->whereIn('type', ['in', 'purchase'])->sum('quantity');
-                                    $totalOut = $logs->where('type', 'consumption')->sum('quantity');
-                                    $balance = $totalIn - $totalOut;
-                                @endphp
-                                <div @click="openMaterialId = {{ $material->id }}" class="flex items-center justify-between p-3 rounded-xl border border-slate-50 hover:border-indigo-100 hover:bg-indigo-50/30 cursor-pointer transition-all group">
-                                    <div>
-                                        <p class="text-xs font-bold text-slate-800 group-hover:text-indigo-700 transition-colors">{{ $material->name }}</p>
-                                        <p class="text-[9px] text-slate-400 uppercase flex items-center gap-1 mt-0.5">
-                                            <span class="text-emerald-500"><i class="bi bi-arrow-down"></i> In: {{ $totalIn }}</span> | 
-                                            <span class="text-rose-500"><i class="bi bi-arrow-up"></i> Out: {{ $totalOut }}</span>
-                                        </p>
-                                    </div>
-                                    <div class="text-right">
-                                        <p class="text-sm font-black {{ $balance <= 0 ? 'text-rose-600' : 'text-emerald-600' }}">
-                                            {{ $balance }}
-                                        </p>
-                                        <p class="text-[8px] font-bold text-slate-400 uppercase">{{ $material->unit ?? 'Unit' }}</p>
-                                    </div>
-                                </div>
-                            @empty
-                                <p class="text-[10px] text-slate-300 italic py-4 text-center">No materials recorded for this site.</p>
-                            @endforelse
-                        </div>
+                    <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden relative">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-gray-50 border-b border-gray-200">
+                                <tr>
+                                    <th class="px-6 py-3 text-[10px] font-bold text-gray-500 uppercase tracking-wider">Material</th>
+                                    <th class="px-6 py-3 text-[10px] font-bold text-gray-500 uppercase tracking-wider">Total Received (In)</th>
+                                    <th class="px-6 py-3 text-[10px] font-bold text-gray-500 uppercase tracking-wider">Total Used (Out)</th>
+                                    <th class="px-6 py-3 text-[10px] font-bold text-gray-500 uppercase tracking-wider text-right">Available Stock</th>
+                                    <th class="px-6 py-3 text-[10px] font-bold text-gray-500 uppercase tracking-wider text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                @forelse($groupedMaterials as $materialId => $logs)
+                                    @php
+                                        $material = $logs->first()->material;
+                                        $totalIn = $logs->whereIn('type', ['in', 'purchase'])->sum('quantity');
+                                        $totalOut = $logs->where('type', 'consumption')->sum('quantity');
+                                        $balance = $totalIn - $totalOut;
+                                    @endphp
+                                    <tr class="hover:bg-gray-50/50 transition-colors">
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
+                                                    <i class="bi bi-box"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="text-xs font-bold text-gray-900">{{ $material->name }}</p>
+                                                    <p class="text-[10px] text-gray-500">{{ $material->unit ?? 'Unit' }}</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 text-xs font-semibold text-emerald-600">
+                                            +{{ $totalIn }}
+                                        </td>
+                                        <td class="px-6 py-4 text-xs font-semibold text-rose-600">
+                                            -{{ $totalOut }}
+                                        </td>
+                                        <td class="px-6 py-4 text-right">
+                                            <span class="text-sm font-black {{ $balance <= 0 ? 'text-rose-600' : 'text-gray-900' }}">
+                                                {{ $balance }}
+                                            </span>
+                                            <span class="text-[10px] text-gray-500 font-medium ml-1">{{ $material->unit }}</span>
+                                        </td>
+                                        <td class="px-6 py-4 text-center">
+                                            <button @click="openMaterialId = {{ $material->id }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white rounded-lg text-xs font-bold transition-colors">
+                                                <i class="bi bi-eye"></i> View Log
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="px-6 py-10 text-center text-gray-400 text-xs italic">
+                                            No materials recorded for this site.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
 
                         <!-- Modals for Material Transactions -->
                         @foreach($groupedMaterials as $materialId => $logs)
