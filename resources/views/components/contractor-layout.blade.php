@@ -53,24 +53,78 @@
             border-radius: 4px;
         }
 
+        /* Premium Form Field & Select2 Overrides for Professional Look */
+        input[type="text"],
+        input[type="number"],
+        input[type="email"],
+        input[type="password"],
+        input[type="tel"],
+        input[type="url"],
+        input[type="date"],
+        input[type="datetime-local"],
+        select,
+        textarea {
+            border: 1px solid #cbd5e1 !important; /* Elegant slate border */
+            background-color: #ffffff !important; /* Clean white bg */
+            transition: all 0.2s ease-in-out !important;
+            color: #1e293b !important;
+            font-weight: 600 !important;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="tel"]:focus,
+        input[type="url"]:focus,
+        input[type="date"]:focus,
+        input[type="datetime-local"]:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #4f46e5 !important; /* Indigo-600 focus border */
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1) !important; /* Elegant focus ring shadow */
+            background-color: #ffffff !important;
+            outline: none !important;
+        }
+
         /* Select2 Tailwind Fixes */
         .select2-container .select2-selection--single {
-            height: 48px !important;
-            border-color: #f1f5f9 !important;
-            border-radius: 1rem !important;
-            padding-top: 10px;
-            background-color: #f8fafc !important;
+            height: 46px !important;
+            border: 1px solid #cbd5e1 !important;
+            padding-top: 8px !important;
+            background-color: #ffffff !important;
+            transition: all 0.2s ease-in-out !important;
         }
 
         .select2-container--default .select2-selection--single .select2-selection__arrow {
-            top: 10px !important;
+            top: 8px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #1e293b !important;
+            font-weight: 700 !important;
+        }
+
+        .select2-container .select2-selection--single:focus,
+        .select2-container--open .select2-selection--single {
+            border-color: #4f46e5 !important;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1) !important;
         }
 
         .select2-dropdown {
-            border-color: #f1f5f9 !important;
-            border-radius: 1rem !important;
+            border-color: #cbd5e1 !important;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
             overflow: hidden;
+            background-color: #ffffff !important;
+        }
+
+        /* Professional Label Styling */
+        label {
+            color: #475569 !important; /* Slate-600 */
+            font-weight: 700 !important;
+            font-size: 11px !important;
+            letter-spacing: 0.05em !important;
+            text-transform: uppercase !important;
         }
 
         /* Premium Tooltip */
