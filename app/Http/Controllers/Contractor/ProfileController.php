@@ -31,7 +31,7 @@ class ProfileController extends Controller
             'phone'      => 'nullable|string|max:20',
             'city'       => 'nullable|string|max:100',
             'password'   => 'nullable|min:6|confirmed',
-            'image'      => 'nullable|image|max:2048',   // ✔ Corrected
+            'image'      => 'nullable|image|max:10240',   // ✔ Corrected
             'categories' => 'array',
         ]);
 

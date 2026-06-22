@@ -43,7 +43,7 @@ class WorkerController extends Controller
             'specialization' => 'nullable|string|max:100',
             'daily_wage' => 'nullable|numeric|min:0',
             'identity_type' => 'required|in:aadhar,pan,voter_id,driving_license,other',
-            'identity_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'identity_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
             'status' => 'required|in:active,inactive'
         ]);
 
