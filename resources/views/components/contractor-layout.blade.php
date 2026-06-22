@@ -233,10 +233,18 @@
             input, select, textarea, .select2-container .select2-selection--single {
                 padding-top: 0.5rem !important;
                 padding-bottom: 0.5rem !important;
-                padding-left: 0.75rem !important;
-                padding-right: 0.75rem !important;
                 height: 38px !important;
                 font-size: 0.75rem !important;
+            }
+            input:not([class*="pl-"]), select:not([class*="pl-"]), textarea:not([class*="pl-"]) {
+                padding-left: 0.75rem !important;
+            }
+            input:not([class*="pr-"]), select:not([class*="pr-"]), textarea:not([class*="pr-"]) {
+                padding-right: 0.75rem !important;
+            }
+            .select2-container .select2-selection--single {
+                padding-left: 0.75rem !important;
+                padding-right: 0.75rem !important;
             }
 
             /* Compact tables */
