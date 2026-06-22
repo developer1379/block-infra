@@ -124,6 +124,93 @@
         [class*="rounded-"] {
             border-radius: 0px !important;
         }
+
+        /* Super responsive mobile compact design overrides */
+        @media (max-width: 767px) {
+            main {
+                padding-left: 0.5rem !important;
+                padding-right: 0.5rem !important;
+            }
+            
+            /* Compact padding for cards and sections */
+            .p-3, .p-5, .p-6, .md\:p-6, .sm\:p-10 {
+                padding: 0.75rem !important;
+            }
+            .py-4, .py-6 {
+                padding-top: 0.5rem !important;
+                padding-bottom: 0.5rem !important;
+            }
+            .px-3, .px-4, .px-6 {
+                padding-left: 0.75rem !important;
+                padding-right: 0.75rem !important;
+            }
+            
+            /* Tighten space-y classes */
+            .space-y-4, .space-y-6, .space-y-8, .md\:space-y-8 {
+                margin-top: 0.75rem !important;
+                margin-bottom: 0.75rem !important;
+                gap: 0.75rem !important;
+            }
+            .gap-3, .gap-4, .gap-6, .md\:gap-6 {
+                gap: 0.5rem !important;
+            }
+            
+            /* Heading resizing */
+            .text-2xl {
+                font-size: 1.15rem !important;
+                line-height: 1.5rem !important;
+            }
+            .text-xl {
+                font-size: 1rem !important;
+                line-height: 1.35rem !important;
+            }
+            .text-lg {
+                font-size: 0.9rem !important;
+                line-height: 1.25rem !important;
+            }
+            .text-sm {
+                font-size: 0.75rem !important;
+            }
+            .text-xs {
+                font-size: 10px !important;
+            }
+
+            /* Compact form elements */
+            input, select, textarea, .select2-container .select2-selection--single {
+                padding-top: 0.5rem !important;
+                padding-bottom: 0.5rem !important;
+                padding-left: 0.75rem !important;
+                padding-right: 0.75rem !important;
+                height: 38px !important;
+                font-size: 0.75rem !important;
+            }
+
+            /* Compact tables */
+            table th {
+                padding: 0.5rem 0.5rem !important;
+                font-size: 10px !important;
+            }
+            table td {
+                padding: 0.5rem 0.5rem !important;
+                font-size: 11px !important;
+            }
+
+            /* Button size reduction */
+            .px-4.py-2, .px-5.py-3 {
+                padding: 0.5rem 0.75rem !important;
+                font-size: 11px !important;
+            }
+
+            /* Stats card specific overrides */
+            .w-12.h-12 {
+                width: 2.25rem !important;
+                height: 2.25rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+            .w-12.h-12 i {
+                font-size: 1.25rem !important;
+            }
+        }
     </style>
 </head>
 
