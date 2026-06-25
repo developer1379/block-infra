@@ -132,7 +132,7 @@
             {{-- CONTACT MAP (Left) --}}
             <div class="col-lg-6 wow fadeInLeft" data-wow-delay="0.2s">
                 <div class="map-container h-100">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3571.2185250493867!2d80.2974378!3d26.4809249!2m3!1f0!2f0!3f0!2m3!1i1024!2i768!4f13.1!3m3!1m2!1m3!1d3571.2185250493867!2d80.2974378!3d26.4809249!2sVikas%20Nagar%2C%20Kanpur%2C%20Uttar%20Pradesh!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" 
+                    <iframe src="https://maps.google.com/maps?q=Flat%20No.%20202,%20Plot%20No.%20674,%20Vishambhar%20Sadan,%20Vikas%20Nagar,%20Kanpur&t=&z=15&ie=UTF8&iwloc=&output=embed" 
                         width="100%" height="100%" style="border:0; min-height: 400px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
             </div>
