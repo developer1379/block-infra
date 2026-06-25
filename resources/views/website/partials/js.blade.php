@@ -86,7 +86,7 @@
     <script>
         $(document).ready(function() {
             $('select[name="categories[]"]').select2({
-                placeholder: 'Select multiple categories',
+                placeholder: '{{ __('Select multiple categories') }}',
                 width: '100%'
             });
         });

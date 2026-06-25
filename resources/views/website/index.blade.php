@@ -68,36 +68,33 @@
         }
     </style>
 
-
-
     <!-- Carousel -->
     <div class="container-fluid p-0">
         <div id="header-carousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img class="w-100" src="{{ asset('website/img/carousel-1.jpg') }}" alt="Bloc Infra Project">
+                    <img class="w-100" src="{{ asset('website/img/carousel-1.jpg') }}" alt="{{ __('Bloc Infra Project') }}">
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center text-center">
                         <div class="p-3" style="max-width:900px;">
                             <i class="fa fa-city fa-4x text-primary mb-4 d-none d-sm-block"></i>
-                            <h1 class="display-3 fw-bold text-white mb-md-3">Building Tomorrow, Today</h1>
-                            <p class="lead mb-4 text-light">Modern infrastructure, quality materials, and precision engineering.</p>
-                            <a href="#about" class="btn btn-primary py-md-3 px-md-5">Discover More</a>
+                            <h1 class="display-3 fw-bold text-white mb-md-3">{{ __('Building Tomorrow, Today') }}</h1>
+                            <p class="lead mb-4 text-light">{{ __('Modern infrastructure, quality materials, and precision engineering.') }}</p>
+                            <a href="#about" class="btn btn-primary py-md-3 px-md-5">{{ __('Discover More') }}</a>
                         </div>
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img class="w-100" src="{{ asset('website/img/carousel-2.jpg') }}" alt="Infrastructure Development">
+                    <img class="w-100" src="{{ asset('website/img/carousel-2.jpg') }}" alt="{{ __('Infrastructure Development') }}">
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center text-center">
                         <div class="p-3" style="max-width:900px;">
                             <i class="fa fa-hard-hat fa-4x text-primary mb-4 d-none d-sm-block"></i>
-                            <h1 class="display-3 fw-bold text-white mb-md-3">Quality That Endures</h1>
-                            <p class="lead mb-4 text-light">Delivering excellence in every project with innovation and integrity.</p>
-                            <a href="#services" class="btn btn-primary py-md-3 px-md-5">Our Services</a>
+                            <h1 class="display-3 fw-bold text-white mb-md-3">{{ __('Quality That Endures') }}</h1>
+                            <p class="lead mb-4 text-light">{{ __('Delivering excellence in every project with innovation and integrity.') }}</p>
+                            <a href="#services" class="btn btn-primary py-md-3 px-md-5">{{ __('Our Services') }}</a>
                         </div>
                     </div>
                 </div>
             </div>
-
             <button class="carousel-control-prev" type="button" data-bs-target="#header-carousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon"></span>
             </button>
@@ -111,27 +108,25 @@
     <div id="about" class="container-fluid py-6 px-5 bg-dark-section">
         <div class="row g-5 align-items-center">
             <div class="col-lg-7">
-                <h1 class="display-5 text-uppercase mb-4"><span class="text-primary">About</span> Bloc Infra</h1>
+                <h1 class="display-5 text-uppercase mb-4"><span class="text-primary">{{ __('About') }}</span> {{ __('Bloc Infra') }}</h1>
                 <p class="mb-4">
-                    Bloc Infra is a Kanpur-based construction and infrastructure company delivering modern,
-                    sustainable projects across commercial, residential, and public sectors.
-                    We combine advanced engineering with innovation and transparency to build long-lasting value.
+                    {{ __('Bloc Infra is a Kanpur-based construction and infrastructure company delivering modern, sustainable projects across commercial, residential, and public sectors. We combine advanced engineering with innovation and transparency to build long-lasting value.') }}
                 </p>
                 <div class="row gx-5 py-2">
                     <div class="col-sm-6">
-                        <p><i class="fa fa-check text-primary me-3"></i>Professional Engineers</p>
-                        <p><i class="fa fa-check text-primary me-3"></i>Comprehensive Planning</p>
-                        <p><i class="fa fa-check text-primary me-3"></i>Transparent Execution</p>
+                        <p><i class="fa fa-check text-primary me-3"></i>{{ __('Professional Engineers') }}</p>
+                        <p><i class="fa fa-check text-primary me-3"></i>{{ __('Comprehensive Planning') }}</p>
+                        <p><i class="fa fa-check text-primary me-3"></i>{{ __('Transparent Execution') }}</p>
                     </div>
                     <div class="col-sm-6">
-                        <p><i class="fa fa-check text-primary me-3"></i>High-Quality Materials</p>
-                        <p><i class="fa fa-check text-primary me-3"></i>On-Time Delivery</p>
-                        <p><i class="fa fa-check text-primary me-3"></i>Sustainable Approach</p>
+                        <p><i class="fa fa-check text-primary me-3"></i>{{ __('High-Quality Materials') }}</p>
+                        <p><i class="fa fa-check text-primary me-3"></i>{{ __('On-Time Delivery') }}</p>
+                        <p><i class="fa fa-check text-primary me-3"></i>{{ __('Sustainable Approach') }}</p>
                     </div>
                 </div>
             </div>
             <div class="col-lg-5">
-                <img class="img-fluid rounded shadow-lg" src="{{ asset('website/img/about.jpg') }}" alt="Bloc Infra Team">
+                <img class="img-fluid rounded shadow-lg" src="{{ asset('website/img/about.jpg') }}" alt="{{ __('Bloc Infra Team') }}">
             </div>
         </div>
     </div>
@@ -139,37 +134,37 @@
     <!-- Services -->
     <div id="services" class="container-fluid bg-dark-section py-6 px-5">
         <div class="text-center mx-auto mb-5" style="max-width:700px;">
-            <h1 class="display-5 text-uppercase mb-4">Our <span class="text-primary">Core Services</span></h1>
+            <h1 class="display-5 text-uppercase mb-4">{{ __('Our') }} <span class="text-primary">{{ __('Core Services') }}</span></h1>
         </div>
         <div class="row g-5">
             <div class="col-lg-4 col-md-6">
                 <div class="service-item text-center p-4 rounded shadow-sm">
                     <img class="img-fluid mb-3 rounded" src="{{ asset('website/img/service-1.jpg') }}" alt="">
-                    <h4 class="text-light mb-3">Commercial Construction</h4>
-                    <p>Corporate complexes and industrial structures with world-class quality and precision.</p>
+                    <h4 class="text-light mb-3">{{ __('Commercial Construction') }}</h4>
+                    <p>{{ __('Corporate complexes and industrial structures with world-class quality and precision.') }}</p>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6">
                 <div class="service-item text-center p-4 rounded shadow-sm">
                     <img class="img-fluid mb-3 rounded" src="{{ asset('website/img/service-2.jpg') }}" alt="">
-                    <h4 class="text-light mb-3">Residential Development</h4>
-                    <p>Elegant, sustainable homes built to match modern lifestyles and environmental standards.</p>
+                    <h4 class="text-light mb-3">{{ __('Residential Development') }}</h4>
+                    <p>{{ __('Elegant, sustainable homes built to match modern lifestyles and environmental standards.') }}</p>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6">
                 <div class="service-item text-center p-4 rounded shadow-sm">
                     <img class="img-fluid mb-3 rounded" src="{{ asset('website/img/service-3.jpg') }}" alt="">
-                    <h4 class="text-light mb-3">Infrastructure Projects</h4>
-                    <p>Urban infrastructure solutions including roads, bridges, and smart utilities.</p>
+                    <h4 class="text-light mb-3">{{ __('Infrastructure Projects') }}</h4>
+                    <p>{{ __('Urban infrastructure solutions including roads, bridges, and smart utilities.') }}</p>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Portfolio -->
-    <div class="container-fluid bg-dark-section py-6 px-5">
+    <div id="projects" class="container-fluid bg-dark-section py-6 px-5">
         <div class="text-center mx-auto mb-5" style="max-width:600px;">
-            <h1 class="display-5 text-uppercase mb-4">Our <span class="text-primary">Projects</span></h1>
+            <h1 class="display-5 text-uppercase mb-4">{{ __('Our') }} <span class="text-primary">{{ __('Projects') }}</span></h1>
         </div>
         <div class="row g-4 portfolio-container">
             @for ($i = 1; $i <= 6; $i++)
@@ -185,21 +180,20 @@
         </div>
     </div>
 
-
     <!-- Blog -->
     <div class="container-fluid bg-dark-section py-6 px-5">
         <div class="text-center mx-auto mb-5" style="max-width:600px;">
-            <h1 class="display-5 text-uppercase mb-4">Latest <span class="text-primary">Insights</span></h1>
+            <h1 class="display-5 text-uppercase mb-4">{{ __('Latest') }} <span class="text-primary">{{ __('Insights') }}</span></h1>
         </div>
         <div class="row g-5">
             @for ($i = 1; $i <= 3; $i++)
                 <div class="col-lg-4 col-md-6">
                     <div class="p-4 rounded shadow-sm">
                         <img class="img-fluid rounded mb-3" src="{{ asset('website/img/blog-' . $i . '.jpg') }}">
-                        <h5 class="text-light mb-2">Project Spotlight {{ $i }}</h5>
+                        <h5 class="text-light mb-2">{{ __('Project Spotlight') }} {{ $i }}</h5>
                         <p class="small text-muted"><i class="far fa-calendar-alt text-primary me-2"></i>01 Nov 2025</p>
-                        <p>Explore how Bloc Infra is shaping sustainable infrastructure for the next generation.</p>
-                        <a href="#" class="fw-bold">Read More <i class="bi bi-arrow-right"></i></a>
+                        <p>{{ __('Explore how Bloc Infra is shaping sustainable infrastructure for the next generation.') }}</p>
+                        <a href="#" class="fw-bold">{{ __('Read More') }} <i class="bi bi-arrow-right"></i></a>
                     </div>
                 </div>
             @endfor
@@ -207,4 +201,3 @@
     </div>
 
 </x-website-layout>
-

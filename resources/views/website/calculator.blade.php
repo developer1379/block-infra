@@ -56,9 +56,9 @@
     <section class="bg-dark text-center py-6 mb-5">
         <div class="container">
             <h1 class="display-5 fw-bold text-uppercase mb-2" style="color:#b3d33c;">
-                Construction Cost Calculator
+                {{ __('Construction Cost Calculator') }}
             </h1>
-            <p class="lead text-light fw-medium mb-0">Select a category and work to calculate cost professionally</p>
+            <p class="lead text-light fw-medium mb-0">{{ __('Select a category and work to calculate cost professionally') }}</p>
         </div>
     </section>
 
@@ -67,13 +67,14 @@
         <div class="row justify-content-center">
             <div class="col-lg-8">
 
-                {{-- CALCULATOR CARD --}}<div class="calc-wrapper">
+                {{-- CALCULATOR CARD --}}
+                <div class="calc-wrapper">
 
                     <div class="card calc-box shadow-sm mb-4">
                         <div class="card-header calc-header py-3">
                             <h5 class="fw-bold mb-0">
                                 <i class="fa-solid fa-calculator me-2" style="color:#b3d33c;"></i>
-                                Calculate Your Work Cost
+                                {{ __('Calculate Your Work Cost') }}
                             </h5>
                         </div>
 
@@ -81,28 +82,28 @@
 
                             {{-- CATEGORY --}}
                             <div class="mb-3">
-                                <label class="label-title mb-1">Select Category <span
+                                <label class="label-title mb-1">{{ __('Select Category') }} <span
                                         class="text-danger">*</span></label>
                                 <select id="categorySelect" class="form-control select2">
-                                    <option value="">Select Category</option>
+                                    <option value="">{{ __('Select Category') }}</option>
                                     @foreach ($categories as $cat)
-                                        <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                        <option value="{{ $cat->id }}">{{ __($cat->name) }}</option>
                                     @endforeach
                                 </select>
                             </div>
 
                             {{-- WORK --}}
                             <div class="mb-3">
-                                <label class="label-title mb-1">Select Work <span class="text-danger">*</span></label>
+                                <label class="label-title mb-1">{{ __('Select Work') }} <span class="text-danger">*</span></label>
                                 <select id="workSelect" class="form-control select2">
-                                    <option value="">Select Work</option>
+                                    <option value="">{{ __('Select Work') }}</option>
                                     @foreach ($works as $work)
                                         <option value="{{ $work->id }}" data-category="{{ $work->category_id }}"
                                             data-lmin="{{ $work->labor_min }}" data-lmax="{{ $work->labor_max }}"
                                             data-mmin="{{ $work->labor_material_min }}"
                                             data-mmax="{{ $work->labor_material_max }}"
                                             data-unit="{{ $work->unit->symbol ?? $work->unit_label }}">
-                                            {{ $work->name }}
+                                            {{ __($work->name) }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -111,13 +112,13 @@
                             {{-- ROW WITH INPUT + UNIT FIELD --}}
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="label-title mb-1">Enter Quantity</label>
+                                    <label class="label-title mb-1">{{ __('Enter Quantity') }}</label>
                                     <input type="number" id="qty" class="form-control" placeholder="e.g., 100"
                                         min="1">
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-                                    <label class="label-title mb-1">Custom Unit (Optional)</label>
+                                    <label class="label-title mb-1">{{ __('Custom Unit (Optional)') }}</label>
                                     <input type="text" id="customUnit" class="form-control"
                                         placeholder="e.g., sqft, rft">
                                 </div>
@@ -126,7 +127,7 @@
                             {{-- SUBMIT BUTTON --}}
                             <div class="text-end mt-3">
                                 <button id="calculateBtn" class="btn btn-theme px-4">
-                                    <i class="fa-solid fa-check me-1"></i> Calculate
+                                    <i class="fa-solid fa-check me-1"></i> {{ __('Calculate') }}
                                 </button>
                             </div>
 
@@ -140,38 +141,38 @@
                     <div class="card-header bg-white py-2 border-0">
                         <h5 class="fw-bold mb-0">
                             <i class="fa-solid fa-receipt me-2" style="color:#b3d33c;"></i>
-                            Estimated Cost
+                            {{ __('Estimated Cost') }}
                         </h5>
                     </div>
 
                     <div class="card-body">
 
                         <div class="result-box mb-3">
-                            <strong class="d-block">Work:</strong>
+                            <strong class="d-block">{{ __('Work:') }}</strong>
                             <span id="rWork" class="fw-semibold"></span>
                         </div>
 
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <div class="result-box">
-                                    <h6 class="fw-bold mb-1">Labor Cost</h6>
+                                    <h6 class="fw-bold mb-1">{{ __('Labor Cost') }}</h6>
                                     <p class="mb-0">₹<span id="laborRange"></span></p>
-                                    <p class="small text-muted mb-0">Total: ₹<span id="laborTotal"></span></p>
+                                    <p class="small text-muted mb-0">{{ __('Total:') }} ₹<span id="laborTotal"></span></p>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="result-box">
-                                    <h6 class="fw-bold mb-1">Labor + Material</h6>
+                                    <h6 class="fw-bold mb-1">{{ __('Labor + Material') }}</h6>
                                     <p class="mb-0">₹<span id="materialRange"></span></p>
-                                    <p class="small text-muted mb-0">Total: ₹<span id="materialTotal"></span></p>
+                                    <p class="small text-muted mb-0">{{ __('Total:') }} ₹<span id="materialTotal"></span></p>
                                 </div>
                             </div>
                         </div>
 
                         <hr>
 
-                        <h5 class="fw-bold">Final Estimated Cost:</h5>
+                        <h5 class="fw-bold">{{ __('Final Estimated Cost:') }}</h5>
                         <h2 class="fw-bold" style="color:#b3d33c;">₹<span id="finalCost"></span></h2>
 
                     </div>
@@ -183,4 +184,3 @@
     </div>
 
 </x-website-layout>
-
