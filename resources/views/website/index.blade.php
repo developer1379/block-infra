@@ -204,6 +204,36 @@
             }
         }
 
+        /* === Professional Portfolio Style === */
+        .portfolio-box img {
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .portfolio-box:hover img {
+            transform: scale(1.08);
+        }
+
+        .portfolio-box:hover .portfolio-overlay {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+        
+        #portfolio-flters li {
+            color: rgba(255,255,255,0.75);
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.12) !important;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        #portfolio-flters li:hover,
+        #portfolio-flters li.active {
+            background-color: #b3d33c !important;
+            color: #000000 !important;
+            border-color: #b3d33c !important;
+            box-shadow: 0 4px 15px rgba(179, 211, 60, 0.3);
+        }
+
         /* === Links === */
         a {
             color: #b3d33c;
@@ -320,17 +350,59 @@
         <div class="text-center mx-auto mb-5" style="max-width:600px;">
             <h1 class="display-5 text-uppercase mb-4">{{ __('Our') }} <span class="text-primary">{{ __('Projects') }}</span></h1>
         </div>
+
+        {{-- Filter categories --}}
+        <div class="row g-0 justify-content-center mb-5">
+            <div class="col-lg-8 text-center">
+                <ul class="list-inline mb-0" id="portfolio-flters" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); padding: 8px 16px; border-radius: 50px; display: inline-block;">
+                    <li class="btn btn-sm rounded-pill px-3 py-2 mx-1 fw-bold text-uppercase active" data-filter="*">
+                        {{ __('All') }}
+                    </li>
+                    <li class="btn btn-sm rounded-pill px-3 py-2 mx-1 fw-bold text-uppercase" data-filter=".residential">
+                        {{ __('Residential') }}
+                    </li>
+                    <li class="btn btn-sm rounded-pill px-3 py-2 mx-1 fw-bold text-uppercase" data-filter=".commercial">
+                        {{ __('Commercial') }}
+                    </li>
+                    <li class="btn btn-sm rounded-pill px-3 py-2 mx-1 fw-bold text-uppercase" data-filter=".infrastructure">
+                        {{ __('Infrastructure') }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+
         <div class="row g-4 portfolio-container">
-            @for ($i = 1; $i <= 6; $i++)
-                <div class="col-xl-4 col-lg-6 col-md-6">
-                    <div class="portfolio-box position-relative overflow-hidden rounded shadow-sm">
-                        <img class="img-fluid w-100" src="{{ asset('website/img/portfolio-' . $i . '.jpg') }}">
-                        <a class="portfolio-btn" href="{{ asset('website/img/portfolio-' . $i . '.jpg') }}" data-lightbox="portfolio">
-                            <i class="bi bi-plus text-primary fs-3"></i>
-                        </a>
+            @php
+                $projectsList = [
+                    ['title' => __('Kanpur Smart Highway'), 'category' => 'infrastructure', 'cat_name' => __('Infrastructure'), 'img' => 'portfolio-1.jpg', 'desc' => __('High-speed smart expressway connecting key hubs.')],
+                    ['title' => __('Emerald Heights Complex'), 'category' => 'residential', 'cat_name' => __('Residential'), 'img' => 'portfolio-2.jpg', 'desc' => __('Premium residential apartments with sustainable design.')],
+                    ['title' => __('Grand Mall & Corporate Plaza'), 'category' => 'commercial', 'cat_name' => __('Commercial'), 'img' => 'portfolio-3.jpg', 'desc' => __('A state-of-the-art commercial and shopping center.')],
+                    ['title' => __('Metro Station Expansion'), 'category' => 'infrastructure', 'cat_name' => __('Infrastructure'), 'img' => 'portfolio-4.jpg', 'desc' => __('Modern urban transit design and station development.')],
+                    ['title' => __('Aroma Industrial Unit'), 'category' => 'commercial', 'cat_name' => __('Commercial'), 'img' => 'portfolio-5.jpg', 'desc' => __('Advanced manufacturing and industrial warehouse.')],
+                    ['title' => __('Vasant Kunj Villas'), 'category' => 'residential', 'cat_name' => __('Residential'), 'img' => 'portfolio-6.jpg', 'desc' => __('Luxury eco-friendly villas matching modern living.')],
+                ];
+            @endphp
+
+            @foreach ($projectsList as $item)
+                <div class="col-xl-4 col-lg-6 col-md-6 portfolio-item {{ $item['category'] }}">
+                    <div class="portfolio-box position-relative overflow-hidden rounded shadow-lg" style="height: 280px; border: 1px solid rgba(255,255,255,0.05);">
+                        <img class="img-fluid w-100 h-100" src="{{ asset('website/img/' . $item['img']) }}" alt="{{ $item['title'] }}" style="object-fit: cover;">
+                        <div class="portfolio-overlay d-flex flex-column align-items-center justify-content-center px-4" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(rgba(179, 211, 60, 0.95), rgba(4, 15, 40, 0.95)); opacity: 0; transition: all 0.4s ease; transform: translateY(15px);">
+                            <span class="text-uppercase fw-bold mb-1 text-dark" style="font-size: 11px; letter-spacing: 2px;">{{ $item['cat_name'] }}</span>
+                            <h5 class="text-white fw-bold mb-2 text-center">{{ $item['title'] }}</h5>
+                            <p class="text-white-50 small mb-3 text-center px-2" style="font-size: 12px; line-height: 1.4;">{{ $item['desc'] }}</p>
+                            <div class="d-flex gap-2">
+                                <a class="btn btn-sm btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center" href="{{ asset('website/img/' . $item['img']) }}" data-lightbox="portfolio" style="width: 40px; height: 40px;">
+                                    <i class="bi bi-zoom-in text-dark fs-6"></i>
+                                </a>
+                                <a class="btn btn-sm btn-outline-light rounded-circle d-flex align-items-center justify-content-center" href="{{ route('website.contact') }}" style="width: 40px; height: 40px;">
+                                    <i class="bi bi-link-45deg fs-6"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            @endfor
+            @endforeach
         </div>
     </div>
 
