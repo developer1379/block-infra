@@ -204,6 +204,70 @@
             }
         }
 
+        /* === Premium About Section === */
+        .stats-glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 24px 20px;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            height: 100%;
+        }
+        .stats-glass-card:hover {
+            transform: translateY(-6px);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(179, 211, 60, 0.4);
+            box-shadow: 0 12px 30px rgba(179, 211, 60, 0.15);
+        }
+        .about-feature-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            height: 100%;
+        }
+        .about-feature-item:hover {
+            background: rgba(179, 211, 60, 0.05);
+            border-color: rgba(179, 211, 60, 0.2);
+            transform: translateX(5px);
+        }
+        .about-img-wrap {
+            position: relative;
+            padding: 15px;
+        }
+        .about-img-wrap img {
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .about-img-wrap:hover img {
+            transform: scale(1.02);
+        }
+        .about-img-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 30px;
+            bottom: 30px;
+            border: 2px solid #b3d33c;
+            border-radius: 16px;
+            opacity: 0.4;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1;
+        }
+        .about-img-wrap:hover .about-img-frame {
+            transform: translate(8px, 8px);
+            opacity: 0.8;
+            border-color: #c9ec4b;
+        }
+
         /* === Professional Portfolio Style === */
         .portfolio-box img {
             transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -292,25 +356,80 @@
     <div id="about" class="container-fluid py-6 px-5 bg-dark-section">
         <div class="row g-5 align-items-center">
             <div class="col-lg-7">
+                <span class="text-uppercase fw-bold text-primary mb-2 d-inline-block" style="font-size: 13px; letter-spacing: 2px;">{{ __('WHO WE ARE') }}</span>
                 <h1 class="display-5 text-uppercase mb-4"><span class="text-primary">{{ __('About') }}</span> {{ __('Bloc Infra') }}</h1>
-                <p class="mb-4">
+                
+                <p class="mb-4 text-light-50 lh-lg" style="font-size: 15px;">
                     {{ __('Bloc Infra is a Kanpur-based construction and infrastructure company delivering modern, sustainable projects across commercial, residential, and public sectors. We combine advanced engineering with innovation and transparency to build long-lasting value.') }}
                 </p>
-                <div class="row gx-5 py-2">
+
+                {{-- Stats Counters --}}
+                <div class="row g-4 mb-4">
+                    <div class="col-4">
+                        <div class="stats-glass-card">
+                            <h2 class="fw-bold mb-1 text-primary">150+</h2>
+                            <small class="text-muted text-uppercase fw-bold d-block" style="font-size: 9px; letter-spacing: 0.5px; line-height: 1.3;">{{ __('Projects Completed') }}</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="stats-glass-card">
+                            <h2 class="fw-bold mb-1 text-primary">98%</h2>
+                            <small class="text-muted text-uppercase fw-bold d-block" style="font-size: 9px; letter-spacing: 0.5px; line-height: 1.3;">{{ __('Client Satisfaction') }}</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="stats-glass-card">
+                            <h2 class="fw-bold mb-1 text-primary">12+</h2>
+                            <small class="text-muted text-uppercase fw-bold d-block" style="font-size: 9px; letter-spacing: 0.5px; line-height: 1.3;">{{ __('Years Experience') }}</small>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Features List --}}
+                <div class="row g-3 py-2 text-white">
                     <div class="col-sm-6">
-                        <p><i class="fa fa-check text-primary me-3"></i>{{ __('Professional Engineers') }}</p>
-                        <p><i class="fa fa-check text-primary me-3"></i>{{ __('Comprehensive Planning') }}</p>
-                        <p><i class="fa fa-check text-primary me-3"></i>{{ __('Transparent Execution') }}</p>
+                        <div class="about-feature-item">
+                            <i class="bi bi-patch-check-fill text-primary me-2 fs-5"></i>
+                            <span>{{ __('Professional Engineers') }}</span>
+                        </div>
                     </div>
                     <div class="col-sm-6">
-                        <p><i class="fa fa-check text-primary me-3"></i>{{ __('High-Quality Materials') }}</p>
-                        <p><i class="fa fa-check text-primary me-3"></i>{{ __('On-Time Delivery') }}</p>
-                        <p><i class="fa fa-check text-primary me-3"></i>{{ __('Sustainable Approach') }}</p>
+                        <div class="about-feature-item">
+                            <i class="bi bi-patch-check-fill text-primary me-2 fs-5"></i>
+                            <span>{{ __('Comprehensive Planning') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="about-feature-item">
+                            <i class="bi bi-patch-check-fill text-primary me-2 fs-5"></i>
+                            <span>{{ __('Transparent Execution') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="about-feature-item">
+                            <i class="bi bi-patch-check-fill text-primary me-2 fs-5"></i>
+                            <span>{{ __('High-Quality Materials') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="about-feature-item">
+                            <i class="bi bi-patch-check-fill text-primary me-2 fs-5"></i>
+                            <span>{{ __('On-Time Delivery') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="about-feature-item">
+                            <i class="bi bi-patch-check-fill text-primary me-2 fs-5"></i>
+                            <span>{{ __('Sustainable Approach') }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-lg-5">
-                <img class="img-fluid rounded shadow-lg" src="{{ asset('website/img/about.jpg') }}" alt="{{ __('Bloc Infra Team') }}">
+                <div class="about-img-wrap position-relative">
+                    <img class="img-fluid position-relative w-100" src="{{ asset('website/img/about.jpg') }}" alt="{{ __('Bloc Infra Team') }}" style="z-index: 2;">
+                    <div class="about-img-frame"></div>
+                </div>
             </div>
         </div>
     </div>
