@@ -5,7 +5,7 @@
     "display": "fullscreen",
     "description": "A Progressive Web Application setup for Laravel projects.",
     "theme_color": "#6777ef",
-    "start_url": "/login",
+    "start_url": "/contractor/dashboard",
     "icons": [
         {
             "src": "https://bloc-infra.rawsio.com/website/img/fav.jpg",
