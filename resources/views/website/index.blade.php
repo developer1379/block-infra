@@ -52,10 +52,156 @@
             box-shadow: 0 0 15px rgba(179, 211, 60, 0.3);
         }
 
-        /* === Carousel Captions === */
-        .carousel-caption h1,
-        .carousel-caption p {
-            text-shadow: 0 0 10px rgba(0,0,0,0.7);
+        /* === Carousel Captions & Layout === */
+        #header-carousel {
+            height: 85vh;
+            min-height: 600px;
+            position: relative;
+        }
+
+        #header-carousel .carousel-inner,
+        #header-carousel .carousel-item {
+            height: 100%;
+        }
+
+        #header-carousel .carousel-item img {
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.45) contrast(1.05);
+        }
+
+        .carousel-caption {
+            background: transparent !important;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 0;
+        }
+
+        .hero-glass-card {
+            background: rgba(10, 15, 30, 0.45);
+            backdrop-filter: blur(10px) saturate(140%);
+            -webkit-backdrop-filter: blur(10px) saturate(140%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 50px 60px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            max-width: 820px;
+            margin: 0 auto;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: cardFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes cardFadeUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .hero-tagline {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #b3d33c;
+            display: inline-block;
+            margin-bottom: 22px;
+            background: rgba(179, 211, 60, 0.1);
+            padding: 6px 16px;
+            border-radius: 50px;
+            border: 1px solid rgba(179, 211, 60, 0.2);
+        }
+
+        .hero-title {
+            font-size: 3.8rem;
+            font-weight: 800 !important;
+            letter-spacing: -1px;
+            line-height: 1.15;
+            margin-bottom: 22px;
+        }
+
+        .hero-desc {
+            font-size: 1.15rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 35px;
+            line-height: 1.65;
+        }
+
+        /* Scroll Down Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .scroll-indicator:hover {
+            color: #b3d33c;
+        }
+
+        .scroll-mouse {
+            width: 20px;
+            height: 32px;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            position: relative;
+            margin-bottom: 8px;
+            transition: border-color 0.3s ease;
+        }
+
+        .scroll-indicator:hover .scroll-mouse {
+            border-color: #b3d33c;
+        }
+
+        .scroll-wheel {
+            width: 4px;
+            height: 6px;
+            background-color: #b3d33c;
+            border-radius: 2px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 6px;
+            animation: wheelSlide 1.5s infinite;
+        }
+
+        @keyframes wheelSlide {
+            0% { top: 6px; opacity: 1; }
+            100% { top: 18px; opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            #header-carousel {
+                height: 70vh;
+                min-height: 500px;
+            }
+            .hero-glass-card {
+                padding: 30px 24px;
+                margin: 0 15px;
+            }
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            .hero-desc {
+                font-size: 1rem;
+            }
+            .scroll-indicator {
+                display: none;
+            }
         }
 
         /* === Links === */
@@ -75,22 +221,22 @@
                 <div class="carousel-item active">
                     <img class="w-100" src="{{ asset('website/img/carousel-1.jpg') }}" alt="{{ __('Bloc Infra Project') }}">
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center text-center">
-                        <div class="p-3" style="max-width:900px;">
-                            <i class="fa fa-city fa-4x text-primary mb-4 d-none d-sm-block"></i>
-                            <h1 class="display-3 fw-bold text-white mb-md-3">{{ __('Building Tomorrow, Today') }}</h1>
-                            <p class="lead mb-4 text-light">{{ __('Modern infrastructure, quality materials, and precision engineering.') }}</p>
-                            <a href="#about" class="btn btn-primary py-md-3 px-md-5">{{ __('Discover More') }}</a>
+                        <div class="hero-glass-card">
+                            <span class="hero-tagline">{{ __('Leaders in Infrastructure') }}</span>
+                            <h1 class="hero-title">{{ __('Building Tomorrow, Today') }}</h1>
+                            <p class="hero-desc">{{ __('Modern infrastructure, quality materials, and precision engineering delivered with integrity.') }}</p>
+                            <a href="#about" class="btn btn-primary py-3 px-5 rounded-pill">{{ __('Discover More') }}</a>
                         </div>
                     </div>
                 </div>
                 <div class="carousel-item">
                     <img class="w-100" src="{{ asset('website/img/carousel-2.jpg') }}" alt="{{ __('Infrastructure Development') }}">
                     <div class="carousel-caption d-flex flex-column align-items-center justify-content-center text-center">
-                        <div class="p-3" style="max-width:900px;">
-                            <i class="fa fa-hard-hat fa-4x text-primary mb-4 d-none d-sm-block"></i>
-                            <h1 class="display-3 fw-bold text-white mb-md-3">{{ __('Quality That Endures') }}</h1>
-                            <p class="lead mb-4 text-light">{{ __('Delivering excellence in every project with innovation and integrity.') }}</p>
-                            <a href="#services" class="btn btn-primary py-md-3 px-md-5">{{ __('Our Services') }}</a>
+                        <div class="hero-glass-card">
+                            <span class="hero-tagline">{{ __('Engineered for Excellence') }}</span>
+                            <h1 class="hero-title">{{ __('Quality That Endures') }}</h1>
+                            <p class="hero-desc">{{ __('Delivering structural masterworks in every sector with pioneering techniques and innovation.') }}</p>
+                            <a href="#services" class="btn btn-primary py-3 px-5 rounded-pill">{{ __('Our Services') }}</a>
                         </div>
                     </div>
                 </div>
@@ -101,6 +247,14 @@
             <button class="carousel-control-next" type="button" data-bs-target="#header-carousel" data-bs-slide="next">
                 <span class="carousel-control-next-icon"></span>
             </button>
+
+            <!-- Scroll indicator -->
+            <a href="#about" class="scroll-indicator">
+                <div class="scroll-mouse">
+                    <div class="scroll-wheel"></div>
+                </div>
+                <span>{{ __('Scroll') }}</span>
+            </a>
         </div>
     </div>
 
