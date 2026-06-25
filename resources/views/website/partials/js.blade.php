@@ -23,6 +23,13 @@
 
             $('.select2').select2();
 
+            // Format numbers with commas
+            function formatCurrency(num) {
+                return num.toLocaleString('en-IN', {
+                    maximumFractionDigits: 0
+                });
+            }
+
             // CATEGORY CHANGE
             $('#categorySelect').change(function() {
                 const cat = $(this).val();
@@ -39,25 +46,43 @@
                 $('#workSelect').val('').trigger('change');
             });
 
-            // UPDATE ON SELECT CHANGE
-            $('#workSelect, #qty').on('change keyup', function() {
+            // WORK CHANGE -> UPDATE UNIT BADGE
+            $('#workSelect').change(function() {
+                const selected = $('#workSelect option:selected');
+                const unit = selected.val() ? (selected.data('unit') || '-') : '-';
+                $('#qty-unit-badge').text(unit);
                 calculate();
             });
 
-            // BUTTON CLICK
+            // UPDATE ON QUANTITY INPUT
+            $('#qty').on('input keyup', function() {
+                calculate();
+            });
+
+            // RESET BUTTON CLICK
+            $('#resetBtn').click(function() {
+                $('#categorySelect').val('').trigger('change');
+                $('#workSelect').val('').trigger('change');
+                $('#qty').val('');
+                $('#qty-unit-badge').text('-');
+                $('#resultCard').addClass('d-none');
+                $('#resultPlaceholder').removeClass('d-none');
+            });
+
+            // CALCULATE BUTTON CLICK
             $('#calculateBtn').click(function() {
-                console.log("Button clicked");
                 calculate();
             });
 
             // MAIN CALCULATE FUNCTION
             function calculate() {
-
                 const work = $('#workSelect option:selected');
-                const qty = parseFloat($('#qty').val());
+                const qtyVal = $('#qty').val();
+                const qty = parseFloat(qtyVal);
 
-                if (!work.val() || !qty || qty <= 0) {
+                if (!work.val() || !qtyVal || isNaN(qty) || qty <= 0) {
                     $('#resultCard').addClass('d-none');
+                    $('#resultPlaceholder').removeClass('d-none');
                     return;
                 }
 
@@ -67,17 +92,35 @@
                 let mmax = parseFloat(work.data('mmax')) || 0;
                 let unit = work.data('unit') || '';
 
-                $('#laborRange').text(lmin + ' - ' + lmax + ' / ' + unit);
-                $('#materialRange').text(mmin + ' - ' + mmax + ' / ' + unit);
+                // Show formatted cost ranges
+                $('#laborRange').text(formatCurrency(lmin) + ' - ' + formatCurrency(lmax) + ' / ' + unit);
+                $('#materialRange').text(formatCurrency(mmin) + ' - ' + formatCurrency(mmax) + ' / ' + unit);
 
-                $('#laborTotal').text((lmin * qty) + ' - ' + (lmax * qty));
-                $('#materialTotal').text((mmin * qty) + ' - ' + (mmax * qty));
+                // Show formatted totals
+                $('#laborTotal').text(formatCurrency(lmin * qty) + ' - ' + formatCurrency(lmax * qty));
+                $('#materialTotal').text(formatCurrency(mmin * qty) + ' - ' + formatCurrency(mmax * qty));
 
-                const finalCost = mmax ? (mmax * qty) : (lmax * qty);
+                // Recommend final cost (Labor + Material max if exists, else Labor max)
+                const finalCostVal = mmax ? (mmax * qty) : (lmax * qty);
+                $('#finalCost').text(formatCurrency(finalCostVal));
+                
+                // Set receipt metadata
+                $('#rWork').text(work.text().trim());
+                $('#rQty').text(qty);
+                $('#rUnit').text(unit);
 
-                $('#finalCost').text(finalCost);
-                $('#rWork').text(work.text());
+                // Calculate ratio progress bar (Labor max vs Material max)
+                // If labor_material is mmax, it includes labor. So material ratio is mmax - lmax.
+                let matPortion = Math.max(0, mmax - lmax);
+                let totalMax = lmax + matPortion;
+                let laborPct = totalMax ? Math.round((lmax / totalMax) * 100) : 40;
+                let materialPct = 100 - laborPct;
 
+                $('.comparison-bar-labor').css('width', laborPct + '%');
+                $('.comparison-bar-material').css('width', materialPct + '%');
+
+                // Toggle visibility cards
+                $('#resultPlaceholder').addClass('d-none');
                 $('#resultCard').removeClass('d-none');
             }
 
