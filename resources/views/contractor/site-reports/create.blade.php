@@ -49,7 +49,7 @@
                     </div>
                     <div class="space-y-3">
                         <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Weather Condition') }}</label>
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div class="grid grid-cols-3 sm:grid-cols-5 gap-2">
                             @foreach(['Clear' => '☀️', 'Cloudy' => '☁️', 'Rainy' => '🌧️', 'Stormy' => '⛈️', 'Windy' => '💨'] as $val => $icon)
                                 <label class="relative group cursor-pointer">
                                     <input type="radio" name="weather_condition" value="{{ $val }}" {{ $val == 'Clear' ? 'checked' : '' }} class="peer sr-only">
@@ -88,16 +88,16 @@
                 <!-- Photo Upload -->
                 <div class="space-y-4">
                     <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Site Visuals & Photos') }}</label>
-                    <div class="relative group">
-                        <input id="photos" name="photos[]" type="file" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" accept="image/*">
-                        <div class="p-12 border-2 border-dashed border-gray-200 rounded-[2.5rem] bg-gray-50/50 group-hover:bg-indigo-50/30 group-hover:border-indigo-200 transition-all text-center">
+                    <label for="photos" class="relative group cursor-pointer block">
+                        <input id="photos" name="photos[]" type="file" multiple class="hidden" accept="image/*">
+                        <div class="p-6 md:p-12 border-2 border-dashed border-gray-200 rounded-[2.5rem] bg-gray-50/50 group-hover:bg-indigo-50/30 group-hover:border-indigo-200 transition-all text-center">
                             <div class="h-16 w-16 bg-white rounded-2xl shadow-sm flex items-center justify-center text-indigo-600 mx-auto mb-4 group-hover:scale-110 transition-transform">
                                 <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
                             </div>
                             <p class="text-sm font-black text-gray-900">{{ __('Drop site photos here or click to browse') }}</p>
                             <p class="text-[10px] font-bold text-gray-400 mt-1 uppercase tracking-widest">{{ __('Maximum 2MB per image • PNG, JPG') }}</p>
                         </div>
-                    </div>
+                    </label>
                     <div id="photo-preview-grid" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-4"></div>
                 </div>
 
@@ -119,7 +119,7 @@
 
                     <template id="material-row-template">
                         <div class="material-row grid grid-cols-1 md:grid-cols-12 gap-4 items-end animate-fade-in bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
-                            <div class="md:col-span-7 space-y-2">
+                            <div class="md:col-span-5 space-y-2">
                                 <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">{{ __('Material') }}</label>
                                 <select name="materials[INDEX][id]" required class="w-full px-5 py-3 bg-slate-50 border-transparent rounded-xl text-xs font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all outline-none">
                                     <option value="">{{ __('Select Material') }}</option>
@@ -128,23 +128,23 @@
                                     @endforeach
                                 </select>
                             </div>
-                    <div class="md:col-span-4 space-y-2">
-                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">{{ __('Link to Milestone') }} ({{ __('Optional') }})</label>
-                        <select name="materials[INDEX][milestone_id]" class="milestone-select w-full px-5 py-3 bg-slate-50 border-transparent rounded-xl text-xs font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all outline-none">
-                            <option value="">{{ __('Select Milestone') }}</option>
-                        </select>
-                    </div>
-                    <div class="md:col-span-3 space-y-2">
-                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">{{ __('Quantity Used') }}</label>
-                        <input type="number" step="0.01" name="materials[INDEX][quantity]" required placeholder="0.00"
-                            class="w-full px-5 py-3 bg-slate-50 border-transparent rounded-xl text-xs font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all outline-none">
-                    </div>
-                    <div class="md:col-span-1 flex justify-end">
-                        <button type="button" onclick="this.closest('.material-row').remove()" class="w-10 h-10 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 transition-colors flex items-center justify-center">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </div>
-                </div>
+                            <div class="md:col-span-4 space-y-2">
+                                <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">{{ __('Link to Milestone') }} ({{ __('Optional') }})</label>
+                                <select name="materials[INDEX][milestone_id]" class="milestone-select w-full px-5 py-3 bg-slate-50 border-transparent rounded-xl text-xs font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all outline-none">
+                                    <option value="">{{ __('Select Milestone') }}</option>
+                                </select>
+                            </div>
+                            <div class="md:col-span-2 space-y-2">
+                                <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">{{ __('Quantity Used') }}</label>
+                                <input type="number" step="0.01" name="materials[INDEX][quantity]" required placeholder="0.00"
+                                    class="w-full px-5 py-3 bg-slate-50 border-transparent rounded-xl text-xs font-bold text-slate-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all outline-none">
+                            </div>
+                            <div class="md:col-span-1 flex justify-end md:justify-center">
+                                <button type="button" onclick="this.closest('.material-row').remove()" class="w-10 h-10 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 transition-colors flex items-center justify-center">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </div>
+                        </div>
                     </template>
                 </div>
 
