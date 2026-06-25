@@ -95,7 +95,7 @@
                                 <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
                             </div>
                             <p class="text-sm font-black text-gray-900">{{ __('Drop site photos here or click to browse') }}</p>
-                            <p class="text-[10px] font-bold text-gray-400 mt-1 uppercase tracking-widest">{{ __('Maximum 2MB per image • PNG, JPG') }}</p>
+                            <p class="text-[10px] font-bold text-gray-400 mt-1 uppercase tracking-widest">{{ __('Maximum 50MB per image • PNG, JPG') }}</p>
                         </div>
                     </label>
                     <div id="photo-preview-grid" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-4"></div>

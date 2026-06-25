@@ -53,7 +53,7 @@ class SiteReportController extends Controller
             'challenges' => 'nullable|string',
             'next_day_plan' => 'nullable|string',
             'progress_percentage' => 'required|integer|min:0|max:100',
-            'photos.*' => 'nullable|image|max:10240',
+            'photos.*' => 'nullable|image|max:51200',
             'materials' => 'nullable|array',
             'materials.*.id' => 'required|exists:materials,id',
             'materials.*.milestone_id' => 'nullable|exists:project_milestones,id',
