@@ -45,6 +45,7 @@
         padding: 6px 0 !important;
         background-color: #ffffff !important;
         min-width: 140px;
+        z-index: 9999 !important;
     }
 
     .lang-switcher .dropdown-item {
@@ -69,7 +70,7 @@
 
 
 <!-- TOP BAR -->
-<div class="container-fluid bg-light py-1 px-4 d-none d-lg-block border-bottom">
+<div class="container-fluid bg-light py-1 px-4 d-none d-lg-block border-bottom" style="position: relative; z-index: 1030;">
     <div class="row align-items-center text-center gx-0">
 
         <div class="col-lg-3 py-1">
