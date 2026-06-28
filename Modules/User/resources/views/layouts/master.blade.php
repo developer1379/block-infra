@@ -19,9 +19,11 @@
 
     {{-- Vite CSS --}}
     {{-- {{ module_vite('build-user', 'resources/assets/sass/app.scss') }} --}}
+    @PwaHead
 </head>
 
 <body>
     @yield('content')
 
+    @RegisterServiceWorkerScript
 </body>

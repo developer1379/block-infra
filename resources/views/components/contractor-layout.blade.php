@@ -274,6 +274,7 @@
             }
         }
     </style>
+    @PwaHead
 </head>
 
 <body class="font-sans antialiased bg-gray-50 text-gray-900" x-data="{ sidebarOpen: false }">

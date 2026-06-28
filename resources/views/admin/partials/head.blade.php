@@ -120,3 +120,4 @@
         border-radius: 0px !important;
     }
 </style>
+@PwaHead

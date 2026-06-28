@@ -1,14 +1,19 @@
 {
     "name": "Bloc Infra APP",
     "short_name": "Bloc Infra",
-    "background_color": "#6777ef",
-    "display": "fullscreen",
-    "description": "A Progressive Web Application setup for Laravel projects.",
-    "theme_color": "#6777ef",
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "description": "A Progressive Web Application setup for Bloc Infra.",
+    "theme_color": "#0f766e",
     "start_url": "/contractor/dashboard",
     "icons": [
         {
-            "src": "https://bloc-infra.rawsio.com/website/img/fav.jpg",
+            "src": "/logo.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/logo.png",
             "sizes": "512x512",
             "type": "image/png"
         }

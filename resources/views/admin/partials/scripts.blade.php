@@ -100,5 +100,6 @@
     });
 </script>
 
+@RegisterServiceWorkerScript
 @stack('scripts')
 

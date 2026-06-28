@@ -74,6 +74,7 @@
     </style>
 
     @stack('styles')
+    @PwaHead
 </head>
 
 <body class="bg-slate-50 text-slate-800 font-sans antialiased overflow-x-hidden">
@@ -148,6 +149,7 @@
         <span class="absolute top-0 right-0 w-4 h-4 bg-red-500 border-2 border-white rounded-full"></span>
     </button>
 
+    @RegisterServiceWorkerScript
     @stack('scripts')
 </body>
 

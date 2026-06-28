@@ -49,7 +49,6 @@
             display: block;
         }
     </style>
-    <link rel="manifest" href="/manifest.json">
     @PwaHead
 
 </head>

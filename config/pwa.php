@@ -19,15 +19,20 @@ return [
     */
 
     'manifest' => [
-        'name' => 'Laravel PWA',
-        'short_name' => 'LPT',
-        'background_color' => '#6777ef',
-        'display' => 'fullscreen',
-        'description' => 'A Progressive Web Application setup for Laravel projects.',
-        'theme_color' => '#6777ef',
+        'name' => 'Bloc Infra APP',
+        'short_name' => 'Bloc Infra',
+        'background_color' => '#ffffff',
+        'display' => 'standalone',
+        'description' => 'A Progressive Web Application setup for Bloc Infra.',
+        'theme_color' => '#0f766e',
         'icons' => [
             [
-                'src' => 'logo.png',
+                'src' => '/logo.png',
+                'sizes' => '192x192',
+                'type' => 'image/png',
+            ],
+            [
+                'src' => '/logo.png',
                 'sizes' => '512x512',
                 'type' => 'image/png',
             ],
