@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
         colorScheme: const ColorScheme.dark(
           primary: Color(0xFF0F766E),
           secondary: Color(0xFFB3D33C), // Accent lime/green matching navbar
-          background: Color(0xFF0F1114),
+          surface: Color(0xFF0F1114),
         ),
         useMaterial3: true,
       ),
@@ -121,7 +121,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) async {
+      onPopInvokedWithResult: (didPop, result) async {
         if (didPop) return;
         
         // Handle android physical back button: navigate back inside webview history
