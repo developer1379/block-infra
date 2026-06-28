@@ -18,8 +18,10 @@ use App\Http\Controllers\Auth\AuthController;
 // Cache clearing utility
 Route::get('/cc', function () {
     Artisan::call('cache:clear');
+    Artisan::call('config:clear');
     Artisan::call('route:clear');
-    return 'cache cleared';
+    Artisan::call('view:clear');
+    return 'All caches (cache, config, route, view) cleared successfully';
 });
 
 // Localization Route
