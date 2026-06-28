@@ -11,7 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 // Define the default URL that the WebView app will load.
 // You can change this to your local server IP (e.g. 'http://192.168.1.100:8000') for testing,
 // or your production domain (e.g. 'https://blocinfra.com').
-const String defaultAppUrl = "https://blocinfra.com";
+const String defaultAppUrl = "https://bloc-infra.rawsio.com/contractor/dashboard";
 const String appTitle = "BLOC INFRA";
 
 void main() async {
