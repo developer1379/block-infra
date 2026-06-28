@@ -5,7 +5,8 @@
     "display": "standalone",
     "description": "A Progressive Web Application setup for Bloc Infra.",
     "theme_color": "#0f766e",
-    "start_url": "/contractor/dashboard",
+    "start_url": "/",
+    "scope": "/",
     "icons": [
         {
             "src": "/logo.png",
