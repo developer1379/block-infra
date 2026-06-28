@@ -114,7 +114,7 @@ class AuthController extends Controller
             }
         }
 
-        if (Auth::attempt($credentials, $request->remember)) {
+        if (Auth::attempt($credentials, $request->boolean('remember', true))) {
             $request->session()->regenerate();
 
             if (auth()->user()->hasRole('user')) {
