@@ -416,6 +416,12 @@
                 </div>
 
                 <div class="flex items-center gap-4">
+                    <!-- PWA Install Button -->
+                    <button class="pwa-install-nav-btn text-white bg-teal-700 hover:bg-teal-600 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors align-items-center gap-2"
+                        style="display: none; border: none; align-items: center; justify-content: center; gap: 6px;">
+                        <i class="bi bi-cloud-arrow-down-fill"></i> <span class="hidden md:inline">{{ __('Download App') }}</span>
+                    </button>
+
                     <!-- Language Switcher -->
                     <div class="relative" x-data="{ open: false }">
                         <button @click="open = !open" class="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">

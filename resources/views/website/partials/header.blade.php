@@ -139,6 +139,12 @@
             </h1>
         </a>
 
+        <!-- Mobile PWA Download Button -->
+        <button class="pwa-install-nav-btn btn text-white d-lg-none ms-auto me-2 align-items-center justify-content-center"
+            style="display: none; background:#0f766e; border-radius: 4px; width: 38px; height: 38px; padding: 0; border: none;">
+            <i class="bi bi-cloud-arrow-down-fill fs-5"></i>
+        </button>
+ 
         <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -176,6 +182,12 @@
                         <a href="{{ route('lang.switch', 'hi') }}" class="dropdown-item text-white-50 py-2 {{ app()->getLocale() == 'hi' ? 'active text-white' : '' }}">हिन्दी (HI)</a>
                     </div>
                 </div>
+
+                <!-- PWA Install Button -->
+                <button class="pwa-install-nav-btn nav-item nav-link btn text-white px-4 ms-lg-3 my-2 my-lg-0 text-uppercase align-self-start align-items-center"
+                    style="display: none; background:#0f766e; font-weight:600; border-radius: 4px; border: none; outline: none; gap: 8px;">
+                    <i class="bi bi-cloud-arrow-down-fill"></i> {{ __('Download') }}
+                </button>
 
                 <a href="{{ route('website.login') }}"
                     class="nav-item nav-link text-dark px-4 ms-lg-3 my-2 my-lg-0 text-uppercase d-inline-flex align-self-start align-items-center"

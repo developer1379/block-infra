@@ -109,6 +109,12 @@
 
                 {{-- Right: Header Actions --}}
                 <div class="flex items-center gap-3 sm:gap-4">
+                    <!-- PWA Install Button -->
+                    <button class="pwa-install-nav-btn text-white bg-primary hover:bg-primary-hover px-3 py-1.5 rounded-lg text-sm font-medium transition-colors align-items-center gap-2"
+                        style="display: none; border: none; align-items: center; justify-content: center; gap: 6px;">
+                        <i class="fa-solid fa-cloud-arrow-down"></i> <span class="hidden md:inline">Download App</span>
+                    </button>
+
                     {{-- Search --}}
                     <div class="hidden md:block relative">
                         <i

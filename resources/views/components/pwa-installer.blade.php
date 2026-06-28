@@ -180,23 +180,21 @@ document.addEventListener('DOMContentLoaded', () => {
         return; // App is already installed, don't show the prompt
     }
 
-    // 2. Check if user previously dismissed the prompt
-    if (localStorage.getItem('pwa_prompt_dismissed') === 'true') {
-        return;
-    }
-
-    // 3. Detect Platform
+    // 2. Detect Platform
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
     const banner = document.getElementById('pwa-install-banner');
     const closeBtn = document.getElementById('pwa-close-btn');
     const installBtn = document.getElementById('pwa-install-btn');
     const iosInstructions = document.getElementById('pwa-ios-instructions');
+    const navButtons = document.querySelectorAll('.pwa-install-nav-btn');
 
     let deferredPrompt = null;
+    const bannerDismissed = localStorage.getItem('pwa_prompt_dismissed') === 'true';
 
     // Show banner helper
     function showBanner() {
+        if (bannerDismissed) return; // Don't show automatic banner if dismissed
         banner.style.display = 'block';
         setTimeout(() => {
             banner.classList.add('pwa-banner-visible');
@@ -212,14 +210,43 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('pwa_prompt_dismissed', 'true');
     }
 
+    // Show navbar buttons helper
+    function showNavButtons() {
+        navButtons.forEach(btn => {
+            btn.style.setProperty('display', 'inline-flex', 'important');
+        });
+    }
+
+    // Hide navbar buttons helper
+    function hideNavButtons() {
+        navButtons.forEach(btn => {
+            btn.style.setProperty('display', 'none', 'important');
+        });
+    }
+
     closeBtn.addEventListener('click', dismissBanner);
 
     if (isIOS) {
-        // iOS Safari does not support beforeinstallprompt. Show iOS instructions banner directly.
+        // Show navbar buttons on iOS Safari
+        showNavButtons();
+
+        // iOS Safari does not support beforeinstallprompt. Show iOS instructions banner directly on load (if not dismissed)
         setTimeout(() => {
             iosInstructions.style.display = 'block';
             showBanner();
         }, 3000);
+
+        // Clicking navbar button shows iOS instructions banner
+        navButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                iosInstructions.style.display = 'block';
+                // Show banner even if dismissed previously
+                banner.style.display = 'block';
+                setTimeout(() => {
+                    banner.classList.add('pwa-banner-visible');
+                }, 50);
+            });
+        });
     } else {
         // Android / Desktop Chrome support beforeinstallprompt
         window.addEventListener('beforeinstallprompt', (e) => {
@@ -228,8 +255,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // Stash the event
             deferredPrompt = e;
             
-            // Show the install button
+            // Show the install button in bottom banner
             installBtn.style.display = 'block';
+            
+            // Show navbar buttons
+            showNavButtons();
             
             // Show our custom banner
             setTimeout(() => {
@@ -237,24 +267,32 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 2000);
         });
 
-        installBtn.addEventListener('click', () => {
+        // Trigger prompt helper
+        function triggerInstallPrompt() {
             if (!deferredPrompt) return;
             // Trigger standard browser install prompt
             deferredPrompt.prompt();
             deferredPrompt.userChoice.then((choiceResult) => {
                 if (choiceResult.outcome === 'accepted') {
                     console.log('User accepted the PWA install prompt');
+                    hideNavButtons();
                 } else {
                     console.log('User dismissed the PWA install prompt');
                 }
                 deferredPrompt = null;
                 dismissBanner();
             });
+        }
+
+        installBtn.addEventListener('click', triggerInstallPrompt);
+        navButtons.forEach(btn => {
+            btn.addEventListener('click', triggerInstallPrompt);
         });
     }
 
     window.addEventListener('appinstalled', () => {
         dismissBanner();
+        hideNavButtons();
     });
 });
 </script>
