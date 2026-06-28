@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 // ==========================================
 // CONFIGURATION
@@ -70,6 +71,8 @@ class _WebViewScreenState extends State<WebViewScreen> {
   
   double progress = 0;
   bool isLoading = true;
+  bool isFirstLoad = true;
+  bool isNoInternet = false;
   String currentUrl = defaultAppUrl;
 
   late InAppWebViewSettings settings;
@@ -77,17 +80,22 @@ class _WebViewScreenState extends State<WebViewScreen> {
   @override
   void initState() {
     super.initState();
+    
+    // Request permission on app launch
+    _requestPermissions();
 
     // Initialize Webview settings
     settings = InAppWebViewSettings(
       useShouldOverrideUrlLoading: true,
       mediaPlaybackRequiresUserGesture: false,
       allowsInlineMediaPlayback: true,
-      iframeAllow: "camera; microphone",
+      iframeAllow: "camera; microphone; geolocation",
       iframeAllowFullscreen: true,
       useOnDownloadStart: true,
       javaScriptEnabled: true,
       domStorageEnabled: true,
+      databaseEnabled: true,
+      geolocationEnabled: true,
       supportZoom: true,
       builtInZoomControls: true,
       displayZoomControls: false,
@@ -115,6 +123,22 @@ class _WebViewScreenState extends State<WebViewScreen> {
               }
             },
           );
+  }
+
+  Future<void> _requestPermissions() async {
+    // Request Camera, Microphone, and Geolocation natively
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.camera,
+      Permission.microphone,
+      Permission.location,
+      Permission.locationWhenInUse,
+    ].request();
+
+    if (kDebugMode) {
+      print("Camera native permission status: ${statuses[Permission.camera]}");
+      print("Microphone native permission status: ${statuses[Permission.microphone]}");
+      print("Location native permission status: ${statuses[Permission.location]}");
+    }
   }
 
   @override
@@ -155,10 +179,18 @@ class _WebViewScreenState extends State<WebViewScreen> {
                   });
                 },
                 onPermissionRequest: (controller, request) async {
-                  // Grants camera/microphone permissions requested by web content
+                  // Grants camera/microphone/location permissions requested by web content
                   return PermissionResponse(
                     resources: request.resources,
                     action: PermissionResponseAction.GRANT,
+                  );
+                },
+                onGeolocationPermissionsShowPrompt: (controller, origin) async {
+                  // Grant geolocation permission to origin
+                  return GeolocationPermissionShowPromptResponse(
+                    origin: origin,
+                    allow: true,
+                    retain: true,
                   );
                 },
                 shouldOverrideUrlLoading: (controller, navigationAction) async {
@@ -187,13 +219,18 @@ class _WebViewScreenState extends State<WebViewScreen> {
                   setState(() {
                     currentUrl = url.toString();
                     isLoading = false;
+                    isFirstLoad = false;
+                    isNoInternet = false;
                   });
                 },
                 onReceivedError: (controller, request, error) {
                   pullToRefreshController?.endRefreshing();
-                  setState(() {
-                    isLoading = false;
-                  });
+                  if (request.isForMainFrame ?? true) {
+                    setState(() {
+                      isNoInternet = true;
+                      isLoading = false;
+                    });
+                  }
                 },
                 onProgressChanged: (controller, progressVal) {
                   if (progressVal == 100) {
@@ -203,6 +240,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
                     progress = progressVal / 100;
                     if (progressVal == 100) {
                       isLoading = false;
+                      isFirstLoad = false;
                     }
                   });
                 },
@@ -222,7 +260,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
               ),
 
               // Progress Indicator at top of screen
-              if (isLoading)
+              if (isLoading && !isNoInternet)
                 Align(
                   alignment: Alignment.topCenter,
                   child: SizedBox(
@@ -232,6 +270,98 @@ class _WebViewScreenState extends State<WebViewScreen> {
                       backgroundColor: Colors.transparent,
                       valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFFB3D33C)),
                     ),
+                  ),
+                ),
+
+              // Centered Loading Spinner (for first initial load)
+              if (isFirstLoad && !isNoInternet)
+                Container(
+                  color: const Color(0xFF0F1114),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // App title
+                        const Text(
+                          appTitle,
+                          style: TextStyle(
+                            color: Color(0xFFB3D33C),
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 2.0,
+                          ),
+                        ),
+                        const SizedBox(height: 30),
+                        const CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0F766E)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+              // Offline/No Internet Screen
+              if (isNoInternet)
+                Container(
+                  color: const Color(0xFF0F1114),
+                  width: double.infinity,
+                  height: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.wifi_off_rounded,
+                        size: 80,
+                        color: Color(0xFFB3D33C),
+                      ),
+                      const SizedBox(height: 24),
+                      const Text(
+                        "No Internet Connection",
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      const Text(
+                        "Please check your cellular or Wi-Fi network and try again.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white70,
+                        ),
+                      ),
+                      const SizedBox(height: 32),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          setState(() {
+                            isNoInternet = false;
+                            isLoading = true;
+                          });
+                          webViewController?.reload();
+                        },
+                        icon: const Icon(Icons.refresh_rounded, color: Colors.black),
+                        label: const Text(
+                          "Retry Connection",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFB3D33C),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 28,
+                            vertical: 14,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
             ],
