@@ -120,4 +120,8 @@
         border-radius: 0px !important;
     }
 </style>
-@PwaHead
+<!-- PWA -->
+<meta name="theme-color" content="#0f766e"/>
+<link rel="apple-touch-icon" href="/logo.png">
+<link rel="manifest" href="/manifest.json">
+<!-- PWA end -->

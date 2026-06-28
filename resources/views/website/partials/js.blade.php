@@ -134,4 +134,19 @@
             });
         });
     </script>
-    @RegisterServiceWorkerScript
+    <!-- PWA scripts -->
+    <script>
+        "use strict";
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("/sw.js").then(
+                (registration) => {
+                    // Service worker registration succeeded
+                },
+                (error) => {
+                    // Service worker registration failed
+                }
+            );
+        }
+    </script>
+    @include('components.pwa-installer')
+    <!-- PWA scripts end -->

@@ -19,11 +19,30 @@
 
     {{-- Vite CSS --}}
     {{-- {{ module_vite('build-user', 'resources/assets/sass/app.scss') }} --}}
-    @PwaHead
+    <!-- PWA -->
+    <meta name="theme-color" content="#0f766e"/>
+    <link rel="apple-touch-icon" href="/logo.png">
+    <link rel="manifest" href="/manifest.json">
+    <!-- PWA end -->
 </head>
 
 <body>
     @yield('content')
 
-    @RegisterServiceWorkerScript
+    <!-- PWA scripts -->
+    <script>
+        "use strict";
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("/sw.js").then(
+                (registration) => {
+                    // Service worker registration succeeded
+                },
+                (error) => {
+                    // Service worker registration failed
+                }
+            );
+        }
+    </script>
+    @include('components.pwa-installer')
+    <!-- PWA scripts end -->
 </body>

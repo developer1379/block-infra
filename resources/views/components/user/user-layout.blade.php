@@ -74,7 +74,11 @@
     </style>
 
     @stack('styles')
-    @PwaHead
+    <!-- PWA -->
+    <meta name="theme-color" content="#0f766e"/>
+    <link rel="apple-touch-icon" href="/logo.png">
+    <link rel="manifest" href="/manifest.json">
+    <!-- PWA end -->
 </head>
 
 <body class="bg-slate-50 text-slate-800 font-sans antialiased overflow-x-hidden">
@@ -149,7 +153,22 @@
         <span class="absolute top-0 right-0 w-4 h-4 bg-red-500 border-2 border-white rounded-full"></span>
     </button>
 
-    @RegisterServiceWorkerScript
+    <!-- PWA scripts -->
+    <script>
+        "use strict";
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("/sw.js").then(
+                (registration) => {
+                    // Service worker registration succeeded
+                },
+                (error) => {
+                    // Service worker registration failed
+                }
+            );
+        }
+    </script>
+    @include('components.pwa-installer')
+    <!-- PWA scripts end -->
     @stack('scripts')
 </body>
 

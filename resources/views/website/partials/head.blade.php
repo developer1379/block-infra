@@ -33,22 +33,10 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     {{-- <meta name="google" content="notranslate"> --}}
 
-    <style>
-        #install-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            /* Ensure it stays above other layers */
-        }
-
-        #install-button img {
-            width: 30px;
-            /* Set a explicit size for the image */
-            height: 30px;
-            display: block;
-        }
-    </style>
-    @PwaHead
+    <!-- PWA -->
+    <meta name="theme-color" content="#0f766e"/>
+    <link rel="apple-touch-icon" href="/logo.png">
+    <link rel="manifest" href="/manifest.json">
+    <!-- PWA end -->
 
 </head>
