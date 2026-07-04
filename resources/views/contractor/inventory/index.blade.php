@@ -158,10 +158,10 @@
     </div>
 
     <!-- Redesigned Add Log Modal -->
-    <div x-data="{ open: false }" 
+    <div x-data="{ open: false, selectedMaterial: '' }" 
          x-show="open" 
          @open-modal.window="if ($event.detail === 'add-inventory-log') open = true" 
-         @close-modal.window="open = false"
+         @close-modal.window="open = false; selectedMaterial = ''"
          class="fixed inset-0 z-50 overflow-y-auto" 
          x-cloak>
         <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
@@ -211,11 +211,12 @@
 
                             <div class="space-y-2">
                                 <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ __('Material Item') }}</label>
-                                <select name="material_id" required class="w-full px-3 md:px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none appearance-none cursor-pointer">
+                                <select name="material_id" x-model="selectedMaterial" required class="w-full px-3 md:px-6 py-4 bg-gray-50/50 border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none appearance-none cursor-pointer">
                                     <option value="">{{ __('Select Material') }}</option>
                                     @foreach($materials as $material)
                                         <option value="{{ $material->id }}">{{ $material->name }} ({{ $material->unit }})</option>
                                     @endforeach
+                                    <option value="other" class="text-indigo-600 font-extrabold">{{ __('Other - Add New Material') }}</option>
                                 </select>
                             </div>
 
@@ -226,6 +227,20 @@
                                     <option value="consumption" selected>{{ __('Consumption (Stock Out)') }}</option>
                                     <option value="adjustment">{{ __('Adjustment') }}</option>
                                 </select>
+                            </div>
+
+                            <!-- Dynamic fields for Adding New Material -->
+                            <div x-show="selectedMaterial === 'other'" x-transition class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 p-4 md:p-6 bg-indigo-50/30 rounded-3xl border border-indigo-100/50">
+                                <div class="space-y-2">
+                                    <label class="text-[10px] font-black text-indigo-900/60 uppercase tracking-widest ml-1">{{ __('New Material Name') }}</label>
+                                    <input type="text" name="new_material_name" :required="selectedMaterial === 'other'" placeholder="{{ __('e.g., Cement, Sand') }}"
+                                           class="w-full px-3 md:px-6 py-4 bg-white border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all outline-none">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-[10px] font-black text-indigo-900/60 uppercase tracking-widest ml-1">{{ __('New Material Unit') }}</label>
+                                    <input type="text" name="new_material_unit" :required="selectedMaterial === 'other'" placeholder="{{ __('e.g., bags, kg, cu.ft') }}"
+                                           class="w-full px-3 md:px-6 py-4 bg-white border-transparent rounded-2xl text-sm font-bold text-gray-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all outline-none">
+                                </div>
                             </div>
                         </div>
 

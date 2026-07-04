@@ -41,14 +41,22 @@ class InventoryController extends Controller
     {
         $request->validate([
             'project_id' => 'required|exists:projects,id',
-            'material_id' => 'required|exists:materials,id',
+            'material_id' => 'required',
             'quantity' => 'required|numeric|min:0.01',
             'type' => 'required|in:purchase,consumption,adjustment',
             'unit_price' => 'nullable|numeric|min:0',
             'vendor_name' => 'nullable|string|max:255',
             'entry_date' => 'required|date',
-            'notes' => 'nullable|string'
+            'notes' => 'nullable|string',
+            'new_material_name' => 'required_if:material_id,other|nullable|string|max:255',
+            'new_material_unit' => 'required_if:material_id,other|nullable|string|max:50',
         ]);
+
+        if ($request->material_id !== 'other') {
+            $request->validate([
+                'material_id' => 'exists:materials,id',
+            ]);
+        }
 
         try {
             $contractor = Auth::user()->contractor;
@@ -58,7 +66,26 @@ class InventoryController extends Controller
                 ->where('contractor_id', $contractor->id)
                 ->firstOrFail();
 
-            MaterialInventory::create($request->all());
+            $materialId = $request->material_id;
+            if ($materialId === 'other') {
+                // Find case-insensitive or create
+                $materialName = trim($request->new_material_name);
+                $materialUnit = trim($request->new_material_unit);
+                
+                $material = Material::where('name', 'like', $materialName)->first();
+                if (!$material) {
+                    $material = Material::create([
+                        'name' => $materialName,
+                        'unit' => $materialUnit,
+                    ]);
+                }
+                $materialId = $material->id;
+            }
+
+            $logData = $request->all();
+            $logData['material_id'] = $materialId;
+
+            MaterialInventory::create($logData);
 
             return redirect()->route('contractor.inventory.index')->with('success', 'Material log added successfully.');
         } catch (\Exception $e) {
