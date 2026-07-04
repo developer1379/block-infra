@@ -21,11 +21,37 @@ class WorkerController extends Controller
         $this->contractors = $contractors;
     }
 
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $workers = $this->workers->getAll();
-            return view('admin.workers.index', compact('workers'));
+            $query = \App\Models\Worker::query();
+
+            if ($request->filled('search')) {
+                $search = $request->input('search');
+                $query->where(function($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                      ->orWhere('phone', 'like', "%{$search}%")
+                      ->orWhere('specialization', 'like', "%{$search}%");
+                });
+            }
+
+            if ($request->filled('specialization')) {
+                $query->where('specialization', $request->input('specialization'));
+            }
+
+            if ($request->filled('status')) {
+                $query->where('status', $request->input('status'));
+            }
+
+            $workers = $query->latest()->paginate(25)->withQueryString();
+            
+            // Get unique specializations for filter dropdown
+            $specializations = \App\Models\Worker::whereNotNull('specialization')
+                ->where('specialization', '!=', '')
+                ->distinct()
+                ->pluck('specialization');
+
+            return view('admin.workers.index', compact('workers', 'specializations'));
         } catch (\Exception $e) {
             Log::error('Admin Worker Index Error: ' . $e->getMessage());
             return back()->with('error', 'Unable to load workers.');
