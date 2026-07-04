@@ -15,7 +15,7 @@
         <!-- Stats Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <!-- Total Contractors -->
-            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-lg transition-all group">
+            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover-lift group">
                 <div class="flex items-center justify-between mb-4">
                     <div class="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all">
                         <i class="fa-solid fa-user-tie text-xl"></i>
@@ -27,7 +27,7 @@
             </div>
 
             <!-- Total Projects -->
-            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-lg transition-all group">
+            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover-lift group">
                 <div class="flex items-center justify-between mb-4">
                     <div class="w-12 h-12 bg-teal-50 rounded-2xl flex items-center justify-center text-teal-600 group-hover:bg-teal-600 group-hover:text-white transition-all">
                         <i class="fa-solid fa-building-columns text-xl"></i>
@@ -39,7 +39,7 @@
             </div>
 
             <!-- Total Workforce -->
-            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-lg transition-all group">
+            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover-lift group">
                 <div class="flex items-center justify-between mb-4">
                     <div class="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-600 group-hover:bg-amber-600 group-hover:text-white transition-all">
                         <i class="fa-solid fa-users-gear text-xl"></i>
@@ -51,7 +51,7 @@
             </div>
 
             <!-- Total Payments -->
-            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-lg transition-all group">
+            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover-lift group">
                 <div class="flex items-center justify-between mb-4">
                     <div class="w-12 h-12 bg-rose-50 rounded-2xl flex items-center justify-center text-rose-600 group-hover:bg-rose-600 group-hover:text-white transition-all">
                         <i class="fa-solid fa-money-bill-trend-up text-xl"></i>

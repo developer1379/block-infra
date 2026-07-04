@@ -91,7 +91,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         @forelse ($projects as $project)
             <div
-                class="bg-white rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-all duration-200 flex flex-col h-full group">
+                class="bg-white rounded-xl shadow-sm border border-slate-200 hover-lift flex flex-col h-full group">
 
                 {{-- Card Header: Status & Date --}}
                 <div class="p-5 pb-0">

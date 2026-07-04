@@ -7,7 +7,7 @@
 
 <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('admin/images/favicon.png') }}">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <script src="https://cdn.tailwindcss.com"></script>
@@ -22,7 +22,7 @@
                     secondary: '#64748b',
                 },
                 fontFamily: {
-                    sans: ['Poppins', 'sans-serif'],
+                    sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
                 }
             }
         }
@@ -38,8 +38,9 @@
 <style>
     /* Custom Overrides for Third Party Libraries to match Tailwind */
     body {
-        font-family: 'Poppins', sans-serif;
+        font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
         background-color: #f8fafc;
+        letter-spacing: -0.01em;
     }
 
     /* Scrollbar */
@@ -115,9 +116,18 @@
         display: none !important;
     }
 
-    /* Globally remove border radius from all elements to ensure a flat design */
-    [class*="rounded-"] {
-        border-radius: 0px !important;
+    /* Modern, premium UI enhancement styles */
+    .hover-lift {
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+    }
+    .hover-lift:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px -6px rgba(15, 118, 110, 0.08), 0 8px 16px -8px rgba(15, 118, 110, 0.08) !important;
+    }
+    
+    input:focus, select:focus, textarea:focus {
+        border-color: #0f766e !important;
+        box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.1) !important;
     }
 </style>
 <!-- PWA -->
