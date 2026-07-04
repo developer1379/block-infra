@@ -8,7 +8,7 @@
         </div>
 
         <a href="{{ route('admin.categories.create') }}"
-            class="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold px-4.5 py-2.5 rounded-xl shadow-sm shadow-teal-100 transition-all duration-200 transform hover:-translate-y-0.5">
+            class="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow-sm shadow-teal-100 transition-all duration-200 transform hover:-translate-y-0.5">
             <i class="fa-solid fa-plus text-xs"></i> Add New Category
         </a>
     </div>
