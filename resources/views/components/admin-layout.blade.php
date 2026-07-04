@@ -10,14 +10,14 @@
     <div class="flex h-screen overflow-hidden">
 
         <aside
-            class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200
+            class="fixed inset-y-0 left-0 z-50 w-64 bg-slate-50/90 border-r border-slate-200/80
                transform transition-transform duration-300 ease-in-out
                lg:relative lg:translate-x-0 lg:flex
                flex flex-col shrink-0"
             :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
 
             <!-- Logo -->
-            <div class="flex items-center justify-center h-16 border-b border-gray-100 bg-white">
+            <div class="flex items-center justify-center h-16 border-b border-slate-200/80 bg-slate-50/90">
                 <a href="{{ route('dashboard') }}" class="flex items-center gap-2 text-xl font-bold text-slate-800">
                     <div class="w-8 h-8 bg-teal-600 text-white rounded-lg flex items-center justify-center">
                         <i class="fa-solid fa-cube"></i>
