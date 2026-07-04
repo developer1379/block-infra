@@ -462,7 +462,12 @@
                                  <template x-for="att in (activeWorker ? activeWorker.attendances : [])" :key="att.id">
                                      <div class="p-3.5 rounded-xl border border-slate-100 bg-slate-50/20 space-y-2.5">
                                          <div class="flex justify-between items-center">
-                                             <p class="text-xs font-bold text-slate-700" x-text="new Date(att.attendance_date).toLocaleDateString('en-US', {day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC'})"></p>
+                                             <div class="flex items-center gap-1.5">
+                                                 <p class="text-xs font-bold text-slate-700" x-text="new Date(att.attendance_date).toLocaleDateString('en-US', {day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC'})"></p>
+                                                 <template x-if="att.latitude">
+                                                     <i class="fa-solid fa-location-dot text-emerald-500 text-xs" title="GPS Location Available"></i>
+                                                 </template>
+                                             </div>
                                              <span class="inline-flex items-center px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider border" 
                                                    :class="att.status === 'present' ? 'bg-emerald-50 text-emerald-700 border-emerald-100/50' : 'bg-rose-50 text-rose-700 border-rose-100/50'"
                                                    x-text="att.status"></span>
