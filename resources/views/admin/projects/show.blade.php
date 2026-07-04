@@ -1,5 +1,5 @@
 <x-admin-layout>
-    <div class="p-6 space-y-8 animate-fade-in">
+    <div class="p-6 space-y-8 animate-fade-in" x-data="{ activeWorker: null, openMaterialId: null, workers: @js($linkedWorkers) }">
         <!-- Header Section -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div class="flex items-center gap-4">
@@ -53,7 +53,8 @@
                     <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">{{ __('Active Workforce') }}</h4>
                     <div class="space-y-2.5 max-h-[250px] overflow-y-auto custom-scrollbar pr-1">
                         @forelse($linkedWorkers as $worker)
-                            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50/40 border border-transparent hover:border-teal-100 hover:bg-white transition-all duration-200">
+                            <div @click="activeWorker = workers.find(w => w.id === {{ $worker->id }})" 
+                                 class="flex items-center justify-between p-3 rounded-xl bg-slate-50/40 border border-transparent hover:border-teal-100 hover:bg-white transition-all duration-200 cursor-pointer">
                                 <div class="flex items-center gap-3">
                                     <div class="w-8 h-8 rounded-full bg-slate-100 border border-slate-200/50 flex items-center justify-center text-slate-600 text-xs font-bold uppercase shadow-sm">
                                         {{ substr($worker->name, 0, 2) }}
@@ -121,7 +122,7 @@
                 </div>
 
                 <!-- Site Inventory -->
-                <div x-data="{ openMaterialId: null }" class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 relative">
+                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 relative">
                     <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-4">{{ __('Site Inventory Overview') }}</h4>
                     <div class="space-y-2.5">
                         @forelse($groupedMaterials as $materialId => $logs)
@@ -158,14 +159,18 @@
                             $material = $logs->first()->material;
                         @endphp
                         <div x-show="openMaterialId === {{ $material->id }}" x-cloak
-                             class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 animate-fade-in">
-                            <div @click.away="openMaterialId = null" class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col overflow-hidden">
-                                <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                             class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                            <!-- Backdrop -->
+                            <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" @click="openMaterialId = null"></div>
+
+                            <!-- Modal Content -->
+                            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden relative z-10 animate-fade-in">
+                                <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
                                     <div>
                                         <h3 class="text-base font-bold text-slate-800">{{ $material->name }} {{ __('Transactions') }}</h3>
-                                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-wider mt-1">{{ __('Unit:') }} {{ $material->unit ?? 'Unit' }}</p>
+                                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-wider mt-1">{{ __('Unit:') }} <span class="text-slate-700 font-bold">{{ $material->unit ?? 'Unit' }}</span></p>
                                     </div>
-                                    <button @click="openMaterialId = null" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-200 text-slate-500 hover:bg-rose-100 hover:text-rose-600 transition-colors">
+                                    <button @click="openMaterialId = null" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-rose-50 hover:text-rose-600 transition-colors">
                                         <i class="fa-solid fa-xmark"></i>
                                     </button>
                                 </div>
@@ -180,30 +185,30 @@
                                                 <th class="px-6 py-3.5">{{ __('Notes') }}</th>
                                             </tr>
                                         </thead>
-                                        <tbody class="divide-y divide-slate-50 text-xs">
+                                        <tbody class="divide-y divide-slate-100 text-xs">
                                             @foreach($logs as $log)
-                                                <tr class="hover:bg-slate-50/50 transition-colors">
-                                                    <td class="px-6 py-3">
-                                                        <p class="font-semibold text-slate-800">{{ $log->entry_date ? $log->entry_date->format('M d, Y') : '-' }}</p>
+                                                <tr class="hover:bg-slate-50/40 transition-colors">
+                                                    <td class="px-6 py-3.5">
+                                                        <p class="font-bold text-slate-700">{{ $log->entry_date ? $log->entry_date->format('M d, Y') : '-' }}</p>
                                                     </td>
-                                                    <td class="px-6 py-3">
+                                                    <td class="px-6 py-3.5">
                                                         @if(in_array($log->type, ['in', 'purchase']))
-                                                            <span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded text-[9px] font-bold uppercase tracking-wider flex items-center gap-1 w-max">
-                                                                <i class="fa-solid fa-arrow-down text-[8px]"></i> IN
+                                                            <span class="inline-flex items-center px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded text-[9px] font-bold uppercase tracking-wider">
+                                                                <i class="fa-solid fa-arrow-down text-[8px] mr-1"></i> IN
                                                             </span>
                                                         @else
-                                                            <span class="px-2 py-0.5 bg-rose-50 text-rose-700 border border-rose-100 rounded text-[9px] font-bold uppercase tracking-wider flex items-center gap-1 w-max">
-                                                                <i class="fa-solid fa-arrow-up text-[8px]"></i> OUT
+                                                            <span class="inline-flex items-center px-2 py-0.5 bg-rose-50 text-rose-700 border border-rose-100 rounded text-[9px] font-bold uppercase tracking-wider">
+                                                                <i class="fa-solid fa-arrow-up text-[8px] mr-1"></i> OUT
                                                             </span>
                                                         @endif
                                                     </td>
-                                                    <td class="px-6 py-3 font-bold {{ in_array($log->type, ['in', 'purchase']) ? 'text-emerald-600' : 'text-rose-600' }}">
-                                                        {{ in_array($log->type, ['in', 'purchase']) ? '+' : '-' }}{{ $log->quantity }}
+                                                    <td class="px-6 py-3.5 font-bold {{ in_array($log->type, ['in', 'purchase']) ? 'text-emerald-600' : 'text-rose-600' }}">
+                                                        {{ in_array($log->type, ['in', 'purchase']) ? '+' : '-' }}{{ number_format($log->quantity, 2) }}
                                                     </td>
-                                                    <td class="px-6 py-3 text-slate-600 font-semibold">
+                                                    <td class="px-6 py-3.5 text-slate-600 font-semibold">
                                                         {{ $log->vendor_name ?: 'System' }}
                                                     </td>
-                                                    <td class="px-6 py-3 text-[10px] text-slate-500 italic max-w-[150px] truncate" title="{{ $log->notes }}">
+                                                    <td class="px-6 py-3.5 text-[10px] text-slate-500 italic max-w-[200px] truncate" title="{{ $log->notes }}">
                                                         {{ $log->notes ?: '-' }}
                                                     </td>
                                                 </tr>
@@ -429,6 +434,139 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Worker Profile Offcanvas/Drawer -->
+        <div x-show="activeWorker !== null" class="fixed inset-0 z-[120] overflow-hidden" x-cloak>
+            <!-- Backdrop -->
+            <div x-show="activeWorker !== null" 
+                 x-transition:enter="ease-in-out duration-300"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="ease-in-out duration-300"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 @click="activeWorker = null"
+                 class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
+
+            <!-- Drawer Content -->
+            <div class="fixed inset-y-0 right-0 pl-10 max-w-full flex">
+                <div x-show="activeWorker !== null"
+                     x-transition:enter="transform transition ease-in-out duration-300"
+                     x-transition:enter-start="translate-x-full"
+                     x-transition:enter-end="translate-x-0"
+                     x-transition:leave="transform transition ease-in-out duration-300"
+                     x-transition:leave-start="translate-x-0"
+                     x-transition:leave-end="translate-x-full"
+                     class="w-screen max-w-md bg-white shadow-2xl flex flex-col">
+                     
+                     <!-- Drawer Header -->
+                     <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                         <div>
+                             <h3 class="text-base font-bold text-slate-800">Worker Profile</h3>
+                             <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">Details & Attendance Logs</p>
+                         </div>
+                         <button @click="activeWorker = null" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-rose-50 hover:text-rose-600 transition-colors">
+                             <i class="fa-solid fa-xmark text-sm"></i>
+                         </button>
+                     </div>
+                     
+                     <!-- Drawer Body -->
+                     <div class="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-6">
+                         <!-- Profile info -->
+                         <div class="flex items-center gap-4 p-4 bg-slate-50/50 rounded-2xl border border-slate-100">
+                             <div class="w-12 h-12 rounded-2xl bg-teal-600/10 text-teal-600 border border-teal-100/50 flex items-center justify-center text-lg font-bold uppercase shadow-sm">
+                                 <span x-text="activeWorker ? activeWorker.name.substring(0, 2).toUpperCase() : ''"></span>
+                             </div>
+                             <div class="min-w-0 flex-1">
+                                 <h4 class="text-sm font-bold text-slate-800 truncate" x-text="activeWorker ? activeWorker.name : ''"></h4>
+                                 <span class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold bg-teal-50 text-teal-700 border border-teal-100/50 uppercase tracking-wider mt-1.5" x-text="activeWorker ? (activeWorker.specialization || 'General') : ''"></span>
+                             </div>
+                         </div>
+                         
+                         <!-- Stats Grid -->
+                         <div class="grid grid-cols-2 gap-4">
+                             <div class="bg-slate-50/30 rounded-xl p-3.5 border border-slate-100 text-center">
+                                 <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Daily Wage</p>
+                                 <p class="text-base font-bold text-slate-800 mt-1" x-text="activeWorker ? '₹' + Number(activeWorker.daily_wage).toLocaleString('en-IN') : '-'"></p>
+                             </div>
+                             <div class="bg-slate-50/30 rounded-xl p-3.5 border border-slate-100 text-center">
+                                 <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Total Days</p>
+                                 <p class="text-base font-bold text-teal-600 mt-1" x-text="activeWorker ? activeWorker.attendances_count : '0'"></p>
+                             </div>
+                         </div>
+                         
+                         <!-- Contact & Identity -->
+                         <div class="space-y-3">
+                             <h5 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 pb-1.5">Contact & Identity</h5>
+                             <div class="grid grid-cols-2 gap-4 text-xs">
+                                 <div>
+                                     <p class="text-slate-400 font-medium">Phone Number</p>
+                                     <p class="font-bold text-slate-700 mt-0.5" x-text="activeWorker ? activeWorker.phone : '-'"></p>
+                                 </div>
+                                 <div>
+                                     <p class="text-slate-400 font-medium">Identity Type</p>
+                                     <p class="font-bold text-slate-700 mt-0.5" x-text="activeWorker ? (activeWorker.identity_type || '-') : '-'"></p>
+                                 </div>
+                                 <div class="col-span-2" x-show="activeWorker && activeWorker.identity_proof">
+                                     <p class="text-slate-400 font-medium">Identity Proof Document</p>
+                                     <a :href="'/storage/' + (activeWorker ? activeWorker.identity_proof : '')" target="_blank" class="inline-flex items-center gap-1.5 mt-1.5 text-teal-600 hover:text-teal-700 font-bold hover:underline">
+                                         <i class="fa-solid fa-file-invoice text-xs"></i> View Attached Proof
+                                     </a>
+                                 </div>
+                             </div>
+                         </div>
+                         
+                         <!-- Attendance logs -->
+                         <div class="space-y-3">
+                             <h5 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 pb-1.5">Attendance History on Project</h5>
+                             <div class="space-y-2.5 max-h-[350px] overflow-y-auto custom-scrollbar pr-1">
+                                 <template x-for="att in (activeWorker ? activeWorker.attendances : [])" :key="att.id">
+                                     <div class="p-3.5 rounded-xl border border-slate-100 bg-slate-50/20 space-y-2.5">
+                                         <div class="flex justify-between items-center">
+                                             <p class="text-xs font-bold text-slate-700" x-text="new Date(att.attendance_date).toLocaleDateString('en-US', {day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC'})"></p>
+                                             <span class="inline-flex items-center px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider border" 
+                                                   :class="att.status === 'present' ? 'bg-emerald-50 text-emerald-700 border-emerald-100/50' : 'bg-rose-50 text-rose-700 border-rose-100/50'"
+                                                   x-text="att.status"></span>
+                                         </div>
+                                         
+                                         <!-- Details -->
+                                         <div class="text-[10px] space-y-2 pt-2.5 border-t border-slate-100/80" x-show="att.overtime_hours > 0 || att.location_address || att.verification_photo || att.notes">
+                                             <div class="flex justify-between items-center" x-show="att.overtime_hours > 0">
+                                                 <span class="text-slate-400 font-semibold">Overtime Hours:</span>
+                                                 <span class="font-bold text-slate-700 bg-teal-50 text-teal-700 border border-teal-100/50 px-2 py-0.5 rounded" x-text="att.overtime_hours + ' hrs'"></span>
+                                             </div>
+                                             
+                                             <div x-show="att.location_address" class="space-y-1">
+                                                 <span class="text-slate-400 font-semibold">Location Address:</span>
+                                                 <p class="font-medium text-slate-600 leading-normal" x-text="att.location_address"></p>
+                                                 <a :href="'https://www.google.com/maps?q=' + att.latitude + ',' + att.longitude" target="_blank" class="inline-flex items-center gap-1 mt-1 text-teal-600 hover:text-teal-700 font-bold hover:underline">
+                                                     <i class="fa-solid fa-map-pin text-[9px]"></i> View GPS Coordinates
+                                                 </a>
+                                             </div>
+
+                                             <div x-show="att.verification_photo" class="pt-1">
+                                                 <span class="text-slate-400 font-semibold block mb-1">Verification Proof:</span>
+                                                 <a :href="'/storage/' + att.verification_photo" target="_blank" class="inline-flex items-center gap-1.5 text-teal-600 hover:text-teal-700 font-bold hover:underline">
+                                                     <i class="fa-solid fa-camera text-xs"></i> View Proof Photo
+                                                 </a>
+                                             </div>
+
+                                             <div x-show="att.notes" class="pt-1.5 border-t border-slate-100/40">
+                                                 <span class="text-slate-400 font-semibold">Contractor Notes:</span>
+                                                 <p class="text-slate-600 italic font-medium mt-0.5 pl-2.5 border-l-2 border-slate-200" x-text="'&ldquo;' + att.notes + '&rdquo;'"></p>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </template>
+                                 <div x-show="!activeWorker || !activeWorker.attendances || activeWorker.attendances.length === 0" class="text-center py-8 text-slate-300 italic text-xs">
+                                     No attendance logs registered on this project.
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
                 </div>
             </div>
         </div>

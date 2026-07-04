@@ -131,6 +131,9 @@ class ProjectController extends Controller
             $linkedWorkers = \App\Models\Worker::whereHas('attendances', function($q) use ($project) {
                     $q->where('project_id', $project->id);
                 })
+                ->with(['attendances' => function($q) use ($project) {
+                    $q->where('project_id', $project->id)->orderBy('attendance_date', 'desc');
+                }])
                 ->withCount(['attendances' => function($q) use ($project) {
                     $q->where('project_id', $project->id);
                 }])
