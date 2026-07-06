@@ -151,24 +151,68 @@
                         </h5>
                     </div>
                     <div class="card-body p-4">
-                        <form action="#" method="POST">
+                        @if(session('success'))
+                            <div class="alert alert-success alert-dismissible fade show mb-4 border-0 shadow-sm" role="alert" style="background-color: #d1e7dd; color: #0f5132; border-radius: 10px;">
+                                <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        @if($errors->any() && !$errors->has('captcha'))
+                            <div class="alert alert-danger alert-dismissible fade show mb-4 border-0 shadow-sm" role="alert" style="background-color: #f8d7da; color: #842029; border-radius: 10px;">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ $errors->first('mail_error') ?: __('Please fix the errors below and try again.') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        <form action="{{ route('website.contact.submit') }}" method="POST">
                             @csrf
+                            
+                            {{-- Honeypot field (anti-spam) --}}
+                            <div style="display: none;">
+                                <input type="text" name="website_url">
+                            </div>
+
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <label class="label-title mb-1 small">{{ __('Your Name') }}</label>
-                                    <input type="text" class="form-control" placeholder="{{ __('Your Name') }}" required>
+                                    <input type="text" name="name" value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror" placeholder="{{ __('Your Name') }}" required>
+                                    @error('name')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="col-md-6">
                                     <label class="label-title mb-1 small">{{ __('Your Email') }}</label>
-                                    <input type="email" class="form-control" placeholder="{{ __('Your Email') }}" required>
+                                    <input type="email" name="email" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" placeholder="{{ __('Your Email') }}" required>
+                                    @error('email')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="col-12">
                                     <label class="label-title mb-1 small">{{ __('Subject') }}</label>
-                                    <input type="text" class="form-control" placeholder="{{ __('Subject') }}" required>
+                                    <input type="text" name="subject" value="{{ old('subject') }}" class="form-control @error('subject') is-invalid @enderror" placeholder="{{ __('Subject') }}" required>
+                                    @error('subject')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="col-12">
                                     <label class="label-title mb-1 small">{{ __('Message') }}</label>
-                                    <textarea class="form-control" rows="4" placeholder="{{ __('Write your message here...') }}" required></textarea>
+                                    <textarea name="message" class="form-control @error('message') is-invalid @enderror" rows="4" placeholder="{{ __('Write your message here...') }}" required>{{ old('message') }}</textarea>
+                                    @error('message')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-12">
+                                    <label class="label-title mb-1 small">{{ __('Verify You Are Human') }}</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light text-dark fw-bold" style="border-radius: 10px 0 0 10px; border-right: none;">
+                                            {{ $num1 }} + {{ $num2 }} =
+                                        </span>
+                                        <input type="number" name="captcha" class="form-control @error('captcha') is-invalid @enderror" placeholder="{{ __('Solve this sum') }}" style="border-radius: 0 10px 10px 0;" required>
+                                        @error('captcha')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                 </div>
                                 <div class="col-12 mt-4">
                                     <button class="btn btn-primary w-100 py-3 text-uppercase fw-bold rounded-pill shadow-sm" type="submit">

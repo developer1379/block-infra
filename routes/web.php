@@ -39,6 +39,7 @@ Route::controller(WebsiteController::class)->group(function () {
     Route::get('/faqs', 'faqs')->name('website.faqs');
     Route::get('/digitalshramik', 'digitalShramik')->name('website.digitalshramik');
     Route::get('/contact', 'contact')->name('website.contact');
+    Route::post('/contact', 'contactSubmit')->name('website.contact.submit');
     Route::get('/request-demo', 'requestDemo')->name('website.request-demo');
     Route::get('/calculator', 'calculator')->name('website.calculator');
     Route::get('/sitemap.xml', 'sitemap')->name('website.sitemap');

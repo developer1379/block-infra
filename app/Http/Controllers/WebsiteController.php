@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Work;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ContactMail;
 
 class WebsiteController extends Controller
 {
@@ -88,7 +90,62 @@ class WebsiteController extends Controller
      */
     public function contact()
     {
-        return view('website.contact');
+        $num1 = rand(1, 9);
+        $num2 = rand(1, 9);
+        session(['captcha_answer' => $num1 + $num2]);
+
+        return view('website.contact', compact('num1', 'num2'));
+    }
+
+    /**
+     * Handle the contact form submission.
+     */
+    public function contactSubmit(Request $request)
+    {
+        // 1. Honeypot check (anti-spam)
+        if ($request->filled('website_url')) {
+            return redirect()->route('website.contact')
+                ->with('success', 'Thank you! Your message has been sent successfully.');
+        }
+
+        // 2. Validation
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string',
+            'captcha' => 'required|integer',
+        ], [
+            'captcha.required' => 'Please solve the math verification captcha.',
+            'captcha.integer' => 'The captcha answer must be an integer.',
+        ]);
+
+        // 3. CAPTCHA verification
+        if ($request->input('captcha') != session('captcha_answer')) {
+            return back()->withInput()->withErrors(['captcha' => 'Verification code failed. Please try again.']);
+        }
+
+        // 4. Clear CAPTCHA session answer to prevent replay attacks
+        session()->forget('captcha_answer');
+
+        // 5. Send Mail
+        try {
+            $mailData = [
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'subject' => $request->input('subject'),
+                'message' => $request->input('message'),
+            ];
+
+            Mail::to('info@blocinfra.in')->send(new ContactMail($mailData));
+
+            return redirect()->route('website.contact')
+                ->with('success', 'Thank you! Your message has been sent successfully.');
+
+        } catch (\Exception $e) {
+            logger()->error('Mail sending failed: ' . $e->getMessage());
+            return back()->withInput()->withErrors(['mail_error' => 'Unable to send email at this time. Please try again later.']);
+        }
     }
 
     /**
