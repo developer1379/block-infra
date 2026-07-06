@@ -32,13 +32,13 @@
                 @endif
 
                 {{-- Post Content --}}
-                <div class="text-white-50 lh-lg article-body mb-5" style="font-size: 16px; text-align: justify; word-wrap: break-word;">
+                <div class="lh-lg article-body mb-5" style="font-size: 16.5px; text-align: justify; word-wrap: break-word; color: #2d3748;">
                     {!! $blog->content !!}
                 </div>
 
                 {{-- Back Redirect --}}
-                <div class="border-top border-secondary pt-4 d-flex justify-content-between align-items-center">
-                    <a href="{{ route('website.blog.index') }}" class="btn btn-outline-light rounded-pill px-4" style="border-color: rgba(255,255,255,0.15);">
+                <div class="pt-4 d-flex justify-content-between align-items-center" style="border-top: 1px solid rgba(0,0,0,0.08);">
+                    <a href="{{ route('website.blog.index') }}" class="btn btn-outline-dark rounded-pill px-4" style="border-color: rgba(0,0,0,0.15); font-weight: 600;">
                         <i class="fa-solid fa-arrow-left me-2 text-xs" style="font-size: 11px;"></i> {{ __('Back to Blog') }}
                     </a>
                 </div>
