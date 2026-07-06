@@ -62,6 +62,18 @@
                         </label>
                     </div>
 
+                    <div class="pt-4 border-t border-slate-100">
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Category <span class="text-rose-500">*</span></label>
+                        <select name="category" required class="w-full bg-slate-50 border border-slate-200 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded-xl px-4 py-3 text-sm transition-all outline-none">
+                            <option value="">Select Category</option>
+                            <option value="Construction" {{ old('category', $blog->category) == 'Construction' ? 'selected' : '' }}>Construction</option>
+                            <option value="Real Estate" {{ old('category', $blog->category) == 'Real Estate' ? 'selected' : '' }}>Real Estate</option>
+                            <option value="Infrastructure" {{ old('category', $blog->category) == 'Infrastructure' ? 'selected' : '' }}>Infrastructure</option>
+                            <option value="Project Management" {{ old('category', $blog->category) == 'Project Management' ? 'selected' : '' }}>Project Management</option>
+                        </select>
+                        @error('category') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+
                     <div class="pt-4 border-t border-slate-100 space-y-3">
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Featured Image</label>
                         @if($blog->image)

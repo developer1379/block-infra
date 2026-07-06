@@ -202,10 +202,34 @@ class WebsiteController extends Controller
     /**
      * Display public blog post index.
      */
-    public function blogIndex()
+    public function blogIndex(Request $request)
     {
-        $blogs = Blog::published()->orderBy('published_at', 'desc')->paginate(9);
-        return view('website.blog.index', compact('blogs'));
+        $query = Blog::published();
+
+        // Search Filter
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+
+        // Category Filter
+        if ($request->filled('category')) {
+            $query->where('category', $request->input('category'));
+        }
+
+        $blogs = $query->orderBy('published_at', 'desc')->paginate(9);
+
+        // Fetch distinct categories for filters
+        $categories = Blog::published()
+            ->whereNotNull('category')
+            ->where('category', '!=', '')
+            ->distinct()
+            ->pluck('category');
+
+        return view('website.blog.index', compact('blogs', 'categories'));
     }
 
     /**

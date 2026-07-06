@@ -38,6 +38,7 @@ class BlogController extends Controller
             'title' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:blogs,slug',
             'content' => 'required|string',
+            'category' => 'required|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
@@ -46,7 +47,7 @@ class BlogController extends Controller
         ]);
 
         $data = $request->only([
-            'title', 'slug', 'content', 'meta_title', 'meta_description', 'meta_keywords'
+            'title', 'slug', 'content', 'category', 'meta_title', 'meta_description', 'meta_keywords'
         ]);
 
         $data['is_published'] = $request->has('is_published');
@@ -85,6 +86,7 @@ class BlogController extends Controller
             'title' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:blogs,slug,' . $blog->id,
             'content' => 'required|string',
+            'category' => 'required|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
@@ -93,7 +95,7 @@ class BlogController extends Controller
         ]);
 
         $data = $request->only([
-            'title', 'slug', 'content', 'meta_title', 'meta_description', 'meta_keywords'
+            'title', 'slug', 'content', 'category', 'meta_title', 'meta_description', 'meta_keywords'
         ]);
 
         $data['is_published'] = $request->has('is_published');
