@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Work;
 use App\Models\Setting;
 use App\Models\Blog;
+use App\Models\BlogComment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ContactMail;
@@ -237,8 +238,59 @@ class WebsiteController extends Controller
      */
     public function blogShow($slug)
     {
+        $blog = Blog::published()
+            ->with(['comments' => function($q) {
+                $q->orderBy('created_at', 'desc');
+            }, 'comments.replies'])
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        // Query suggested blogs: 3 other published posts in the same category,
+        // or general posts if there aren't enough in the same category.
+        $suggestions = Blog::published()
+            ->where('id', '!=', $blog->id)
+            ->where('category', $blog->category)
+            ->limit(3)
+            ->get();
+
+        if ($suggestions->count() < 3) {
+            $extraSuggestions = Blog::published()
+                ->where('id', '!=', $blog->id)
+                ->whereNotIn('id', $suggestions->pluck('id'))
+                ->limit(3 - $suggestions->count())
+                ->get();
+                
+            $suggestions = $suggestions->merge($extraSuggestions);
+        }
+
+        return view('website.blog.show', compact('blog', 'suggestions'));
+    }
+
+    /**
+     * Store a comment/reply for a blog post.
+     */
+    public function storeComment(Request $request, $slug)
+    {
         $blog = Blog::published()->where('slug', $slug)->firstOrFail();
-        return view('website.blog.show', compact('blog'));
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'comment' => 'required|string|max:2000',
+            'parent_id' => 'nullable|exists:blog_comments,id',
+        ]);
+
+        BlogComment::create([
+            'blog_id' => $blog->id,
+            'parent_id' => $request->input('parent_id'),
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'comment' => $request->input('comment'),
+            'is_approved' => true,
+        ]);
+
+        return redirect()->to(route('website.blog.show', $blog->slug) . '#comments-section')
+            ->with('comment_success', 'Comment posted successfully!');
     }
 
     /**

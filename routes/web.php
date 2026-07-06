@@ -44,6 +44,7 @@ Route::controller(WebsiteController::class)->group(function () {
     Route::get('/calculator', 'calculator')->name('website.calculator');
     Route::get('/blog', 'blogIndex')->name('website.blog.index');
     Route::get('/blog/{slug}', 'blogShow')->name('website.blog.show');
+    Route::post('/blog/{slug}/comments', 'storeComment')->name('website.blog.comments.store');
     Route::get('/sitemap.xml', 'sitemap')->name('website.sitemap');
 });
 

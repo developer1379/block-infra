@@ -74,4 +74,12 @@ class Blog extends Model
     {
         return $query->where('is_published', true);
     }
+
+    /**
+     * Get the root comments associated with this blog post.
+     */
+    public function comments()
+    {
+        return $this->hasMany(BlogComment::class)->whereNull('parent_id')->where('is_approved', true);
+    }
 }
