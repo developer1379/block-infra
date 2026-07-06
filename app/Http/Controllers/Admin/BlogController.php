@@ -58,9 +58,7 @@ class BlogController extends Controller
                 $imageUrl = $this->uploadToImgBB($request->file('image'));
                 $data['image'] = $imageUrl;
             } catch (\Exception $e) {
-                logger()->error('ImgBB upload failed, falling back to local storage: ' . $e->getMessage());
-                $imagePath = $request->file('image')->store('blogs', 'public');
-                $data['image'] = $imagePath;
+                return back()->withInput()->withErrors(['image' => 'ImgBB upload failed: ' . $e->getMessage()]);
             }
         }
 
@@ -110,18 +108,17 @@ class BlogController extends Controller
         }
 
         if ($request->hasFile('image')) {
-            // Delete old local image if it exists
-            if ($blog->image && !filter_var($blog->image, FILTER_VALIDATE_URL)) {
-                Storage::disk('public')->delete($blog->image);
-            }
-            
             try {
                 $imageUrl = $this->uploadToImgBB($request->file('image'));
+                
+                // Delete old local image if it exists
+                if ($blog->image && !filter_var($blog->image, FILTER_VALIDATE_URL)) {
+                    Storage::disk('public')->delete($blog->image);
+                }
+                
                 $data['image'] = $imageUrl;
             } catch (\Exception $e) {
-                logger()->error('ImgBB upload failed, falling back to local storage: ' . $e->getMessage());
-                $imagePath = $request->file('image')->store('blogs', 'public');
-                $data['image'] = $imagePath;
+                return back()->withInput()->withErrors(['image' => 'ImgBB upload failed: ' . $e->getMessage()]);
             }
         }
 
