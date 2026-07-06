@@ -1,4 +1,8 @@
-<x-website-layout>
+<x-website-layout 
+    title="Digital Shramik | Bloc-Infra - Direct Labor Hiring Platform" 
+    description="Hire skilled, semi-skilled, and verified construction workers directly. Empowering workers and simplifying hiring for contractors." 
+    keywords="hire construction labor, digital shramik, construction workers, skilled labor Kanpur, worker verification"
+>
 
     <div class="container-fluid bg-dark text-center py-6 mb-5">
         <h1 class="display-5 text-uppercase fw-bold" style="color:#b3d33c;">DigitalShramik</h1>

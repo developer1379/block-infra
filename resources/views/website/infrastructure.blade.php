@@ -1,4 +1,8 @@
-<x-website-layout>
+<x-website-layout 
+    title="Infrastructure Services | Bloc-Infra - Delivering Engineering Excellence" 
+    description="Specialized infrastructure development services in Kanpur. Road building, heavy civil engineering, and public works with world-class quality." 
+    keywords="infrastructure services, road construction, civil engineering, public works Kanpur, infrastructure developers"
+>
 
     {{-- Page Header --}}
     <div class="container-fluid bg-dark text-center py-6 mb-5">

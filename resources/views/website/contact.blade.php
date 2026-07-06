@@ -1,4 +1,8 @@
-<x-website-layout>
+<x-website-layout 
+    title="Contact Us | Get in Touch with Bloc-Infra Kanpur" 
+    description="Get in touch with Bloc-Infra Pvt. Ltd. Reach out for construction quotes, project consults, or contractor inquiries. Located in Kanpur." 
+    keywords="contact construction company, request quote, Kanpur construction contact, call builders"
+>
 
     <style>
         .contact-info-card {

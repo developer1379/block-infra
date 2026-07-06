@@ -1,4 +1,8 @@
-<x-website-layout>
+<x-website-layout 
+    title="Design & Consulting | Bloc-Infra - Modern Architecture & Planning" 
+    description="Architectural planning, structural design, and expert engineering consultancy. Turn your construction vision into beautiful, functional spaces." 
+    keywords="architectural design, design consulting, structural engineering, building plans, construction consultants"
+>
 
     {{-- Page Header --}}
     <div class="container-fluid bg-dark text-center py-6 mb-5">

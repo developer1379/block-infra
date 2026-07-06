@@ -1,7 +1,18 @@
+@props([
+    'title' => null,
+    'description' => null,
+    'keywords' => null,
+    'canonical' => null,
+])
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 {{-- Head Section --}}
-@include('website.partials.head')
+@include('website.partials.head', [
+    'title' => $title,
+    'description' => $description,
+    'keywords' => $keywords,
+    'canonical' => $canonical
+])
 
 <body>
 

@@ -1,4 +1,8 @@
-<x-website-layout>
+<x-website-layout 
+    title="Bloc-Infra | Digital Construction Platform & Verified Contractors" 
+    description="Connect with verified builders, contractors, and design experts in Kanpur. Manage your construction projects seamlessly with Bloc-Infra Pvt. Ltd." 
+    keywords="construction platform, verified contractors, builders in Kanpur, construction company Kanpur, building contractor"
+>
 
     <style>
         /* === Base Dark Theme === */

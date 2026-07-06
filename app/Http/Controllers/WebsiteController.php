@@ -119,5 +119,30 @@ class WebsiteController extends Controller
 
         return view('website.calculator', compact('categories', 'works'));
     }
+
+    /**
+     * Generate dynamic sitemap.xml.
+     */
+    public function sitemap()
+    {
+        $now = now()->toAtomString();
+
+        $routes = [
+            ['loc' => route('website.home'), 'lastmod' => $now, 'changefreq' => 'daily', 'priority' => '1.0'],
+            ['loc' => route('website.about'), 'lastmod' => $now, 'changefreq' => 'monthly', 'priority' => '0.8'],
+            ['loc' => route('website.construction'), 'lastmod' => $now, 'changefreq' => 'monthly', 'priority' => '0.8'],
+            ['loc' => route('website.infrastructure'), 'lastmod' => $now, 'changefreq' => 'monthly', 'priority' => '0.8'],
+            ['loc' => route('website.project-management'), 'lastmod' => $now, 'changefreq' => 'monthly', 'priority' => '0.8'],
+            ['loc' => route('website.design-consulting'), 'lastmod' => $now, 'changefreq' => 'monthly', 'priority' => '0.8'],
+            ['loc' => route('website.clients'), 'lastmod' => $now, 'changefreq' => 'monthly', 'priority' => '0.6'],
+            ['loc' => route('website.faqs'), 'lastmod' => $now, 'changefreq' => 'monthly', 'priority' => '0.6'],
+            ['loc' => route('website.digitalshramik'), 'lastmod' => $now, 'changefreq' => 'weekly', 'priority' => '0.7'],
+            ['loc' => route('website.contact'), 'lastmod' => $now, 'changefreq' => 'monthly', 'priority' => '0.7'],
+            ['loc' => route('website.calculator'), 'lastmod' => $now, 'changefreq' => 'monthly', 'priority' => '0.7'],
+        ];
+
+        return response()->view('website.sitemap', compact('routes'))
+            ->header('Content-Type', 'text/xml');
+    }
 }
 

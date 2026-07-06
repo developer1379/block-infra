@@ -1,9 +1,70 @@
 <head>
     <meta charset="utf-8">
-    <title>Bloc-Infra - Construction Company</title>
+    <title>{{ isset($title) ? $title : 'Bloc-Infra - Construction & Infrastructure Company' }}</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Kanpur's best Construction " name="keywords">
-    <meta content="Kanpur Construction comapany" name="description">
+    <meta content="{{ isset($keywords) ? $keywords : 'Kanpur Construction, Best Builders, Bloc-Infra, Construction Company Kanpur' }}" name="keywords">
+    <meta content="{{ isset($description) ? $description : 'Bloc-Infra Pvt. Ltd. connects builders, contractors, and clients under one powerful digital construction platform.' }}" name="description">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ isset($canonical) ? $canonical : url()->current() }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="{{ isset($title) ? $title : 'Bloc-Infra - Construction & Infrastructure Company' }}">
+    <meta property="og:description" content="{{ isset($description) ? $description : 'Bloc-Infra Pvt. Ltd. connects builders, contractors, and clients under one powerful digital construction platform.' }}">
+    <meta property="og:image" content="{{ asset('logo.png') }}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url()->current() }}">
+    <meta property="twitter:title" content="{{ isset($title) ? $title : 'Bloc-Infra - Construction & Infrastructure Company' }}">
+    <meta property="twitter:description" content="{{ isset($description) ? $description : 'Bloc-Infra Pvt. Ltd. connects builders, contractors, and clients under one powerful digital construction platform.' }}">
+    <meta property="twitter:image" content="{{ asset('logo.png') }}">
+
+    <!-- Structured Data (JSON-LD) for Local Business / Construction Company -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ConstructionBusiness",
+      "name": "Bloc-Infra Pvt. Ltd.",
+      "image": "{{ asset('logo.png') }}",
+      "@id": "{{ url('/') }}",
+      "url": "{{ url('/') }}",
+      "telephone": "+91-XXXXXXXXXX",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Kakadeo",
+        "addressLocality": "Kanpur",
+        "addressRegion": "Uttar Pradesh",
+        "postalCode": "208025",
+        "addressCountry": "IN"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 26.4744,
+        "longitude": 80.3013
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday"
+        ],
+        "opens": "09:00",
+        "closes": "18:00"
+      },
+      "sameAs": [
+        "https://www.facebook.com/blocinfra",
+        "https://twitter.com/blocinfra",
+        "https://www.linkedin.com/company/blocinfra"
+      ]
+    }
+    </script>
 
     <!-- Favicon -->
     <link href="{{ asset('website/img/fav.jpg') }}" rel="icon">

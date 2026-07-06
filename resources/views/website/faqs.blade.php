@@ -1,4 +1,8 @@
-<x-website-layout>
+<x-website-layout 
+    title="Frequently Asked Questions | Bloc-Infra Help Center" 
+    description="Have questions about hiring contractors, design consultations, or project tracking? Find quick answers in the Bloc-Infra FAQ directory." 
+    keywords="construction FAQs, hiring contractors help, construction cost estimation, Bloc-Infra support"
+>
 
     <style>
         .accordion-button {

@@ -1,4 +1,8 @@
-<x-website-layout>
+<x-website-layout 
+    title="Construction Cost Calculator | Estimate Your Project Budget" 
+    description="Calculate your building construction costs instantly. Estimate material, labor, and structure costs for your project using our smart calculator." 
+    keywords="construction cost calculator, project budget estimator, building material cost, house construction calculator"
+>
 
     <style>
         .calc-box {

@@ -1,4 +1,8 @@
-<x-website-layout>
+<x-website-layout 
+    title="Project Management Services | Bloc-Infra - On-Time Construction Delivery" 
+    description="Professional construction project management. We plan, monitor, and coordinate your projects to ensure quality, safety, and timely completion." 
+    keywords="project management, construction coordination, project planning, site supervision, construction manager"
+>
 
     {{-- Page Header --}}
     <div class="container-fluid bg-dark text-center py-6 mb-5">

@@ -41,6 +41,7 @@ Route::controller(WebsiteController::class)->group(function () {
     Route::get('/contact', 'contact')->name('website.contact');
     Route::get('/request-demo', 'requestDemo')->name('website.request-demo');
     Route::get('/calculator', 'calculator')->name('website.calculator');
+    Route::get('/sitemap.xml', 'sitemap')->name('website.sitemap');
 });
 
 // Authentication Routes

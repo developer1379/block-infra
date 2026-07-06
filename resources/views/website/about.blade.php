@@ -1,4 +1,8 @@
-<x-website-layout>
+<x-website-layout 
+    title="About Us | Bloc-Infra - Building the Future with Quality & Trust" 
+    description="Discover how Bloc-Infra Pvt. Ltd. connects builders, contractors, and clients under one powerful digital platform. Trusted construction services in Kanpur." 
+    keywords="about Bloc-Infra, construction technology, trusted contractors Kanpur, builder connection"
+>
 
     {{-- PAGE HEADER --}}
     <div class="container-fluid page-header text-center mb-5">

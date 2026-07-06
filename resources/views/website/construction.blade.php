@@ -1,4 +1,8 @@
-<x-website-layout>
+<x-website-layout 
+    title="Construction Services | Bloc-Infra - Quality Building & Development" 
+    description="Explore our end-to-end construction services in Kanpur. From residential buildings to commercial complexes, we deliver excellence on time." 
+    keywords="construction services, building development, residential construction, commercial projects, Kanpur builders"
+>
 
     {{-- Page Header --}}
     <div class="container-fluid bg-dark text-center py-6 mb-5">

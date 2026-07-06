@@ -1,4 +1,8 @@
-<x-website-layout>
+<x-website-layout 
+    title="Our Clients & Partners | Bloc-Infra Portfolio" 
+    description="See how we collaborate with top developers, public organizations, and private clients to deliver successful construction projects in Kanpur." 
+    keywords="construction clients, project portfolio, client reviews, partner companies"
+>
 
     <div class="container-fluid bg-dark text-center py-6 mb-5">
         <h1 class="display-5 text-uppercase fw-bold" style="color:#b3d33c;">Our Clients</h1>
