@@ -146,10 +146,10 @@ class BlogController extends Controller
      */
     private function uploadToImgBB($file)
     {
-        $apiKey = env('IMGBB_API_KEY') ?? Setting::where('key', 'imgbb_api_key')->value('value');
+        $apiKey = Setting::where('key', 'imgbb_api_key')->value('value');
         
         if (empty($apiKey)) {
-            throw new \Exception('ImgBB API Key is not configured. Please set IMGBB_API_KEY in your .env or Settings page.');
+            throw new \Exception('ImgBB API Key is not configured. Please configure it in your Settings page.');
         }
 
         $response = Http::asMultipart()
