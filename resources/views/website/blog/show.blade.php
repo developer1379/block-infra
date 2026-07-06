@@ -33,7 +33,7 @@
 
                 {{-- Post Content --}}
                 <div class="text-white-50 lh-lg article-body mb-5" style="font-size: 16px; text-align: justify; word-wrap: break-word;">
-                    {!! nl2br(e($blog->content)) !!}
+                    {!! $blog->content !!}
                 </div>
 
                 {{-- Back Redirect --}}

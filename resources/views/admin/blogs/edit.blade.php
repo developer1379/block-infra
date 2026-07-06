@@ -37,7 +37,7 @@
 
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Content <span class="text-rose-500">*</span></label>
-                        <textarea name="content" rows="12" required
+                        <textarea id="blog-content" name="content" rows="12"
                             class="w-full bg-slate-50 border border-slate-200 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded-xl px-4 py-3 text-sm transition-all outline-none"
                             placeholder="Write your article body content here...">{{ old('content', $blog->content) }}</textarea>
                         @error('content') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
@@ -128,4 +128,23 @@
             </div>
         </div>
     </form>
+
+    @push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.2/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: '#blog-content',
+            height: 450,
+            plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table code help wordcount',
+            toolbar: 'undo redo | blocks | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+            branding: false,
+            promotion: false,
+            setup: function (editor) {
+                editor.on('change', function () {
+                    editor.save();
+                });
+            }
+        });
+    </script>
+    @endpush
 </x-admin-layout>
