@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Work;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ContactMail;
@@ -130,6 +131,24 @@ class WebsiteController extends Controller
 
         // 5. Send Mail
         try {
+            // Load dynamic mail settings from database settings table
+            $settings = Setting::pluck('value', 'key')->toArray();
+
+            if (!empty($settings['mail_host'])) {
+                config([
+                    'mail.mailers.smtp.transport' => $settings['mail_mailer'] ?? 'smtp',
+                    'mail.mailers.smtp.host' => $settings['mail_host'],
+                    'mail.mailers.smtp.port' => $settings['mail_port'] ?? 587,
+                    'mail.mailers.smtp.username' => $settings['mail_username'] ?? null,
+                    'mail.mailers.smtp.password' => $settings['mail_password'] ?? null,
+                    'mail.mailers.smtp.encryption' => $settings['mail_encryption'] ?? null,
+                    'mail.from.address' => $settings['mail_from_address'] ?? 'info@blocinfra.in',
+                    'mail.from.name' => $settings['mail_from_name'] ?? config('app.name'),
+                ]);
+
+                Mail::purge('smtp');
+            }
+
             $mailData = [
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
@@ -137,7 +156,9 @@ class WebsiteController extends Controller
                 'message' => $request->input('message'),
             ];
 
-            Mail::to('info@blocinfra.in')->send(new ContactMail($mailData));
+            $recipient = $settings['mail_from_address'] ?? 'info@blocinfra.in';
+
+            Mail::to($recipient)->send(new ContactMail($mailData));
 
             return redirect()->route('website.contact')
                 ->with('success', 'Thank you! Your message has been sent successfully.');
