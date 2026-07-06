@@ -8,7 +8,7 @@ Options -Indexes
     RewriteRule ^\.(.*) - [F]
 
     # Block direct access to sensitive directories
-    RewriteRule ^(app|bootstrap|config|database|lang|resources|routes|storage|tests|vendor|Modules)/ - [F]
+    RewriteRule ^(app|bootstrap|config|database|resources|routes|tests|vendor)/ - [F]
 
     # Block direct access to sensitive root files
     RewriteRule ^(artisan|composer\.(json|lock)|package(-lock)?\.json|phpunit\.xml|vite\.config\.js|.*\.sql|.*\.txt)$ - [F]
