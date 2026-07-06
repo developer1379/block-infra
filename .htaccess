@@ -1,0 +1,23 @@
+# Disable directory browsing
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Prevent direct access to hidden files and folders (e.g., .env, .git)
+    RewriteRule ^\.(.*) - [F]
+
+    # Block direct access to sensitive directories
+    RewriteRule ^(app|bootstrap|config|database|lang|resources|routes|storage|tests|vendor|Modules)/ - [F]
+
+    # Block direct access to sensitive root files
+    RewriteRule ^(artisan|composer\.(json|lock)|package(-lock)?\.json|phpunit\.xml|vite\.config\.js|.*\.sql|.*\.txt)$ - [F]
+
+    # Enable HTTPS redirection if needed (uncomment the lines below to enforce HTTPS)
+    # RewriteCond %{HTTPS} !=on
+    # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Rewrite all traffic to the public directory
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
