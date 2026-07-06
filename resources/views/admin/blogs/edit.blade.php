@@ -1,0 +1,119 @@
+<x-admin-layout>
+    {{-- PAGE HEADER --}}
+    <div class="flex items-center gap-4 mb-8">
+        <a href="{{ route('admin.blogs.index') }}" class="w-10 h-10 bg-white border border-slate-100 rounded-xl flex items-center justify-center text-slate-400 hover:text-teal-600 shadow-sm transition-all">
+            <i class="fa-solid fa-arrow-left text-sm"></i>
+        </a>
+        <div>
+            <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Edit Blog Post</h2>
+            <p class="text-slate-500 text-sm mt-0.5">Modify and update your article details and SEO fields</p>
+        </div>
+    </div>
+
+    {{-- FORM --}}
+    <form action="{{ route('admin.blogs.update', $blog->id) }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        @method('PUT')
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {{-- Main Content Section (2/3 width) --}}
+            <div class="lg:col-span-2 space-y-6">
+                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 space-y-5">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Title <span class="text-rose-500">*</span></label>
+                        <input type="text" name="title" value="{{ old('title', $blog->title) }}" required
+                            class="w-full bg-slate-50 border border-slate-200 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded-xl px-4 py-3 text-sm transition-all outline-none"
+                            placeholder="Enter blog post title">
+                        @error('title') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Slug (URL Keyword)</label>
+                        <input type="text" name="slug" value="{{ old('slug', $blog->slug) }}"
+                            class="w-full bg-slate-50 border border-slate-200 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded-xl px-4 py-3 text-sm transition-all outline-none"
+                            placeholder="e.g. how-to-build-a-house (auto-regenerates if left blank)">
+                        @error('slug') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Content <span class="text-rose-500">*</span></label>
+                        <textarea name="content" rows="12" required
+                            class="w-full bg-slate-50 border border-slate-200 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded-xl px-4 py-3 text-sm transition-all outline-none"
+                            placeholder="Write your article body content here...">{{ old('content', $blog->content) }}</textarea>
+                        @error('content') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+            </div>
+
+            {{-- Sidebar Meta & Settings Section (1/3 width) --}}
+            <div class="space-y-6">
+                {{-- Publishing Settings --}}
+                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 space-y-4">
+                    <h3 class="font-bold text-slate-800 text-sm border-b border-slate-100 pb-3">Publishing Status</h3>
+                    
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="text-sm font-semibold text-slate-700 block">Status</span>
+                            <span class="text-xs text-slate-400">Make this post public immediately</span>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" name="is_published" value="1" {{ old('is_published', $blog->is_published) ? 'checked' : '' }} class="sr-only peer">
+                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div>
+                        </label>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-100 space-y-3">
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Featured Image</label>
+                        @if($blog->image)
+                            <div class="relative w-full h-32 rounded-xl overflow-hidden border border-slate-150 mb-2">
+                                <img src="{{ asset('storage/' . $blog->image) }}" class="w-full h-full object-cover" alt="Featured Image">
+                            </div>
+                        @endif
+                        <input type="file" name="image" accept="image/*"
+                            class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100 cursor-pointer">
+                        @error('image') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+
+                {{-- SEO Settings --}}
+                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 space-y-4">
+                    <h3 class="font-bold text-slate-800 text-sm border-b border-slate-100 pb-3">SEO Optimization</h3>
+                    
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Meta Title</label>
+                        <input type="text" name="meta_title" value="{{ old('meta_title', $blog->meta_title) }}"
+                            class="w-full bg-slate-50 border border-slate-200 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded-xl px-4 py-3 text-sm transition-all outline-none"
+                            placeholder="Default is title">
+                        @error('meta_title') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Meta Description</label>
+                        <textarea name="meta_description" rows="4"
+                            class="w-full bg-slate-50 border border-slate-200 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded-xl px-4 py-3 text-sm transition-all outline-none"
+                            placeholder="Recommended length: 150-160 characters">{{ old('meta_description', $blog->meta_description) }}</textarea>
+                        @error('meta_description') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Meta Keywords</label>
+                        <input type="text" name="meta_keywords" value="{{ old('meta_keywords', $blog->meta_keywords) }}"
+                            class="w-full bg-slate-50 border border-slate-200 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 rounded-xl px-4 py-3 text-sm transition-all outline-none"
+                            placeholder="e.g. contracting, architecture, Kanpur">
+                        @error('meta_keywords') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+
+                {{-- Action Buttons --}}
+                <div class="flex gap-4">
+                    <button type="submit" class="flex-1 text-center bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold py-3.5 rounded-xl shadow-sm shadow-teal-100 transition-all duration-200">
+                        Update Post
+                    </button>
+                    <a href="{{ route('admin.blogs.index') }}" class="flex-1 text-center bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm font-semibold py-3.5 rounded-xl transition-all duration-200">
+                        Cancel
+                    </a>
+                </div>
+            </div>
+        </div>
+    </form>
+</x-admin-layout>

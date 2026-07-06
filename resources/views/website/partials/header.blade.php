@@ -169,6 +169,7 @@
                 <a href="{{ route('website.about') }}" class="nav-item nav-link {{ Request::routeIs('website.about') ? 'active' : '' }} text-uppercase">{{ __('About Us') }}</a>
                 <a href="{{ route('website.faqs') }}" class="nav-item nav-link {{ Request::routeIs('website.faqs') ? 'active' : '' }} text-uppercase">{{ __('FAQs') }}</a>
                 <a href="{{ route('website.calculator') }}" class="nav-item nav-link {{ Request::routeIs('website.calculator') ? 'active' : '' }} text-uppercase">{{ __('Calculator') }}</a>
+                <a href="{{ route('website.blog.index') }}" class="nav-item nav-link {{ Request::routeIs('website.blog.*') ? 'active' : '' }} text-uppercase">{{ __('Blog') }}</a>
                 <a href="{{ route('website.contact') }}" class="nav-item nav-link {{ Request::routeIs('website.contact') ? 'active' : '' }} text-uppercase">{{ __('Contact Us') }}</a>
 
                 <!-- Mobile Language Switcher (Visible only on mobile/tablet) -->

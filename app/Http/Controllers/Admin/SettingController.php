@@ -26,6 +26,7 @@ class SettingController extends Controller
             'mail_encryption' => 'nullable|string',
             'mail_from_address' => 'required|email',
             'mail_from_name' => 'required|string',
+            'imgbb_api_key' => 'nullable|string|max:255',
         ]);
 
         foreach ($data as $key => $value) {

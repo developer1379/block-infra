@@ -351,6 +351,37 @@
         </div>
     @endcanany
 
+    {{-- BLOGS --}}
+    @if (auth()->user()->hasRole('admin'))
+        <div x-data="{ open: {{ request()->routeIs('admin.blogs.*') ? 'true' : 'false' }} }" class="space-y-1">
+            <button @click="open = !open"
+                class="w-full group flex items-center justify-between px-4 py-2.5 text-sm font-medium rounded-xl border-l-4 transition-all duration-200
+                {{ request()->routeIs('admin.blogs.*') ? 'bg-slate-800/50 text-white border-teal-500' : 'border-transparent text-slate-400 hover:bg-slate-800/60 hover:text-white' }}">
+                <div class="flex items-center">
+                    <i class="fa-solid fa-blog w-5 text-center text-base transition-colors {{ request()->routeIs('admin.blogs.*') ? 'text-teal-400' : 'text-slate-500 group-hover:text-teal-400' }}"></i>
+                    <span class="ml-3">Blogs</span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-[10px] text-slate-500 transition-transform duration-200"
+                    :class="open ? 'rotate-90 text-teal-400' : ''"></i>
+            </button>
+            <div x-show="open" x-collapse x-cloak class="relative pl-9 space-y-1">
+                <div class="absolute left-[24px] top-0 bottom-0 w-[1px] bg-slate-800"></div>
+                <a href="{{ route('admin.blogs.index') }}"
+                    class="group flex items-center py-2 pl-4 text-xs font-semibold rounded-lg transition-colors duration-150
+                   {{ request()->routeIs('admin.blogs.index') ? 'text-teal-300 bg-slate-800/40' : 'text-slate-400 hover:text-teal-300 hover:bg-slate-800/30' }}">
+                    <span class="w-1.5 h-1.5 rounded-full mr-2 transition-colors {{ request()->routeIs('admin.blogs.index') ? 'bg-teal-400' : 'bg-slate-600 group-hover:bg-teal-400' }}"></span>
+                    All Blogs
+                </a>
+                <a href="{{ route('admin.blogs.create') }}"
+                    class="group flex items-center py-2 pl-4 text-xs font-semibold rounded-lg transition-colors duration-150
+                   {{ request()->routeIs('admin.blogs.create') ? 'text-teal-300 bg-slate-800/40' : 'text-slate-400 hover:text-teal-300 hover:bg-slate-800/30' }}">
+                    <span class="w-1.5 h-1.5 rounded-full mr-2 transition-colors {{ request()->routeIs('admin.blogs.create') ? 'bg-teal-400' : 'bg-slate-600 group-hover:bg-teal-400' }}"></span>
+                    Add Blog
+                </a>
+            </div>
+        </div>
+    @endif
+
     {{-- EMAIL SETTINGS --}}
     @if (auth()->user()->hasRole('admin'))
         <a href="{{ route('admin.settings.edit') }}"

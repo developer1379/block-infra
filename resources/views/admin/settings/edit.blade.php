@@ -111,6 +111,23 @@
 
                 </div>
 
+                {{-- ImgBB Settings --}}
+                <div class="mt-8 pt-6 border-t border-slate-100 space-y-4">
+                    <h4 class="font-bold text-slate-700 flex items-center gap-2">
+                        <i class="fa-solid fa-image text-primary"></i> Third-Party Image Hosting (ImgBB)
+                    </h4>
+                    <p class="text-xs text-slate-400">Configure ImgBB API settings to upload blog featured images directly to the cloud rather than local disk storage.</p>
+                    
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">
+                            ImgBB API Key
+                        </label>
+                        <input type="text" name="imgbb_api_key" value="{{ old('imgbb_api_key', $settings['imgbb_api_key'] ?? '') }}"
+                               class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
+                               placeholder="Enter your ImgBB API key">
+                    </div>
+                </div>
+
                 {{-- Submit Button --}}
                 <div class="flex justify-end pt-6 mt-6 border-t border-slate-100">
                     <button type="submit"

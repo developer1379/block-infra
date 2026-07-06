@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\FinanceController;
 use App\Http\Controllers\Admin\SiteReportController;
 use App\Http\Controllers\Admin\WorkerPaymentController;
 use App\Http\Controllers\Admin\FeedbackController;
+use App\Http\Controllers\Admin\BlogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -82,3 +83,6 @@ Route::patch('worker-payments/{id}/reject', [WorkerPaymentController::class, 're
 
 // Support & Feedback
 Route::resource('feedback', FeedbackController::class)->only(['index', 'show', 'update']);
+
+// Blog Management
+Route::resource('blogs', BlogController::class);

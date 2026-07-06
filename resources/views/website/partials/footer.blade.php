@@ -58,7 +58,7 @@
                                 style="color:#b3d33c;"></i>{{ __('Infrastructure') }}</a>
                         <a class="text-white-50 mb-2" href="{{ route('website.construction') }}"><i class="fa fa-angle-right me-2"
                                 style="color:#b3d33c;"></i>{{ __('Renovation') }}</a>
-                        <a class="text-white-50" href="#"><i class="fa fa-angle-right me-2"
+                        <a class="text-white-50" href="{{ route('website.blog.index') }}"><i class="fa fa-angle-right me-2"
                                 style="color:#b3d33c;"></i>{{ __('Blog') }}</a>
                     </div>
                 </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Work;
 use App\Models\Setting;
+use App\Models\Blog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ContactMail;
@@ -199,6 +200,24 @@ class WebsiteController extends Controller
     }
 
     /**
+     * Display public blog post index.
+     */
+    public function blogIndex()
+    {
+        $blogs = Blog::published()->orderBy('published_at', 'desc')->paginate(9);
+        return view('website.blog.index', compact('blogs'));
+    }
+
+    /**
+     * Display a single public blog post.
+     */
+    public function blogShow($slug)
+    {
+        $blog = Blog::published()->where('slug', $slug)->firstOrFail();
+        return view('website.blog.show', compact('blog'));
+    }
+
+    /**
      * Generate dynamic sitemap.xml.
      */
     public function sitemap()
@@ -217,7 +236,19 @@ class WebsiteController extends Controller
             ['loc' => route('website.digitalshramik'), 'lastmod' => $now, 'changefreq' => 'weekly', 'priority' => '0.7'],
             ['loc' => route('website.contact'), 'lastmod' => $now, 'changefreq' => 'monthly', 'priority' => '0.7'],
             ['loc' => route('website.calculator'), 'lastmod' => $now, 'changefreq' => 'monthly', 'priority' => '0.7'],
+            ['loc' => route('website.blog.index'), 'lastmod' => $now, 'changefreq' => 'daily', 'priority' => '0.8'],
         ];
+
+        // Add published blogs to sitemap
+        $blogs = Blog::published()->get();
+        foreach ($blogs as $blog) {
+            $routes[] = [
+                'loc' => route('website.blog.show', $blog->slug),
+                'lastmod' => $blog->updated_at->toAtomString(),
+                'changefreq' => 'weekly',
+                'priority' => '0.6'
+            ];
+        }
 
         return response()->view('website.sitemap', compact('routes'))
             ->header('Content-Type', 'text/xml');

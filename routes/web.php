@@ -42,6 +42,8 @@ Route::controller(WebsiteController::class)->group(function () {
     Route::post('/contact', 'contactSubmit')->name('website.contact.submit');
     Route::get('/request-demo', 'requestDemo')->name('website.request-demo');
     Route::get('/calculator', 'calculator')->name('website.calculator');
+    Route::get('/blog', 'blogIndex')->name('website.blog.index');
+    Route::get('/blog/{slug}', 'blogShow')->name('website.blog.show');
     Route::get('/sitemap.xml', 'sitemap')->name('website.sitemap');
 });
 
