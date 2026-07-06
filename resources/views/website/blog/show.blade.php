@@ -25,9 +25,9 @@
             <div class="col-lg-8">
                 
                 {{-- Featured Image --}}
-                @if($blog->image)
+                @if($blog->image_url)
                     <div class="mb-5 rounded-3 overflow-hidden shadow" style="max-height: 480px;">
-                        <img src="{{ asset('storage/' . $blog->image) }}" class="w-100 h-100 object-cover" alt="{{ $blog->title }}">
+                        <img src="{{ $blog->image_url }}" class="w-100 h-100 object-cover" alt="{{ $blog->title }}">
                     </div>
                 @endif
 

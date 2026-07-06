@@ -47,8 +47,8 @@
                     @forelse($blogs as $blog)
                         <tr class="hover:bg-slate-50/50 transition-colors">
                             <td class="px-6 py-4">
-                                @if($blog->image)
-                                    <img src="{{ asset('storage/' . $blog->image) }}" class="w-12 h-12 object-cover rounded-lg border border-slate-100" alt="Thumbnail">
+                                @if($blog->image_url)
+                                    <img src="{{ $blog->image_url }}" class="w-12 h-12 object-cover rounded-lg border border-slate-100" alt="Thumbnail">
                                 @else
                                     <div class="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center text-slate-400">
                                         <i class="fa-solid fa-image text-sm"></i>
