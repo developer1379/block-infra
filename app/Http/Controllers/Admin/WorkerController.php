@@ -137,14 +137,26 @@ class WorkerController extends Controller
         }
     }
 
-    public function attendance($id)
+    public function attendance(Request $request, $id)
     {
         try {
             $worker = $this->workers->find($id);
-            $attendanceRecords = \App\Models\ProjectAttendance::where('worker_id', $id)
-                ->with('project')
-                ->latest('attendance_date')
-                ->paginate(20);
+            
+            $query = \App\Models\ProjectAttendance::where('worker_id', $id)
+                ->with('project');
+                
+            if ($request->filled('start_date')) {
+                $query->whereDate('attendance_date', '>=', $request->input('start_date'));
+            }
+            
+            if ($request->filled('end_date')) {
+                $query->whereDate('attendance_date', '<=', $request->input('end_date'));
+            }
+            
+            $attendanceRecords = $query->latest('attendance_date')
+                ->paginate(20)
+                ->withQueryString();
+                
             return view('admin.workers.attendance', compact('worker', 'attendanceRecords'));
         } catch (\Exception $e) {
             Log::error('Admin Worker Attendance Error: ' . $e->getMessage());

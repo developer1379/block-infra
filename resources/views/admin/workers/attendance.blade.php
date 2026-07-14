@@ -14,6 +14,36 @@
             </div>
         </div>
 
+        {{-- Filters Section --}}
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+            <form method="GET" action="{{ route('admin.workers.attendance', $worker->id) }}" class="flex flex-col md:flex-row md:items-end gap-4">
+                <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="start_date" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Start Date</label>
+                        <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}"
+                               class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-colors">
+                    </div>
+                    <div>
+                        <label for="end_date" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">End Date</label>
+                        <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}"
+                               class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-colors">
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button type="submit"
+                            class="px-5 py-2.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-sm font-bold flex items-center gap-2 transition-all">
+                        <i class="fa-solid fa-filter text-xs"></i> Filter
+                    </button>
+                    @if(request('start_date') || request('end_date'))
+                        <a href="{{ route('admin.workers.attendance', $worker->id) }}"
+                           class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-bold flex items-center gap-2 transition-all">
+                            <i class="fa-solid fa-xmark text-xs"></i> Reset
+                        </a>
+                    @endif
+                </div>
+            </form>
+        </div>
+
         <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">

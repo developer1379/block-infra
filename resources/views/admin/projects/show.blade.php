@@ -1,5 +1,20 @@
 <x-admin-layout>
-    <div x-data="{ activeWorker: null, openMaterialId: null, workers: @js($linkedWorkers) }">
+    <div x-data="{ 
+        activeWorker: null, 
+        openMaterialId: null, 
+        workers: @js($linkedWorkers),
+        filterStartDate: '',
+        filterEndDate: '',
+        filteredAttendances() {
+            if (!this.activeWorker || !this.activeWorker.attendances) return [];
+            return this.activeWorker.attendances.filter(att => {
+                const dateStr = att.attendance_date.substring(0, 10);
+                if (this.filterStartDate && dateStr < this.filterStartDate) return false;
+                if (this.filterEndDate && dateStr > this.filterEndDate) return false;
+                return true;
+            });
+        }
+    }">
         <!-- Page Content (Animated) -->
         <div class="p-6 space-y-8 animate-fade-in">
             <!-- Header Section -->
@@ -454,12 +469,37 @@
                                  </div>
                              </div>
                          </div>
-                         
-                         <!-- Attendance logs -->
-                         <div class="space-y-3">
-                             <h5 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 pb-1.5">Attendance History on Project</h5>
-                             <div class="space-y-2.5 max-h-[350px] overflow-y-auto custom-scrollbar pr-1">
-                                <template x-for="att in (activeWorker ? activeWorker.attendances : [])" :key="att.id">
+                                      <!-- Attendance logs -->
+                          <div class="space-y-3">
+                              <h5 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 pb-1.5 flex justify-between items-center">
+                                  <span>Attendance History on Project</span>
+                              </h5>
+                              
+                              <!-- Dynamic Date Filters -->
+                              <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100/80 space-y-2">
+                                  <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Filter Logs by Date</p>
+                                  <div class="grid grid-cols-2 gap-2 text-xs">
+                                      <div>
+                                          <label class="text-[8px] font-bold text-slate-400 uppercase tracking-wider block mb-0.5">From</label>
+                                          <input type="date" x-model="filterStartDate"
+                                                 class="w-full px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-[10px] focus:outline-none focus:border-teal-500 transition-colors">
+                                      </div>
+                                      <div>
+                                          <label class="text-[8px] font-bold text-slate-400 uppercase tracking-wider block mb-0.5">To</label>
+                                          <input type="date" x-model="filterEndDate"
+                                                 class="w-full px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-[10px] focus:outline-none focus:border-teal-500 transition-colors">
+                                      </div>
+                                  </div>
+                                  <div class="flex justify-end pt-1" x-show="filterStartDate || filterEndDate">
+                                      <button type="button" @click="filterStartDate = ''; filterEndDate = '';"
+                                              class="text-[9px] text-rose-500 hover:text-rose-600 font-bold uppercase tracking-wider">
+                                          Clear Filter
+                                      </button>
+                                  </div>
+                              </div>
+
+                              <div class="space-y-2.5 max-h-[350px] overflow-y-auto custom-scrollbar pr-1">
+                                <template x-for="att in filteredAttendances()" :key="att.id">
                                     <div x-data="{ open: false }" class="p-3.5 rounded-xl border border-slate-100 bg-slate-50/20 space-y-2.5 transition-all">
                                         <!-- Header row (Clickable to toggle collapse) -->
                                         <div @click="open = !open" class="flex justify-between items-start cursor-pointer select-none">
@@ -526,9 +566,9 @@
                                         </div>
                                     </div>
                                 </template>
-                                 <div x-show="!activeWorker || !activeWorker.attendances || activeWorker.attendances.length === 0" class="text-center py-8 text-slate-300 italic text-xs">
-                                     No attendance logs registered on this project.
-                                 </div>
+                                 <div x-show="filteredAttendances().length === 0" class="text-center py-8 text-slate-300 italic text-xs">
+                                     No attendance logs found matching the selected dates.
+                                 </div>        </div>
                              </div>
                          </div>
                      </div>
