@@ -153,16 +153,161 @@
                 This utility scans the database for any locally stored images and Base64 strings (such as contractor profile pictures, daily site photos, attendance verification photos, feedback screenshots, progress logs, etc.), converts them to WebP format, uploads them to ImgBB, and updates the database records automatically.
             </p>
 
-            <form action="{{ route('admin.settings.sync-images') }}" method="POST" onsubmit="return confirm('Are you sure you want to sync all legacy images? This process may take a while depending on the number of images.')">
-                @csrf
-                <div class="flex justify-start">
-                    <button type="submit"
-                            class="px-6 py-2.5 rounded-lg text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md shadow-indigo-100 transition-all transform hover:-translate-y-0.5 animate-pulse-slow">
-                        <i class="fa-solid fa-cloud-arrow-up mr-2"></i> Sync Legacy Images to ImgBB
-                    </button>
+            <div class="flex justify-start">
+                <button type="button" id="btnStartSync"
+                        class="px-6 py-2.5 rounded-lg text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md shadow-indigo-100 transition-all transform hover:-translate-y-0.5">
+                    <i class="fa-solid fa-cloud-arrow-up mr-2"></i> Sync Legacy Images to ImgBB
+                </button>
+            </div>
+
+            {{-- Progress Bar --}}
+            <div id="syncProgressContainer" class="hidden mt-8 border-t border-slate-100 pt-6">
+                <div class="flex justify-between items-center mb-2">
+                    <span id="syncProgressText" class="text-xs font-bold text-slate-600 uppercase tracking-wide">Syncing: 0 / 0 images (0%)</span>
+                    <span id="syncProgressPercent" class="text-xs font-bold text-indigo-600">0%</span>
                 </div>
-            </form>
+                <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+                    <div id="syncProgressBar" class="bg-indigo-600 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+            </div>
+
+            {{-- Logs --}}
+            <div id="syncLogContainer" class="hidden mt-6">
+                <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2 flex items-center gap-1">
+                    <i class="fa-solid fa-list-ul"></i> Sync Logs
+                </h5>
+                <div id="syncLogs" class="bg-slate-900 text-slate-300 font-mono text-[10px] p-4 rounded-xl max-h-60 overflow-y-auto space-y-1.5 scrollbar-thin">
+                    <!-- Logs will be populated dynamically -->
+                </div>
+            </div>
         </div>
     </div>
+
+    <script>
+    document.getElementById('btnStartSync').addEventListener('click', function(e) {
+        e.preventDefault();
+        if (!confirm('Are you sure you want to sync all legacy images? This process will scan the database and upload local images/Base64 strings to ImgBB.')) {
+            return;
+        }
+        
+        const btn = this;
+        const progressContainer = document.getElementById('syncProgressContainer');
+        const progressBar = document.getElementById('syncProgressBar');
+        const progressText = document.getElementById('syncProgressText');
+        const progressPercent = document.getElementById('syncProgressPercent');
+        const logContainer = document.getElementById('syncLogContainer');
+        const logsDiv = document.getElementById('syncLogs');
+        
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Scanning...';
+        
+        logsDiv.innerHTML = '';
+        progressBar.style.width = '0%';
+        progressPercent.innerText = '0%';
+        progressText.innerText = 'Syncing: 0 / 0 images (0%)';
+        
+        progressContainer.classList.remove('hidden');
+        logContainer.classList.remove('hidden');
+        
+        function log(message, type = 'info') {
+            const p = document.createElement('p');
+            const time = new Date().toLocaleTimeString();
+            let color = 'text-slate-300';
+            if (type === 'success') color = 'text-emerald-400 font-bold';
+            if (type === 'error') color = 'text-rose-400 font-bold';
+            p.className = `leading-relaxed ${color}`;
+            p.innerHTML = `[${time}] ${message}`;
+            logsDiv.appendChild(p);
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+        }
+        
+        log('Scanning database for local images and Base64 strings...');
+        
+        fetch('{{ route("admin.settings.sync-images.scan") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        })
+        .then(response => response.json().then(data => ({ status: response.status, body: data })))
+        .then(({ status, body }) => {
+            if (status !== 200 || !body.success) {
+                throw new Error(body.message || 'Scanning failed.');
+            }
+            
+            const total = body.total;
+            const items = body.items;
+            
+            log(`Scan complete. Found ${total} images/items to sync.`, total > 0 ? 'info' : 'success');
+            
+            if (total === 0) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up mr-2"></i> Sync Legacy Images to ImgBB';
+                return;
+            }
+            
+            let processed = 0;
+            
+            function processNext() {
+                if (items.length === 0) {
+                    log('All images have been successfully processed and synced!', 'success');
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> Sync Completed';
+                    return;
+                }
+                
+                const item = items.shift();
+                log(`Syncing ${item.type} #${item.id}...`);
+                
+                fetch('{{ route("admin.settings.sync-images.item") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ type: item.type, id: item.id })
+                })
+                .then(res => res.json().then(data => ({ ok: res.ok, body: data })))
+                .then(({ ok, body }) => {
+                    processed++;
+                    const percent = Math.round((processed / total) * 100);
+                    progressBar.style.width = percent + '%';
+                    progressPercent.innerText = percent + '%';
+                    progressText.innerText = `Syncing: ${processed} / ${total} images (${percent}%)`;
+                    
+                    if (ok && body.success) {
+                        log(body.message, 'success');
+                    } else {
+                        log(body.message || 'Sync failed.', 'error');
+                    }
+                    
+                    // Process next item
+                    processNext();
+                })
+                .catch(err => {
+                    processed++;
+                    const percent = Math.round((processed / total) * 100);
+                    progressBar.style.width = percent + '%';
+                    progressPercent.innerText = percent + '%';
+                    progressText.innerText = `Syncing: ${processed} / ${total} images (${percent}%)`;
+                    
+                    log(`Failed to sync ${item.type} #${item.id}: ${err.message}`, 'error');
+                    
+                    // Process next item
+                    processNext();
+                });
+            }
+            
+            // Start processing queue
+            processNext();
+        })
+        .catch(error => {
+            log(`Error: ${error.message}`, 'error');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up mr-2"></i> Try Sync Again';
+        });
+    });
+    </script>
 
 </x-admin-layout>
