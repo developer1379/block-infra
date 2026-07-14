@@ -568,7 +568,7 @@
                                 </template>
                                  <div x-show="filteredAttendances().length === 0" class="text-center py-8 text-slate-300 italic text-xs">
                                      No attendance logs found matching the selected dates.
-                                 </div>        </div>
+                                 </div>        
                              </div>
                          </div>
                      </div>
