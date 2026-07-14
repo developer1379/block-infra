@@ -1,13 +1,13 @@
-<x-contractor-layout>
+<x-admin-layout>
     <div class="p-3 md:p-6 space-y-4 md:space-y-8 animate-fade-in">
         <!-- Header Section -->
         <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3 md:gap-6 bg-white p-4 md:p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
             <div class="flex items-center gap-3 md:gap-6">
-                <a href="{{ route('contractor.site-reports.index') }}" class="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all">
+                <a href="{{ route('admin.site-reports.index') }}" class="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all">
                     <i class="fa-solid fa-arrow-left text-xl"></i>
                 </a>
                 <div>
-                    <h1 class="text-3xl font-black text-gray-900 tracking-tight">{{ $report->project->title }}</h1>
+                    <h1 class="text-3xl font-black text-gray-900 tracking-tight">{{ $report->project->title ?? 'N/A' }}</h1>
                     <p class="text-gray-500 text-sm font-medium mt-1">
                         {{ __('Site report for') }} <span class="text-indigo-600 font-bold">{{ \Carbon\Carbon::parse($report->report_date)->format('F d, Y') }}</span>
                     </p>
@@ -161,7 +161,7 @@
                         <div class="p-5 bg-gray-50 rounded-2xl border border-gray-100">
                             <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">{{ __('Operational Status') }}</p>
                             <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-emerald-100 text-emerald-700">
-                                {{ __($report->project->status) }}
+                                {{ __($report->project->status ?? 'Active') }}
                             </span>
                         </div>
                         <div class="p-5 bg-gray-50 rounded-2xl border border-gray-100">
@@ -169,11 +169,13 @@
                             <p class="text-sm font-black text-gray-800">{{ $report->project->location ?? __('Primary Site') }}</p>
                         </div>
                     </div>
-                    <a href="{{ route('contractor.projects.show', $report->project->id) }}" 
+                    @if($report->project)
+                    <a href="{{ route('admin.projects.show', $report->project->id) }}" 
                        class="w-full inline-flex items-center justify-center gap-2 px-3 md:px-6 py-4 bg-gray-900 text-white text-[10px] font-black uppercase tracking-widest rounded-2xl hover:bg-black transition-all shadow-lg shadow-gray-200 transform active:scale-95">
                         <i class="fa-solid fa-arrow-up-right-from-square"></i>
                         {{ __('Full Project Intelligence') }}
                     </a>
+                    @endif
                 </div>
             </div>
         </div>
@@ -188,4 +190,4 @@
             animation: fadeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
     </style>
-</x-contractor-layout>
+</x-admin-layout>
