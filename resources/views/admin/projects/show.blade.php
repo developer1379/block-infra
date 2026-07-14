@@ -459,35 +459,58 @@
                          <div class="space-y-3">
                              <h5 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 pb-1.5">Attendance History on Project</h5>
                              <div class="space-y-2.5 max-h-[350px] overflow-y-auto custom-scrollbar pr-1">
-                                 <template x-for="att in (activeWorker ? activeWorker.attendances : [])" :key="att.id">
-                                     <div class="p-3.5 rounded-xl border border-slate-100 bg-slate-50/20 space-y-2.5">
-                                         <div class="flex justify-between items-center">
-                                             <div class="flex items-center gap-1.5">
-                                                 <p class="text-xs font-bold text-slate-700" x-text="new Date(att.attendance_date).toLocaleDateString('en-US', {day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC'})"></p>
-                                                 <template x-if="att.latitude">
-                                                     <i class="fa-solid fa-location-dot text-emerald-500 text-xs" title="GPS Location Available"></i>
-                                                 </template>
+                                <template x-for="att in (activeWorker ? activeWorker.attendances : [])" :key="att.id">
+                                    <div x-data="{ open: false }" class="p-3.5 rounded-xl border border-slate-100 bg-slate-50/20 space-y-2.5 transition-all">
+                                        <!-- Header row (Clickable to toggle collapse) -->
+                                        <div @click="open = !open" class="flex justify-between items-start cursor-pointer select-none">
+                                            <div class="min-w-0 flex-1 pr-4">
+                                                <div class="flex items-center gap-1.5">
+                                                    <p class="text-xs font-bold text-slate-700" x-text="new Date(att.attendance_date).toLocaleDateString('en-US', {day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC'})"></p>
+                                                    <template x-if="att.latitude">
+                                                        <i class="fa-solid fa-location-dot text-emerald-500 text-[10px]" :title="att.location_address || 'GPS Coordinates Available'"></i>
+                                                    </template>
+                                                    <template x-if="att.verification_photo">
+                                                        <i class="fa-solid fa-camera text-slate-400 text-[9px]" title="Photo Proof Available"></i>
+                                                    </template>
+                                                </div>
+                                                <p class="text-[9px] text-slate-400 font-semibold truncate mt-1 flex items-center gap-0.5" x-show="att.location_address || att.latitude">
+                                                    <i class="fa-solid fa-map-pin text-[8px] text-slate-300"></i>
+                                                    <span x-text="att.location_address ? att.location_address : att.latitude + ', ' + att.longitude"></span>
+                                                </p>
+                                            </div>
+                                            
+                                            <div class="flex items-center gap-2 flex-shrink-0">
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider border" 
+                                                      :class="att.status === 'present' ? 'bg-emerald-50 text-emerald-700 border-emerald-100/50' : 'bg-rose-50 text-rose-700 border-rose-100/50'"
+                                                      x-text="att.status"></span>
+                                                <!-- Chevron indicator -->
+                                                <i class="fa-solid fa-chevron-down text-slate-400 text-[10px] transition-transform duration-200" :class="open ? 'rotate-180' : ''"></i>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Details (Collapsible section) -->
+                                        <div x-show="open" 
+                                             x-collapse
+                                             class="text-[10px] space-y-2.5 pt-2.5 border-t border-slate-100/80">
+                                             
+                                             <!-- Location section (Always show GPS coordinates link if latitude/longitude exist!) -->
+                                             <div x-show="att.latitude || att.location_address" class="space-y-1">
+                                                 <span class="text-slate-400 font-semibold flex items-center gap-1">
+                                                     <i class="fa-solid fa-location-dot text-slate-400"></i> Location Details:
+                                                 </span>
+                                                 <p class="font-medium text-slate-600 leading-normal" x-text="att.location_address ? att.location_address : 'GPS coordinates logged'"></p>
+                                                 <a :href="'https://www.google.com/maps?q=' + att.latitude + ',' + att.longitude" target="_blank" class="inline-flex items-center gap-1 mt-1 text-teal-600 hover:text-teal-700 font-bold hover:underline">
+                                                     <i class="fa-solid fa-map-pin text-[9px]"></i> View GPS Coordinates (<span x-text="att.latitude + ', ' + att.longitude"></span>)
+                                                 </a>
                                              </div>
-                                             <span class="inline-flex items-center px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider border" 
-                                                   :class="att.status === 'present' ? 'bg-emerald-50 text-emerald-700 border-emerald-100/50' : 'bg-rose-50 text-rose-700 border-rose-100/50'"
-                                                   x-text="att.status"></span>
-                                         </div>
-                                         
-                                         <!-- Details -->
-                                         <div class="text-[10px] space-y-2 pt-2.5 border-t border-slate-100/80" x-show="att.overtime_hours > 0 || att.location_address || att.verification_photo || att.notes">
+
+                                             <!-- Overtime -->
                                              <div class="flex justify-between items-center" x-show="att.overtime_hours > 0">
                                                  <span class="text-slate-400 font-semibold">Overtime Hours:</span>
                                                  <span class="font-bold text-slate-700 bg-teal-50 text-teal-700 border border-teal-100/50 px-2 py-0.5 rounded" x-text="att.overtime_hours + ' hrs'"></span>
                                              </div>
-                                             
-                                             <div x-show="att.location_address" class="space-y-1">
-                                                 <span class="text-slate-400 font-semibold">Location Address:</span>
-                                                 <p class="font-medium text-slate-600 leading-normal" x-text="att.location_address"></p>
-                                                 <a :href="'https://www.google.com/maps?q=' + att.latitude + ',' + att.longitude" target="_blank" class="inline-flex items-center gap-1 mt-1 text-teal-600 hover:text-teal-700 font-bold hover:underline">
-                                                     <i class="fa-solid fa-map-pin text-[9px]"></i> View GPS Coordinates
-                                                 </a>
-                                             </div>
 
+                                             <!-- Photo Proof -->
                                              <div x-show="att.verification_photo" class="pt-1">
                                                  <span class="text-slate-400 font-semibold block mb-1">Verification Proof:</span>
                                                  <a :href="att.verification_photo_url" target="_blank" class="inline-flex items-center gap-1.5 text-teal-600 hover:text-teal-700 font-bold hover:underline">
@@ -495,13 +518,14 @@
                                                  </a>
                                              </div>
 
+                                             <!-- Notes -->
                                              <div x-show="att.notes" class="pt-1.5 border-t border-slate-100/40">
                                                  <span class="text-slate-400 font-semibold">Contractor Notes:</span>
                                                  <p class="text-slate-600 italic font-medium mt-0.5 pl-2.5 border-l-2 border-slate-200" x-text="'&ldquo;' + att.notes + '&rdquo;'"></p>
                                              </div>
-                                         </div>
-                                     </div>
-                                 </template>
+                                        </div>
+                                    </div>
+                                </template>
                                  <div x-show="!activeWorker || !activeWorker.attendances || activeWorker.attendances.length === 0" class="text-center py-8 text-slate-300 italic text-xs">
                                      No attendance logs registered on this project.
                                  </div>

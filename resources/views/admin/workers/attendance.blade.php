@@ -52,10 +52,17 @@
                                 </td>
                                 <td class="px-6 py-4 text-center">
                                     @if($record->latitude && $record->longitude)
-                                        <a href="https://www.google.com/maps?q={{ $record->latitude }},{{ $record->longitude }}" target="_blank" 
-                                           class="inline-flex items-center gap-1 text-[10px] font-bold text-indigo-600 hover:text-indigo-800 bg-indigo-50 px-2 py-1 rounded-md border border-indigo-100 transition-all">
-                                            <i class="fa-solid fa-location-dot"></i> Maps
-                                        </a>
+                                        <div class="flex flex-col items-center gap-1">
+                                            <a href="https://www.google.com/maps?q={{ $record->latitude }},{{ $record->longitude }}" target="_blank" 
+                                               class="inline-flex items-center gap-1 text-[10px] font-bold text-indigo-600 hover:text-indigo-800 bg-indigo-50 px-2 py-1 rounded-md border border-indigo-100 transition-all">
+                                                <i class="fa-solid fa-location-dot"></i> Maps
+                                            </a>
+                                            @if($record->location_address)
+                                                <span class="text-[9px] text-slate-500 font-medium max-w-[150px] truncate block" title="{{ $record->location_address }}">{{ $record->location_address }}</span>
+                                            @else
+                                                <span class="text-[8px] text-slate-400 font-semibold uppercase tracking-wider">{{ $record->latitude }}, {{ $record->longitude }}</span>
+                                            @endif
+                                        </div>
                                     @else
                                         <span class="text-[10px] text-slate-300 font-bold italic">No GPS</span>
                                     @endif
