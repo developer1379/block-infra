@@ -29,4 +29,15 @@ class Feedback extends Model
     {
         return $this->belongsTo(Project::class);
     }
+
+    public function getAttachmentUrlAttribute()
+    {
+        if (empty($this->attachment)) {
+            return null;
+        }
+        if (filter_var($this->attachment, FILTER_VALIDATE_URL)) {
+            return $this->attachment;
+        }
+        return asset('storage/' . $this->attachment);
+    }
 }

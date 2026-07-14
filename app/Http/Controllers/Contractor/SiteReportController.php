@@ -70,7 +70,7 @@ class SiteReportController extends Controller
             // Handle Photo Uploads
             if ($request->hasFile('photos')) {
                 foreach ($request->file('photos') as $photo) {
-                    $path = $photo->store('site-reports/photos', 'public');
+                    $path = app(\App\Services\ImgBBService::class)->upload($photo);
                     \App\Models\SitePhoto::create([
                         'report_id' => $report->id,
                         'photo_path' => $path

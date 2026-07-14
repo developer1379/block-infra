@@ -89,9 +89,9 @@
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-6">
                         @forelse($report->photos as $photo)
                             <div class="group relative aspect-square rounded-[2rem] overflow-hidden bg-gray-50 border border-gray-100 shadow-sm hover:shadow-xl transition-all cursor-pointer">
-                                <img src="{{ asset('storage/' . $photo->photo_path) }}" alt="{{ __('Site Photo') }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                                <img src="{{ $photo->photo_url }}" alt="{{ __('Site Photo') }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                                 <div class="absolute inset-0 bg-indigo-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
-                                    <a href="{{ asset('storage/' . $photo->photo_path) }}" target="_blank" class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-indigo-600 shadow-xl hover:scale-110 transition-transform">
+                                    <a href="{{ $photo->photo_url }}" target="_blank" class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-indigo-600 shadow-xl hover:scale-110 transition-transform">
                                         <i class="fa-solid fa-expand"></i>
                                     </a>
                                 </div>

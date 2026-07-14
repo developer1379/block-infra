@@ -60,8 +60,8 @@
                     @if($feedback->attachment)
                         <div class="mt-8 pt-6 border-t border-gray-50">
                             <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4"><i class="bi bi-paperclip"></i> {{ __('Attachment') }}</p>
-                            <a href="{{ asset('storage/' . $feedback->attachment) }}" target="_blank" class="block max-w-sm rounded-xl overflow-hidden border border-gray-200 hover:border-indigo-300 transition-colors">
-                                <img src="{{ asset('storage/' . $feedback->attachment) }}" alt="Attachment" class="w-full h-auto object-cover">
+                            <a href="{{ $feedback->attachment_url }}" target="_blank" class="block max-w-sm rounded-xl overflow-hidden border border-gray-200 hover:border-indigo-300 transition-colors">
+                                <img src="{{ $feedback->attachment_url }}" alt="Attachment" class="w-full h-auto object-cover">
                             </a>
                         </div>
                     @endif

@@ -38,6 +38,7 @@ use App\Http\Controllers\Admin\SettingController;
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/settings', [SettingController::class, 'edit'])->name('settings.edit');
 Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
+Route::post('/settings/sync-images', [SettingController::class, 'syncImages'])->name('settings.sync-images');
 
 // Resource Management
 Route::resource('categories', CategoryController::class);

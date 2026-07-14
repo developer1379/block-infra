@@ -283,7 +283,7 @@
                                                 <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1">
                                                     <i class="bi bi-paperclip"></i> {{ __('Site Proof Attached') }}
                                                 </span>
-                                                <a href="{{ asset('storage/' . $update->report_file_path) }}" target="_blank" class="h-10 w-10 flex items-center justify-center bg-gray-50 rounded-xl text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all">
+                                                <a href="{{ $update->report_file_url }}" target="_blank" class="h-10 w-10 flex items-center justify-center bg-gray-50 rounded-xl text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all">
                                                     <i class="bi bi-eye"></i>
                                                 </a>
                                             </div>

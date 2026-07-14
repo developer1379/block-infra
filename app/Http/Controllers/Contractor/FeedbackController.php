@@ -42,7 +42,7 @@ class FeedbackController extends Controller
         $data['status'] = 'pending';
 
         if ($request->hasFile('attachment')) {
-            $data['attachment'] = $request->file('attachment')->store('feedback', 'public');
+            $data['attachment'] = app(\App\Services\ImgBBService::class)->upload($request->file('attachment'));
         }
 
         Feedback::create($data);

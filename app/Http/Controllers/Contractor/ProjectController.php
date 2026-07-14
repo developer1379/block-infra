@@ -188,15 +188,14 @@ class ProjectController extends Controller
         // 5. Handle File Upload or Camera Photo
         $filePath = null;
         if ($request->filled('verification_photo')) {
-            $img = $request->verification_photo;
-            $img = str_replace('data:image/jpeg;base64,', '', $img);
-            $img = str_replace(' ', '+', $img);
-            $data = base64_decode($img);
-            $fileName = 'report_' . time() . '_' . uniqid() . '.jpg';
-            $filePath = 'progress-reports/' . $fileName;
-            Storage::disk('public')->put($filePath, $data);
+            $filePath = app(\App\Services\ImgBBService::class)->upload($request->verification_photo);
         } elseif ($request->hasFile('report_file')) {
-            $filePath = $request->file('report_file')->store('progress-reports', 'public');
+            $file = $request->file('report_file');
+            if (str_starts_with($file->getMimeType(), 'image/')) {
+                $filePath = app(\App\Services\ImgBBService::class)->upload($file);
+            } else {
+                $filePath = $file->store('progress-reports', 'public');
+            }
         }
 
         // 4. Create the History Record

@@ -76,12 +76,7 @@ class AttendanceController extends Controller
             
             // Handle Base64 Captured Image
             if ($request->filled('captured_image')) {
-                $img = $request->captured_image;
-                $img = str_replace('data:image/jpeg;base64,', '', $img);
-                $img = str_replace(' ', '+', $img);
-                $imageName = 'attendance_' . time() . '_' . uniqid() . '.jpg';
-                \Illuminate\Support\Facades\Storage::disk('public')->put('attendance/verification/' . $imageName, base64_decode($img));
-                $data['verification_photo'] = 'attendance/verification/' . $imageName;
+                $data['verification_photo'] = app(\App\Services\ImgBBService::class)->upload($request->captured_image);
             }
 
             $this->attendance->create($data);

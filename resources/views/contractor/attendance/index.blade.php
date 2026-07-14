@@ -83,9 +83,9 @@
                                 <td class="px-4 md:px-8 py-3 md:py-6">
                                     <div class="flex items-center justify-center gap-3">
                                         @if($record->verification_photo)
-                                            <a href="{{ asset('storage/' . $record->verification_photo) }}" target="_blank" 
+                                            <a href="{{ $record->verification_photo_url }}" target="_blank" 
                                                class="h-12 w-12 rounded-2xl overflow-hidden border-2 border-white shadow-md hover:scale-125 transition-transform relative group/img">
-                                                <img src="{{ asset('storage/' . $record->verification_photo) }}" class="h-full w-full object-cover">
+                                                <img src="{{ $record->verification_photo_url }}" class="h-full w-full object-cover">
                                                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 flex items-center justify-center text-white transition-opacity">
                                                     <i class="fa-solid fa-eye text-xs"></i>
                                                 </div>
@@ -133,7 +133,7 @@
 
                         <div class="flex gap-3">
                             @if($record->verification_photo)
-                                <a href="{{ asset('storage/' . $record->verification_photo) }}" target="_blank" class="flex-1 h-12 bg-white rounded-2xl border border-gray-100 flex items-center justify-center gap-2 text-xs font-black text-gray-600 uppercase tracking-widest shadow-sm">
+                                <a href="{{ $record->verification_photo_url }}" target="_blank" class="flex-1 h-12 bg-white rounded-2xl border border-gray-100 flex items-center justify-center gap-2 text-xs font-black text-gray-600 uppercase tracking-widest shadow-sm">
                                     <i class="fa-solid fa-camera"></i> {{ __('View Photo') }}
                                 </a>
                             @endif

@@ -81,7 +81,12 @@ class WorkerController extends Controller
         try {
             $data = $request->except('identity_proof');
             if ($request->hasFile('identity_proof')) {
-                $data['identity_proof'] = $request->file('identity_proof')->store('workers/identity', 'public');
+                $file = $request->file('identity_proof');
+                if (str_starts_with($file->getMimeType(), 'image/')) {
+                    $data['identity_proof'] = app(\App\Services\ImgBBService::class)->upload($file);
+                } else {
+                    $data['identity_proof'] = $file->store('workers/identity', 'public');
+                }
             }
             
             $this->workers->create($data);

@@ -272,7 +272,7 @@
                                                     <span class="text-[9px] text-slate-400 uppercase font-bold tracking-wider">• {{ $update->created_at->format('M d, h:i A') }}</span>
                                                 </div>
                                                 @if ($update->report_file_path)
-                                                    <a href="{{ asset('storage/' . $update->report_file_path) }}"
+                                                    <a href="{{ $update->report_file_url }}"
                                                         target="_blank"
                                                         class="text-slate-400 hover:text-teal-600 transition-colors"
                                                         title="View Attachment">

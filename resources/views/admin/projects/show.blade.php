@@ -242,7 +242,7 @@
                                                     <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
                                                         <i class="fa-solid fa-paperclip"></i> {{ __('Site Proof Attached') }}
                                                     </span>
-                                                    <a href="{{ asset('storage/' . $update->report_file_path) }}" target="_blank" class="h-10 w-10 flex items-center justify-center bg-slate-50 border border-slate-200/60 rounded-xl text-teal-600 hover:bg-teal-600 hover:text-white transition-all">
+                                                    <a href="{{ $update->report_file_url }}" target="_blank" class="h-10 w-10 flex items-center justify-center bg-slate-50 border border-slate-200/60 rounded-xl text-teal-600 hover:bg-teal-600 hover:text-white transition-all">
                                                         <i class="fa-solid fa-eye text-sm"></i>
                                                     </a>
                                                 </div>
@@ -448,7 +448,7 @@
                                  </div>
                                  <div class="col-span-2" x-show="activeWorker && activeWorker.identity_proof">
                                      <p class="text-slate-400 font-medium">Identity Proof Document</p>
-                                     <a :href="'/storage/' + (activeWorker ? activeWorker.identity_proof : '')" target="_blank" class="inline-flex items-center gap-1.5 mt-1.5 text-teal-600 hover:text-teal-700 font-bold hover:underline">
+                                     <a :href="activeWorker ? activeWorker.identity_proof_url : '#'" target="_blank" class="inline-flex items-center gap-1.5 mt-1.5 text-teal-600 hover:text-teal-700 font-bold hover:underline">
                                          <i class="fa-solid fa-file-invoice text-xs"></i> View Attached Proof
                                      </a>
                                  </div>
@@ -490,7 +490,7 @@
 
                                              <div x-show="att.verification_photo" class="pt-1">
                                                  <span class="text-slate-400 font-semibold block mb-1">Verification Proof:</span>
-                                                 <a :href="'/storage/' + att.verification_photo" target="_blank" class="inline-flex items-center gap-1.5 text-teal-600 hover:text-teal-700 font-bold hover:underline">
+                                                 <a :href="att.verification_photo_url" target="_blank" class="inline-flex items-center gap-1.5 text-teal-600 hover:text-teal-700 font-bold hover:underline">
                                                      <i class="fa-solid fa-camera text-xs"></i> View Proof Photo
                                                  </a>
                                              </div>

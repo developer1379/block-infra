@@ -28,4 +28,15 @@ class ProjectProgressUpdate extends Model
     {
         return $this->belongsTo(ProjectMilestone::class, 'milestone_id');
     }
+
+    public function getReportFileUrlAttribute()
+    {
+        if (empty($this->report_file_path)) {
+            return null;
+        }
+        if (filter_var($this->report_file_path, FILTER_VALIDATE_URL)) {
+            return $this->report_file_path;
+        }
+        return asset('storage/' . $this->report_file_path);
+    }
 }

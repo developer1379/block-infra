@@ -89,7 +89,7 @@
                                     <div class="flex -space-x-3">
                                         @forelse($report->photos->take(4) as $photo)
                                             <div class="h-12 w-12 rounded-2xl ring-4 ring-white overflow-hidden shadow-sm hover:-translate-y-1 transition-transform cursor-pointer">
-                                                <img class="h-full w-full object-cover" src="{{ asset('storage/' . $photo->photo_path) }}" alt="{{ __('Site Photo') }}">
+                                                <img class="h-full w-full object-cover" src="{{ $photo->photo_url }}" alt="{{ __('Site Photo') }}">
                                             </div>
                                         @empty
                                             <div class="flex items-center gap-2 text-gray-300">

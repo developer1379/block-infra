@@ -140,4 +140,29 @@
         </div>
     </div>
 
+    {{-- SYNC IMAGES CARD --}}
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 max-w-4xl mt-6">
+        <div class="border-b border-gray-100 px-6 py-4">
+            <h3 class="font-bold text-slate-700 flex items-center gap-2">
+                <i class="fa-solid fa-arrows-rotate text-primary"></i> Sync Images to Cloud
+            </h3>
+        </div>
+
+        <div class="p-6 md:p-8">
+            <p class="text-sm text-slate-500 mb-6">
+                This utility scans the database for any locally stored images and Base64 strings (such as contractor profile pictures, daily site photos, attendance verification photos, feedback screenshots, progress logs, etc.), converts them to WebP format, uploads them to ImgBB, and updates the database records automatically.
+            </p>
+
+            <form action="{{ route('admin.settings.sync-images') }}" method="POST" onsubmit="return confirm('Are you sure you want to sync all legacy images? This process may take a while depending on the number of images.')">
+                @csrf
+                <div class="flex justify-start">
+                    <button type="submit"
+                            class="px-6 py-2.5 rounded-lg text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md shadow-indigo-100 transition-all transform hover:-translate-y-0.5 animate-pulse-slow">
+                        <i class="fa-solid fa-cloud-arrow-up mr-2"></i> Sync Legacy Images to ImgBB
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </x-admin-layout>

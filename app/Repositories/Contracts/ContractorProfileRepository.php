@@ -42,23 +42,12 @@ class ContractorProfileRepository implements ContractorProfileRepositoryInterfac
             $user->password = Hash::make($data['password']);
         }
         // ---------------------------
-        // UPDATE PROFILE PHOTO (BASE64)
+        // UPDATE PROFILE PHOTO (ImgBB)
         // ---------------------------
         if (isset($data['image'])) {
-
             $file = $data['image'];
-
-            // Convert uploaded file to Base64
-            $imageData = base64_encode(file_get_contents($file));
-
-            // Get file extension (jpeg/png/etc)
-            $extension = $file->getClientOriginalExtension();
-
-            // Build a proper Base64 string format
-            $base64Image = "data:image/{$extension};base64,{$imageData}";
-
-            // Save Base64 string in contractor table
-            $contractor->image = $base64Image;
+            $imageUrl = app(\App\Services\ImgBBService::class)->upload($file);
+            $contractor->image = $imageUrl;
         }
 
 

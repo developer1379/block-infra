@@ -62,8 +62,8 @@
                                 </td>
                                 <td class="px-6 py-4 text-center">
                                     @if($record->verification_photo)
-                                        <button type="button" onclick="window.open('{{ asset('storage/' . $record->verification_photo) }}', '_blank')" class="group relative inline-block h-10 w-10 rounded-lg overflow-hidden border border-slate-200 shadow-sm transition-transform hover:scale-105">
-                                            <img src="{{ asset('storage/' . $record->verification_photo) }}" class="h-full w-full object-cover">
+                                        <button type="button" onclick="window.open('{{ $record->verification_photo_url }}', '_blank')" class="group relative inline-block h-10 w-10 rounded-lg overflow-hidden border border-slate-200 shadow-sm transition-transform hover:scale-105">
+                                            <img src="{{ $record->verification_photo_url }}" class="h-full w-full object-cover">
                                             <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                                 <i class="fa-solid fa-eye text-white text-[10px]"></i>
                                             </div>

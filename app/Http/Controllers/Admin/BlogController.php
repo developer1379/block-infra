@@ -10,8 +10,17 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Http;
 
+use App\Services\ImgBBService;
+
 class BlogController extends Controller
 {
+    protected $imgBB;
+
+    public function __construct(ImgBBService $imgBB)
+    {
+        $this->imgBB = $imgBB;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -55,7 +64,7 @@ class BlogController extends Controller
 
         if ($request->hasFile('image')) {
             try {
-                $imageUrl = $this->uploadToImgBB($request->file('image'));
+                $imageUrl = $this->imgBB->upload($request->file('image'));
                 $data['image'] = $imageUrl;
             } catch (\Exception $e) {
                 return back()->withInput()->withErrors(['image' => 'ImgBB upload failed: ' . $e->getMessage()]);
@@ -109,7 +118,7 @@ class BlogController extends Controller
 
         if ($request->hasFile('image')) {
             try {
-                $imageUrl = $this->uploadToImgBB($request->file('image'));
+                $imageUrl = $this->imgBB->upload($request->file('image'));
                 
                 // Delete old local image if it exists
                 if ($blog->image && !filter_var($blog->image, FILTER_VALIDATE_URL)) {
@@ -138,28 +147,5 @@ class BlogController extends Controller
         $blog->delete();
 
         return redirect()->route('admin.blogs.index')->with('success', 'Blog post deleted successfully!');
-    }
-
-    /**
-     * Upload an image to ImgBB and return its public URL.
-     */
-    private function uploadToImgBB($file)
-    {
-        $apiKey = Setting::where('key', 'imgbb_api_key')->value('value');
-        
-        if (empty($apiKey)) {
-            throw new \Exception('ImgBB API Key is not configured. Please configure it in your Settings page.');
-        }
-
-        $response = Http::asMultipart()
-            ->post('https://api.imgbb.com/1/upload?key=' . $apiKey, [
-                'image' => fopen($file->getPathname(), 'r'),
-            ]);
-
-        if ($response->successful()) {
-            return $response->json('data.url');
-        }
-
-        throw new \Exception('ImgBB upload failed: ' . ($response->json('error.message') ?? 'Unknown error'));
     }
 }
