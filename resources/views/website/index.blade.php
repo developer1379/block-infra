@@ -1,7 +1,7 @@
 <x-website-layout 
-    title="Bloc-Infra | Digital Construction Platform & Verified Contractors" 
-    description="Connect with verified builders, contractors, and design experts in Kanpur. Manage your construction projects seamlessly with Bloc-Infra Pvt. Ltd." 
-    keywords="construction platform, verified contractors, builders in Kanpur, construction company Kanpur, building contractor"
+    title="Best Construction Company in Kanpur & UP | Bloc-Infra" 
+    description="Looking for the best construction company in Kanpur or UP? Bloc-Infra Pvt. Ltd. delivers top-tier residential, commercial, and infrastructure services in Kanpur Nagar and across Uttar Pradesh." 
+    keywords="best construction company in kanpur, best construction company in up, construction company in kanpur nagar, builders in kanpur, top construction companies in uttar pradesh, civil contractors kanpur, bloc-infra"
 >
 
     <style>

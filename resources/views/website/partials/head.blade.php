@@ -1,9 +1,9 @@
 <head>
     <meta charset="utf-8">
-    <title>{{ isset($title) ? $title : 'Bloc-Infra - Construction & Infrastructure Company' }}</title>
+    <title>{{ isset($title) ? $title : 'Best Construction Company in Kanpur & UP | Bloc-Infra Pvt. Ltd.' }}</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="{{ isset($keywords) ? $keywords : 'Kanpur Construction, Best Builders, Bloc-Infra, Construction Company Kanpur' }}" name="keywords">
-    <meta content="{{ isset($description) ? $description : 'Bloc-Infra Pvt. Ltd. connects builders, contractors, and clients under one powerful digital construction platform.' }}" name="description">
+    <meta content="{{ isset($keywords) ? $keywords : 'best construction company in kanpur, best construction company in up, construction company in kanpur nagar, top builders in kanpur, civil contractors in uttar pradesh, bloc-infra, structural engineers kanpur, commercial construction up, residential developers kanpur' }}" name="keywords">
+    <meta content="{{ isset($description) ? $description : 'Looking for the best construction company in Kanpur or UP? Bloc-Infra Pvt. Ltd. is a top-rated construction and infrastructure firm in Kanpur Nagar, Uttar Pradesh, specializing in high-quality residential, commercial, and industrial building projects.' }}" name="description">
 
     <!-- Canonical URL -->
     <link rel="canonical" href="{{ isset($canonical) ? $canonical : url()->current() }}">
@@ -11,57 +11,83 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:title" content="{{ isset($title) ? $title : 'Bloc-Infra - Construction & Infrastructure Company' }}">
-    <meta property="og:description" content="{{ isset($description) ? $description : 'Bloc-Infra Pvt. Ltd. connects builders, contractors, and clients under one powerful digital construction platform.' }}">
+    <meta property="og:title" content="{{ isset($title) ? $title : 'Best Construction Company in Kanpur & UP | Bloc-Infra Pvt. Ltd.' }}">
+    <meta property="og:description" content="{{ isset($description) ? $description : 'Looking for the best construction company in Kanpur or UP? Bloc-Infra Pvt. Ltd. is a top-rated construction and infrastructure firm in Kanpur Nagar, Uttar Pradesh, specializing in high-quality residential, commercial, and industrial building projects.' }}">
     <meta property="og:image" content="{{ asset('logo.png') }}">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{{ url()->current() }}">
-    <meta property="twitter:title" content="{{ isset($title) ? $title : 'Bloc-Infra - Construction & Infrastructure Company' }}">
-    <meta property="twitter:description" content="{{ isset($description) ? $description : 'Bloc-Infra Pvt. Ltd. connects builders, contractors, and clients under one powerful digital construction platform.' }}">
+    <meta property="twitter:title" content="{{ isset($title) ? $title : 'Best Construction Company in Kanpur & UP | Bloc-Infra Pvt. Ltd.' }}">
+    <meta property="twitter:description" content="{{ isset($description) ? $description : 'Looking for the best construction company in Kanpur or UP? Bloc-Infra Pvt. Ltd. is a top-rated construction and infrastructure firm in Kanpur Nagar, Uttar Pradesh, specializing in high-quality residential, commercial, and industrial building projects.' }}">
     <meta property="twitter:image" content="{{ asset('logo.png') }}">
 
-    <!-- Structured Data (JSON-LD) for Local Business / Construction Company -->
+    <!-- Structured Data (JSON-LD) for Local Business & Sitelinks Searchbox -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "ConstructionBusiness",
-      "name": "Bloc-Infra Pvt. Ltd.",
-      "image": "{{ asset('logo.png') }}",
-      "@id": "{{ url('/') }}",
-      "url": "{{ url('/') }}",
-      "telephone": "+91-XXXXXXXXXX",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Kakadeo",
-        "addressLocality": "Kanpur",
-        "addressRegion": "Uttar Pradesh",
-        "postalCode": "208025",
-        "addressCountry": "IN"
-      },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": 26.4744,
-        "longitude": 80.3013
-      },
-      "openingHoursSpecification": {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday"
-        ],
-        "opens": "09:00",
-        "closes": "18:00"
-      },
-      "sameAs": [
-        "https://www.facebook.com/blocinfra",
-        "https://twitter.com/blocinfra",
-        "https://www.linkedin.com/company/blocinfra"
+      "@graph": [
+        {
+          "@type": "ConstructionBusiness",
+          "@id": "{{ url('/') }}/#organization",
+          "name": "Bloc-Infra Pvt. Ltd.",
+          "image": "{{ asset('logo.png') }}",
+          "url": "{{ url('/') }}",
+          "telephone": "+91-9140809882",
+          "email": "info@blocinfra.in",
+          "priceRange": "$$",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Kakadeo",
+            "addressLocality": "Kanpur",
+            "addressRegion": "Uttar Pradesh",
+            "postalCode": "208025",
+            "addressCountry": "IN"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 26.4744,
+            "longitude": 80.3013
+          },
+          "openingHoursSpecification": {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday"
+            ],
+            "opens": "09:00",
+            "closes": "18:00"
+          },
+          "sameAs": [
+            "https://www.facebook.com/blocinfra",
+            "https://twitter.com/blocinfra",
+            "https://www.linkedin.com/company/blocinfra"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "{{ url('/') }}/#website",
+          "url": "{{ url('/') }}",
+          "name": "Bloc-Infra",
+          "description": "Best Construction Company in Kanpur & UP",
+          "publisher": {
+            "@id": "{{ url('/') }}/#organization"
+          },
+          "potentialAction": [
+            {
+              "@type": "SearchAction",
+              "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "{{ url('/') }}?search={search_term_string}"
+              },
+              "query-input": "required name=search_term_string"
+            }
+          ]
+        }
       ]
     }
     </script>
