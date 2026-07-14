@@ -81,6 +81,14 @@ class Project extends Model
         return $this->progressUpdates()->first()->progress_percentage ?? 0;
     }
 
+    /**
+     * Get the name of the project (alias for title)
+     */
+    public function getNameAttribute()
+    {
+        return $this->title;
+    }
+
     public function inventoryLogs()
     {
         return $this->hasMany(MaterialInventory::class);
